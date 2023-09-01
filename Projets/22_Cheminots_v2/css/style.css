@@ -1,0 +1,161 @@
+body{
+    background-color: #d1f4f7;
+    font-family: Verdana, Tahoma, Arial, sans-serif;
+    font-size: 16px;
+}
+
+.main-section{
+    padding-top: 100px;
+}
+.logo-asso{
+    height: 40px;
+    width : 40px;
+    padding-left: 7px;
+    padding-top: 7px;
+    padding-right: 3px;
+  }
+h1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: white;
+    height: 200px;
+}
+.main-block{
+    width: 1024px;
+    background-color: white;
+    height: 400px;
+    border-radius: 20px;
+    margin: 0 auto;
+}
+nav{
+    display: flex;
+    justify-content: space-around;
+    height: 100px;
+    align-items: center;
+}
+.drams{
+    width: 100px;
+    font-size: 20px;
+    color: #190f33;
+    text-decoration: none;
+}
+.drams:hover{
+    color: #5c48d0;
+    text-decoration: none;
+}
+.mainimg{
+    width: 1024px;
+    height: 400px;
+    object-fit: cover;
+}
+#about_me, #projects{
+    background-color: white;
+    padding-top: 100px;    
+    padding-right: 100px;
+    padding-left: 100px;
+    padding-bottom: 100px;
+}
+#education, #contact{
+    background-color: #eeeef7;
+    padding-top: 100px;    
+    padding-right: 100px;
+    padding-left: 100px;
+    padding-bottom: 100px;
+}
+.profile{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.profile2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.imgprofile{
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    border: #fcc01a 3px solid;
+    object-fit: cover;
+}
+.nameprofile{
+    height: 30px;
+    font-size: 38px;
+    font-weight: bold;
+    color: #190f33;
+    padding-bottom: 50px;
+}
+.cityprofile{
+    height: 30px;
+    font-size: 30px;
+    font-style: italic;
+    color: #190f33;
+}
+.lll{
+    padding-top: 25px;
+}
+.meeee{
+    font-size: 26px;
+    font-weight: bold;
+    color: #190f33;
+    margin-bottom: 40px;
+    
+}
+.txtme{
+    line-height: 30px;
+}
+.rework{
+    font-size: 30px;
+    font-weight: bold;
+    color: #190f33;
+    margin-bottom: 80px;
+    display: flex;
+    justify-content: center;
+}
+
+.logos{
+    height: 100px;
+}
+.texts{
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+    margin-bottom: 120px;
+    line-height: 30px;
+}
+.bold{
+    font-weight: bold;
+}
+.imggproject{
+    width: 500px;
+    margin-right: 60px;
+}
+h3{
+    font-size: 26px;
+    color: #190f33;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+.all{
+    display: flex;
+    margin-bottom: 100px;
+}
+h4{
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+.liii{
+    list-style-type: disc;
+    line-height: 30px;
+}
+.thirdlogos{
+    width: 30px;
+}   
+.containerEvent{
+    display: flex;
+    justify-content: space-between;
+}
