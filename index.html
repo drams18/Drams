@@ -1,661 +1,160 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Arphan DRAME — Développeur Full Stack</title>
-  <meta content="Portfolio d'Arphan DRAME, Développeur Web Full Stack — React, Symfony, NestJS, React Native" name="description">
-  <meta content="développeur web, full stack, React, Symfony, NestJS, React Native, TypeScript, Docker" name="keywords">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Arphan DRAME — Portfolio RPG</title>
+  <meta name="description" content="Portfolio interactif d'Arphan DRAME — Explorez comme un jeu RPG !">
 
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <!-- Pixel Art Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-  <link href="assets/css/style.css" rel="stylesheet">
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <!-- Mobile nav toggle -->
-  <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
+  <!-- Game Canvas -->
+  <canvas id="gameCanvas"></canvas>
 
-  <!-- ======= Sidebar / Header ======= -->
-  <header id="header">
-    <div class="d-flex flex-column h-100">
-
-      <div class="profile">
-        <img src="assets/img/moi-rond.png" alt="Arphan DRAME" class="img-fluid rounded-circle profile-photo">
-        <h1><a href="index.html">Arphan DRAME</a></h1>
-        <p class="profile-title">Développeur Full Stack</p>
-        <div class="availability-badge">
-          <span class="avail-dot"></span> Disponible immédiatement
-        </div>
-        <div class="social-links mt-3 text-center">
-          <a href="https://github.com/drams18" target="_blank" title="GitHub"><i class="bx bxl-github"></i></a>
-          <a href="https://www.linkedin.com/in/arphan-drame-b29259258/" target="_blank" title="LinkedIn"><i class="bx bxl-linkedin"></i></a>
-          <a href="https://twitter.com/drams_18" target="_blank" title="Twitter"><i class="bx bxl-twitter"></i></a>
-          <a href="https://www.instagram.com/dramsss18/" target="_blank" title="Instagram"><i class="bx bxl-instagram"></i></a>
-        </div>
-      </div>
-
-      <nav id="navbar" class="nav-menu navbar">
-        <ul>
-          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Accueil</span></a></li>
-          <li><a href="#about" class="nav-link scrollto"><i class="bx bx-user"></i> <span>À propos</span></a></li>
-          <li><a href="#skills" class="nav-link scrollto"><i class="bx bx-code-alt"></i> <span>Compétences</span></a></li>
-          <li><a href="#experience" class="nav-link scrollto"><i class="bx bx-briefcase"></i> <span>Expériences</span></a></li>
-          <li><a href="#formation" class="nav-link scrollto"><i class="bx bx-graduation"></i> <span>Formation</span></a></li>
-          <li><a href="#interests" class="nav-link scrollto"><i class="bx bx-heart"></i> <span>Centres d'intérêt</span></a></li>
-          <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>
-        </ul>
-      </nav>
-
-    </div>
-  </header>
-  <!-- End Header -->
-
-  <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
-    <div class="hero-container" data-aos="fade-in">
-      <p class="hero-greeting">Bonjour, je suis</p>
-      <h1>Arphan DRAME</h1>
-      <p class="hero-subtitle">
-        <span class="typed" data-typed-items="Développeur Full Stack,React &amp; React Native,Backend Symfony / NestJS,Mobile &amp; Web Developer"></span>
-      </p>
-      <div class="hero-cta mt-4">
-        <a href="#about" class="btn-hero-primary scrollto">Me découvrir</a>
-        <a href="#contact" class="btn-hero-secondary scrollto">Me contacter</a>
+  <!-- ======= HUD Overlay ======= -->
+  <div id="hud">
+    <div id="hud-title">ARPHAN DRAME</div>
+    <div id="hud-subtitle">Développeur Full Stack</div>
+    <div id="hud-progress">
+      <div id="hud-progress-label">🗺️ <span id="visited-count">0</span>/6 lieux</div>
+      <div id="hud-progress-bar-wrap">
+        <div id="hud-progress-bar"></div>
       </div>
     </div>
-  </section>
-  <!-- End Hero -->
+    <div id="hud-dots"></div>
+  </div>
 
-  <main id="main">
+  <!-- Quick Nav Button -->
+  <div id="quick-nav-toggle" title="Navigation rapide">
+    <span class="pixel-icon">⚡</span>
+    <span>MENU</span>
+  </div>
 
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-      <div class="container">
-
-        <div class="section-title" data-aos="fade-up">
-          <h2>À propos</h2>
-          <p>Développeur Full Stack passionné, en quête de nouveaux défis techniques</p>
-        </div>
-
-        <div class="row align-items-center">
-          <div class="col-lg-3 text-center mb-4 mb-lg-0" data-aos="fade-right">
-            <img src="assets/img/moi-rond.png" class="about-photo" alt="Arphan DRAME">
-          </div>
-          <div class="col-lg-9" data-aos="fade-left">
-            <p class="about-description">
-              Développeur Web Full Stack en cours de Master Architecte de Systèmes d'Informations à l'ETNA,
-              je conçois et développe des applications web et mobiles de bout en bout.
-              Passionné par les nouvelles technologies, j'aime relever des défis techniques et
-              livrer des produits soignés, performants et maintenables.
-            </p>
-
-            <div class="row mt-4">
-              <div class="col-md-6">
-                <div class="about-info-item">
-                  <i class="bi bi-person-fill"></i>
-                  <div>
-                    <strong>Nom</strong>
-                    <span>Arphan DRAME</span>
-                  </div>
-                </div>
-                <div class="about-info-item">
-                  <i class="bi bi-telephone-fill"></i>
-                  <div>
-                    <strong>Téléphone</strong>
-                    <span>07 67 31 84 26</span>
-                  </div>
-                </div>
-                <div class="about-info-item">
-                  <i class="bi bi-geo-alt-fill"></i>
-                  <div>
-                    <strong>Localisation</strong>
-                    <span>Paris, Île-de-France</span>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="about-info-item">
-                  <i class="bi bi-envelope-fill"></i>
-                  <div>
-                    <strong>Email</strong>
-                    <span>arphandrame0@gmail.com</span>
-                  </div>
-                </div>
-                <div class="about-info-item">
-                  <i class="bi bi-mortarboard-fill"></i>
-                  <div>
-                    <strong>Formation</strong>
-                    <span>Master ASI — ETNA</span>
-                  </div>
-                </div>
-                <div class="about-info-item">
-                  <i class="bi bi-circle-fill" style="color: #22c55e; font-size: 10px;"></i>
-                  <div>
-                    <strong>Disponibilité</strong>
-                    <span class="avail-text">Immédiate</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="about-languages mt-4">
-              <h5>Langues</h5>
-              <div class="lang-badges">
-                <span class="lang-badge">🇫🇷 Français — Natif</span>
-                <span class="lang-badge">🇬🇧 Anglais — B2</span>
-                <span class="lang-badge">🇪🇸 Espagnol — A2</span>
-                <span class="lang-badge">🕌 Arabe littéraire — A2</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-    <!-- End About Section -->
-
-    <!-- ======= Skills Section ======= -->
-    <section id="skills" class="skills section-bg">
-      <div class="container">
-
-        <div class="section-title" data-aos="fade-up">
-          <h2>Compétences</h2>
-          <p>Stack technique et savoir-faire acquis à travers projets et formations</p>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-6 mb-4" data-aos="fade-up">
-            <div class="skill-category-card">
-              <div class="skill-category-header">
-                <div class="skill-cat-icon icon-frontend"><i class="bi bi-window"></i></div>
-                <h4>Frontend</h4>
-              </div>
-              <div class="skill-tags">
-                <span class="skill-tag tag-frontend">React</span>
-                <span class="skill-tag tag-frontend">React Native</span>
-                <span class="skill-tag tag-frontend">TypeScript</span>
-                <span class="skill-tag tag-frontend">HTML / CSS</span>
-                <span class="skill-tag tag-frontend">Expo (EAS)</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="50">
-            <div class="skill-category-card">
-              <div class="skill-category-header">
-                <div class="skill-cat-icon icon-backend"><i class="bi bi-server"></i></div>
-                <h4>Backend</h4>
-              </div>
-              <div class="skill-tags">
-                <span class="skill-tag tag-backend">Symfony</span>
-                <span class="skill-tag tag-backend">NestJS</span>
-                <span class="skill-tag tag-backend">Node.js</span>
-                <span class="skill-tag tag-backend">Laravel</span>
-                <span class="skill-tag tag-backend">Python</span>
-                <span class="skill-tag tag-backend">API REST</span>
-                <span class="skill-tag tag-backend">JWT</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="skill-category-card">
-              <div class="skill-category-header">
-                <div class="skill-cat-icon icon-db"><i class="bi bi-database-fill"></i></div>
-                <h4>Base de données</h4>
-              </div>
-              <div class="skill-tags">
-                <span class="skill-tag tag-db">MySQL</span>
-                <span class="skill-tag tag-db">PostgreSQL</span>
-                <span class="skill-tag tag-db">MongoDB</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="150">
-            <div class="skill-category-card">
-              <div class="skill-category-header">
-                <div class="skill-cat-icon icon-devops"><i class="bi bi-gear-fill"></i></div>
-                <h4>DevOps & Outils</h4>
-              </div>
-              <div class="skill-tags">
-                <span class="skill-tag tag-devops">Docker</span>
-                <span class="skill-tag tag-devops">Git</span>
-                <span class="skill-tag tag-devops">Railway</span>
-                <span class="skill-tag tag-devops">Cloudflare</span>
-                <span class="skill-tag tag-devops">Nginx</span>
-                <span class="skill-tag tag-devops">Web Scraping</span>
-                <span class="skill-tag tag-devops">Jira</span>
-                <span class="skill-tag tag-devops">Trello</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12" data-aos="fade-up" data-aos-delay="200">
-            <div class="skill-category-card">
-              <div class="skill-category-header">
-                <div class="skill-cat-icon icon-soft"><i class="bi bi-people-fill"></i></div>
-                <h4>Soft Skills</h4>
-              </div>
-              <div class="skill-tags">
-                <span class="skill-tag tag-soft">Résolution de problèmes</span>
-                <span class="skill-tag tag-soft">Autonomie</span>
-                <span class="skill-tag tag-soft">Esprit d'analyse</span>
-                <span class="skill-tag tag-soft">Apprentissage rapide</span>
-                <span class="skill-tag tag-soft">Travail d'équipe</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-    <!-- End Skills Section -->
-
-    <!-- ======= Experience Section ======= -->
-    <section id="experience" class="experience">
-      <div class="container">
-
-        <div class="section-title" data-aos="fade-up">
-          <h2>Expériences</h2>
-          <p>Projets et réalisations récentes</p>
-        </div>
-
-        <div class="row">
-
-          <div class="col-lg-6 mb-4" data-aos="fade-up">
-            <div class="exp-card">
-              <div class="exp-card-header">
-                <div class="exp-icon-wrap exp-personal islaah-icon-wrap">
-                  <img src="assets/img/islaah-logo.png" alt="Islaah" class="islaah-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                  <i class="bi bi-phone-fill" style="display:none"></i>
-                </div>
-                <div class="exp-meta">
-                  <h3>Islaah</h3>
-                  <p class="exp-subtitle">Application mobile interactive autour du Coran</p>
-                  <div class="exp-tags-row">
-                    <span class="exp-badge badge-personal">Projet personnel</span>
-                    <span class="exp-date"><i class="bi bi-calendar3"></i> 2026</span>
-                  </div>
-                </div>
-              </div>
-              <div class="exp-card-body">
-                <ul class="exp-list">
-                  <li>App mobile de quiz/blind test pour identifier les sourates du Coran à partir d'extraits audio.</li>
-                  <li>API REST Symfony : gestion utilisateurs, scores, progression et authentification JWT.</li>
-                  <li>Système de gamification : XP, streaks, classements et notifications.</li>
-                  <li>Intégration audio via Cloudflare, publication sur l'Apple Store via EAS.</li>
-                  <li>Conception BDD MySQL et gestion complète des données utilisateurs.</li>
-                </ul>
-                <div class="exp-stack">
-                  <span class="stack-tag">React Native</span>
-                  <span class="stack-tag">Symfony</span>
-                  <span class="stack-tag">MySQL</span>
-                  <span class="stack-tag">JWT</span>
-                  <span class="stack-tag">Cloudflare</span>
-                  <span class="stack-tag">Docker</span>
-                  <span class="stack-tag">Railway</span>
-                  <span class="stack-tag">EAS</span>
-                </div>
-                <div class="exp-appstore mt-3">
-                  <a href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" class="btn-appstore">
-                    <i class="bi bi-apple"></i> Disponible sur l'App Store
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="exp-card">
-              <div class="exp-card-header">
-                <div class="exp-icon-wrap exp-school">
-                  <i class="bi bi-globe2"></i>
-                </div>
-                <div class="exp-meta">
-                  <h3>SkyWalk</h3>
-                  <p class="exp-subtitle">Plateforme d'aide à l'expatriation</p>
-                  <div class="exp-tags-row">
-                    <span class="exp-badge badge-school">ETNA — GPE</span>
-                    <span class="exp-date"><i class="bi bi-calendar3"></i> 2025 — 2026</span>
-                  </div>
-                </div>
-              </div>
-              <div class="exp-card-body">
-                <ul class="exp-list">
-                  <li>Collecte de données internationales via API externes (Adzuna, OECD) et web scraping.</li>
-                  <li>Structuration PostgreSQL : procédures administratives, comparateurs, dashboard.</li>
-                  <li>API REST NestJS avec authentification JWT (access + refresh token).</li>
-                  <li>Comparateur de pays, dashboard et projets d'expatriation.</li>
-                  <li>Infrastructure Docker multi-stage + Nginx pour dev &amp; prod.</li>
-                </ul>
-                <div class="exp-stack">
-                  <span class="stack-tag">React</span>
-                  <span class="stack-tag">TypeScript</span>
-                  <span class="stack-tag">NestJS</span>
-                  <span class="stack-tag">PostgreSQL</span>
-                  <span class="stack-tag">JWT</span>
-                  <span class="stack-tag">Docker</span>
-                  <span class="stack-tag">Nginx</span>
-                  <span class="stack-tag">Web Scraping</span>
-                  <span class="stack-tag">Jira</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
-
-      </div>
-    </section>
-    <!-- End Experience Section -->
-
-    <!-- ======= Formation Section ======= -->
-    <section id="formation" class="formation section-bg">
-      <div class="container">
-
-        <div class="section-title" data-aos="fade-up">
-          <h2>Formation</h2>
-          <p>Parcours académique</p>
-        </div>
-
-        <div class="timeline" data-aos="fade-up">
-
-          <div class="timeline-item">
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <div class="timeline-date-badge">2023 — 2026</div>
-              <h3>Master Architecte de Systèmes d'Informations</h3>
-              <h4><i class="bi bi-building"></i> ETNA — École des Technologies Numériques Avancées</h4>
-              <ul>
-                <li><strong>Front :</strong> React Native, TypeScript</li>
-                <li><strong>Back :</strong> Symfony, Laravel, Node.js, NestJS, Python</li>
-                <li><strong>Plateformes :</strong> iOS, Android, Web</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <div class="timeline-date-badge">2023</div>
-              <h3>Formation Développeur Web Full Stack</h3>
-              <h4><i class="bi bi-building"></i> Le Réacteur — Bootcamp intensif</h4>
-              <ul>
-                <li>HTML, CSS, JavaScript, React, Node.js, MongoDB</li>
-                <li>Développement de projets fullstack de bout en bout</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <div class="timeline-date-badge">2020 — 2022</div>
-              <h3>BTS Systèmes Numériques — option Électronique</h3>
-              <h4><i class="bi bi-building"></i> Lycée Jules Ferry — Versailles</h4>
-              <ul>
-                <li>BTS SN option B obtenu + Certification Pix</li>
-                <li>Projet de fin d'études : Jardin connecté</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <div class="timeline-date-badge">2017 — 2020</div>
-              <h3>Baccalauréat STI2D</h3>
-              <h4><i class="bi bi-building"></i> Lycée Dorian — Paris 11e</h4>
-              <ul>
-                <li>Sciences et Technologies de l'Industrie et du Développement Durable</li>
-                <li>Baccalauréat obtenu</li>
-              </ul>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-    <!-- End Formation Section -->
-
-    <!-- ======= Interests Section ======= -->
-    <section id="interests" class="interests">
-      <div class="container">
-
-        <div class="section-title" data-aos="fade-up">
-          <h2>Centres d'intérêt</h2>
-          <p>Ce qui me définit en dehors du code</p>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up">
-            <div class="interest-card">
-              <div class="interest-icon-wrap">
-                <i class="bi bi-laptop-fill"></i>
-              </div>
-              <h4>Développement de projets</h4>
-              <p>Toujours en train d'explorer de nouvelles technologies et de construire de nouveaux projets perso.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="interest-card">
-              <div class="interest-icon-wrap">
-                <i class="bi bi-lightbulb-fill"></i>
-              </div>
-              <h4>Technologie & Innovation</h4>
-              <p>Passionné par les dernières avancées tech, l'IA et les nouvelles manières de résoudre des problèmes.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="interest-card">
-              <div class="interest-icon-wrap">
-                <i class="bi bi-trophy-fill"></i>
-              </div>
-              <h4>Basket-Ball</h4>
-              <p>Sport découvert au collège, rapidement devenu une passion pour le jeu et l'esprit d'équipe.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
-            <div class="interest-card">
-              <div class="interest-icon-wrap">
-                <i class="bi bi-translate"></i>
-              </div>
-              <h4>Culture japonaise</h4>
-              <p>Fan de manga et d'animé — une source d'inspiration créative et de storytelling.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
-            <div class="interest-card">
-              <div class="interest-icon-wrap">
-                <i class="bi bi-controller"></i>
-              </div>
-              <h4>Jeux vidéo</h4>
-              <p>Les jeux vidéo ont éveillé en moi la curiosité pour l'informatique et la création numérique.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-    <!-- End Interests Section -->
-
-    <!-- ======= Contact Section ======= -->
-    <section id="contact" class="contact section-bg">
-      <div class="container">
-
-        <div class="section-title" data-aos="fade-up">
-          <h2>Contact</h2>
-          <p>Une opportunité, un projet, une question ? Écrivez-moi.</p>
-        </div>
-
-        <div class="row" data-aos="fade-in">
-
-          <div class="col-lg-5 mb-5 mb-lg-0">
-            <div class="contact-info-box">
-              <div class="contact-info-item">
-                <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
-                <div>
-                  <h4>Localisation</h4>
-                  <p>Paris, Île-de-France</p>
-                </div>
-              </div>
-              <div class="contact-info-item">
-                <div class="contact-icon"><i class="bi bi-envelope-fill"></i></div>
-                <div>
-                  <h4>Email</h4>
-                  <p><a href="mailto:arphandrame0@gmail.com">arphandrame0@gmail.com</a></p>
-                </div>
-              </div>
-              <div class="contact-info-item">
-                <div class="contact-icon"><i class="bi bi-telephone-fill"></i></div>
-                <div>
-                  <h4>Téléphone</h4>
-                  <p>07 67 31 84 26</p>
-                </div>
-              </div>
-              <div class="contact-info-item">
-                <div class="contact-icon"><i class="bi bi-github"></i></div>
-                <div>
-                  <h4>GitHub</h4>
-                  <p><a href="https://github.com/drams18" target="_blank">github.com/drams18</a></p>
-                </div>
-              </div>
-              <div class="contact-info-item">
-                <div class="contact-icon"><i class="bi bi-linkedin"></i></div>
-                <div>
-                  <h4>LinkedIn</h4>
-                  <p><a href="https://www.linkedin.com/in/arphan-drame-b29259258/" target="_blank">Arphan DRAME</a></p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-7">
-            <form id="contactForm" role="form" class="php-email-form">
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for="name">Nom</label>
-                  <input type="text" name="name" class="form-control" id="name" required>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="email">Email</label>
-                  <input type="email" class="form-control" name="email" id="email" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="subject">Objet</label>
-                <input type="text" class="form-control" name="subject" id="subject" required>
-              </div>
-              <div class="form-group">
-                <label for="message">Message</label>
-                <textarea class="form-control" name="message" id="message" rows="8" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Envoi en cours...</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Votre message a bien été envoyé. Merci !</div>
-              </div>
-              <div class="text-center">
-                <button type="submit">Envoyer le message <i class="bi bi-send ms-2"></i></button>
-              </div>
-            </form>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-    <!-- End Contact Section -->
-
-  </main>
-  <!-- End #main -->
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="container text-center">
-      <p>&copy; 2026 <strong>Arphan DRAME</strong> — Développeur Full Stack</p>
+  <!-- Quick Nav Panel -->
+  <div id="quick-nav-panel" class="hidden">
+    <div id="quick-nav-header">
+      <span>NAVIGATION RAPIDE</span>
+      <button id="quick-nav-close" class="btn-pixel">✕</button>
     </div>
-  </footer>
-  <!-- End Footer -->
+    <div id="quick-nav-list">
+      <button class="quick-nav-item" data-section="about">
+        <span class="qn-icon">🏠</span>
+        <span class="qn-label">À PROPOS</span>
+        <span class="qn-status" data-for="about">○</span>
+      </button>
+      <button class="quick-nav-item" data-section="skills">
+        <span class="qn-icon">⚙️</span>
+        <span class="qn-label">COMPÉTENCES</span>
+        <span class="qn-status" data-for="skills">○</span>
+      </button>
+      <button class="quick-nav-item" data-section="projects">
+        <span class="qn-icon">🕹️</span>
+        <span class="qn-label">PROJETS</span>
+        <span class="qn-status" data-for="projects">○</span>
+      </button>
+      <button class="quick-nav-item" data-section="formation">
+        <span class="qn-icon">📚</span>
+        <span class="qn-label">FORMATION</span>
+        <span class="qn-status" data-for="formation">○</span>
+      </button>
+      <button class="quick-nav-item" data-section="interests">
+        <span class="qn-icon">🌿</span>
+        <span class="qn-label">INTÉRÊTS</span>
+        <span class="qn-status" data-for="interests">○</span>
+      </button>
+      <button class="quick-nav-item" data-section="contact">
+        <span class="qn-icon">📬</span>
+        <span class="qn-label">CONTACT</span>
+        <span class="qn-status" data-for="contact">○</span>
+      </button>
+    </div>
+  </div>
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center" title="Retour en haut">
-    <i class="bi bi-arrow-up-short"></i>
-  </a>
+  <!-- Interaction Prompt -->
+  <div id="interact-prompt" class="hidden">
+    <div class="prompt-key">E</div>
+    <div class="prompt-text">INTERAGIR</div>
+  </div>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/typed.js/typed.min.js"></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- Tutorial Overlay -->
+  <div id="tutorial-overlay">
+    <div id="tutorial-box">
+      <div id="tutorial-avatar">🧑‍💻</div>
+      <div id="tutorial-title">BIENVENUE !</div>
+      <div id="tutorial-name">Portfolio de Arphan DRAME</div>
+      <div id="tutorial-desc">Explorez la carte et entrez dans les bâtiments pour découvrir mon parcours.</div>
+      <div id="tutorial-controls">
+        <div class="ctrl-desktop">
+          <div class="ctrl-row">
+            <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+            <span>ou</span>
+            <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd>
+            <span>se déplacer</span>
+          </div>
+          <div class="ctrl-row">
+            <kbd>Shift</kbd> <span>courir / sprinter</span>
+          </div>
+          <div class="ctrl-row">
+            <kbd>E</kbd> <span>ou clic sur un bâtiment → interagir</span>
+          </div>
+        </div>
+        <div class="ctrl-mobile">
+          <span>Joystick → déplacer</span><br>
+          <span>Joystick à fond → <strong>courir</strong></span><br>
+          <span>Bouton <strong>E</strong> → interagir</span>
+        </div>
+      </div>
+      <button id="tutorial-start" class="btn-pixel btn-start">▶ COMMENCER</button>
+    </div>
+  </div>
 
-  <script src="assets/js/main.js"></script>
+  <!-- Section Modal -->
+  <div id="section-modal" class="hidden">
+    <div id="modal-backdrop"></div>
+    <div id="modal-panel">
+      <div id="modal-header">
+        <span id="modal-icon"></span>
+        <span id="modal-title"></span>
+        <button id="modal-close" class="btn-pixel">✕ FERMER</button>
+      </div>
+      <div id="modal-body">
+        <div id="modal-content"></div>
+      </div>
+    </div>
+  </div>
 
-  <script>
-    // ===== EmailJS Contact Form =====
-    // Créez un compte sur https://www.emailjs.com/ puis remplacez les valeurs ci-dessous
-    const EMAILJS_PUBLIC_KEY  = 'a8mKuHS56bPD-ydT0';   // Compte > API Keys
-    const EMAILJS_SERVICE_ID  = 'service_kju3n28';   // Email Services
-    const EMAILJS_TEMPLATE_ID = 'template_pili6gr';  // Email Templates
+  <!-- Mobile Controls -->
+  <div id="mobile-controls" class="hidden">
+    <div id="joystick-zone">
+      <div id="joystick-base">
+        <div id="joystick-ring"></div>
+        <div id="joystick-thumb"></div>
+      </div>
+    </div>
+    <div id="mobile-buttons">
+      <button id="btn-interact-mobile" class="btn-mobile-action">E</button>
+    </div>
+  </div>
 
-    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  <!-- Notification Toast -->
+  <div id="toast" class="hidden"></div>
 
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+  <!-- EmailJS (for contact form) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" async></script>
 
-      const form       = this;
-      const loading    = form.querySelector('.loading');
-      const errorMsg   = form.querySelector('.error-message');
-      const sentMsg    = form.querySelector('.sent-message');
-
-      loading.style.display  = 'block';
-      errorMsg.style.display = 'none';
-      sentMsg.style.display  = 'none';
-
-      const templateParams = {
-        from_name:  form.querySelector('[name="name"]').value,
-        from_email: form.querySelector('[name="email"]').value,
-        subject:    form.querySelector('[name="subject"]').value,
-        message:    form.querySelector('[name="message"]').value,
-      };
-
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-        .then(function() {
-          loading.style.display = 'none';
-          sentMsg.style.display = 'block';
-          form.reset();
-        }, function(error) {
-          loading.style.display  = 'none';
-          errorMsg.textContent   = 'Erreur lors de l\'envoi. Réessayez ou contactez-moi directement par email.';
-          errorMsg.style.display = 'block';
-          console.error('EmailJS error:', error);
-        });
-    });
-  </script>
+  <!-- JS Modules (load order matters) -->
+  <script src="js/map.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/controls.js"></script>
+  <script src="js/mobileControls.js"></script>
+  <script src="js/interactions.js"></script>
+  <script src="js/game.js"></script>
 
 </body>
-
 </html>
