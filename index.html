@@ -2,159 +2,150 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Arphan DRAME — Portfolio RPG</title>
-  <meta name="description" content="Portfolio interactif d'Arphan DRAME — Explorez comme un jeu RPG !">
-
-  <!-- Pixel Art Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musée de drams — Arphan DRAME</title>
+  <meta name="description" content="Musée interactif du parcours d'Arphan DRAME — Développeur Full Stack">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Game Canvas -->
-  <canvas id="gameCanvas"></canvas>
+  <!-- ═══════════════════════════════════
+       SCREEN 1 — WELCOME
+  ═══════════════════════════════════ -->
+  <div id="screen-welcome" class="screen active">
+    <div class="welcome-particles" id="welcome-particles"></div>
+    <div class="welcome-radial"></div>
+    <div class="welcome-content">
+      <div class="museum-badge">MUSÉE INTERACTIF</div>
+      <div class="museum-crest">🏛️</div>
+      <div class="museum-of">MUSÉE DE</div>
+      <h1 class="museum-name">drams</h1>
+      <div class="museum-subtitle">PORTFOLIO D'ARPHAN DRAME · DÉVELOPPEUR FULL STACK</div>
+      <div class="welcome-rule"></div>
+      <p class="welcome-desc">
+        Une visite guidée à travers les défis, les créations<br>
+        et les moments qui ont façonné un développeur passionné.
+      </p>
+      <button class="btn-museum" id="btn-start-visit">
+        <span>🚪</span>
+        <span>Commencer la visite du musée de drams</span>
+      </button>
+      <div class="welcome-meta">Entrée libre &ensp;·&ensp; ~5 minutes &ensp;·&ensp; 9 salles</div>
+    </div>
+  </div>
 
-  <!-- ======= HUD Overlay ======= -->
-  <div id="hud">
-    <div id="hud-title">ARPHAN DRAME</div>
-    <div id="hud-subtitle">Développeur Full Stack</div>
-    <div id="hud-progress">
-      <div id="hud-progress-label">🗺️ <span id="visited-count">0</span>/6 lieux</div>
-      <div id="hud-progress-bar-wrap">
-        <div id="hud-progress-bar"></div>
+  <!-- ═══════════════════════════════════
+       SCREEN 2 — AVATAR SELECTION
+  ═══════════════════════════════════ -->
+  <div id="screen-avatar" class="screen">
+    <div class="avatar-screen">
+      <div class="avatar-topbar">
+        <button class="btn-back" id="btn-back-welcome">← RETOUR</button>
+        <div class="avatar-topbar-title">MUSÉE DE DRAMS</div>
+        <div></div>
+      </div>
+      <div class="avatar-header">
+        <div class="section-badge">ACCUEIL DES VISITEURS</div>
+        <h2 class="avatar-title">CHOISISSEZ VOTRE GUIDE</h2>
+        <p class="avatar-sub">Quel personnage vous accompagnera dans cette visite ?</p>
+      </div>
+      <div class="avatar-grid" id="avatar-grid">
+        <!-- Injected by JS -->
+      </div>
+      <div class="avatar-footer">
+        <div class="avatar-selection-info" id="avatar-selection-info">
+          <span id="sel-emoji"></span>
+          <span id="sel-name">Aucun guide sélectionné</span>
+        </div>
+        <button class="btn-museum btn-enter" id="btn-enter-museum" disabled>
+          <span>🏛️</span>
+          <span>Entrer dans le musée</span>
+        </button>
       </div>
     </div>
-    <div id="hud-dots"></div>
   </div>
 
-  <!-- Quick Nav Button -->
-  <div id="quick-nav-toggle" title="Navigation rapide">
-    <span class="pixel-icon">⚡</span>
-    <span>MENU</span>
-  </div>
+  <!-- ═══════════════════════════════════
+       SCREEN 3 — MUSEUM
+  ═══════════════════════════════════ -->
+  <div id="screen-museum" class="screen">
 
-  <!-- Quick Nav Panel -->
-  <div id="quick-nav-panel" class="hidden">
-    <div id="quick-nav-header">
-      <span>NAVIGATION RAPIDE</span>
-      <button id="quick-nav-close" class="btn-pixel">✕</button>
-    </div>
-    <div id="quick-nav-list">
-      <button class="quick-nav-item" data-section="about">
-        <span class="qn-icon">🏠</span>
-        <span class="qn-label">À PROPOS</span>
-        <span class="qn-status" data-for="about">○</span>
-      </button>
-      <button class="quick-nav-item" data-section="skills">
-        <span class="qn-icon">⚙️</span>
-        <span class="qn-label">COMPÉTENCES</span>
-        <span class="qn-status" data-for="skills">○</span>
-      </button>
-      <button class="quick-nav-item" data-section="projects">
-        <span class="qn-icon">🕹️</span>
-        <span class="qn-label">PROJETS</span>
-        <span class="qn-status" data-for="projects">○</span>
-      </button>
-      <button class="quick-nav-item" data-section="formation">
-        <span class="qn-icon">📚</span>
-        <span class="qn-label">FORMATION</span>
-        <span class="qn-status" data-for="formation">○</span>
-      </button>
-      <button class="quick-nav-item" data-section="interests">
-        <span class="qn-icon">🌿</span>
-        <span class="qn-label">INTÉRÊTS</span>
-        <span class="qn-status" data-for="interests">○</span>
-      </button>
-      <button class="quick-nav-item" data-section="contact">
-        <span class="qn-icon">📬</span>
-        <span class="qn-label">CONTACT</span>
-        <span class="qn-status" data-for="contact">○</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Interaction Prompt -->
-  <div id="interact-prompt" class="hidden">
-    <div class="prompt-key">E</div>
-    <div class="prompt-text">INTERAGIR</div>
-  </div>
-
-  <!-- Tutorial Overlay -->
-  <div id="tutorial-overlay">
-    <div id="tutorial-box">
-      <div id="tutorial-avatar">🧑‍💻</div>
-      <div id="tutorial-title">BIENVENUE !</div>
-      <div id="tutorial-name">Portfolio de Arphan DRAME</div>
-      <div id="tutorial-desc">Explorez la carte et entrez dans les bâtiments pour découvrir mon parcours.</div>
-      <div id="tutorial-controls">
-        <div class="ctrl-desktop">
-          <div class="ctrl-row">
-            <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
-            <span>ou</span>
-            <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd>
-            <span>se déplacer</span>
-          </div>
-          <div class="ctrl-row">
-            <kbd>Shift</kbd> <span>courir / sprinter</span>
-          </div>
-          <div class="ctrl-row">
-            <kbd>E</kbd> <span>ou clic sur un bâtiment → interagir</span>
-          </div>
-        </div>
-        <div class="ctrl-mobile">
-          <span>Joystick → déplacer</span><br>
-          <span>Joystick à fond → <strong>courir</strong></span><br>
-          <span>Bouton <strong>E</strong> → interagir</span>
+    <!-- Top navigation bar -->
+    <div class="museum-topbar">
+      <div class="topbar-visitor">
+        <div class="visitor-avatar" id="topbar-avatar"></div>
+        <div class="visitor-info">
+          <div class="visitor-label">VISITEUR</div>
+          <div class="visitor-name" id="topbar-name">—</div>
         </div>
       </div>
-      <button id="tutorial-start" class="btn-pixel btn-start">▶ COMMENCER</button>
-    </div>
-  </div>
-
-  <!-- Section Modal -->
-  <div id="section-modal" class="hidden">
-    <div id="modal-backdrop"></div>
-    <div id="modal-panel">
-      <div id="modal-header">
-        <span id="modal-icon"></span>
-        <span id="modal-title"></span>
-        <button id="modal-close" class="btn-pixel">✕ FERMER</button>
+      <div class="topbar-progress">
+        <div class="topbar-room-name" id="topbar-room-name"></div>
+        <div class="topbar-track">
+          <div class="topbar-fill" id="topbar-fill"></div>
+        </div>
+        <div class="topbar-dots" id="topbar-dots"></div>
       </div>
-      <div id="modal-body">
-        <div id="modal-content"></div>
+      <div class="topbar-actions">
+        <span class="topbar-counter"><span id="room-num">1</span>/<span id="room-tot">10</span></span>
+        <button class="btn-plan" id="btn-plan" title="Plan du musée">🗺️ PLAN</button>
       </div>
     </div>
-  </div>
 
-  <!-- Mobile Controls -->
-  <div id="mobile-controls" class="hidden">
-    <div id="joystick-zone">
-      <div id="joystick-base">
-        <div id="joystick-ring"></div>
-        <div id="joystick-thumb"></div>
+    <!-- Hall wrapper -->
+    <div class="museum-hall" id="museum-hall">
+      <!-- Architectural decoration -->
+      <div class="arch arch-left">
+        <div class="arch-column"></div>
+        <div class="arch-panel"></div>
+      </div>
+      <div class="arch arch-right">
+        <div class="arch-panel"></div>
+        <div class="arch-column"></div>
+      </div>
+      <div class="hall-molding hall-molding-top"></div>
+      <div class="hall-molding hall-molding-bottom"></div>
+      <div class="hall-spotlight" id="hall-spotlight"></div>
+
+      <!-- Room content -->
+      <div class="room-wrapper" id="room-wrapper">
+        <!-- Injected by JS -->
+      </div>
+
+      <!-- Navigation -->
+      <button class="nav-btn nav-prev" id="nav-prev">
+        <div class="nav-chevron">‹</div>
+        <div class="nav-hint" id="nav-prev-hint"></div>
+      </button>
+      <button class="nav-btn nav-next" id="nav-next">
+        <div class="nav-chevron">›</div>
+        <div class="nav-hint" id="nav-next-hint"></div>
+      </button>
+    </div>
+
+    <!-- Museum Map overlay -->
+    <div class="map-overlay hidden" id="map-overlay">
+      <div class="map-panel">
+        <div class="map-panel-header">
+          <div>
+            <div class="section-badge">NAVIGATION</div>
+            <h3 class="map-title">PLAN DU MUSÉE</h3>
+          </div>
+          <button class="btn-close-map" id="btn-close-map">✕</button>
+        </div>
+        <div class="map-list" id="map-list">
+          <!-- Injected by JS -->
+        </div>
       </div>
     </div>
-    <div id="mobile-buttons">
-      <button id="btn-interact-mobile" class="btn-mobile-action">E</button>
-    </div>
+
   </div>
 
-  <!-- Notification Toast -->
-  <div id="toast" class="hidden"></div>
+  <!-- Toast -->
+  <div class="toast hidden" id="toast"></div>
 
-  <!-- EmailJS (for contact form) -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" async></script>
-
-  <!-- JS Modules (load order matters) -->
-  <script src="js/map.js"></script>
-  <script src="js/player.js"></script>
-  <script src="js/controls.js"></script>
-  <script src="js/mobileControls.js"></script>
-  <script src="js/interactions.js"></script>
-  <script src="js/game.js"></script>
-
+  <script src="js/museum.js"></script>
 </body>
 </html>
