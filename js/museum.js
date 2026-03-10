@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   MUSÉE DE DRAMS — museum.js
+   MUSÉE DE DRAMS — museum.js  (game version)
    Portfolio interactif d'Arphan DRAME
    ══════════════════════════════════════════════════════ */
 
@@ -7,16 +7,16 @@
 
 // ── Avatars ─────────────────────────────────────────────
 const AVATARS = [
-  { id: 'spiderman', name: 'Spider-Man',   emoji: '🕷️' },
-  { id: 'batman',    name: 'Batman',        emoji: '🦇' },
-  { id: 'flash',     name: 'Flash',         emoji: '⚡' },
-  { id: 'superman',  name: 'Superman',      emoji: '🦸' },
-  { id: 'naruto',    name: 'Naruto',        emoji: '🍥' },
-  { id: 'goku',      name: 'Goku',          emoji: '🐉' },
-  { id: 'sonic',     name: 'Sonic',         emoji: '💨' },
-  { id: 'link',      name: 'Link',          emoji: '🗡️' },
-  { id: 'mario',     name: 'Mario',         emoji: '🍄' },
-  { id: 'harry',     name: 'Harry Potter',  emoji: '🧙' },
+  { id: 'spiderman', name: 'Spider-Man',  emoji: '🕷️' },
+  { id: 'batman',    name: 'Batman',       emoji: '🦇' },
+  { id: 'flash',     name: 'Flash',        emoji: '⚡' },
+  { id: 'superman',  name: 'Superman',     emoji: '🦸' },
+  { id: 'naruto',    name: 'Naruto',       emoji: '🍥' },
+  { id: 'goku',      name: 'Goku',         emoji: '🐉' },
+  { id: 'sonic',     name: 'Sonic',        emoji: '💨' },
+  { id: 'link',      name: 'Link',         emoji: '🗡️' },
+  { id: 'mario',     name: 'Mario',        emoji: '🍄' },
+  { id: 'harry',     name: 'Harry Potter', emoji: '🧙' },
 ];
 
 // ── Museum rooms ─────────────────────────────────────────
@@ -36,9 +36,9 @@ const ROOMS = [
       story: 'Bienvenue dans ce musée interactif dédié au parcours d\'Arphan DRAME, développeur Full Stack basé à Paris. Cette visite vous guidera à travers les moments fondateurs, les défis techniques surmontés et les créations qui ont façonné ce développeur complet et polyvalent.',
       badges: ['🟢 Disponible immédiatement', '📍 Paris, Île-de-France', '🎓 Master ASI — ETNA'],
       socials: [
-        { icon: '⌨', label: 'GitHub',   url: 'https://github.com/drams18' },
-        { icon: '💼', label: 'LinkedIn', url: 'https://www.linkedin.com/in/arphan-drame-b29259258/' },
-        { icon: '🐦', label: 'Twitter',  url: 'https://twitter.com/drams_18' },
+        { icon: '⌨', label: 'GitHub',    url: 'https://github.com/drams18' },
+        { icon: '💼', label: 'LinkedIn',  url: 'https://www.linkedin.com/in/arphan-drame-b29259258/' },
+        { icon: '🐦', label: 'Twitter',   url: 'https://twitter.com/drams_18' },
         { icon: '📸', label: 'Instagram', url: 'https://www.instagram.com/dramsss18/' },
       ],
       langs: ['🇫🇷 Français — Natif', '🇬🇧 Anglais — B2', '🇪🇸 Espagnol — A2', '🕌 Arabe — A2'],
@@ -115,11 +115,11 @@ const ROOMS = [
       plaqueDate: '2023 — Aujourd\'hui',
       story: 'Chaque outil est une arme forgée à travers des projets réels, des défis techniques et des heures de pratique. Voici l\'arsenal complet d\'un développeur Full Stack moderne.',
       categories: [
-        { label: 'FRONTEND',          color: '#44aaff', rgb: '68,170,255',    skills: ['React', 'React Native', 'TypeScript', 'HTML / CSS', 'Expo EAS'] },
-        { label: 'BACKEND',           color: '#44ee88', rgb: '68,238,136',    skills: ['Symfony', 'NestJS', 'Node.js', 'Laravel', 'Python', 'API REST', 'JWT'] },
-        { label: 'BASE DE DONNÉES',   color: '#ff8844', rgb: '255,136,68',    skills: ['MySQL', 'PostgreSQL', 'MongoDB'] },
-        { label: 'DEVOPS & OUTILS',   color: '#cc88ff', rgb: '204,136,255',   skills: ['Docker', 'Git', 'Railway', 'Cloudflare', 'Nginx', 'Web Scraping', 'Jira'] },
-        { label: 'SOFT SKILLS',       color: '#ffd700', rgb: '255,215,0',     skills: ['Résolution de problèmes', 'Autonomie', 'Esprit d\'analyse', 'Apprentissage rapide', 'Travail d\'équipe'] },
+        { label: 'FRONTEND',        color: '#44aaff', rgb: '68,170,255',  skills: ['React', 'React Native', 'TypeScript', 'HTML / CSS', 'Expo EAS'] },
+        { label: 'BACKEND',         color: '#44ee88', rgb: '68,238,136',  skills: ['Symfony', 'NestJS', 'Node.js', 'Laravel', 'Python', 'API REST', 'JWT'] },
+        { label: 'BASE DE DONNÉES', color: '#ff8844', rgb: '255,136,68',  skills: ['MySQL', 'PostgreSQL', 'MongoDB'] },
+        { label: 'DEVOPS & OUTILS', color: '#cc88ff', rgb: '204,136,255', skills: ['Docker', 'Git', 'Railway', 'Cloudflare', 'Nginx', 'Web Scraping', 'Jira'] },
+        { label: 'SOFT SKILLS',     color: '#ffd700', rgb: '255,215,0',   skills: ['Résolution de problèmes', 'Autonomie', 'Esprit d\'analyse', 'Apprentissage rapide', 'Travail d\'équipe'] },
       ],
     },
   },
@@ -176,11 +176,11 @@ const ROOMS = [
       plaqueDate: 'Depuis toujours',
       story: 'Derrière le développeur se cache une personne curieuse, passionnée et en perpétuel mouvement. Ces passions nourrissent la créativité, la discipline et l\'approche unique portée dans chaque projet.',
       interests: [
-        { icon: '🏀', name: 'BASKET-BALL',      desc: 'Découvert au collège, rapidement devenu une passion. L\'esprit d\'équipe et la stratégie du jeu.' },
-        { icon: '🇯🇵', name: 'MANGA & ANIMÉ',   desc: 'Fan de culture japonaise — une source d\'inspiration créative et de storytelling profond.' },
-        { icon: '🎮', name: 'JEUX VIDÉO',        desc: 'Les jeux vidéo ont éveillé la curiosité pour l\'informatique et la création numérique dès l\'enfance.' },
-        { icon: '💡', name: 'TECH & IA',          desc: 'Passionné par les dernières avancées tech, l\'intelligence artificielle et les nouvelles façons de résoudre des problèmes.' },
-        { icon: '💻', name: 'PROJETS PERSO',      desc: 'Toujours en train d\'explorer une nouvelle technologie ou de construire un nouveau projet en dehors des heures de travail.' },
+        { icon: '🏀', name: 'BASKET-BALL',  desc: 'Découvert au collège, rapidement devenu une passion. L\'esprit d\'équipe et la stratégie du jeu.' },
+        { icon: '🇯🇵', name: 'MANGA & ANIMÉ', desc: 'Fan de culture japonaise — une source d\'inspiration créative et de storytelling profond.' },
+        { icon: '🎮', name: 'JEUX VIDÉO',   desc: 'Les jeux vidéo ont éveillé la curiosité pour l\'informatique et la création numérique dès l\'enfance.' },
+        { icon: '💡', name: 'TECH & IA',     desc: 'Passionné par les dernières avancées tech, l\'intelligence artificielle et les nouvelles façons de résoudre des problèmes.' },
+        { icon: '💻', name: 'PROJETS PERSO', desc: 'Toujours en train d\'explorer une nouvelle technologie ou de construire un nouveau projet en dehors des heures de travail.' },
       ],
     },
   },
@@ -198,12 +198,12 @@ const ROOMS = [
       plaqueDate: 'Disponible immédiatement',
       story: 'La visite touche à sa fin. Si ce parcours vous a convaincu ou si vous souhaitez en discuter, toutes les voies sont ouvertes.',
       contacts: [
-        { icon: '📧', label: 'EMAIL',       value: 'arphandrame0@gmail.com', href: 'mailto:arphandrame0@gmail.com' },
-        { icon: '📱', label: 'TÉLÉPHONE',   value: '07 67 31 84 26',        href: 'tel:+33767318426' },
-        { icon: '📍', label: 'LOCALISATION', value: 'Paris, Île-de-France',  href: null },
-        { icon: '⌨',  label: 'GITHUB',      value: 'github.com/drams18',    href: 'https://github.com/drams18' },
-        { icon: '💼', label: 'LINKEDIN',    value: 'Arphan DRAME',          href: 'https://www.linkedin.com/in/arphan-drame-b29259258/' },
-        { icon: '🟢', label: 'STATUT',      value: 'Disponible immédiatement', href: null },
+        { icon: '📧', label: 'EMAIL',        value: 'arphandrame0@gmail.com',  href: 'mailto:arphandrame0@gmail.com' },
+        { icon: '📱', label: 'TÉLÉPHONE',    value: '07 67 31 84 26',          href: 'tel:+33767318426' },
+        { icon: '📍', label: 'LOCALISATION', value: 'Paris, Île-de-France',    href: null },
+        { icon: '⌨',  label: 'GITHUB',       value: 'github.com/drams18',      href: 'https://github.com/drams18' },
+        { icon: '💼', label: 'LINKEDIN',     value: 'Arphan DRAME',            href: 'https://www.linkedin.com/in/arphan-drame-b29259258/' },
+        { icon: '🟢', label: 'STATUT',       value: 'Disponible immédiatement', href: null },
       ],
     },
   },
@@ -221,35 +221,47 @@ const ROOMS = [
   },
 ];
 
-// ── State ────────────────────────────────────────────────
+// ── Screen state ──────────────────────────────────────────
 const state = {
   avatar: null,
   room: 0,
   visited: new Set(),
 };
 
-// ── Init ─────────────────────────────────────────────────
+// ── Game state ────────────────────────────────────────────
+const DOOR_SPACING  = 220;   // px between door centers in corridor
+const CORRIDOR_PAD  = 160;   // left/right padding
+const CHAR_W        = 52;
+const CHAR_H        = 80;
+const CHAR_SPEED    = 5.5;
+const NEAR_THRESH   = 70;    // px radius to highlight door
+const CORRIDOR_W    = ROOMS.length * DOOR_SPACING + CORRIDOR_PAD * 2;
+
+const gst = {
+  running: false,
+  char: { x: 0, vx: 0, facing: 1 },
+  nearDoor: -1,
+  inRoom: -1,
+  frameId: null,
+  keys: {},
+};
+
+function getDoorX(i) { return CORRIDOR_PAD + i * DOOR_SPACING; }
+
+// ── Init ──────────────────────────────────────────────────
 function init() {
   buildAvatarGrid();
   buildMapList();
-  buildProgressDots();
-  document.getElementById('room-tot').textContent = ROOMS.length;
 
-  // Welcome
   document.getElementById('btn-start-visit').addEventListener('click', () => switchTo('welcome', 'avatar'));
   document.getElementById('btn-back-welcome').addEventListener('click', () => switchTo('avatar', 'welcome'));
   document.getElementById('btn-enter-museum').addEventListener('click', onEnterMuseum);
-
-  // Museum nav
-  document.getElementById('nav-prev').addEventListener('click', () => navigate(-1));
-  document.getElementById('nav-next').addEventListener('click', () => navigate(1));
   document.getElementById('btn-plan').addEventListener('click', openMap);
   document.getElementById('btn-close-map').addEventListener('click', closeMap);
+  document.getElementById('btn-exit-room').addEventListener('click', exitGameRoom);
+  document.getElementById('room-nav-prev').addEventListener('click', () => navigateRoom(-1));
+  document.getElementById('room-nav-next').addEventListener('click', () => navigateRoom(1));
 
-  // Keyboard
-  document.addEventListener('keydown', onKey);
-
-  // Particles
   buildParticles();
 }
 
@@ -264,12 +276,18 @@ function switchTo(from, to) {
   }, 500);
 }
 
-// ── Avatar ────────────────────────────────────────────────
+// ── Avatar screen ─────────────────────────────────────────
 function buildAvatarGrid() {
   const grid = document.getElementById('avatar-grid');
   grid.innerHTML = AVATARS.map(a => `
     <div class="avatar-card" data-id="${a.id}" onclick="selectAvatar('${a.id}')">
-      <div class="avatar-emoji">${a.emoji}</div>
+      <div class="avatar-sprite-wrap">
+        <img class="avatar-img"
+             src="assets/img/avatars/${a.id}.png"
+             alt="${a.name}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="avatar-emoji-fb">${a.emoji}</div>
+      </div>
       <div class="avatar-name">${a.name}</div>
     </div>
   `).join('');
@@ -281,7 +299,13 @@ function selectAvatar(id) {
   document.querySelectorAll('.avatar-card').forEach(c =>
     c.classList.toggle('selected', c.dataset.id === id)
   );
-  document.getElementById('sel-emoji').textContent = a.emoji;
+
+  const preview = document.getElementById('sel-avatar-preview');
+  preview.innerHTML = `
+    <img src="assets/img/avatars/${a.id}.png" alt="${a.name}"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <span class="sel-emoji-fb">${a.emoji}</span>
+  `;
   document.getElementById('sel-name').textContent = a.name + ' sélectionné·e';
   document.getElementById('btn-enter-museum').disabled = false;
 }
@@ -289,127 +313,321 @@ function selectAvatar(id) {
 function onEnterMuseum() {
   if (!state.avatar) return;
   const a = AVATARS.find(x => x.id === state.avatar);
-  document.getElementById('topbar-avatar').textContent = a.emoji;
-  document.getElementById('topbar-name').textContent = a.name;
+
+  // HUD avatar
+  const icon = document.getElementById('hud-char-icon');
+  icon.innerHTML = `
+    <img src="assets/img/avatars/${a.id}.png" alt="${a.name}"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <span class="hud-emoji-fb">${a.emoji}</span>
+  `;
+  document.getElementById('hud-char-name').textContent = a.name;
+
   switchTo('avatar', 'museum');
   state.room = 0;
   state.visited.clear();
-  renderRoom(0, null);
-  setTimeout(() => toast(`🏛️ Bienvenue, ${a.name} ! La visite commence…`), 800);
+
+  setTimeout(() => {
+    initGame(a);
+    toast(`🏛️ Bienvenue, ${a.name} ! Déplacez-vous avec ← →`);
+  }, 550);
 }
 
-// ── Navigation ────────────────────────────────────────────
-function navigate(dir) {
-  const next = state.room + dir;
-  if (next < 0 || next >= ROOMS.length) return;
-  renderRoom(next, dir > 0 ? 'next' : 'prev');
-}
+// ══════════════════════════════════════════════════════════
+// GAME ENGINE
+// ══════════════════════════════════════════════════════════
 
-function goToRoom(index) {
-  if (index < 0 || index >= ROOMS.length) return;
-  const dir = index > state.room ? 'next' : index < state.room ? 'prev' : null;
-  closeMap();
-  renderRoom(index, dir);
-}
-
-function onKey(e) {
-  const mapOpen = !document.getElementById('map-overlay').classList.contains('hidden');
-  if (mapOpen) {
-    if (e.key === 'Escape') closeMap();
-    return;
-  }
-  if (document.getElementById('screen-museum').classList.contains('active')) {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
-    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   navigate(-1);
-    if (e.key === 'Escape') openMap();
-  }
-}
-
-// ── Room rendering ────────────────────────────────────────
-function renderRoom(index, dir) {
-  const room = ROOMS[index];
-  const wrapper = document.getElementById('room-wrapper');
-  const isFirst = !dir;
-  const firstVisit = !state.visited.has(room.id);
-
-  state.room = index;
-  state.visited.add(room.id);
-
-  // Spotlight color
-  document.getElementById('hall-spotlight').style.background =
-    `radial-gradient(ellipse 65% 55% at 50% 42%, rgba(${room.rgb}, 0.07) 0%, transparent 65%)`;
-
-  // Room HTML
-  const html = `<div class="room-exhibit" style="--ra:${room.accent};--ra-rgb:${room.rgb}">
-    ${buildRoom(room)}
-  </div>`;
-
-  if (isFirst) {
-    wrapper.innerHTML = html;
-  } else {
-    // Slide out, then slide in
-    wrapper.style.opacity = '0';
-    wrapper.style.transform = dir === 'next' ? 'translateX(-40px)' : 'translateX(40px)';
-    wrapper.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
-    setTimeout(() => {
-      wrapper.innerHTML = html;
-      wrapper.style.transition = 'none';
-      wrapper.style.transform = dir === 'next' ? 'translateX(40px)' : 'translateX(-40px)';
-      wrapper.style.opacity = '0';
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          wrapper.style.transition = 'opacity 0.38s ease, transform 0.38s ease';
-          wrapper.style.opacity = '1';
-          wrapper.style.transform = 'translateX(0)';
-        });
-      });
-    }, 280);
-  }
-
-  wrapper.scrollTop = 0;
-
-  updateHUD(room);
+function initGame(avatar) {
+  buildCorridor(avatar);
+  buildMinimapRooms();
   buildProgressDots();
-  updateNavBtns();
-  updateMapState();
+  setupGameInput();
 
-  if (dir && firstVisit) {
-    setTimeout(() => toast(`🏛️ ${room.label}`), 320);
-  }
+  gst.char.x = getDoorX(0) - CHAR_W / 2;
+  gst.nearDoor = 0;
+  gst.inRoom = -1;
+  gst.running = true;
 
-  // Completion fanfare
-  if (room.type === 'completion' && firstVisit) {
-    setTimeout(() => toast('🏆 Vous avez exploré le musée en entier !'), 1000);
-  }
+  // Show controls hint
+  const hint = document.getElementById('controls-hint');
+  hint.classList.add('visible');
+  setTimeout(() => hint.classList.remove('visible'), 5000);
+
+  if (gst.frameId) cancelAnimationFrame(gst.frameId);
+  gameLoop();
 }
 
-// ── HUD update ────────────────────────────────────────────
-function updateHUD(room) {
-  document.getElementById('topbar-room-name').textContent = room.label;
-  document.getElementById('room-num').textContent = state.room + 1;
-  const pct = (state.visited.size / ROOMS.length) * 100;
-  document.getElementById('topbar-fill').style.width = pct + '%';
+function buildCorridor(avatar) {
+  const scene = document.getElementById('corridor-scene');
+  scene.style.width = CORRIDOR_W + 'px';
+
+  // Build doors
+  const doorsEl = document.getElementById('corridor-doors');
+  doorsEl.innerHTML = ROOMS.map((room, i) => {
+    const x = getDoorX(i);
+    const shortLabel = room.label.includes('—')
+      ? room.label.split('—')[1].trim()
+      : room.label;
+    return `
+      <div class="game-door" data-i="${i}" style="left:${x - 55}px" onclick="tapDoor(${i})">
+        <div class="door-num">${String(i + 1).padStart(2, '0')}</div>
+        <div class="door-emoji">${room.emoji}</div>
+        <div class="door-label">${shortLabel}</div>
+        <div class="door-hint">↑ ENTRER</div>
+        <div class="door-glow"></div>
+      </div>
+    `;
+  }).join('');
+
+  // Build character sprite
+  const inner = document.getElementById('char-sprite-inner');
+  inner.innerHTML = `
+    <img src="assets/img/avatars/${avatar.id}.png" alt="${avatar.name}"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="char-emoji-fb">${avatar.emoji}</div>
+  `;
+}
+
+function buildMinimapRooms() {
+  const el = document.getElementById('minimap-rooms');
+  el.innerHTML = ROOMS.map((r, i) => `
+    <div class="mm-room" data-i="${i}" title="${r.label}"
+         style="left:${(getDoorX(i) / CORRIDOR_W) * 100}%"
+         onclick="tapDoor(${i})"></div>
+  `).join('');
 }
 
 function buildProgressDots() {
-  const container = document.getElementById('topbar-dots');
-  if (!container) return;
-  container.innerHTML = ROOMS.map((r, i) => {
-    let cls = 't-dot';
-    if (i === state.room) cls += ' current';
-    else if (state.visited.has(r.id)) cls += ' visited';
-    const style = i === state.room ? `background:${r.accent};box-shadow:0 0 5px ${r.accent};border-color:${r.accent}` : '';
-    return `<div class="${cls}" title="${r.label}" style="${style}" onclick="goToRoom(${i})"></div>`;
-  }).join('');
+  // We don't have topbar-dots anymore, minimap handles it
+  updateMinimapState();
 }
 
-function updateNavBtns() {
-  document.getElementById('nav-prev').disabled = state.room === 0;
-  document.getElementById('nav-next').disabled = state.room >= ROOMS.length - 1;
-  const prev = ROOMS[state.room - 1];
-  const next = ROOMS[state.room + 1];
-  document.getElementById('nav-prev-hint').textContent = prev ? prev.emoji : '';
-  document.getElementById('nav-next-hint').textContent = next ? next.emoji : '';
+function updateMinimapState() {
+  document.querySelectorAll('.mm-room').forEach((el, i) => {
+    const r = ROOMS[i];
+    el.classList.remove('current', 'visited');
+    if (i === state.room) {
+      el.classList.add('current');
+      el.style.background = r.accent;
+      el.style.boxShadow  = `0 0 6px ${r.accent}`;
+    } else if (state.visited.has(r.id)) {
+      el.classList.add('visited');
+      el.style.background = '';
+      el.style.boxShadow  = '';
+    } else {
+      el.style.background = '';
+      el.style.boxShadow  = '';
+    }
+  });
+}
+
+function setupGameInput() {
+  document.addEventListener('keydown', onGameKey);
+  document.addEventListener('keyup',   e => { gst.keys[e.code] = false; });
+
+  // Mobile d-pad
+  const btnL = document.getElementById('btn-dpad-left');
+  const btnR = document.getElementById('btn-dpad-right');
+  const btnE = document.getElementById('btn-dpad-enter');
+
+  const hold = (btn, code) => {
+    btn.addEventListener('touchstart', e => { e.preventDefault(); gst.keys[code] = true; },  { passive: false });
+    btn.addEventListener('touchend',   e => { e.preventDefault(); gst.keys[code] = false; }, { passive: false });
+    btn.addEventListener('mousedown',  () => { gst.keys[code] = true; });
+    btn.addEventListener('mouseup',    () => { gst.keys[code] = false; });
+    btn.addEventListener('mouseleave', () => { gst.keys[code] = false; });
+  };
+  hold(btnL, 'ArrowLeft');
+  hold(btnR, 'ArrowRight');
+  btnE.addEventListener('click', () => {
+    if (gst.nearDoor >= 0 && gst.inRoom < 0) enterGameRoom(gst.nearDoor);
+  });
+}
+
+function onGameKey(e) {
+  gst.keys[e.code] = true;
+
+  const mapOpen = !document.getElementById('map-overlay').classList.contains('hidden');
+  if (mapOpen) {
+    if (e.code === 'Escape') closeMap();
+    return;
+  }
+
+  if (!document.getElementById('screen-museum').classList.contains('active')) return;
+
+  if (gst.inRoom >= 0) {
+    // Inside a room
+    if (e.code === 'Escape' || e.code === 'KeyQ') exitGameRoom();
+    if (e.code === 'ArrowRight' || e.code === 'KeyD') navigateRoom(1);
+    if (e.code === 'ArrowLeft'  || e.code === 'KeyA') navigateRoom(-1);
+    return;
+  }
+
+  // In corridor
+  if (e.code === 'Escape') { openMap(); return; }
+  if ((e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'Enter') && gst.nearDoor >= 0) {
+    e.preventDefault();
+    enterGameRoom(gst.nearDoor);
+  }
+}
+
+function gameLoop() {
+  if (!gst.running) return;
+
+  if (gst.inRoom < 0) {
+    // Movement
+    if (gst.keys.ArrowRight || gst.keys.KeyD) {
+      gst.char.vx = Math.min(gst.char.vx + 0.9, CHAR_SPEED);
+    } else if (gst.keys.ArrowLeft || gst.keys.KeyA) {
+      gst.char.vx = Math.max(gst.char.vx - 0.9, -CHAR_SPEED);
+    } else {
+      gst.char.vx *= 0.72;
+      if (Math.abs(gst.char.vx) < 0.08) gst.char.vx = 0;
+    }
+
+    gst.char.x = Math.max(0, Math.min(gst.char.x + gst.char.vx, CORRIDOR_W - CHAR_W));
+
+    if (gst.char.vx > 0.2)       gst.char.facing = 1;
+    else if (gst.char.vx < -0.2) gst.char.facing = -1;
+
+    // Nearest door
+    const charCenter = gst.char.x + CHAR_W / 2;
+    let bestI = -1, bestD = Infinity;
+    for (let i = 0; i < ROOMS.length; i++) {
+      const d = Math.abs(charCenter - getDoorX(i));
+      if (d < NEAR_THRESH && d < bestD) { bestI = i; bestD = d; }
+    }
+    if (bestI !== gst.nearDoor) {
+      gst.nearDoor = bestI;
+      if (bestI >= 0) {
+        state.room = bestI;
+        updateMinimapState();
+      }
+    }
+
+    renderCorridorFrame();
+  }
+
+  gst.frameId = requestAnimationFrame(gameLoop);
+}
+
+function renderCorridorFrame() {
+  const viewport = document.getElementById('corridor-viewport');
+  const scene    = document.getElementById('corridor-scene');
+  const charEl   = document.getElementById('game-character');
+  if (!viewport || !scene || !charEl) return;
+
+  // Camera — smooth follow
+  const vw      = viewport.clientWidth;
+  const targetX = gst.char.x + CHAR_W / 2 - vw / 2;
+  const camX    = Math.max(0, Math.min(targetX, CORRIDOR_W - vw));
+  scene.style.transform = `translateX(${-camX}px)`;
+
+  // Character
+  charEl.style.left = gst.char.x + 'px';
+  const flip = gst.char.facing === -1 ? 'scaleX(-1)' : 'scaleX(1)';
+  charEl.style.transform = flip;
+  charEl.classList.toggle('walking', Math.abs(gst.char.vx) > 0.4);
+
+  // Door highlights
+  document.querySelectorAll('.game-door').forEach((el, i) => {
+    el.classList.toggle('near', i === gst.nearDoor);
+  });
+
+  // Minimap character dot
+  const dot = document.getElementById('minimap-char-dot');
+  if (dot) {
+    const pct = (gst.char.x / (CORRIDOR_W - CHAR_W)) * 100;
+    dot.style.left = pct + '%';
+  }
+}
+
+// ── Enter / Exit room ─────────────────────────────────────
+function enterGameRoom(i) {
+  if (gst.inRoom >= 0) return;
+  gst.inRoom   = i;
+  state.room   = i;
+  const firstVisit = !state.visited.has(ROOMS[i].id);
+  state.visited.add(ROOMS[i].id);
+
+  renderRoomOverlay(i);
+  updateMinimapState();
+
+  if (firstVisit && ROOMS[i].type === 'completion') {
+    setTimeout(() => toast('🏆 Vous avez exploré le musée en entier !'), 900);
+  }
+}
+
+function renderRoomOverlay(i) {
+  const room    = ROOMS[i];
+  const overlay = document.getElementById('room-overlay');
+  const wrapper = document.getElementById('room-wrapper');
+  const nameEl  = document.getElementById('room-overlay-room-name');
+  const counter = document.getElementById('room-nav-counter');
+  const spotlight = document.getElementById('hall-spotlight');
+  const prevBtn = document.getElementById('room-nav-prev');
+  const nextBtn = document.getElementById('room-nav-next');
+
+  nameEl.textContent  = room.label;
+  counter.textContent = `${i + 1} / ${ROOMS.length}`;
+  prevBtn.disabled    = i === 0;
+  nextBtn.disabled    = i >= ROOMS.length - 1;
+
+  if (spotlight) {
+    spotlight.style.background =
+      `radial-gradient(ellipse 65% 55% at 50% 42%, rgba(${room.rgb},0.07) 0%, transparent 65%)`;
+  }
+
+  wrapper.innerHTML = `
+    <div class="room-exhibit" style="--ra:${room.accent};--ra-rgb:${room.rgb}">
+      ${buildRoom(room)}
+    </div>
+  `;
+  wrapper.scrollTop = 0;
+
+  overlay.classList.remove('hidden', 'exiting');
+  void overlay.offsetWidth; // reflow
+  overlay.classList.add('entering');
+  setTimeout(() => overlay.classList.remove('entering'), 450);
+}
+
+function exitGameRoom() {
+  gst.inRoom = -1;
+  const overlay = document.getElementById('room-overlay');
+  overlay.classList.add('exiting');
+  setTimeout(() => {
+    overlay.classList.add('hidden');
+    overlay.classList.remove('exiting');
+  }, 380);
+}
+
+function navigateRoom(dir) {
+  const next = gst.inRoom + dir;
+  if (next < 0 || next >= ROOMS.length) return;
+  gst.inRoom   = next;
+  state.room   = next;
+  state.visited.add(ROOMS[next].id);
+
+  // Move character to match
+  gst.char.x = getDoorX(next) - CHAR_W / 2;
+
+  renderRoomOverlay(next);
+  updateMinimapState();
+}
+
+function tapDoor(i) {
+  // Mobile / click: teleport char & enter
+  gst.char.x    = getDoorX(i) - CHAR_W / 2;
+  gst.char.vx   = 0;
+  gst.nearDoor  = i;
+  state.room    = i;
+  enterGameRoom(i);
+}
+
+function goToRoom(i) {
+  if (i < 0 || i >= ROOMS.length) return;
+  closeMap();
+  tapDoor(i);
 }
 
 // ── Map ───────────────────────────────────────────────────
@@ -445,7 +663,10 @@ function updateMapState() {
   });
 }
 
-function openMap()  { document.getElementById('map-overlay').classList.remove('hidden'); updateMapState(); }
+function openMap()  {
+  updateMapState();
+  document.getElementById('map-overlay').classList.remove('hidden');
+}
 function closeMap() { document.getElementById('map-overlay').classList.add('hidden'); }
 
 // ── Toast ─────────────────────────────────────────────────
@@ -459,28 +680,23 @@ function toast(msg) {
   el._t = setTimeout(() => {
     el.classList.remove('show');
     setTimeout(() => el.classList.add('hidden'), 350);
-  }, 3200);
+  }, 3400);
 }
 
-// ── Particle background (welcome) ─────────────────────────
+// ── Particle background ───────────────────────────────────
 function buildParticles() {
   const container = document.getElementById('welcome-particles');
-  const count = 60;
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < 60; i++) {
     const el = document.createElement('div');
     const size  = Math.random() * 2 + 1;
-    const x     = Math.random() * 100;
-    const y     = Math.random() * 100;
-    const delay = Math.random() * 5;
     const dur   = 3 + Math.random() * 4;
-    const alpha = 0.1 + Math.random() * 0.3;
+    const delay = Math.random() * 5;
     el.style.cssText = `
       position:absolute;
-      width:${size}px; height:${size}px;
-      border-radius:50%;
-      left:${x}%; top:${y}%;
-      background:rgba(212,175,55,${alpha});
-      animation: particleFade ${dur}s ${delay}s ease-in-out infinite alternate;
+      width:${size}px; height:${size}px; border-radius:50%;
+      left:${Math.random()*100}%; top:${Math.random()*100}%;
+      background:rgba(212,175,55,${0.1 + Math.random()*0.3});
+      animation:particleFade ${dur}s ${delay}s ease-in-out infinite alternate;
     `;
     container.appendChild(el);
   }
@@ -498,7 +714,7 @@ function buildParticles() {
 }
 
 // ══════════════════════════════════════════════════════════
-// ROOM BUILDERS
+// ROOM BUILDERS (unchanged from original)
 // ══════════════════════════════════════════════════════════
 
 function buildRoom(room) {
@@ -524,7 +740,6 @@ function buildRoom(room) {
   return header + body;
 }
 
-// ── Profile room ──────────────────────────────────────────
 function buildProfile(room) {
   const d = room.data;
   return `
@@ -555,7 +770,6 @@ function buildProfile(room) {
   `;
 }
 
-// ── Timeline room ─────────────────────────────────────────
 function buildTimeline(room) {
   const d = room.data;
   return `
@@ -586,7 +800,6 @@ function buildTimeline(room) {
   `;
 }
 
-// ── Story room ────────────────────────────────────────────
 function buildStory(room) {
   const d = room.data;
   const tags = d.tags ? `
@@ -613,7 +826,6 @@ function buildStory(room) {
   `;
 }
 
-// ── Skills room ───────────────────────────────────────────
 function buildSkills(room) {
   const d = room.data;
   return `
@@ -637,7 +849,6 @@ function buildSkills(room) {
   `;
 }
 
-// ── Project room ──────────────────────────────────────────
 function buildProject(room) {
   const d = room.data;
   const impact = d.impact ? `
@@ -671,7 +882,6 @@ function buildProject(room) {
   `;
 }
 
-// ── Interests room ────────────────────────────────────────
 function buildInterests(room) {
   const d = room.data;
   return `
@@ -694,7 +904,6 @@ function buildInterests(room) {
   `;
 }
 
-// ── Contact room ──────────────────────────────────────────
 function buildContact(room) {
   const d = room.data;
   return `
@@ -723,9 +932,8 @@ function buildContact(room) {
   `;
 }
 
-// ── Completion room ───────────────────────────────────────
 function buildCompletion(room) {
-  const a = AVATARS.find(x => x.id === state.avatar);
+  const a    = AVATARS.find(x => x.id === state.avatar);
   const name = a ? a.name : 'Vous';
   return `
     <div class="completion-wrap">
@@ -742,12 +950,11 @@ function buildCompletion(room) {
         <a href="https://www.linkedin.com/in/arphan-drame-b29259258/" target="_blank" class="exhibit-link">💼 LinkedIn</a>
         <a href="mailto:arphandrame0@gmail.com" class="exhibit-link">📧 Email</a>
       </div>
-      <button class="completion-restart" onclick="goToRoom(0)">↩ Recommencer la visite</button>
+      <button class="completion-restart" onclick="goToRoom(0)">↩ Retour au début</button>
     </div>
   `;
 }
 
-// ── Utilities ─────────────────────────────────────────────
 function handleImgError(el) {
   el.outerHTML = '<div class="profile-placeholder">🧑‍💻</div>';
 }

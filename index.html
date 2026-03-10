@@ -48,16 +48,16 @@
       </div>
       <div class="avatar-header">
         <div class="section-badge">ACCUEIL DES VISITEURS</div>
-        <h2 class="avatar-title">CHOISISSEZ VOTRE GUIDE</h2>
-        <p class="avatar-sub">Quel personnage vous accompagnera dans cette visite ?</p>
+        <h2 class="avatar-title">CHOISISSEZ VOTRE PERSONNAGE</h2>
+        <p class="avatar-sub">Qui vous guidera à travers les salles du musée ?</p>
       </div>
       <div class="avatar-grid" id="avatar-grid">
         <!-- Injected by JS -->
       </div>
       <div class="avatar-footer">
         <div class="avatar-selection-info" id="avatar-selection-info">
-          <span id="sel-emoji"></span>
-          <span id="sel-name">Aucun guide sélectionné</span>
+          <div class="sel-avatar-preview" id="sel-avatar-preview"></div>
+          <span id="sel-name">Aucun personnage sélectionné</span>
         </div>
         <button class="btn-museum btn-enter" id="btn-enter-museum" disabled>
           <span>🏛️</span>
@@ -68,61 +68,89 @@
   </div>
 
   <!-- ═══════════════════════════════════
-       SCREEN 3 — MUSEUM
+       SCREEN 3 — MUSEUM GAME
   ═══════════════════════════════════ -->
   <div id="screen-museum" class="screen">
 
-    <!-- Top navigation bar -->
-    <div class="museum-topbar">
-      <div class="topbar-visitor">
-        <div class="visitor-avatar" id="topbar-avatar"></div>
-        <div class="visitor-info">
-          <div class="visitor-label">VISITEUR</div>
-          <div class="visitor-name" id="topbar-name">—</div>
-        </div>
+    <!-- Game HUD -->
+    <div class="game-hud" id="game-hud">
+      <div class="hud-visitor">
+        <div class="hud-char-icon" id="hud-char-icon"></div>
+        <div class="hud-char-name" id="hud-char-name">—</div>
       </div>
-      <div class="topbar-progress">
-        <div class="topbar-room-name" id="topbar-room-name"></div>
-        <div class="topbar-track">
-          <div class="topbar-fill" id="topbar-fill"></div>
-        </div>
-        <div class="topbar-dots" id="topbar-dots"></div>
-      </div>
-      <div class="topbar-actions">
-        <span class="topbar-counter"><span id="room-num">1</span>/<span id="room-tot">10</span></span>
+      <div class="hud-title">MUSÉE DE DRAMS</div>
+      <div class="hud-actions">
         <button class="btn-plan" id="btn-plan" title="Plan du musée">🗺️ PLAN</button>
       </div>
     </div>
 
-    <!-- Hall wrapper -->
-    <div class="museum-hall" id="museum-hall">
-      <!-- Architectural decoration -->
-      <div class="arch arch-left">
-        <div class="arch-column"></div>
-        <div class="arch-panel"></div>
-      </div>
-      <div class="arch arch-right">
-        <div class="arch-panel"></div>
-        <div class="arch-column"></div>
-      </div>
-      <div class="hall-molding hall-molding-top"></div>
-      <div class="hall-molding hall-molding-bottom"></div>
-      <div class="hall-spotlight" id="hall-spotlight"></div>
-
-      <!-- Room content -->
-      <div class="room-wrapper" id="room-wrapper">
-        <!-- Injected by JS -->
+    <!-- Game World (corridor) -->
+    <div id="game-world">
+      <div id="corridor-viewport">
+        <div id="corridor-scene">
+          <!-- Doors injected by JS -->
+          <div id="corridor-doors"></div>
+          <!-- Character -->
+          <div id="game-character">
+            <div id="char-sprite-inner"></div>
+            <div class="char-shadow"></div>
+          </div>
+        </div>
       </div>
 
-      <!-- Navigation -->
-      <button class="nav-btn nav-prev" id="nav-prev">
-        <div class="nav-chevron">‹</div>
-        <div class="nav-hint" id="nav-prev-hint"></div>
-      </button>
-      <button class="nav-btn nav-next" id="nav-next">
-        <div class="nav-chevron">›</div>
-        <div class="nav-hint" id="nav-next-hint"></div>
-      </button>
+      <!-- Minimap strip -->
+      <div id="game-minimap">
+        <div id="minimap-inner">
+          <div id="minimap-rooms"></div>
+          <div id="minimap-char-dot"></div>
+        </div>
+      </div>
+
+      <!-- Mobile D-Pad -->
+      <div id="mobile-dpad">
+        <button id="btn-dpad-left" class="dpad-btn">←</button>
+        <button id="btn-dpad-enter" class="dpad-btn dpad-enter">↑ ENTRER</button>
+        <button id="btn-dpad-right" class="dpad-btn">→</button>
+      </div>
+
+      <!-- Controls hint -->
+      <div id="controls-hint" class="controls-hint">
+        <kbd>← →</kbd> Se déplacer &nbsp;·&nbsp;
+        <kbd>↑</kbd> Entrer dans une salle &nbsp;·&nbsp;
+        <kbd>ESC</kbd> Plan
+      </div>
+    </div>
+
+    <!-- Room Content Overlay -->
+    <div id="room-overlay" class="room-overlay hidden">
+      <div class="room-overlay-bar">
+        <button class="btn-exit-room" id="btn-exit-room">← SORTIR</button>
+        <div class="room-overlay-room-name" id="room-overlay-room-name"></div>
+        <div class="room-overlay-nav">
+          <button class="room-nav-btn" id="room-nav-prev" title="Salle précédente">‹</button>
+          <span id="room-nav-counter"></span>
+          <button class="room-nav-btn" id="room-nav-next" title="Salle suivante">›</button>
+        </div>
+      </div>
+      <div class="room-overlay-body" id="room-overlay-body">
+        <!-- Spotlight -->
+        <div class="hall-spotlight" id="hall-spotlight"></div>
+        <!-- Architectural columns -->
+        <div class="arch arch-left">
+          <div class="arch-column"></div>
+          <div class="arch-panel"></div>
+        </div>
+        <div class="arch arch-right">
+          <div class="arch-panel"></div>
+          <div class="arch-column"></div>
+        </div>
+        <div class="hall-molding hall-molding-top"></div>
+        <div class="hall-molding hall-molding-bottom"></div>
+        <!-- Room content -->
+        <div class="room-wrapper" id="room-wrapper">
+          <!-- Injected by JS -->
+        </div>
+      </div>
     </div>
 
     <!-- Museum Map overlay -->
