@@ -37,7 +37,10 @@ class Game {
     this.canvas.width  = window.innerWidth;
     this.canvas.height = window.innerHeight;
     this.ctx.imageSmoothingEnabled = false;
-    this.player.groundY = Math.round(this.canvas.height * GROUND_RATIO);
+    // Zoom adaptatif : ~1 sur mobile, ~1.8 sur grand écran desktop
+    this.zoom = Math.min(2.2, Math.max(1, window.innerWidth / 900));
+    const eh = Math.round(this.canvas.height / this.zoom);
+    this.player.groundY = Math.round(eh * GROUND_RATIO);
   }
 
   _loop() {
@@ -47,6 +50,9 @@ class Game {
     const w   = this.canvas.width;
 
     const modalOpen = this.interactions.isOpen();
+    const zoom = this.zoom;
+    const ew   = w / zoom;  // largeur effective (espace monde)
+    const eh   = h / zoom;  // hauteur effective (espace monde)
 
     // Close modal
     if (this.controls.close && modalOpen) {
@@ -66,26 +72,31 @@ class Game {
 
     this.controls.flush();
 
-    // Camera
-    this._targetX = this.player.x - w / 2;
-    this._targetX = Math.max(0, Math.min(WORLD_WIDTH - w, this._targetX));
+    // Camera (en espace monde)
+    this._targetX = this.player.x - ew / 2;
+    this._targetX = Math.max(0, Math.min(WORLD_WIDTH - ew, this._targetX));
     this.cameraX += (this._targetX - this.cameraX) * 0.1;
     const camX = Math.round(this.cameraX);
 
-    // Render
+    // Render avec zoom
     ctx.clearRect(0, 0, w, h);
-    this.map.draw(ctx, camX, h, this._tick);
+    ctx.save();
+    ctx.scale(zoom, zoom);
+
+    this.map.draw(ctx, camX, eh, this._tick);
 
     if (this._nearBuilding) {
-      this._drawBuildingGlow(ctx, this._nearBuilding, camX, h);
+      this._drawBuildingGlow(ctx, this._nearBuilding, camX, eh);
     }
 
     this.player.draw(ctx, camX);
-    this._drawHUD(ctx, w, h);
+    this._drawHUD(ctx, ew, eh);
 
     if (this._nearBuilding && !modalOpen) {
-      this._drawInteractPrompt(ctx, w, h, this._nearBuilding);
+      this._drawInteractPrompt(ctx, ew, eh, this._nearBuilding);
     }
+
+    ctx.restore();
 
     requestAnimationFrame(() => this._loop());
   }

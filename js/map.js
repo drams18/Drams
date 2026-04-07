@@ -245,8 +245,8 @@ class GameMap {
     }
 
     // Door
-    const doorW = 28;
-    const doorH = 46;
+    const doorW = 42;
+    const doorH = 69;
     const doorX = sx + Math.floor(b.w / 2) - Math.floor(doorW / 2);
     const doorY = groundY - doorH;
     ctx.fillStyle = '#3a1f0a';
