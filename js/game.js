@@ -110,7 +110,7 @@ class Game {
     ctx.save();
     ctx.font = '7px "Press Start 2P", monospace';
     ctx.textAlign = 'center';
-    const hintText = '← → DÉPLACER  ·  ESPACE ENTRER  ·  ESC/SHIFT FERMER';
+    const hintText = '← → [DÉPLACER]  ·  ESPACE [OUVRIR UNE FENÊTRE]  ·  ESC/SHIFT [FERMER UNE FENÊTRE]';
     const hintW = ctx.measureText(hintText).width + 20;
     const hintY = h - 16;
     ctx.fillStyle = 'rgba(0,0,0,0.45)';

@@ -108,16 +108,16 @@ class Player {
     ctx.fillRect(sx + 5, sy + 11 - armSwing, 4, 10);
 
     // ── Hands ────────────────────────────────
-    ctx.fillStyle = '#f5c5a3'; // skin
+    ctx.fillStyle = '#4d301b'; // skin
     ctx.fillRect(sx - 9, sy + 20 + armSwing, 4, 4);
     ctx.fillRect(sx + 5, sy + 20 - armSwing, 4, 4);
 
     // ── Neck ────────────────────────────────
-    ctx.fillStyle = '#f5c5a3';
+    ctx.fillStyle = '#4d301b';
     ctx.fillRect(sx - 2, sy + 7, 4, 4);
 
     // ── Head ────────────────────────────────
-    ctx.fillStyle = '#f5c5a3';
+    ctx.fillStyle = '#4d301b';
     ctx.fillRect(sx - 6, sy, 12, 10);
 
     // Eyes

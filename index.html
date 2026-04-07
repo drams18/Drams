@@ -8,46 +8,36 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .desktop-only { display: none; }
+    @media (min-width: 768px) {
+      .desktop-only { display: block; }
+    }
+  </style>
 </head>
 <body>
-
-  <!-- ═══════════════════════════════════
-       SCREEN 1 — WELCOME
-  ═══════════════════════════════════ -->
   <div id="screen-welcome" class="screen active">
     <div class="welcome-sky"></div>
     <div class="welcome-content">
-      <div class="mc-badge">PORTFOLIO INTERACTIF</div>
-      <h1 class="mc-title">[ ARPHAN.DEV ]</h1>
+      <h1 class="mc-title">ARPHAN DRAME</h1>
       <div class="mc-subtitle">Développeur Full Stack · Paris</div>
 
-      <div class="mc-instructions">
+      <div class="mc-instructions desktop-only">
         <div class="instr-title">CONTRÔLES</div>
         <div class="instr-row"><kbd>← →</kbd><span>Se déplacer</span></div>
         <div class="instr-row"><kbd>ESPACE</kbd><span>Entrer dans un bâtiment</span></div>
         <div class="instr-row"><kbd>ESC / SHIFT</kbd><span>Fermer une fenêtre</span></div>
       </div>
 
-      <button class="mc-btn" id="btn-start">
-        ▶ &nbsp;COMMENCER
-      </button>
-
-      <a href="assets/CV.pdf" target="_blank" class="cv-link">
-        📄 Vue rapide — CV classique
-      </a>
+      <button class="mc-btn" id="btn-start">▶ &nbsp;COMMENCER</button>
+      <a href="assets/CV.pdf" target="_blank" class="cv-link">📄 Vue rapide — CV classique</a>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════
-       SCREEN 2 — GAME (canvas)
-  ═══════════════════════════════════ -->
   <div id="screen-game" class="screen hidden">
     <canvas id="gameCanvas"></canvas>
   </div>
 
-  <!-- ═══════════════════════════════════
-       SECTION MODAL
-  ═══════════════════════════════════ -->
   <div id="modal-backdrop" class="modal-backdrop hidden"></div>
   <div id="section-modal" class="section-modal hidden">
     <div class="modal-header">
@@ -57,10 +47,13 @@
     <div id="modal-body" class="modal-body"></div>
   </div>
 
-  <!-- Toast -->
   <div class="toast hidden" id="toast"></div>
 
-  <!-- Scripts — order matters -->
+  <script>
+    if(/Mobi|Android/i.test(navigator.userAgent)){
+      document.querySelectorAll('.desktop-only').forEach(el => el.style.display='none');
+    }
+  </script>
   <script src="js/museum.js"></script>
   <script src="js/controls.js"></script>
   <script src="js/mobileControls.js"></script>
