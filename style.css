@@ -196,17 +196,33 @@ body.modal-open { overflow: hidden; }
   box-shadow: 0 1px 0 #2d4e15;
 }
 
-/* CV link */
+/* CV button */
 .cv-link {
-  font-size: 7px;
-  color: #8ab4d0;
+  font-family: var(--pixel-font);
+  font-size: 11px;
+  color: #fff;
   text-decoration: none;
   letter-spacing: 1px;
-  border-bottom: 1px dashed rgba(138,180,208,0.4);
-  padding-bottom: 2px;
-  transition: color 0.2s;
+  display: inline-block;
+  padding: 14px 28px;
+  background: #2a6fa8;
+  border: 3px solid #5ab0e8;
+  box-shadow: 0 4px 0 #154070, 0 5px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+  cursor: pointer;
+  image-rendering: pixelated;
+  position: relative;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+  transition: background 0.1s, box-shadow 0.1s, transform 0.1s;
 }
-.cv-link:hover { color: #fff; }
+.cv-link:hover {
+  background: #3585c8;
+  box-shadow: 0 4px 0 #154070, 0 5px 0 rgba(0,0,0,0.4), 0 0 16px rgba(90,176,232,0.6);
+  color: #fff;
+}
+.cv-link:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #154070;
+}
 
 /* ── Game canvas ─────────────────────────────────────── */
 #gameCanvas {
@@ -475,6 +491,21 @@ body.modal-open { overflow: hidden; }
 
 /* Contact */
 .contact-info { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.contact-row { display: flex; align-items: center; gap: 8px; }
+.copy-btn {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 4px 8px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #ccc;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.copy-btn:hover { background: rgba(255,255,255,0.16); color: #fff; }
+.copy-btn--ok { background: #3a8a3a; color: #fff; border-color: #5d9c34; }
 .contact-direct {
   display: inline-flex;
   align-items: center;
@@ -534,7 +565,9 @@ body.modal-open { overflow: hidden; }
 }
 .form-btn:hover  { background: #5a9c2e; }
 .form-btn:active { transform: translateY(2px); box-shadow: none; }
-.form-status { font-size: 11px; color: #69f0ae; min-height: 18px; }
+.form-status          { font-size: 11px; min-height: 18px; }
+.form-status.success  { color: #69f0ae; }
+.form-status.error    { color: #ff5555; }
 
 /* Projects gallery */
 .projets-grid {

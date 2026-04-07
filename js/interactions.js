@@ -43,6 +43,8 @@ class InteractionManager {
     this._modal.classList.remove('hidden');
     this._backdrop.classList.remove('hidden');
     document.body.classList.add('modal-open');
+
+    if (buildingId === 'contact') this._bindContactForm();
   }
 
   close() {
@@ -51,6 +53,49 @@ class InteractionManager {
     this._modal.classList.add('hidden');
     this._backdrop.classList.add('hidden');
     document.body.classList.remove('modal-open');
+    // Music keeps playing — only game exit stops it
+  }
+
+  // ── Contact form ────────────────────────────────────
+
+  _bindContactForm() {
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const value = btn.dataset.copy;
+        await navigator.clipboard.writeText(value);
+        const prev = btn.textContent;
+        btn.textContent = '✓';
+        btn.classList.add('copy-btn--ok');
+        setTimeout(() => { btn.textContent = prev; btn.classList.remove('copy-btn--ok'); }, 1500);
+      });
+    });
+
+    const form   = document.getElementById('contact-form');
+    const btn    = document.getElementById('form-submit');
+    const status = document.getElementById('form-status');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btn.disabled    = true;
+      btn.textContent = '⏳ ENVOI...';
+      status.textContent = '';
+      status.className   = 'form-status';
+
+      try {
+        // Remplacer 'YOUR_SERVICE_ID' et 'YOUR_TEMPLATE_ID' par vos valeurs EmailJS
+        await emailjs.sendForm('service_kju3n28', 'template_pili6gr', form);
+        status.textContent = '✅ Message envoyé !';
+        status.classList.add('success');
+        setTimeout(() => this.close(), 1500);
+      } catch (err) {
+        console.error('EmailJS error:', err);
+        status.textContent = '❌ Erreur lors de l\'envoi. Réessayez.';
+        status.classList.add('error');
+        btn.disabled    = false;
+        btn.textContent = '▶ ENVOYER';
+      }
+    });
   }
 
   // ── Section renderers ───────────────────────────────
@@ -173,20 +218,26 @@ class InteractionManager {
     return `
       <h3 class="sub-title">📬 CONTACTEZ-MOI</h3>
       <div class="contact-info">
-        <a href="mailto:${section.email}" class="contact-direct">
-          <span>✉</span> ${section.email}
-        </a>
-        <a href="tel:${section.phone.replace(/\s/g,'')}" class="contact-direct">
-          <span>📞</span> ${section.phone}
-        </a>
+        <div class="contact-row">
+          <a href="mailto:${section.email}" class="contact-direct">
+            <span>✉</span> ${section.email}
+          </a>
+          <button class="copy-btn" data-copy="${section.email}" title="Copier l'email">⧉</button>
+        </div>
+        <div class="contact-row">
+          <a href="tel:${section.phone.replace(/\s/g,'')}" class="contact-direct">
+            <span>📞</span> ${section.phone}
+          </a>
+          <button class="copy-btn" data-copy="${section.phone}" title="Copier le numéro">⧉</button>
+        </div>
       </div>
       <div class="contact-links">${linksHTML}</div>
       <div class="section-divider"></div>
       <h3 class="sub-title">💌 ENVOYER UN MESSAGE</h3>
-      <form class="contact-form" id="contact-form" onsubmit="return false;">
-        <input type="text"  name="name"    placeholder="Votre nom"     class="form-input" required>
-        <input type="email" name="email"   placeholder="Votre email"   class="form-input" required>
-        <textarea           name="message" placeholder="Votre message" class="form-input form-textarea" required></textarea>
+      <form class="contact-form" id="contact-form">
+        <input type="text"  name="from_name"  placeholder="Votre nom"     class="form-input" required>
+        <input type="email" name="from_email" placeholder="Votre email"   class="form-input" required>
+        <textarea           name="message"    placeholder="Votre message" class="form-input form-textarea" required></textarea>
         <button type="submit" class="form-btn" id="form-submit">▶ ENVOYER</button>
         <div class="form-status" id="form-status"></div>
       </form>

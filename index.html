@@ -27,9 +27,10 @@
         <div class="instr-row"><kbd>← →</kbd><span>Se déplacer</span></div>
         <div class="instr-row"><kbd>ESPACE</kbd><span>Entrer dans un bâtiment</span></div>
         <div class="instr-row"><kbd>ESC / SHIFT</kbd><span>Fermer une fenêtre</span></div>
+        <div class="instr-row"><kbd>ENTREE</kbd><span>Position de départ</span></div>
       </div>
 
-      <button class="mc-btn" id="btn-start">▶ &nbsp;COMMENCER</button>
+      <button class="mc-btn" id="btn-start">▶ &nbsp;Let's go !!!</button>
       <a href="assets/CV.pdf" target="_blank" class="cv-link">📄 Vue rapide — CV classique</a>
     </div>
   </div>
@@ -54,6 +55,10 @@
       document.querySelectorAll('.desktop-only').forEach(el => el.style.display='none');
     }
   </script>
+  <!-- EmailJS — https://emailjs.com : remplacer YOUR_PUBLIC_KEY ci-dessous -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('a8mKuHS56bPD-ydT0');</script>
+
   <script src="js/museum.js"></script>
   <script src="js/controls.js"></script>
   <script src="js/mobileControls.js"></script>

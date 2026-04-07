@@ -121,7 +121,7 @@ class Game {
     ctx.save();
     ctx.font = '7px "Press Start 2P", monospace';
     ctx.textAlign = 'center';
-    const hintText = '← → [DÉPLACER]  ·  ESPACE [OUVRIR UNE FENÊTRE]  ·  ESC/SHIFT [FERMER UNE FENÊTRE]';
+    const hintText = '← → [DÉPLACER]  ·  ESPACE [OUVRIR UNE FENÊTRE]  ·  ESC/SHIFT [FERMER UNE FENÊTRE]  ·  ENTREE [POSITION DE DEPART]';
     const hintW = ctx.measureText(hintText).width + 20;
     const hintY = h - 16;
     ctx.fillStyle = 'rgba(0,0,0,0.45)';
@@ -153,11 +153,28 @@ class Game {
   }
 }
 
+// ── Background music ──────────────────────────────────
+
+const bgMusic = new Audio('assets/audio/bg-music.mp3');
+bgMusic.loop   = true;
+bgMusic.volume = 0.3;
+
+function startMusic() {
+  bgMusic.play().catch(() => {}); // catch autoplay policy silently
+}
+
+function stopMusic() {
+  bgMusic.pause();
+  bgMusic.currentTime = 0;
+}
+
 // ── Boot ─────────────────────────────────────────────
 
 function startGame() {
   const welcome = document.getElementById('screen-welcome');
   const game    = document.getElementById('screen-game');
+
+  startMusic();
 
   welcome.classList.add('screen-exit');
   setTimeout(() => {

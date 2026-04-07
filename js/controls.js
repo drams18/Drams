@@ -37,5 +37,5 @@ class Controls {
   get left()     { return !!(this._keys['ArrowLeft']  || this._keys['KeyA']); }
   get right()    { return !!(this._keys['ArrowRight'] || this._keys['KeyD']); }
   get interact() { return this._justPressed('Space') || this._justPressed('KeyE'); }
-  get close()    { return this._justPressed('Escape') || this._justPressed('ShiftLeft') || this._justPressed('ShiftRight'); }
+  get close()    { return this._justPressed('Escape') || this._justPressed('ShiftLeft'); }
 }
