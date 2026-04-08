@@ -154,16 +154,25 @@ class Game {
 }
 
 // ── Background music ──────────────────────────────────
+// Audio created lazily on first user gesture for mobile/WebView compatibility
 
-const bgMusic = new Audio('assets/audio/bg-music.mp3');
-bgMusic.loop   = true;
-bgMusic.volume = 0.3;
+let bgMusic = null;
+
+function _initAudio() {
+  if (bgMusic) return;
+  bgMusic = new Audio('assets/audio/bg-music.mp3');
+  bgMusic.loop   = true;
+  bgMusic.volume = 0.3;
+}
 
 function startMusic() {
-  bgMusic.play().catch(() => {}); // catch autoplay policy silently
+  _initAudio();
+  const p = bgMusic.play();
+  if (p !== undefined) p.catch(() => {});
 }
 
 function stopMusic() {
+  if (!bgMusic) return;
   bgMusic.pause();
   bgMusic.currentTime = 0;
 }
@@ -174,6 +183,7 @@ function startGame() {
   const welcome = document.getElementById('screen-welcome');
   const game    = document.getElementById('screen-game');
 
+  // Init + play audio synchronously inside the user gesture (required on iOS/WebView)
   startMusic();
 
   welcome.classList.add('screen-exit');
@@ -186,5 +196,19 @@ function startGame() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('btn-start')?.addEventListener('click', startGame);
+  const btn = document.getElementById('btn-start');
+  if (!btn) return;
+
+  // Pre-unlock audio on any touch/click before the start button (iOS WebView)
+  const unlock = () => {
+    _initAudio();
+    // Trigger a silent play/pause to unlock the audio context on iOS
+    bgMusic.play().then(() => bgMusic.pause()).catch(() => {});
+    btn.removeEventListener('touchstart', unlock);
+    btn.removeEventListener('mousedown',  unlock);
+  };
+  btn.addEventListener('touchstart', unlock, { passive: true });
+  btn.addEventListener('mousedown',  unlock);
+
+  btn.addEventListener('click', startGame);
 });
