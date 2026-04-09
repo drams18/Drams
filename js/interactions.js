@@ -25,6 +25,7 @@ class InteractionManager {
   }
 
   isOpen() { return this._currentSection !== null; }
+  currentSection() { return this._currentSection; }
 
   open(buildingId) {
     const section = SECTIONS[buildingId];
@@ -227,6 +228,7 @@ class InteractionManager {
       </div>
       <div class="contact-links">${linksHTML}</div>
       <div class="section-divider"></div>
+      <div class="contact-notice">⚠ Commandes désactivées — cliquez sur FERMER pour quitter</div>
       <h3 class="sub-title">ENVOYER UN MESSAGE</h3>
       <form class="contact-form" id="contact-form">
         <input type="text"  name="from_name"  placeholder="Votre nom"     class="form-input" required>

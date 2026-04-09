@@ -55,7 +55,7 @@ class Game {
     const eh   = h / zoom;  // hauteur effective (espace monde)
 
     // Close modal
-    if (this.controls.close && modalOpen) {
+    if (this.controls.close && modalOpen && this.interactions.currentSection() !== 'contact') {
       this.interactions.close();
     }
 
@@ -120,14 +120,45 @@ class Game {
   _drawHUD(ctx, w, h) {
     ctx.save();
     ctx.font = '7px "Press Start 2P", monospace';
-    ctx.textAlign = 'center';
-    const hintText = '[DÉPLACER]  ·  [ENTRER DANS UN BÂTIMENT]  ·  [FERMER UNE FENÊTRE]';
-    const hintW = ctx.measureText(hintText).width + 20;
+
+    const KEY = '#ffd700';
+    const LBL = 'rgba(255,255,255,0.70)';
+    const SEP = 'rgba(255,255,255,0.25)';
+
+    const segments = [
+      { text: 'Aller à gauche : ',  color: LBL },
+      { text: '[← / Q / A]   ',   color: KEY },
+      { text: 'Aller à droite : ',  color: LBL },
+      { text: ' [→ / D] ',   color: KEY },
+      { text: '   ·   ',   color: SEP },
+      { text: ' Entrer : ',   color: LBL },
+      { text: '[↑ / W / Z]',   color: KEY },
+      { text: '   ·   ',   color: SEP },
+      { text: ' Fermer : ',   color: LBL },
+      { text: '[↓ / S]',     color: KEY },
+    ];
+
+    let totalW = 0;
+    const widths = segments.map(s => {
+      const sw = ctx.measureText(s.text).width;
+      totalW += sw;
+      return sw;
+    });
+
     const hintY = h - 16;
-    ctx.fillStyle = 'rgba(0,0,0,0.45)';
-    ctx.fillRect(w / 2 - hintW / 2, hintY - 11, hintW, 14);
-    ctx.fillStyle = 'rgba(255,255,255,0.55)';
-    ctx.fillText(hintText, w / 2, hintY);
+    const pad   = 10;
+    let x = Math.round(w / 2 - totalW / 2);
+
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(x - pad, hintY - 11, totalW + pad * 2, 14);
+
+    ctx.textAlign = 'left';
+    for (let i = 0; i < segments.length; i++) {
+      ctx.fillStyle = segments[i].color;
+      ctx.fillText(segments[i].text, x, hintY);
+      x += widths[i];
+    }
+
     ctx.restore();
   }
 

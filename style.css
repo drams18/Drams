@@ -566,6 +566,7 @@ body.modal-open { overflow: hidden; }
 .form-btn:hover  { background: #5a9c2e; }
 .form-btn:active { transform: translateY(2px); box-shadow: none; }
 .form-status          { font-size: 11px; min-height: 18px; }
+.contact-notice { font-size: 10px; color: #ffcc00; background: rgba(255,204,0,.1); border: 1px solid rgba(255,204,0,.3); padding: 6px 10px; margin-bottom: 6px; text-align: center; }
 .form-status.success  { color: #69f0ae; }
 .form-status.error    { color: #ff5555; }
 
