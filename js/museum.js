@@ -32,6 +32,7 @@ const SECTIONS = {
       { name: 'React Native', level: 92, color: '#61dafb' },
       { name: 'Symfony', level: 88, color: '#5656b1' },
       { name: 'MySQL', level: 85, color: '#f29111' },
+      { name: 'Expo', level: 85, color: '#895e89' },
       { name: 'Node.js', level: 85, color: '#3c873a' },
       { name: 'React', level: 88, color: '#00d8ff' },
       { name: 'TypeScript', level: 85, color: '#3178c6' },
@@ -121,7 +122,7 @@ const SECTIONS = {
       {
         title: 'ISLAAH',
         type: 'Application Mobile',
-        tech: ['React Native', 'Symfony', 'MySQL'],
+        tech: ['React Native', 'Symfony', 'MySQL', 'Cloudflare', 'Railway', 'Expo'],
         desc: 'Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l\'App Store.',
         links: [
           { label: 'Télécharger', url: 'https://apps.apple.com/us/app/islaah/id6758726142' },

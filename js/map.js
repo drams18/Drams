@@ -68,7 +68,7 @@ const BUILDINGS_DATA = [
     roofColor: '#8b6914',
     roofDark: '#6b510f',
     windowColor: '#ffd54f',
-    x: 1260, w: 380, h: 300,  // bigger gallery
+    x: 1260, w: 380, h: 240,
   },
 ];
 
@@ -276,10 +276,27 @@ class GameMap {
     // Visited checkmark
     if (b.visited) {
       ctx.save();
-      ctx.font = '14px monospace';
-      ctx.fillStyle = '#69f0ae';
-      ctx.textAlign = 'center';
-      ctx.fillText('[V]', sx + b.w - 12, by + roofH - 30);
+      const cx = sx + b.w - 16;
+      const cy = by + roofH - 44;
+      const r = 11;
+      // Circle background
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = '#1b5e20';
+      ctx.fill();
+      ctx.strokeStyle = '#69f0ae';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      // Checkmark stroke
+      ctx.beginPath();
+      ctx.moveTo(cx - 5, cy);
+      ctx.lineTo(cx - 1, cy + 4);
+      ctx.lineTo(cx + 5, cy - 4);
+      ctx.strokeStyle = '#69f0ae';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
       ctx.restore();
     }
   }
