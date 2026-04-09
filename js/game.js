@@ -121,7 +121,7 @@ class Game {
     ctx.save();
     ctx.font = '7px "Press Start 2P", monospace';
     ctx.textAlign = 'center';
-    const hintText = '← → [DÉPLACER]  ·  ESPACE [OUVRIR UNE FENÊTRE]  ·  ESC/SHIFT [FERMER UNE FENÊTRE]  ·  ENTREE [POSITION DE DEPART]';
+    const hintText = '[DÉPLACER]  ·  [ENTRER DANS UN BÂTIMENT]  ·  [FERMER UNE FENÊTRE]';
     const hintW = ctx.measureText(hintText).width + 20;
     const hintY = h - 16;
     ctx.fillStyle = 'rgba(0,0,0,0.45)';
@@ -139,7 +139,7 @@ class Game {
     ctx.save();
     ctx.font = '8px "Press Start 2P", monospace';
     ctx.textAlign = 'center';
-    const label = `[ ESPACE ] — ${building.label}`;
+    const label = `[ ENTRER ] — ${building.label}`;
     const lw = ctx.measureText(label).width + 16;
 
     ctx.fillStyle = 'rgba(0,0,0,0.7)';

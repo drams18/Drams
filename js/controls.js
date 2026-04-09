@@ -1,6 +1,7 @@
 /* ══════════════════════════════════════════════════════
    CONTROLS.JS — Keyboard input (side-scroller)
-   ← → move | Space/E interact | Esc/Shift close
+   ← / Q / A move left | → / D move right
+   ↑ / W / Z interact  | ↓ / S close
    ══════════════════════════════════════════════════════ */
 
 'use strict';
@@ -16,7 +17,8 @@ class Controls {
       }
       this._keys[e.code] = true;
 
-      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) {
+      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space',
+           'KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyZ', 'KeyQ'].includes(e.code)) {
         e.preventDefault();
       }
     });
@@ -34,8 +36,8 @@ class Controls {
     return !!this._justPressedKeys[code];
   }
 
-  get left()     { return !!(this._keys['ArrowLeft']  || this._keys['KeyA']); }
+  get left()     { return !!(this._keys['ArrowLeft']  || this._keys['KeyA'] || this._keys['KeyQ']); }
   get right()    { return !!(this._keys['ArrowRight'] || this._keys['KeyD']); }
-  get interact() { return this._justPressed('Space') || this._justPressed('KeyE'); }
-  get close()    { return this._justPressed('Escape') || this._justPressed('ShiftLeft'); }
+  get interact() { return this._justPressed('ArrowUp')   || this._justPressed('KeyW') || this._justPressed('KeyZ'); }
+  get close()    { return this._justPressed('ArrowDown') || this._justPressed('KeyS'); }
 }

@@ -37,7 +37,7 @@ class InteractionManager {
     if (b) b.visited = true;
 
     document.documentElement.style.setProperty('--modal-accent', section.accent);
-    this._title.textContent = `${section.emoji}  ${section.label}`;
+    this._title.textContent = section.label;
     this._body.innerHTML = this._renderSection(section);
 
     this._modal.classList.remove('hidden');
@@ -64,7 +64,7 @@ class InteractionManager {
         const value = btn.dataset.copy;
         await navigator.clipboard.writeText(value);
         const prev = btn.textContent;
-        btn.textContent = '✓';
+        btn.textContent = 'OK';
         btn.classList.add('copy-btn--ok');
         setTimeout(() => { btn.textContent = prev; btn.classList.remove('copy-btn--ok'); }, 1500);
       });
@@ -78,22 +78,22 @@ class InteractionManager {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       btn.disabled    = true;
-      btn.textContent = '⏳ ENVOI...';
+      btn.textContent = 'ENVOI...';
       status.textContent = '';
       status.className   = 'form-status';
 
       try {
         // Remplacer 'YOUR_SERVICE_ID' et 'YOUR_TEMPLATE_ID' par vos valeurs EmailJS
         await emailjs.sendForm('service_kju3n28', 'template_pili6gr', form);
-        status.textContent = '✅ Message envoyé !';
+        status.textContent = 'Message envoyé !';
         status.classList.add('success');
         setTimeout(() => this.close(), 1500);
       } catch (err) {
         console.error('EmailJS error:', err);
-        status.textContent = '❌ Erreur lors de l\'envoi. Réessayez.';
+        status.textContent = 'Erreur lors de l\'envoi. Réessayez.';
         status.classList.add('error');
         btn.disabled    = false;
-        btn.textContent = '▶ ENVOYER';
+        btn.textContent = 'ENVOYER';
       }
     });
   }
@@ -116,13 +116,12 @@ class InteractionManager {
 
     const socialsHTML = bio.socials.map(s => `
       <a href="${s.url}" target="_blank" rel="noopener" class="social-link">
-        <span>${s.icon}</span> ${s.label}
+        ${s.label}
       </a>
     `).join('');
 
     const langsHTML = bio.languages.map(l => `
       <div class="lang-item">
-        <span class="lang-flag">${l.flag}</span>
         <span class="lang-name">${l.label}</span>
         <span class="lang-level">${l.level}</span>
       </div>
@@ -135,23 +134,22 @@ class InteractionManager {
 
     return `
       <div class="profile-header">
-        <div class="profile-avatar">👨‍💻</div>
         <div class="profile-info">
           <h2 class="profile-name">${bio.name}</h2>
           <div class="profile-title">${bio.title}</div>
           <div class="profile-tags">
             <span class="tag">${bio.availability}</span>
-            <span class="tag">📍 ${bio.location}</span>
+            <span class="tag">${bio.location}</span>
           </div>
         </div>
       </div>
       <p class="profile-bio">${bio.description}</p>
       <div class="social-links">${socialsHTML}</div>
       <div class="section-divider"></div>
-      <h3 class="sub-title">⚙ COMPÉTENCES</h3>
+      <h3 class="sub-title">COMPETENCES</h3>
       <div class="skills-badges">${skillsHTML}</div>
       <div class="section-divider"></div>
-      <h3 class="sub-title">🌍 LANGUES</h3>
+      <h3 class="sub-title">LANGUES</h3>
       <div class="langs-list">${langsHTML}</div>
     `;
   }
@@ -161,7 +159,6 @@ class InteractionManager {
 
     const timelineHTML = timeline.map(t => `
       <div class="timeline-item">
-        <div class="timeline-dot">${t.icon}</div>
         <div class="timeline-card">
           <div class="timeline-date">${t.date}</div>
           <div class="timeline-title">${t.title}</div>
@@ -173,7 +170,6 @@ class InteractionManager {
 
     const expHTML = experiences.map(e => `
       <div class="exp-item">
-        <span class="exp-icon">${e.icon}</span>
         <div>
           <div class="exp-date">${e.date}</div>
           <div class="exp-title">${e.title}</div>
@@ -183,10 +179,10 @@ class InteractionManager {
     `).join('');
 
     return `
-      <h3 class="sub-title">🎓 FORMATION</h3>
+      <h3 class="sub-title">FORMATION</h3>
       <div class="timeline">${timelineHTML}</div>
       <div class="section-divider"></div>
-      <h3 class="sub-title">💼 EXPÉRIENCES</h3>
+      <h3 class="sub-title">EXPERIENCES</h3>
       <div class="exp-list">${expHTML}</div>
     `;
   }
@@ -194,14 +190,13 @@ class InteractionManager {
   _renderPassions(section) {
     const cardsHTML = section.items.map(item => `
       <div class="passion-card">
-        <div class="passion-emoji">${item.emoji}</div>
         <div class="passion-title">${item.title}</div>
         <p class="passion-desc">${item.desc}</p>
       </div>
     `).join('');
 
     return `
-      <h3 class="sub-title">🎯 MES PASSIONS</h3>
+      <h3 class="sub-title">MES PASSIONS</h3>
       <p class="section-intro">Ce qui me fait bouger, penser, créer.</p>
       <div class="passions-grid">${cardsHTML}</div>
     `;
@@ -210,35 +205,34 @@ class InteractionManager {
   _renderContact(section) {
     const linksHTML = section.links.map(l => `
       <a href="${l.url}" target="_blank" rel="noopener" class="contact-link" style="--link-color:${l.color}">
-        <span class="contact-icon">${l.icon}</span>
         <span>${l.label}</span>
       </a>
     `).join('');
 
     return `
-      <h3 class="sub-title">📬 CONTACTEZ-MOI</h3>
+      <h3 class="sub-title">CONTACTEZ-MOI</h3>
       <div class="contact-info">
         <div class="contact-row">
           <a href="mailto:${section.email}" class="contact-direct">
-            <span>✉</span> ${section.email}
+            ${section.email}
           </a>
-          <button class="copy-btn" data-copy="${section.email}" title="Copier l'email">⧉</button>
+          <button class="copy-btn" data-copy="${section.email}" title="Copier l'email">COPIER</button>
         </div>
         <div class="contact-row">
           <a href="tel:${section.phone.replace(/\s/g,'')}" class="contact-direct">
-            <span>📞</span> ${section.phone}
+            ${section.phone}
           </a>
-          <button class="copy-btn" data-copy="${section.phone}" title="Copier le numéro">⧉</button>
+          <button class="copy-btn" data-copy="${section.phone}" title="Copier le numéro">COPIER</button>
         </div>
       </div>
       <div class="contact-links">${linksHTML}</div>
       <div class="section-divider"></div>
-      <h3 class="sub-title">💌 ENVOYER UN MESSAGE</h3>
+      <h3 class="sub-title">ENVOYER UN MESSAGE</h3>
       <form class="contact-form" id="contact-form">
         <input type="text"  name="from_name"  placeholder="Votre nom"     class="form-input" required>
         <input type="email" name="from_email" placeholder="Votre email"   class="form-input" required>
         <textarea           name="message"    placeholder="Votre message" class="form-input form-textarea" required></textarea>
-        <button type="submit" class="form-btn" id="form-submit">▶ ENVOYER</button>
+        <button type="submit" class="form-btn" id="form-submit">ENVOYER</button>
         <div class="form-status" id="form-status"></div>
       </form>
     `;
@@ -253,7 +247,6 @@ class InteractionManager {
 
       return `
         <div class="proj-card" style="--proj-accent:${p.accent}">
-          <div class="proj-emoji">${p.emoji}</div>
           <div class="proj-type">${p.type}</div>
           <h3 class="proj-title">${p.title}</h3>
           <p class="proj-desc">${p.desc}</p>
@@ -264,7 +257,7 @@ class InteractionManager {
     }).join('');
 
     return `
-      <h3 class="sub-title">🎮 GALERIE PROJETS</h3>
+      <h3 class="sub-title">GALERIE PROJETS</h3>
       <p class="section-intro">Applications mobiles, plateformes web, projets IoT.</p>
       <div class="projets-grid">${cardsHTML}</div>
     `;

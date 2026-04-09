@@ -27,10 +27,10 @@ class MobileControls {
     const div = document.createElement('div');
     div.id = 'mobile-btns';
     div.innerHTML = `
-      <button id="mbtn-left"  class="mbtn" aria-label="Aller à gauche">←</button>
+      <button id="mbtn-left"  class="mbtn" aria-label="Aller à gauche">G</button>
       <button id="mbtn-enter" class="mbtn mbtn-enter" aria-label="Entrer">ENTRER</button>
       <button id="mbtn-close" class="mbtn mbtn-close" aria-label="Fermer">FERMER</button>
-      <button id="mbtn-right" class="mbtn" aria-label="Aller à droite">→</button>
+      <button id="mbtn-right" class="mbtn" aria-label="Aller à droite">D</button>
     `;
     document.body.appendChild(div);
   }
@@ -57,18 +57,18 @@ class MobileControls {
 
     bind('mbtn-enter',
       () => {
-        this._controls._justPressedKeys['Space'] = true;
-        this._controls._keys['Space'] = true;
+        this._controls._justPressedKeys['ArrowUp'] = true;
+        this._controls._keys['ArrowUp'] = true;
       },
-      () => { this._controls._keys['Space'] = false; }
+      () => { this._controls._keys['ArrowUp'] = false; }
     );
 
     bind('mbtn-close',
       () => {
-        this._controls._justPressedKeys['Escape'] = true;
-        this._controls._keys['Escape'] = true;
+        this._controls._justPressedKeys['ArrowDown'] = true;
+        this._controls._keys['ArrowDown'] = true;
       },
-      () => { this._controls._keys['Escape'] = false; }
+      () => { this._controls._keys['ArrowDown'] = false; }
     );
   }
 

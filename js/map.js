@@ -25,7 +25,6 @@ const BUILDINGS_DATA = [
     roofDark: '#5c2009',
     windowColor: '#4fc3f7',
     x: 200, w: 230, h: 240,
-    emoji: '🏠',
   },
   {
     id: 'parcours',
@@ -37,7 +36,6 @@ const BUILDINGS_DATA = [
     roofDark: '#2a5040',
     windowColor: '#81c784',
     x: 460, w: 230, h: 240,
-    emoji: '🎓',
   },
   {
     id: 'passions',
@@ -49,7 +47,6 @@ const BUILDINGS_DATA = [
     roofDark: '#6b3510',
     windowColor: '#ff8a65',
     x: 720, w: 230, h: 240,
-    emoji: '🎯',
   },
   {
     id: 'contact',
@@ -61,7 +58,6 @@ const BUILDINGS_DATA = [
     roofDark: '#502e6b',
     windowColor: '#ce93d8',
     x: 980, w: 230, h: 240,
-    emoji: '📬',
   },
   {
     id: 'projets',
@@ -73,7 +69,6 @@ const BUILDINGS_DATA = [
     roofDark: '#6b510f',
     windowColor: '#ffd54f',
     x: 1260, w: 380, h: 300,  // bigger gallery
-    emoji: '🎮',
   },
 ];
 
@@ -284,7 +279,7 @@ class GameMap {
       ctx.font = '14px monospace';
       ctx.fillStyle = '#69f0ae';
       ctx.textAlign = 'center';
-      ctx.fillText('✓', sx + b.w - 12, by + roofH - 30);
+      ctx.fillText('[V]', sx + b.w - 12, by + roofH - 30);
       ctx.restore();
     }
   }
