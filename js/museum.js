@@ -25,7 +25,7 @@ const SECTIONS = {
       ],
       socials: [
         { label: 'GitHub', url: 'https://github.com/drams18' },
-        { label: 'LinkedIn', url: 'https://www.linkedin.com/in/arphan-drame-b29259258/' },
+        { label: 'LinkedIn', url: 'https://www.linkedin.com/in/arphan-drame/' },
       ],
     },
     skills: [
@@ -103,7 +103,7 @@ const SECTIONS = {
     phone: '07 67 31 84 26',
     links: [
       { label: 'GitHub', url: 'https://github.com/drams18', color: '#f0f0f0' },
-      { label: 'LinkedIn', url: 'https://www.linkedin.com/in/arphan-drame-b29259258/', color: '#0a66c2' },
+      { label: 'LinkedIn', url: 'https://www.linkedin.com/in/arphan-drame/', color: '#0a66c2' },
       { label: 'Twitter / X', url: 'https://twitter.com/drams_18', color: '#1da1f2' },
       { label: 'Instagram', url: 'https://www.instagram.com/dramsss18/', color: '#e1306c' },
     ],
@@ -126,7 +126,6 @@ const SECTIONS = {
         desc: 'Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l\'App Store.',
         links: [
           { label: 'Télécharger', url: 'https://apps.apple.com/us/app/islaah/id6758726142' },
-          { label: 'GitHub', url: 'https://github.com/drams18' },
         ],
         accent: '#81c784',
       },
@@ -134,18 +133,20 @@ const SECTIONS = {
         title: 'SKYWALK',
         type: 'Plateforme Web SaaS',
         tech: ['React', 'NestJS', 'PostgreSQL', 'Docker'],
-        desc: 'Plateforme de gestion SaaS. Interface React moderne, API NestJS robuste, déployée avec Docker et Nginx.',
+        desc: 'Plateforme d\'expatriation SaaS. Interface React moderne, API NestJS robuste, déployée avec Docker et Nginx.',
         links: [
-          { label: 'GitHub', url: 'https://github.com/drams18' },
+          { label: 'Accéder', url: 'https://skywalk-chi.vercel.app/auth/login' },
         ],
         accent: '#4fc3f7',
       },
       {
-        title: 'Jardin Connecté',
-        type: 'Projet IoT — BTS',
-        tech: ['Arduino', 'Python', 'Raspberry Pi'],
-        desc: 'Système de gestion automatisée d\'un jardin : capteurs d\'humidité, température, arrosage automatique contrôlé à distance.',
-        links: [],
+        title: 'Plateforme de recherche de prospects',
+        type: 'Projet Personel',
+        tech: ['Node.js', 'Railway', 'HTML', 'CSS', 'JavaScript', 'NoSQL'],
+        desc: 'Plateforme permettant de rechercher une enseigne qui a besoin d\'un site web ou d\'une mise à jour.',
+        links: [
+          { label: 'Accéder', url: 'https://drams18.github.io/Prospectly/index.html' },
+        ],
         accent: '#a5d6a7',
       },
     ],

@@ -260,7 +260,7 @@ class InteractionManager {
 
     return `
       <h3 class="sub-title">GALERIE PROJETS</h3>
-      <p class="section-intro">Applications mobiles, plateformes web, projets IoT.</p>
+      <p class="section-intro">Applications mobiles, plateformes web, projets personnels.</p>
       <div class="projets-grid">${cardsHTML}</div>
     `;
   }
