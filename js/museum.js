@@ -104,8 +104,7 @@ const SECTIONS = {
     links: [
       { label: 'GitHub', url: 'https://github.com/drams18', color: '#f0f0f0' },
       { label: 'LinkedIn', url: 'https://www.linkedin.com/in/arphan-drame/', color: '#0a66c2' },
-      { label: 'Twitter / X', url: 'https://twitter.com/drams_18', color: '#1da1f2' },
-      { label: 'Instagram', url: 'https://www.instagram.com/dramsss18/', color: '#e1306c' },
+      { label: 'Voir mon CV en PDF', url: 'assets/CV.pdf', color: '#1da1f2' },
     ],
     emailjs: {
       serviceId: 'service_portfolio',
