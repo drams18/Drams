@@ -8,7 +8,8 @@
      • E-mail    → adresse affichée + bouton COPIER + services au choix :
                    Gmail (webmail), Outlook (webmail), Application e-mail (mailto:)
                    → fonctionne sur ordinateur MÊME sans logiciel mail installé
-     • Téléphone → tel:  sur mobile (déclenche l'appel) ;
+     • Téléphone → sur mobile : tel: (déclenche l'appel) ET sms: (ouvre
+                   l'application Messages pour écrire un SMS) ;
                    texte NON cliquable + bouton COPIER sur ordinateur
 
    Utilisé par index.html (musée) et tarifs.html.
@@ -268,16 +269,29 @@
     svc.appendChild(svcLink('Application e-mail', mailtoHref(subject), true));
     mail.appendChild(svc);
 
-    // ── Téléphone : tel: sur mobile, texte simple sur desktop ──
+    // ── Téléphone : appel + SMS sur mobile, texte simple sur desktop ──
     var phone;
     if (mobile) {
-      phone = doc.createElement('a');
-      phone.className = 'cw-option';
-      phone.href = 'tel:' + PHONE_TEL;
-      phone.appendChild(span('cw-option-label', 'Téléphone'));
-      phone.appendChild(span('cw-option-value', PHONE));
-      phone.appendChild(span('cw-option-hint', "Ouvre l'application Téléphone pour appeler"));
-      phone.addEventListener('click', function () { setTimeout(close, 150); });
+      phone = doc.createDocumentFragment();
+
+      var call = doc.createElement('a');
+      call.className = 'cw-option';
+      call.href = 'tel:' + PHONE_TEL;
+      call.appendChild(span('cw-option-label', 'Téléphone — appeler'));
+      call.appendChild(span('cw-option-value', PHONE));
+      call.appendChild(span('cw-option-hint', "Ouvre l'application Téléphone pour appeler"));
+      call.addEventListener('click', function () { setTimeout(close, 150); });
+
+      var sms = doc.createElement('a');
+      sms.className = 'cw-option';
+      sms.href = 'sms:' + PHONE_TEL + (subject ? '?&body=' + encodeURIComponent(subject) : '');
+      sms.appendChild(span('cw-option-label', 'Téléphone — message'));
+      sms.appendChild(span('cw-option-value', PHONE));
+      sms.appendChild(span('cw-option-hint', "Ouvre l'application Messages pour envoyer un SMS"));
+      sms.addEventListener('click', function () { setTimeout(close, 150); });
+
+      phone.appendChild(call);
+      phone.appendChild(sms);
     } else {
       phone = doc.createElement('div');
       phone.className = 'cw-option cw-option--static';
