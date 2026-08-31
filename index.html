@@ -2,11 +2,11 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Arphan DRAME — Portfolio</title>
   <meta name="description" content="Portfolio interactif d'Arphan DRAME — Développeur Full Stack Paris">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="icon" href="assets/img/favicon.png">
+  <link rel="icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="style.css">
   <style>
     .desktop-only { display: none; }
@@ -19,25 +19,62 @@
   <div id="screen-welcome" class="screen active">
     <div class="welcome-sky"></div>
     <div class="welcome-content">
+      <p class="mc-eyebrow">PORTFOLIO INTERACTIF</p>
       <h1 class="mc-title">ARPHAN DRAME</h1>
-      <div class="mc-subtitle">Développeur Full Stack · Paris</div>
+      <p class="mc-subtitle">Développeur Full Stack</p>
+      <p class="mc-location">React · React Native · Symfony — Paris</p>
 
-      <div class="mc-instructions desktop-only">
-        <div class="instr-title">CONTRÔLES</div>
-        <div class="instr-row"><kbd>← / Q / A</kbd><span>Aller à gauche</span></div>
-        <div class="instr-row"><kbd>→ / D</kbd><span>Aller à droite</span></div>
-        <div class="instr-row"><kbd>↑ / W / Z</kbd><span>Entrer dans un bâtiment</span></div>
-        <div class="instr-row"><kbd>↓ / S</kbd><span>Fermer une fenêtre</span></div>
+      <div class="welcome-actions">
+        <button class="mc-btn mc-btn--primary" id="btn-start">
+          <span class="mc-btn__label">Let's go !</span>
+          <span class="mc-btn__hint">Explorer mon portfolio</span>
+        </button>
+
+        <div class="welcome-secondary">
+          <a href="assets/CV.pdf" target="_blank" rel="noopener" class="mc-btn mc-btn--ghost cv-link">
+            <span class="mc-btn__label">CV</span>
+            <span class="mc-btn__hint">Mon parcours en PDF</span>
+          </a>
+          <a href="tarifs.html" class="mc-btn mc-btn--ghost tarifs-link">
+            <span class="mc-btn__label">Tarifs</span>
+            <span class="mc-btn__hint">Mes prestations</span>
+          </a>
+        </div>
       </div>
 
-      <button class="mc-btn" id="btn-start">Let's go !!!</button>
-      <a href="assets/CV.pdf" target="_blank" class="cv-link">Vue rapide — CV classique</a>
-      <a href="tarifs.html" class="tarifs-link">Tarifs</a>
+      <details class="mc-help desktop-only">
+        <summary>COMMENT ÇA MARCHE ?</summary>
+        <div class="mc-help__body">
+          <p>Un mini-jeu : déplacez votre personnage et entrez dans les maisons pour découvrir chaque section (profil, parcours, projets, passions, contact).</p>
+          <ul>
+            <li><b>← →</b><span>Se déplacer (ou A / D)</span></li>
+            <li><b>↑</b><span>Entrer dans une maison (ou W)</span></li>
+            <li><b>↓</b><span>Fermer une fenêtre (ou S)</span></li>
+          </ul>
+        </div>
+      </details>
     </div>
   </div>
 
   <div id="screen-game" class="screen hidden">
     <canvas id="gameCanvas"></canvas>
+
+    <button id="btn-home" type="button" class="game-home-btn">Accueil</button>
+
+    <div id="game-intro" class="game-intro hidden">
+      <div class="game-intro__card">
+        <h2 class="game-intro__title">BIENVENUE DANS LE VILLAGE</h2>
+        <p class="game-intro__text">
+          Chaque maison est une section de mon portfolio. Déplacez-vous jusqu'à
+          une porte, puis entrez pour lire le contenu. Vous pouvez revenir à
+          l'accueil à tout moment avec le bouton en haut à gauche.
+        </p>
+        <ul class="game-intro__list" id="game-intro-list"></ul>
+        <button type="button" id="btn-intro-close" class="mc-btn mc-btn--primary">
+          <span class="mc-btn__label">C'est parti</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <div id="modal-backdrop" class="modal-backdrop hidden"></div>

@@ -22,6 +22,13 @@ class InteractionManager {
   _bind() {
     this._closeBtn?.addEventListener('click', () => this.close());
     this._backdrop?.addEventListener('click', () => this.close());
+    // Échap ferme la fenêtre (comme le clic sur le fond), y compris Contact
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'Escape' || e.keyCode === 27) && this.isOpen()) {
+        e.preventDefault();
+        this.close();
+      }
+    });
   }
 
   isOpen() { return this._currentSection !== null; }
@@ -258,11 +265,16 @@ class InteractionManager {
         <a href="${l.url}" target="_blank" rel="noopener" class="proj-link">${l.label}</a>
       `).join('');
 
+      const roleHTML = p.role
+        ? `<p class="proj-role"><span class="proj-role__k">Mon rôle</span>${p.role}</p>`
+        : '';
+
       return `
         <div class="proj-card" style="--proj-accent:${p.accent}">
           <div class="proj-type">${p.type}</div>
           <h3 class="proj-title">${p.title}</h3>
           <p class="proj-desc">${p.desc}</p>
+          ${roleHTML}
           <div class="proj-tech">${techHTML}</div>
           <div class="proj-links">${linksHTML}</div>
         </div>

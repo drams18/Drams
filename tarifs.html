@@ -107,7 +107,14 @@
       text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 0 0 22px rgba(255,255,255,0.22);
     }
 
-    .mc-subtitle { font-size: 8px; color: #aac4e0; letter-spacing: 1px; line-height: 1.6; }
+    .mc-subtitle {
+      font-family: var(--body-font);
+      font-size: 13px;
+      font-weight: 600;
+      color: #b9cae0;
+      letter-spacing: 0.3px;
+      line-height: 1.6;
+    }
 
     /* ── Boutons pixel (repris de .mc-btn / .cv-link) ────── */
     .btn {
@@ -180,8 +187,9 @@
     .choice-intro {
       text-align: center;
       font-family: var(--body-font);
-      font-size: 13px;
-      color: #9aa7bb;
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #b8c2d0;
       margin-bottom: 30px;
     }
 
@@ -257,9 +265,9 @@
       line-height: 1.5;
     }
     .choice-desc {
-      font-size: 13px;
-      line-height: 1.65;
-      color: #9aa7bb;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #aeb9c9;
       flex: 1;
     }
     .choice-cta {
@@ -317,15 +325,15 @@
     .panel-body {
       padding: 28px 26px 30px;
       font-family: var(--body-font);
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1.7;
-      color: #d0ccc4;
+      color: #d9d5cd;
     }
 
     .intro {
-      color: #8f9bb0;
-      font-size: 13px;
-      font-style: italic;
+      color: #a9b4c4;
+      font-size: 13.5px;
+      line-height: 1.7;
       margin-bottom: 30px;
     }
 
@@ -337,12 +345,12 @@
       align-items: center;
       gap: 12px;
       font-family: var(--pixel-font);
-      font-size: 9px;
+      font-size: 10px;
       color: var(--accent);
       letter-spacing: 2px;
-      line-height: 1.6;
-      margin: 0 0 18px;
-      padding-bottom: 12px;
+      line-height: 1.7;
+      margin: 0 0 20px;
+      padding-bottom: 14px;
       border-bottom: 2px solid var(--accent);
     }
     .group-title::before {
@@ -385,7 +393,7 @@
       align-items: flex-start;
       gap: 9px;
       font-family: var(--body-font);
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
       color: #fff;
       line-height: 1.45;
@@ -400,9 +408,9 @@
       box-shadow: 0 0 6px var(--accent-glow);
     }
     .card-desc {
-      font-size: 12px;
-      color: #93a0b4;
-      line-height: 1.6;
+      font-size: 13.5px;
+      color: #a9b4c4;
+      line-height: 1.65;
       flex: 1;
     }
 
@@ -415,20 +423,22 @@
       border-top: 1px dashed rgba(255,255,255,0.12);
     }
     .price-label {
-      font-size: 10px;
-      color: #7c899e;
+      font-family: var(--body-font);
+      font-size: 11px;
+      font-weight: 600;
+      color: #8b97a9;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
     .price {
       font-family: var(--pixel-font);
-      font-size: 15px;
+      font-size: 17px;
       color: var(--accent);
       letter-spacing: 1px;
       text-shadow: 0 0 14px var(--accent-glow);
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
     }
     .price::before {
       content: '';
@@ -495,10 +505,11 @@
     @media (max-width: 640px) {
       body { padding: 20px 12px 36px; }
       .choice-grid { grid-template-columns: 1fr; gap: 18px; }
-      .panel-body { padding: 18px 15px 22px; font-size: 13px; }
+      .panel-body { padding: 18px 15px 22px; font-size: 14.5px; }
       .grid { grid-template-columns: 1fr; }
-      .btn { font-size: 10px; padding: 12px 18px; }
+      .btn { font-size: 10px; padding: 14px 18px; }
       .view-nav { gap: 10px; }
+      .view-nav .btn { flex: 1 1 auto; }
     }
 
     @media (min-width: 641px) and (max-width: 900px) {

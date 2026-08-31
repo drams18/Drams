@@ -27,6 +27,12 @@ class Game {
     this._tick          = 0;
     this._nearBuilding  = null;
 
+    // Appareil tactile : les boutons à l'écran + l'intro suffisent,
+    // on n'affiche pas le rappel clavier dessiné sur le canvas.
+    this._touch = (window.matchMedia &&
+      window.matchMedia('(hover: none) and (pointer: coarse)').matches) ||
+      'ontouchstart' in window || window.innerWidth <= 900;
+
     this._resize();
     window.addEventListener('resize', () => this._resize());
 
@@ -44,6 +50,13 @@ class Game {
   }
 
   _loop() {
+    // En pause quand on est revenu à l'accueil : on garde la boucle
+    // vivante mais on ne calcule/dessine rien.
+    if (document.getElementById('screen-game').classList.contains('hidden')) {
+      requestAnimationFrame(() => this._loop());
+      return;
+    }
+
     this._tick++;
     const ctx = this.ctx;
     const h   = this.canvas.height;
@@ -118,24 +131,25 @@ class Game {
   }
 
   _drawHUD(ctx, w, h) {
-    ctx.save();
-    ctx.font = '7px "Press Start 2P", monospace';
+    // Sur mobile : boutons tactiles visibles + intro → pas de rappel clavier.
+    if (this._touch) return;
 
-    const KEY = '#ffd700';
-    const LBL = 'rgba(255,255,255,0.70)';
-    const SEP = 'rgba(255,255,255,0.25)';
+    ctx.save();
+    ctx.font = '8px "Press Start 2P", monospace';
+
+    const KEY = '#ffe066';
+    const LBL = 'rgba(255,255,255,0.82)';
+    const SEP = 'rgba(255,255,255,0.28)';
 
     const segments = [
-      { text: 'Aller à gauche : ',  color: LBL },
-      { text: '[← / Q / A]   ',   color: KEY },
-      { text: 'Aller à droite : ',  color: LBL },
-      { text: ' [→ / D] ',   color: KEY },
-      { text: '   ·   ',   color: SEP },
-      { text: ' Entrer : ',   color: LBL },
-      { text: '[↑ / W / Z]',   color: KEY },
-      { text: '   ·   ',   color: SEP },
-      { text: ' Fermer : ',   color: LBL },
-      { text: '[↓ / S]',     color: KEY },
+      { text: 'SE DÉPLACER ', color: LBL },
+      { text: '← →',          color: KEY },
+      { text: '     ',        color: SEP },
+      { text: 'ENTRER ',      color: LBL },
+      { text: '↑',            color: KEY },
+      { text: '     ',        color: SEP },
+      { text: 'FERMER ',      color: LBL },
+      { text: '↓',            color: KEY },
     ];
 
     let totalW = 0;
@@ -145,12 +159,16 @@ class Game {
       return sw;
     });
 
-    const hintY = h - 16;
-    const pad   = 10;
+    const hintY = h - 20;
+    const padX  = 14;
+    const padY  = 9;
     let x = Math.round(w / 2 - totalW / 2);
 
-    ctx.fillStyle = 'rgba(0,0,0,0.5)';
-    ctx.fillRect(x - pad, hintY - 11, totalW + pad * 2, 14);
+    ctx.fillStyle = 'rgba(6,10,16,0.72)';
+    ctx.fillRect(x - padX, hintY - 10 - padY, totalW + padX * 2, 12 + padY * 2);
+    ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x - padX, hintY - 10 - padY, totalW + padX * 2, 12 + padY * 2);
 
     ctx.textAlign = 'left';
     for (let i = 0; i < segments.length; i++) {
@@ -168,17 +186,18 @@ class Game {
     const py      = groundY - building.h - 50 + Math.sin(this._tick * 0.08) * 4;
 
     ctx.save();
-    ctx.font = '8px "Press Start 2P", monospace';
+    ctx.font = '9px "Press Start 2P", monospace';
     ctx.textAlign = 'center';
-    const label = `[ ENTRER ] — ${building.label}`;
-    const lw = ctx.measureText(label).width + 16;
+    const action = this._touch ? 'ENTRER' : '↑ ENTRER';
+    const label  = `${action} · ${building.label}`;
+    const lw = ctx.measureText(label).width + 22;
 
-    ctx.fillStyle = 'rgba(0,0,0,0.7)';
-    ctx.fillRect(sx - lw / 2, py - 13, lw, 16);
+    ctx.fillStyle = 'rgba(6,10,16,0.86)';
+    ctx.fillRect(sx - lw / 2, py - 16, lw, 22);
     ctx.strokeStyle = building.accent;
-    ctx.lineWidth = 1;
-    ctx.strokeRect(sx - lw / 2, py - 13, lw, 16);
-    ctx.fillStyle = building.accent;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(sx - lw / 2, py - 16, lw, 22);
+    ctx.fillStyle = '#fff';
     ctx.fillText(label, sx, py);
     ctx.restore();
   }
@@ -210,6 +229,54 @@ function stopMusic() {
 
 // ── Boot ─────────────────────────────────────────────
 
+let _game = null;         // instance unique (créée à la 1re partie)
+let _introShown = false;  // l'intro du jeu ne s'affiche qu'une fois
+
+function _setMobileBtns(display) {
+  const mb = document.getElementById('mobile-btns');
+  if (mb) mb.style.display = display;
+}
+
+function showGameIntro() {
+  if (_introShown) return;
+  _introShown = true;
+
+  const intro = document.getElementById('game-intro');
+  const list  = document.getElementById('game-intro-list');
+  if (!intro || !list) return;
+
+  const touch = (window.matchMedia &&
+    window.matchMedia('(hover: none) and (pointer: coarse)').matches) ||
+    'ontouchstart' in window || window.innerWidth <= 900;
+
+  list.innerHTML = touch
+    ? `<li><b>◀ &nbsp;▶</b><span>Se déplacer dans le village</span></li>
+       <li><b>ENTRER</b><span>Entrer dans une maison quand vous êtes devant la porte</span></li>
+       <li><b>FERMER</b><span>Fermer une fenêtre ouverte</span></li>`
+    : `<li><b>← &nbsp;→</b><span>Se déplacer (ou les touches A / D)</span></li>
+       <li><b>↑</b><span>Entrer dans une maison (ou la touche W)</span></li>
+       <li><b>↓</b><span>Fermer une fenêtre (ou la touche S)</span></li>`;
+
+  intro.classList.remove('hidden');
+
+  const closeIntro = () => intro.classList.add('hidden');
+
+  document.getElementById('btn-intro-close')
+    ?.addEventListener('click', closeIntro, { once: true });
+
+  // Se ferme aussi dès le premier déplacement / première touche mobile
+  const onKey = (e) => {
+    if (['ArrowLeft','ArrowRight','ArrowUp','KeyA','KeyD','KeyW','KeyQ','KeyZ'].includes(e.code)) {
+      closeIntro();
+      window.removeEventListener('keydown', onKey);
+    }
+  };
+  window.addEventListener('keydown', onKey);
+
+  const mb = document.getElementById('mobile-btns');
+  mb?.addEventListener('touchstart', closeIntro, { once: true, passive: true });
+}
+
 function startGame() {
   const welcome = document.getElementById('screen-welcome');
   const game    = document.getElementById('screen-game');
@@ -217,29 +284,55 @@ function startGame() {
   // Init + play audio synchronously inside the user gesture (required on iOS/WebView)
   startMusic();
 
+  welcome.classList.remove('screen-enter');
   welcome.classList.add('screen-exit');
   setTimeout(() => {
     welcome.classList.add('hidden');
-    game.classList.remove('hidden');
+    welcome.classList.remove('screen-exit');
+
+    game.classList.remove('hidden', 'screen-enter');
+    void game.offsetWidth;              // reflow → rejoue l'animation d'entrée
     game.classList.add('screen-enter');
-    new Game();
+
+    if (!_game) {
+      _game = new Game();               // créé une seule fois
+      showGameIntro();
+    }
+    _setMobileBtns('flex');
   }, 500);
+}
+
+function goHome() {
+  const welcome = document.getElementById('screen-welcome');
+  const game    = document.getElementById('screen-game');
+
+  stopMusic();
+  if (_game && _game.interactions) _game.interactions.close();
+
+  game.classList.add('hidden');
+  game.classList.remove('screen-enter');
+  _setMobileBtns('none');
+
+  welcome.classList.remove('hidden', 'screen-exit', 'screen-enter');
+  void welcome.offsetWidth;
+  welcome.classList.add('screen-enter');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('btn-start');
-  if (!btn) return;
+  if (btn) {
+    // Pre-unlock audio on any touch/click before the start button (iOS WebView)
+    const unlock = () => {
+      _initAudio();
+      // Trigger a silent play/pause to unlock the audio context on iOS
+      bgMusic.play().then(() => bgMusic.pause()).catch(() => {});
+      btn.removeEventListener('touchstart', unlock);
+      btn.removeEventListener('mousedown',  unlock);
+    };
+    btn.addEventListener('touchstart', unlock, { passive: true });
+    btn.addEventListener('mousedown',  unlock);
+    btn.addEventListener('click', startGame);
+  }
 
-  // Pre-unlock audio on any touch/click before the start button (iOS WebView)
-  const unlock = () => {
-    _initAudio();
-    // Trigger a silent play/pause to unlock the audio context on iOS
-    bgMusic.play().then(() => bgMusic.pause()).catch(() => {});
-    btn.removeEventListener('touchstart', unlock);
-    btn.removeEventListener('mousedown',  unlock);
-  };
-  btn.addEventListener('touchstart', unlock, { passive: true });
-  btn.addEventListener('mousedown',  unlock);
-
-  btn.addEventListener('click', startGame);
+  document.getElementById('btn-home')?.addEventListener('click', goHome);
 });

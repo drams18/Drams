@@ -58,7 +58,7 @@ const SECTIONS = {
         date: '2022 — 2023',
         title: 'Formation Développeur Web Full Stack',
         place: 'Doranco — Paris',
-        desc: 'Formation complète au développement web : Front-end (HTML5, CSS3, JS, React, Angular, responsive/UX), Back-end (Node.js, PHP, API REST/GraphQL), bases de données SQL/NoSQL, sécurité web (XSS, CSRF, auth), DevOps (Git, CI/CD, Docker) et méthodes Agile/Scrum.',
+        desc: 'Formation complète : front-end (React, Angular, responsive/UX), back-end (Node.js, PHP, API REST/GraphQL), bases SQL/NoSQL, sécurité web, DevOps (Git, CI/CD, Docker) et méthodes Agile.',
       },
       {
         date: '2023',
@@ -122,6 +122,7 @@ const SECTIONS = {
         title: 'ISLAAH',
         type: 'Application Mobile',
         tech: ['React Native', 'Symfony', 'MySQL', 'Cloudflare', 'Railway', 'Expo'],
+        role: 'Conception et développement complet — app mobile, API et mise en production.',
         desc: 'Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l\'App Store.',
         links: [
           { label: 'Télécharger', url: 'https://apps.apple.com/us/app/islaah/id6758726142' },
@@ -132,6 +133,7 @@ const SECTIONS = {
         title: 'SKYWALK',
         type: 'Plateforme Web SaaS',
         tech: ['React', 'NestJS', 'PostgreSQL', 'Docker'],
+        role: 'Développement front-end et back-end, conteneurisation et déploiement.',
         desc: 'Plateforme d\'expatriation SaaS. Interface React moderne, API NestJS robuste, déployée avec Docker et Nginx.',
         links: [
           { label: 'Accéder', url: 'https://skywalk-chi.vercel.app/auth/login' },
@@ -140,8 +142,9 @@ const SECTIONS = {
       },
       {
         title: 'Plateforme de recherche de prospects',
-        type: 'Projet Personel',
+        type: 'Projet Personnel',
         tech: ['Node.js', 'Railway', 'HTML', 'CSS', 'JavaScript', 'NoSQL'],
+        role: 'Projet personnel — idée, conception et développement réalisés seul.',
         desc: 'Plateforme permettant de rechercher une enseigne qui a besoin d\'un site web ou d\'une mise à jour.',
         links: [
           { label: 'Accéder', url: 'https://drams18.github.io/Prospectly/index.html' },
@@ -152,6 +155,7 @@ const SECTIONS = {
         title: 'Wild Kédougou Experience',
         type: 'Plateforme Web',
         tech: ['Cloudflare Workers', 'JavaScript', 'HTML', 'CSS'],
+        role: 'Développement complet du site et déploiement sur Cloudflare Workers.',
         desc: 'Plateforme immersive dédiée à la découverte du Kédougou : nature sauvage, faune et expériences de voyage au cœur du Sénégal oriental.',
         links: [
           { label: 'Voir le projet', url: 'https://wild-kedougou-experience.hitmind-pro.workers.dev/' },
