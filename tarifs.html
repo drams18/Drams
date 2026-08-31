@@ -11,10 +11,17 @@
     /* ══════════════════════════════════════════════════════
        TARIFS.HTML — Page autonome, même univers pixel-art
        que le portfolio (voir style.css). HTML + CSS + JS vanilla.
+       Accent : vert « émeraude » pixel (remplace l'or/doré).
        ══════════════════════════════════════════════════════ */
 
     :root {
-      --mc-gold:    #ffd700;
+      --accent:      #35e07a;   /* vert émeraude — accent principal */
+      --accent-2:    #7bf0a8;   /* variante claire (bordures / hover) */
+      --accent-dark: #17864a;   /* ombre portée pixel */
+      --accent-deep: #0c5c33;   /* ombre profonde */
+      --accent-glow: rgba(53, 224, 122, 0.45);
+      --accent-dim:  rgba(53, 224, 122, 0.12);
+
       --mc-text:    #f0ead6;
       --mc-dark:    #1a1a2e;
       --pixel-font: 'Press Start 2P', monospace;
@@ -58,7 +65,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 860px;
+      max-width: 900px;
       animation: fadeIn 0.5s ease;
     }
 
@@ -78,13 +85,13 @@
       font-size: clamp(18px, 4vw, 30px);
       color: #fff;
       letter-spacing: 2px;
-      text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 0 0 20px rgba(255,215,0,0.5);
+      text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 0 0 20px var(--accent-glow);
       animation: titlePulse 3s ease-in-out infinite;
     }
 
     @keyframes titlePulse {
-      0%, 100% { text-shadow: 4px 4px 0 #000, 0 0 20px rgba(255,215,0,0.4); }
-      50%      { text-shadow: 4px 4px 0 #000, 0 0 35px rgba(255,215,0,0.9); }
+      0%, 100% { text-shadow: 4px 4px 0 #000, 0 0 20px rgba(53,224,122,0.35); }
+      50%      { text-shadow: 4px 4px 0 #000, 0 0 35px rgba(53,224,122,0.85); }
     }
 
     .mc-subtitle { font-size: 8px; color: #aac4e0; letter-spacing: 1px; line-height: 1.6; }
@@ -118,20 +125,25 @@
     }
     .btn-back:active { box-shadow: 0 1px 0 #154070; }
 
-    .btn-contact {
-      background: #4a7c24;
-      box-shadow: 0 4px 0 #2d4e15, 0 5px 0 rgba(0,0,0,0.4);
+    /* Bouton d'action principal — reprend l'accent vert */
+    .btn-cta {
+      background: var(--accent);
+      color: #06251a;
+      border: 3px solid var(--accent-2);
+      box-shadow: 0 4px 0 var(--accent-deep), 0 5px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+      text-shadow: 1px 1px 0 rgba(255,255,255,0.25);
     }
-    .btn-contact:hover {
-      background: #5a9c2e;
-      box-shadow: 0 4px 0 #2d4e15, 0 5px 0 rgba(0,0,0,0.4), 0 0 16px rgba(90,156,46,0.6);
+    .btn-cta:hover {
+      background: var(--accent-2);
+      color: #06251a;
+      box-shadow: 0 4px 0 var(--accent-deep), 0 5px 0 rgba(0,0,0,0.4), 0 0 18px var(--accent-glow);
     }
-    .btn-contact:active { box-shadow: 0 1px 0 #2d4e15; }
+    .btn-cta:active { box-shadow: 0 1px 0 var(--accent-deep); }
 
     /* ── Panneau (repris de .section-modal) ──────────────── */
     .panel {
       background: #0e1215;
-      border: 2px solid var(--mc-gold);
+      border: 2px solid var(--accent);
       box-shadow:
         0 0 0 1px rgba(0,0,0,0.8),
         0 0 40px rgba(0,0,0,0.6),
@@ -146,82 +158,209 @@
 
     .panel-head {
       padding: 12px 16px;
-      border-bottom: 2px solid var(--mc-gold);
+      border-bottom: 2px solid var(--accent);
       background: rgba(0,0,0,0.4);
     }
     .panel-title {
       font-size: 10px;
-      color: var(--mc-gold);
+      color: var(--accent);
       letter-spacing: 1px;
-      text-shadow: 0 0 10px var(--mc-gold);
+      text-shadow: 0 0 10px var(--accent-glow);
     }
 
     .panel-body {
-      padding: 22px;
+      padding: 24px;
       font-family: var(--body-font);
       font-size: 14px;
       line-height: 1.7;
       color: #d0ccc4;
     }
 
-    /* ── Contenu ─────────────────────────────────────────── */
-    .sub-title {
-      font-family: var(--pixel-font);
-      font-size: 9px;
-      color: var(--mc-gold);
-      margin: 4px 0 10px;
-      letter-spacing: 1px;
-      line-height: 1.6;
-    }
     .intro {
-      color: #888;
+      color: #8f9bb0;
       font-size: 13px;
       font-style: italic;
-      margin-bottom: 20px;
-    }
-    .cat-intro { color: #999; font-size: 13px; margin-bottom: 14px; }
-
-    .divider {
-      height: 1px;
-      background: rgba(255,255,255,0.07);
-      margin: 26px 0;
+      margin-bottom: 26px;
     }
 
+    /* ── En-tête de catégorie ────────────────────────────── */
+    .cat + .cat { margin-top: 40px; }
+
+    .cat-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--accent);
+    }
+    .cat-badge {
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      background: var(--accent-dim);
+      border: 2px solid var(--accent);
+      box-shadow: 0 3px 0 var(--accent-deep);
+    }
+    .cat-name {
+      font-family: var(--pixel-font);
+      font-size: 12px;
+      color: #fff;
+      letter-spacing: 1px;
+      line-height: 1.5;
+    }
+    .cat-tag {
+      color: #8f9bb0;
+      font-size: 12px;
+      margin: 12px 0 0;
+    }
+
+    /* ── Sous-groupe (au sein d'une catégorie) ───────────── */
+    .group-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--pixel-font);
+      font-size: 8px;
+      color: var(--accent);
+      letter-spacing: 2px;
+      line-height: 1.6;
+      margin: 26px 0 14px;
+    }
+    .group-title::before {
+      content: '';
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .group-title::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-dim), transparent);
+    }
+
+    /* ── Grille de cartes ────────────────────────────────── */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(238px, 1fr));
       gap: 14px;
     }
 
     .card {
+      position: relative;
       background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-top: 3px solid var(--mc-gold);
-      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-top: 3px solid var(--accent);
+      padding: 15px 15px 16px;
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      transition: background 0.2s, transform 0.2s;
+      gap: 12px;
+      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
     }
-    .card:hover { background: rgba(255,255,255,0.07); transform: translateY(-2px); }
-    .card-name  { font-size: 13px; font-weight: 700; color: #fff; }
-    .card-desc  { font-size: 12px; color: #999; line-height: 1.6; flex: 1; }
-    .price-label { font-size: 10px; color: #888; }
+    .card:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.16);
+      border-top-color: var(--accent-2);
+      box-shadow: 0 6px 0 rgba(0,0,0,0.28), 0 0 20px var(--accent-glow);
+    }
+
+    .card-top { display: flex; align-items: flex-start; gap: 10px; }
+    .card-ico {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(53,224,122,0.28);
+    }
+    .card-name {
+      font-family: var(--body-font);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.45;
+    }
+    .card-desc {
+      font-family: var(--body-font);
+      font-size: 11.5px;
+      color: #93a0b4;
+      line-height: 1.6;
+      margin-top: -4px;
+      flex: 1;
+    }
+
+    .card-price {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(255,255,255,0.1);
+    }
+    .price-label {
+      font-family: var(--body-font);
+      font-size: 10px;
+      color: #7c899e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
     .price {
       font-family: var(--pixel-font);
-      font-size: 11px;
-      color: var(--mc-gold);
+      font-size: 14px;
+      color: var(--accent);
       letter-spacing: 1px;
+      text-shadow: 0 0 14px var(--accent-glow);
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .price::before {
+      content: '◆';
+      font-size: 9px;
+      color: var(--accent-2);
+      text-shadow: none;
+      transform: translateY(-1px);
+    }
+    .price-unit {
+      font-size: 9px;
+      color: #9aa7bb;
+      letter-spacing: 1px;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 34px 0 30px;
     }
 
     /* ── Besoin spécifique ? ─────────────────────────────── */
     .cta {
-      background: rgba(255,215,0,0.06);
-      border: 1px solid rgba(255,215,0,0.25);
-      padding: 18px 16px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(53,224,122,0.3);
+      padding: 22px 18px;
       text-align: center;
     }
-    .cta p { font-size: 13px; color: #bbb; margin: 4px 0 16px; }
+    .cta .sub-title { color: var(--accent); }
+    .cta p { font-size: 13px; color: #b8c2d0; margin: 6px 0 16px; }
+
+    .sub-title {
+      font-family: var(--pixel-font);
+      font-size: 9px;
+      color: var(--accent);
+      letter-spacing: 1px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
 
     .allovoisins {
       margin-top: 18px;
@@ -231,7 +370,7 @@
       color: #888;
       text-align: center;
     }
-    .allovoisins a { color: var(--mc-gold); text-decoration: none; }
+    .allovoisins a { color: var(--accent); text-decoration: none; }
     .allovoisins a:hover { text-decoration: underline; }
 
     /* ── Pied de page ────────────────────────────────────── */
@@ -246,6 +385,7 @@
       opacity: 1;
       transform: none;
       transition: opacity 0.4s ease, transform 0.4s ease;
+      transition-delay: var(--d, 0ms);
     }
 
     /* ── Responsive ──────────────────────────────────────── */
@@ -253,6 +393,8 @@
       body { padding: 20px 12px 36px; }
       .mc-title { font-size: 16px; }
       .panel-body { padding: 16px 14px; font-size: 13px; }
+      .cat-name { font-size: 10px; }
+      .cat-badge { width: 30px; height: 30px; font-size: 14px; }
       .grid { grid-template-columns: 1fr; }
       .btn { font-size: 10px; padding: 12px 20px; }
     }
@@ -276,90 +418,320 @@
       <div class="panel-body">
         <p class="intro">Des tarifs clairs, sans surprise. Les prix affichés sont des points de départ, ajustés selon votre besoin réel.</p>
 
-        <h2 class="sub-title">PARTICULIERS</h2>
-        <p class="cat-intro">Tarifs accessibles pour vos projets et interventions ponctuelles.</p>
-        <div class="grid">
-          <article class="card">
-            <div class="card-name">Site vitrine (page unique)</div>
-            <p class="card-desc">Présence en ligne soignée, responsive et rapide.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">250 €</div>
-          </article>
-          <article class="card">
-            <div class="card-name">Site vitrine multi-pages</div>
-            <p class="card-desc">Plusieurs sections, formulaire de contact, SEO de base.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">490 €</div>
-          </article>
-          <article class="card">
-            <div class="card-name">Landing / page de vente</div>
-            <p class="card-desc">Une page pensée pour convertir vos visiteurs.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">190 €</div>
-          </article>
-          <article class="card">
-            <div class="card-name">Dépannage &amp; modifications</div>
-            <p class="card-desc">Correctifs, ajustements et petites évolutions.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">40 € / h</div>
-          </article>
-          <article class="card">
-            <div class="card-name">Mise en ligne &amp; déploiement</div>
-            <p class="card-desc">Nom de domaine, hébergement, certificat HTTPS.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">90 €</div>
-          </article>
-        </div>
+        <!-- ════════════ PARTICULIERS ════════════ -->
+        <section class="cat">
+          <div class="cat-head">
+            <span class="cat-badge" aria-hidden="true">🏠</span>
+            <h2 class="cat-name">PARTICULIERS</h2>
+          </div>
+          <p class="cat-tag">Tarifs accessibles pour vos projets et interventions ponctuelles.</p>
+
+          <h3 class="group-title">Sites internet</h3>
+          <div class="grid">
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🚀</span>
+                <h4 class="card-name">Landing page</h4>
+              </div>
+              <p class="card-desc">Page unique orientée conversion.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">50 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🖥️</span>
+                <h4 class="card-name">Site vitrine codé sur mesure</h4>
+              </div>
+              <p class="card-desc">Site rapide, responsive, 100 % sur mesure.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">100 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">📝</span>
+                <h4 class="card-name">Site WordPress</h4>
+              </div>
+              <p class="card-desc">Site administrable, thème et extensions configurés.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">150 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🛒</span>
+                <h4 class="card-name">Site Shopify</h4>
+              </div>
+              <p class="card-desc">Boutique en ligne prête à vendre.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">150 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">♻️</span>
+                <h4 class="card-name">Refonte / modification d'un site</h4>
+              </div>
+              <p class="card-desc">Nouveau design ou évolutions d'un site existant.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">50 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🌐</span>
+                <h4 class="card-name">Mise en ligne / configuration</h4>
+              </div>
+              <p class="card-desc">Domaine, hébergement, HTTPS et déploiement.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">40 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🔧</span>
+                <h4 class="card-name">Dépannage / correction</h4>
+              </div>
+              <p class="card-desc">Résolution de bugs et petits correctifs.</p>
+              <div class="card-price">
+                <span class="price">40 €<span class="price-unit">/ h</span></span>
+              </div>
+            </article>
+          </div>
+
+          <h3 class="group-title">Création numérique</h3>
+          <div class="grid">
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">📄</span>
+                <h4 class="card-name">CV professionnel</h4>
+              </div>
+              <p class="card-desc">CV mis en page, propre et lisible.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">30 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🪪</span>
+                <h4 class="card-name">CV interactif / en ligne</h4>
+              </div>
+              <p class="card-desc">CV web animé avec lien partageable.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">60 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🎨</span>
+                <h4 class="card-name">Création / retouche de logo</h4>
+              </div>
+              <p class="card-desc">Logo simple ou reprise d'un existant.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">40 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🖼️</span>
+                <h4 class="card-name">Bannière / visuel web</h4>
+              </div>
+              <p class="card-desc">Visuels pour réseaux sociaux ou site.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">30 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">📁</span>
+                <h4 class="card-name">Portfolio</h4>
+              </div>
+              <p class="card-desc">Vitrine en ligne de vos travaux.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">40 €</span>
+              </div>
+            </article>
+          </div>
+
+          <h3 class="group-title">Accompagnement &amp; développement</h3>
+          <div class="grid">
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🧑‍💻</span>
+                <h4 class="card-name">Initiation au développement web</h4>
+              </div>
+              <p class="card-desc">Bases HTML, CSS et JavaScript en direct.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">15 €<span class="price-unit">/ h</span></span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🎓</span>
+                <h4 class="card-name">Accompagnement projet étudiant</h4>
+              </div>
+              <p class="card-desc">Aide au cadrage et à la réalisation.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">20 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🛠️</span>
+                <h4 class="card-name">Aide au développement web</h4>
+              </div>
+              <p class="card-desc">WordPress, Shopify, HTML, CSS, JavaScript — assistance et résolution de problèmes.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">30 €<span class="price-unit">/ h</span></span>
+              </div>
+            </article>
+          </div>
+        </section>
 
         <div class="divider"></div>
 
-        <h2 class="sub-title">PROFESSIONNELS</h2>
-        <p class="cat-intro">Tarifs adaptés aux projets plus complets et aux entreprises.</p>
-        <div class="grid">
-          <article class="card">
-            <div class="card-name">Site web sur-mesure</div>
-            <p class="card-desc">Design dédié, CMS, intégrations métier.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">1 200 €</div>
-          </article>
-          <article class="card">
-            <div class="card-name">Application web (SaaS, dashboard)</div>
-            <p class="card-desc">Front React, API robuste, authentification.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">2 500 €</div>
-          </article>
-          <article class="card">
-            <div class="card-name">Application mobile iOS / Android</div>
-            <p class="card-desc">React Native, publication sur les stores.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">3 500 €</div>
-          </article>
-          <article class="card">
-            <div class="card-name">API / back-end sur-mesure</div>
-            <p class="card-desc">Symfony ou NestJS, base de données, documentation.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">1 500 €</div>
-          </article>
-          <article class="card">
-            <div class="card-name">Maintenance &amp; évolutions</div>
-            <p class="card-desc">Suivi mensuel, corrections, nouvelles fonctionnalités.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">150 € / mois</div>
-          </article>
-          <article class="card">
-            <div class="card-name">Régie / TJM</div>
-            <p class="card-desc">Renfort ponctuel intégré à votre équipe.</p>
-            <div class="price-label">à partir de</div>
-            <div class="price">350 € / jour</div>
-          </article>
-        </div>
+        <!-- ════════════ PROFESSIONNELS ════════════ -->
+        <section class="cat">
+          <div class="cat-head">
+            <span class="cat-badge" aria-hidden="true">💼</span>
+            <h2 class="cat-name">PROFESSIONNELS</h2>
+          </div>
+          <p class="cat-tag">Tarifs adaptés aux projets plus complets et aux entreprises.</p>
+
+          <div class="grid" style="margin-top:18px">
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🖥️</span>
+                <h4 class="card-name">Site vitrine</h4>
+              </div>
+              <p class="card-desc">Présence pro complète, plusieurs pages, SEO de base.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">600 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">📝</span>
+                <h4 class="card-name">Site WordPress</h4>
+              </div>
+              <p class="card-desc">CMS sur mesure, formation à la prise en main.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">500 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🛒</span>
+                <h4 class="card-name">E-commerce</h4>
+              </div>
+              <p class="card-desc">Boutique complète, paiement et gestion des commandes.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">900 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🏬</span>
+                <h4 class="card-name">Shopify</h4>
+              </div>
+              <p class="card-desc">Boutique Shopify personnalisée et optimisée.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">700 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🧩</span>
+                <h4 class="card-name">Application web</h4>
+              </div>
+              <p class="card-desc">App métier, tableau de bord, espace utilisateur.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">1 200 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">☁️</span>
+                <h4 class="card-name">SaaS</h4>
+              </div>
+              <p class="card-desc">Produit multi-utilisateurs, abonnements, back-office.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">2 500 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">📱</span>
+                <h4 class="card-name">Application mobile</h4>
+              </div>
+              <p class="card-desc">iOS et Android, publication sur les stores.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">3 500 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🔌</span>
+                <h4 class="card-name">API / backend</h4>
+              </div>
+              <p class="card-desc">API sécurisée, base de données, documentation.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">1 500 €</span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">🧰</span>
+                <h4 class="card-name">Maintenance</h4>
+              </div>
+              <p class="card-desc">Suivi mensuel, correctifs et évolutions.</p>
+              <div class="card-price">
+                <span class="price-label">à partir de</span>
+                <span class="price">150 €<span class="price-unit">/ mois</span></span>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top">
+                <span class="card-ico" aria-hidden="true">📅</span>
+                <h4 class="card-name">Développement à la journée</h4>
+              </div>
+              <p class="card-desc">Renfort ponctuel intégré à votre équipe.</p>
+              <div class="card-price">
+                <span class="price">350 €<span class="price-unit">/ jour</span></span>
+              </div>
+            </article>
+          </div>
+        </section>
 
         <div class="divider"></div>
 
         <section class="cta">
           <h2 class="sub-title">BESOIN SPÉCIFIQUE ?</h2>
           <p>Chaque projet est unique. Décrivez-moi le vôtre et recevez un devis personnalisé et gratuit.</p>
-          <a class="btn btn-contact" href="mailto:arphandrame0@gmail.com?subject=Demande%20de%20devis%20personnalis%C3%A9">Me contacter pour un devis</a>
+          <a class="btn btn-cta" href="mailto:arphandrame0@gmail.com?subject=Demande%20de%20devis%20personnalis%C3%A9">Me contacter pour un devis</a>
         </section>
 
         <p class="allovoisins">
@@ -377,6 +749,14 @@
     // Révélation progressive des cartes au défilement (dégradation propre sans JS)
     (function () {
       document.documentElement.classList.add('js');
+
+      // Léger décalage d'apparition par carte, réinitialisé à chaque grille
+      document.querySelectorAll('.grid').forEach(function (grid) {
+        grid.querySelectorAll('.card').forEach(function (card, i) {
+          card.style.setProperty('--d', (i % 4) * 60 + 'ms');
+        });
+      });
+
       var cards = document.querySelectorAll('.card');
 
       if (!('IntersectionObserver' in window)) {
