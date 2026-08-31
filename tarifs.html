@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarifs — Arphan DRAME</title>
+  <meta name="description" content="Grille tarifaire d'Arphan DRAME — Développeur Full Stack. Tarifs particuliers et professionnels, devis personnalisé.">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/img/favicon.png">
+  <style>
+    /* ══════════════════════════════════════════════════════
+       TARIFS.HTML — Page autonome, même univers pixel-art
+       que le portfolio (voir style.css). HTML + CSS + JS vanilla.
+       ══════════════════════════════════════════════════════ */
+
+    :root {
+      --mc-gold:    #ffd700;
+      --mc-text:    #f0ead6;
+      --mc-dark:    #1a1a2e;
+      --pixel-font: 'Press Start 2P', monospace;
+      --body-font:  -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { width: 100%; min-height: 100%; }
+
+    body {
+      font-family: var(--pixel-font);
+      color: var(--mc-text);
+      background: linear-gradient(180deg, #0a0e1a 0%, #1a2a4a 40%, #2a4a7a 70%, #3a6a9a 100%) fixed;
+      padding: 32px 16px 48px;
+      display: flex;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    /* Étoiles en fond (repris du welcome screen) */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 8%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(2px 2px at 40% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 5%,  rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 12%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(2px 2px at 80% 7%,  rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 18%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 30%, rgba(255,255,255,0.4) 0%, transparent 100%);
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 860px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ── En-tête ─────────────────────────────────────────── */
+    .page-head {
+      text-align: center;
+      margin-bottom: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mc-title {
+      font-size: clamp(18px, 4vw, 30px);
+      color: #fff;
+      letter-spacing: 2px;
+      text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 0 0 20px rgba(255,215,0,0.5);
+      animation: titlePulse 3s ease-in-out infinite;
+    }
+
+    @keyframes titlePulse {
+      0%, 100% { text-shadow: 4px 4px 0 #000, 0 0 20px rgba(255,215,0,0.4); }
+      50%      { text-shadow: 4px 4px 0 #000, 0 0 35px rgba(255,215,0,0.9); }
+    }
+
+    .mc-subtitle { font-size: 8px; color: #aac4e0; letter-spacing: 1px; line-height: 1.6; }
+
+    /* ── Boutons pixel (repris de .mc-btn / .cv-link) ────── */
+    .btn {
+      font-family: var(--pixel-font);
+      font-size: 11px;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: 1px;
+      display: inline-block;
+      padding: 13px 26px;
+      cursor: pointer;
+      border: none;
+      position: relative;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+      image-rendering: pixelated;
+      transition: background 0.1s, box-shadow 0.1s, transform 0.1s;
+    }
+    .btn:active { transform: translateY(3px); }
+
+    .btn-back {
+      background: #2a6fa8;
+      border: 3px solid #5ab0e8;
+      box-shadow: 0 4px 0 #154070, 0 5px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .btn-back:hover {
+      background: #3585c8;
+      box-shadow: 0 4px 0 #154070, 0 5px 0 rgba(0,0,0,0.4), 0 0 16px rgba(90,176,232,0.6);
+    }
+    .btn-back:active { box-shadow: 0 1px 0 #154070; }
+
+    .btn-contact {
+      background: #4a7c24;
+      box-shadow: 0 4px 0 #2d4e15, 0 5px 0 rgba(0,0,0,0.4);
+    }
+    .btn-contact:hover {
+      background: #5a9c2e;
+      box-shadow: 0 4px 0 #2d4e15, 0 5px 0 rgba(0,0,0,0.4), 0 0 16px rgba(90,156,46,0.6);
+    }
+    .btn-contact:active { box-shadow: 0 1px 0 #2d4e15; }
+
+    /* ── Panneau (repris de .section-modal) ──────────────── */
+    .panel {
+      background: #0e1215;
+      border: 2px solid var(--mc-gold);
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.8),
+        0 0 40px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+      animation: modalIn 0.35s ease;
+    }
+
+    @keyframes modalIn {
+      from { transform: translateY(10px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .panel-head {
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--mc-gold);
+      background: rgba(0,0,0,0.4);
+    }
+    .panel-title {
+      font-size: 10px;
+      color: var(--mc-gold);
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px var(--mc-gold);
+    }
+
+    .panel-body {
+      padding: 22px;
+      font-family: var(--body-font);
+      font-size: 14px;
+      line-height: 1.7;
+      color: #d0ccc4;
+    }
+
+    /* ── Contenu ─────────────────────────────────────────── */
+    .sub-title {
+      font-family: var(--pixel-font);
+      font-size: 9px;
+      color: var(--mc-gold);
+      margin: 4px 0 10px;
+      letter-spacing: 1px;
+      line-height: 1.6;
+    }
+    .intro {
+      color: #888;
+      font-size: 13px;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    .cat-intro { color: #999; font-size: 13px; margin-bottom: 14px; }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 26px 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-top: 3px solid var(--mc-gold);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .card:hover { background: rgba(255,255,255,0.07); transform: translateY(-2px); }
+    .card-name  { font-size: 13px; font-weight: 700; color: #fff; }
+    .card-desc  { font-size: 12px; color: #999; line-height: 1.6; flex: 1; }
+    .price-label { font-size: 10px; color: #888; }
+    .price {
+      font-family: var(--pixel-font);
+      font-size: 11px;
+      color: var(--mc-gold);
+      letter-spacing: 1px;
+    }
+
+    /* ── Besoin spécifique ? ─────────────────────────────── */
+    .cta {
+      background: rgba(255,215,0,0.06);
+      border: 1px solid rgba(255,215,0,0.25);
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .cta p { font-size: 13px; color: #bbb; margin: 4px 0 16px; }
+
+    .allovoisins {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      font-size: 11px;
+      color: #888;
+      text-align: center;
+    }
+    .allovoisins a { color: var(--mc-gold); text-decoration: none; }
+    .allovoisins a:hover { text-decoration: underline; }
+
+    /* ── Pied de page ────────────────────────────────────── */
+    .page-foot {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    /* ── Révélation progressive des cartes (JS) ──────────── */
+    .js .card { opacity: 0; transform: translateY(12px); }
+    .js .card.in {
+      opacity: 1;
+      transform: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 600px) {
+      body { padding: 20px 12px 36px; }
+      .mc-title { font-size: 16px; }
+      .panel-body { padding: 16px 14px; font-size: 13px; }
+      .grid { grid-template-columns: 1fr; }
+      .btn { font-size: 10px; padding: 12px 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .js .card { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="page-head">
+      <h1 class="mc-title">TARIFS</h1>
+      <p class="mc-subtitle">Arphan DRAME · Développeur Full Stack</p>
+      <a href="index.html" class="btn btn-back">← Retour à l'accueil</a>
+    </header>
+
+    <main class="panel">
+      <div class="panel-head"><span class="panel-title">GRILLE TARIFAIRE</span></div>
+      <div class="panel-body">
+        <p class="intro">Des tarifs clairs, sans surprise. Les prix affichés sont des points de départ, ajustés selon votre besoin réel.</p>
+
+        <h2 class="sub-title">PARTICULIERS</h2>
+        <p class="cat-intro">Tarifs accessibles pour vos projets et interventions ponctuelles.</p>
+        <div class="grid">
+          <article class="card">
+            <div class="card-name">Site vitrine (page unique)</div>
+            <p class="card-desc">Présence en ligne soignée, responsive et rapide.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">250 €</div>
+          </article>
+          <article class="card">
+            <div class="card-name">Site vitrine multi-pages</div>
+            <p class="card-desc">Plusieurs sections, formulaire de contact, SEO de base.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">490 €</div>
+          </article>
+          <article class="card">
+            <div class="card-name">Landing / page de vente</div>
+            <p class="card-desc">Une page pensée pour convertir vos visiteurs.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">190 €</div>
+          </article>
+          <article class="card">
+            <div class="card-name">Dépannage &amp; modifications</div>
+            <p class="card-desc">Correctifs, ajustements et petites évolutions.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">40 € / h</div>
+          </article>
+          <article class="card">
+            <div class="card-name">Mise en ligne &amp; déploiement</div>
+            <p class="card-desc">Nom de domaine, hébergement, certificat HTTPS.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">90 €</div>
+          </article>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2 class="sub-title">PROFESSIONNELS</h2>
+        <p class="cat-intro">Tarifs adaptés aux projets plus complets et aux entreprises.</p>
+        <div class="grid">
+          <article class="card">
+            <div class="card-name">Site web sur-mesure</div>
+            <p class="card-desc">Design dédié, CMS, intégrations métier.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">1 200 €</div>
+          </article>
+          <article class="card">
+            <div class="card-name">Application web (SaaS, dashboard)</div>
+            <p class="card-desc">Front React, API robuste, authentification.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">2 500 €</div>
+          </article>
+          <article class="card">
+            <div class="card-name">Application mobile iOS / Android</div>
+            <p class="card-desc">React Native, publication sur les stores.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">3 500 €</div>
+          </article>
+          <article class="card">
+            <div class="card-name">API / back-end sur-mesure</div>
+            <p class="card-desc">Symfony ou NestJS, base de données, documentation.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">1 500 €</div>
+          </article>
+          <article class="card">
+            <div class="card-name">Maintenance &amp; évolutions</div>
+            <p class="card-desc">Suivi mensuel, corrections, nouvelles fonctionnalités.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">150 € / mois</div>
+          </article>
+          <article class="card">
+            <div class="card-name">Régie / TJM</div>
+            <p class="card-desc">Renfort ponctuel intégré à votre équipe.</p>
+            <div class="price-label">à partir de</div>
+            <div class="price">350 € / jour</div>
+          </article>
+        </div>
+
+        <div class="divider"></div>
+
+        <section class="cta">
+          <h2 class="sub-title">BESOIN SPÉCIFIQUE ?</h2>
+          <p>Chaque projet est unique. Décrivez-moi le vôtre et recevez un devis personnalisé et gratuit.</p>
+          <a class="btn btn-contact" href="mailto:arphandrame0@gmail.com?subject=Demande%20de%20devis%20personnalis%C3%A9">Me contacter pour un devis</a>
+        </section>
+
+        <p class="allovoisins">
+          Vous m'avez trouvé via <a href="https://www.allovoisins.com/" target="_blank" rel="noopener">AlloVoisins</a> ? Précisez-le lors de votre demande.
+        </p>
+      </div>
+    </main>
+
+    <footer class="page-foot">
+      <a href="index.html" class="btn btn-back">← Retour à l'accueil</a>
+    </footer>
+  </div>
+
+  <script>
+    // Révélation progressive des cartes au défilement (dégradation propre sans JS)
+    (function () {
+      document.documentElement.classList.add('js');
+      var cards = document.querySelectorAll('.card');
+
+      if (!('IntersectionObserver' in window)) {
+        cards.forEach(function (c) { c.classList.add('in'); });
+        return;
+      }
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      cards.forEach(function (c) { io.observe(c); });
+    })();
+  </script>
+</body>
+</html>

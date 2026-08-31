@@ -148,6 +148,16 @@ const SECTIONS = {
         ],
         accent: '#a5d6a7',
       },
+      {
+        title: 'Wild Kédougou Experience',
+        type: 'Plateforme Web',
+        tech: ['Cloudflare Workers', 'JavaScript', 'HTML', 'CSS'],
+        desc: 'Plateforme immersive dédiée à la découverte du Kédougou : nature sauvage, faune et expériences de voyage au cœur du Sénégal oriental.',
+        links: [
+          { label: 'Voir le projet', url: 'https://wild-kedougou-experience.hitmind-pro.workers.dev/' },
+        ],
+        accent: '#ff8a65',
+      },
     ],
   },
 };

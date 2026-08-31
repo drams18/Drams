@@ -692,6 +692,34 @@ body.modal-open { overflow: hidden; }
 }
 .mbtn-close:active { background: rgba(160,40,40,0.9); }
 
+/* ── Tarifs button (welcome screen) ─────────────────── */
+.tarifs-link {
+  font-family: var(--pixel-font);
+  font-size: 11px;
+  color: #1a1a2e;
+  text-decoration: none;
+  letter-spacing: 1px;
+  display: inline-block;
+  padding: 14px 28px;
+  background: #e6b422;
+  border: 3px solid var(--mc-gold);
+  box-shadow: 0 4px 0 #8a6a10, 0 5px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+  cursor: pointer;
+  image-rendering: pixelated;
+  position: relative;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.25);
+  transition: background 0.1s, box-shadow 0.1s, transform 0.1s;
+}
+.tarifs-link:hover {
+  background: #f5c633;
+  box-shadow: 0 4px 0 #8a6a10, 0 5px 0 rgba(0,0,0,0.4), 0 0 16px rgba(255,215,0,0.6);
+  color: #1a1a2e;
+}
+.tarifs-link:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #8a6a10;
+}
+
 /* ── Responsive ─────────────────────────────────────── */
 @media (max-width: 600px) {
   .modal-body { padding: 14px 14px; font-size: 13px; }
