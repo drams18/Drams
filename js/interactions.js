@@ -210,25 +210,36 @@ class InteractionManager {
       </a>
     `).join('');
 
+    // Composant de contact commun (js/contact.js) : source unique des
+    // coordonnées + règle mobile/desktop pour le numéro de téléphone.
+    const CW      = window.ContactWidget;
+    const email   = (CW && CW.EMAIL) || section.email;
+    const phone   = (CW && CW.PHONE) || section.phone;
+    const telHref = (CW && CW.PHONE_TEL) || phone.replace(/\s/g, '');
+    const mobile  = CW ? CW.isMobile() : /Mobi|Android/i.test(navigator.userAgent);
+
+    // Mobile : tel: cliquable pour appeler. Desktop : texte non cliquable.
+    const phoneCell = mobile
+      ? `<a href="tel:${telHref}" class="contact-direct">${phone}</a>`
+      : `<span class="contact-direct contact-direct--static">${phone}</span>`;
+
     return `
       <h3 class="sub-title">CONTACTEZ-MOI</h3>
       <div class="contact-info">
         <div class="contact-row">
-          <a href="mailto:${section.email}" class="contact-direct">
-            ${section.email}
+          <a href="mailto:${email}" class="contact-direct">
+            ${email}
           </a>
-          <button class="copy-btn" data-copy="${section.email}" title="Copier l'email">COPIER</button>
+          <button class="copy-btn" data-copy="${email}" title="Copier l'email">COPIER</button>
         </div>
         <div class="contact-row">
-          <a href="tel:${section.phone.replace(/\s/g,'')}" class="contact-direct">
-            ${section.phone}
-          </a>
-          <button class="copy-btn" data-copy="${section.phone}" title="Copier le numéro">COPIER</button>
+          ${phoneCell}
+          <button class="copy-btn" data-copy="${phone}" title="Copier le numéro">COPIER</button>
         </div>
       </div>
       <div class="contact-links">${linksHTML}</div>
       <div class="section-divider"></div>
-      <div class="contact-notice">⚠ Commandes désactivées — cliquez sur FERMER pour quitter</div>
+      <div class="contact-notice">[ ! ] Commandes désactivées — cliquez sur FERMER pour quitter</div>
       <h3 class="sub-title">ENVOYER UN MESSAGE</h3>
       <form class="contact-form" id="contact-form">
         <input type="text"  name="from_name"  placeholder="Votre nom"     class="form-input" required>
