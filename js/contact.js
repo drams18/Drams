@@ -4,12 +4,15 @@
 
    Au clic sur un CTA de contact ([data-contact-cta]), ouvre un
    petit choix pixel-art, lisible et accessible :
-     • E-mail    → mailto:  (desktop + mobile)
-     • Téléphone → tel:     sur mobile ;
-                   texte NON cliquable (+ bouton COPIER) sur ordinateur
+
+     • E-mail    → adresse affichée + bouton COPIER + services au choix :
+                   Gmail (webmail), Outlook (webmail), Application e-mail (mailto:)
+                   → fonctionne sur ordinateur MÊME sans logiciel mail installé
+     • Téléphone → tel:  sur mobile (déclenche l'appel) ;
+                   texte NON cliquable + bouton COPIER sur ordinateur
 
    Utilisé par index.html (musée) et tarifs.html.
-   Les styles sont injectés une seule fois, aucune dépendance.
+   Styles injectés une seule fois, aucune dépendance.
    ══════════════════════════════════════════════════════ */
 (function (global) {
   'use strict';
@@ -28,9 +31,18 @@
     return !!coarse || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   }
 
+  // ── Constructeurs de liens e-mail ────────────────────────
   function mailtoHref(subject) {
     return 'mailto:' + EMAIL +
       (subject ? '?subject=' + encodeURIComponent(subject) : '');
+  }
+  function gmailHref(subject) {
+    return 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(EMAIL) +
+      (subject ? '&su=' + encodeURIComponent(subject) : '');
+  }
+  function outlookHref(subject) {
+    return 'https://outlook.live.com/mail/0/deeplink/compose?to=' + encodeURIComponent(EMAIL) +
+      (subject ? '&subject=' + encodeURIComponent(subject) : '');
   }
 
   // ── Styles (injectés une seule fois) ─────────────────────
@@ -44,10 +56,11 @@
       "font-family:'Press Start 2P',monospace;}",
       '@keyframes cw-fade{from{opacity:0}to{opacity:1}}',
       '@keyframes cw-pop{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}',
-      '.cw-panel{--cw-accent:#35e07a;--cw-accent-2:#7bf0a8;width:100%;max-width:420px;',
+      '.cw-panel{--cw-accent:#35e07a;--cw-accent-2:#7bf0a8;width:100%;max-width:440px;',
       'background:#0e1215;border:2px solid var(--cw-accent);color:#f0ead6;',
       'box-shadow:0 0 0 1px rgba(0,0,0,.8),0 0 40px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.05);',
       'animation:cw-pop .2s ease;max-height:calc(100vh - 40px);overflow-y:auto;}',
+      '.cw-panel:focus{outline:none;}',
       '.cw-head{display:flex;align-items:center;justify-content:space-between;gap:12px;',
       'padding:14px 16px;border-bottom:2px solid var(--cw-accent);background:rgba(0,0,0,.4);}',
       '.cw-title{font-size:11px;letter-spacing:2px;color:var(--cw-accent);margin:0;',
@@ -62,30 +75,102 @@
       'text-decoration:none;color:inherit;background:rgba(255,255,255,.03);',
       'border:1px solid rgba(255,255,255,.1);border-left:4px solid var(--cw-accent);',
       'transition:background .15s,border-color .15s,transform .1s;}',
-      '.cw-option+.cw-option{margin-top:0;}',
       '.cw-option:last-child{margin-bottom:18px;}',
       'a.cw-option:hover,a.cw-option:focus-visible{background:rgba(53,224,122,.1);',
       'border-left-color:var(--cw-accent-2);outline:none;}',
       'a.cw-option:active{transform:translateY(2px);}',
       '.cw-option--static{cursor:default;}',
       '.cw-option-label{display:block;font-size:10px;letter-spacing:1px;color:var(--cw-accent);}',
-      ".cw-option-value{display:block;margin-top:9px;font-family:-apple-system,'Segoe UI',Roboto,sans-serif;",
+      ".cw-option-value{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;",
       'font-size:15px;font-weight:700;color:#fff;word-break:break-word;}',
-      ".cw-option-hint{display:block;margin-top:6px;font-family:-apple-system,'Segoe UI',Roboto,sans-serif;",
-      'font-size:11px;color:#8f9bb0;}',
-      '.cw-copy{margin-top:12px;font-family:inherit;font-size:8px;letter-spacing:1px;',
+      '.cw-option>.cw-option-value{display:block;margin-top:9px;}',
+      ".cw-option-hint{display:block;margin-top:8px;font-family:-apple-system,'Segoe UI',Roboto,sans-serif;",
+      'font-size:11px;color:#8f9bb0;line-height:1.55;}',
+      '.cw-valuerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:9px;}',
+      '.cw-valuerow .cw-option-value{flex:1;min-width:0;}',
+      '.cw-svc-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}',
+      ".cw-svc{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;font-size:12px;font-weight:700;",
+      'color:#f0ead6;text-decoration:none;background:rgba(255,255,255,.05);',
+      'border:1px solid rgba(255,255,255,.25);padding:10px 13px;cursor:pointer;',
+      'transition:background .15s,border-color .15s,transform .1s;}',
+      '.cw-svc:hover,.cw-svc:focus-visible{background:rgba(53,224,122,.14);',
+      'border-color:var(--cw-accent-2);outline:none;}',
+      '.cw-svc:active{transform:translateY(2px);}',
+      '.cw-copy{flex-shrink:0;font-family:inherit;font-size:8px;letter-spacing:1px;',
       'color:#06251a;background:var(--cw-accent);border:2px solid var(--cw-accent-2);',
-      'padding:9px 13px;cursor:pointer;transition:background .15s,transform .1s;}',
+      'padding:9px 12px;cursor:pointer;transition:background .15s,transform .1s;}',
       '.cw-copy:hover,.cw-copy:focus-visible{background:var(--cw-accent-2);outline:none;}',
       '.cw-copy:active{transform:translateY(2px);}',
       '.cw-copy.cw-copied{background:#3a8a3a;color:#fff;border-color:#5d9c34;}',
-      '@media (max-width:480px){.cw-panel{max-width:none;}.cw-option-value{font-size:14px;}}',
+      '@media (max-width:480px){.cw-panel{max-width:none;}.cw-option-value{font-size:14px;}',
+      '.cw-svc{flex:1;text-align:center;}}',
       '@media (prefers-reduced-motion:reduce){.cw-overlay,.cw-panel{animation:none;}}'
     ].join('');
     var el = doc.createElement('style');
     el.id = STYLE_ID;
     el.textContent = css;
     doc.head.appendChild(el);
+  }
+
+  // ── Petits helpers DOM ──────────────────────────────────
+  function span(cls, text) {
+    var s = doc.createElement('span');
+    s.className = cls;
+    s.textContent = text;
+    return s;
+  }
+
+  function fallbackCopy(value) {
+    var t = doc.createElement('textarea');
+    t.value = value;
+    t.setAttribute('readonly', '');
+    t.style.position = 'absolute';
+    t.style.left = '-9999px';
+    doc.body.appendChild(t);
+    t.select();
+    try { doc.execCommand('copy'); } catch (err) { /* noop */ }
+    doc.body.removeChild(t);
+  }
+
+  function copyText(btn, value, okLabel) {
+    var reset = function () {
+      btn.textContent = 'COPIER';
+      btn.classList.remove('cw-copied');
+    };
+    var done = function () {
+      btn.textContent = okLabel;
+      btn.classList.add('cw-copied');
+      setTimeout(reset, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(value).then(done, function () { fallbackCopy(value); done(); });
+    } else {
+      fallbackCopy(value);
+      done();
+    }
+  }
+
+  function copyBtn(value, okLabel) {
+    var b = doc.createElement('button');
+    b.type = 'button';
+    b.className = 'cw-copy';
+    b.textContent = 'COPIER';
+    b.setAttribute('aria-label', 'Copier : ' + value);
+    b.addEventListener('click', function () { copyText(b, value, okLabel); });
+    return b;
+  }
+
+  function svcLink(label, href, isMailto) {
+    var a = doc.createElement('a');
+    a.className = 'cw-svc';
+    a.href = href;
+    if (!isMailto) {
+      a.target = '_blank';
+      a.rel = 'noopener';
+    }
+    a.textContent = label;
+    a.addEventListener('click', function () { setTimeout(close, 150); });
+    return a;
   }
 
   // ── État ─────────────────────────────────────────────────
@@ -122,56 +207,9 @@
     }
   }
 
-  function copyPhone(btn) {
-    var done = function () {
-      var prev = btn.getAttribute('data-label') || btn.textContent;
-      btn.setAttribute('data-label', prev);
-      btn.textContent = 'NUMERO COPIE';
-      btn.classList.add('cw-copied');
-      setTimeout(function () {
-        btn.textContent = prev;
-        btn.classList.remove('cw-copied');
-      }, 1600);
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(PHONE).then(done, done);
-    } else {
-      var t = doc.createElement('textarea');
-      t.value = PHONE;
-      t.setAttribute('readonly', '');
-      t.style.position = 'absolute';
-      t.style.left = '-9999px';
-      doc.body.appendChild(t);
-      t.select();
-      try { doc.execCommand('copy'); } catch (err) { /* noop */ }
-      doc.body.removeChild(t);
-      done();
-    }
-  }
-
-  function makeOption(tag) {
-    var el = doc.createElement(tag);
-    el.className = 'cw-option';
-    return el;
-  }
-
-  function fill(el, label, value, hint) {
-    var l = doc.createElement('span');
-    l.className = 'cw-option-label';
-    l.textContent = label;
-    var v = doc.createElement('span');
-    v.className = 'cw-option-value';
-    v.textContent = value;
-    var h = doc.createElement('span');
-    h.className = 'cw-option-hint';
-    h.textContent = hint;
-    el.appendChild(l);
-    el.appendChild(v);
-    el.appendChild(h);
-  }
-
   function open(opts) {
     opts = opts || {};
+    var subject = opts.subject || '';
     if (overlay) close();
     injectStyles();
     lastFocus = doc.activeElement;
@@ -189,7 +227,9 @@
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-modal', 'true');
     panel.setAttribute('aria-labelledby', 'cw-title');
+    panel.setAttribute('tabindex', '-1');
 
+    // ── En-tête ──────────────────────────────────────────
     var head = doc.createElement('div');
     head.className = 'cw-head';
     var title = doc.createElement('h2');
@@ -207,38 +247,47 @@
 
     var intro = doc.createElement('p');
     intro.className = 'cw-intro';
-    intro.textContent = 'Choisissez un moyen de contact.';
+    intro.textContent = 'Choisissez comment me contacter.';
 
-    // ── E-mail : toujours cliquable (mailto) ──────────────
-    var mail = makeOption('a');
-    mail.href = mailtoHref(opts.subject);
-    fill(mail, 'E-mail', EMAIL, 'Ouvre votre application e-mail');
-    mail.addEventListener('click', function () {
-      setTimeout(close, 120);
-    });
+    // ── E-mail : adresse + copie + services webmail / mailto ──
+    var mail = doc.createElement('div');
+    mail.className = 'cw-option cw-option--static';
+    mail.appendChild(span('cw-option-label', 'E-mail'));
+    var mailRow = doc.createElement('div');
+    mailRow.className = 'cw-valuerow';
+    mailRow.appendChild(span('cw-option-value', EMAIL));
+    mailRow.appendChild(copyBtn(EMAIL, 'ADRESSE COPIEE'));
+    mail.appendChild(mailRow);
+    mail.appendChild(span('cw-option-hint',
+      'Ouvrez votre messagerie habituelle, ou copiez l\'adresse.'));
+    var svc = doc.createElement('div');
+    svc.className = 'cw-svc-row';
+    var firstFocus = svcLink('Gmail', gmailHref(subject));
+    svc.appendChild(firstFocus);
+    svc.appendChild(svcLink('Outlook', outlookHref(subject)));
+    svc.appendChild(svcLink('Application e-mail', mailtoHref(subject), true));
+    mail.appendChild(svc);
 
     // ── Téléphone : tel: sur mobile, texte simple sur desktop ──
     var phone;
     if (mobile) {
-      phone = makeOption('a');
+      phone = doc.createElement('a');
+      phone.className = 'cw-option';
       phone.href = 'tel:' + PHONE_TEL;
-      fill(phone, 'Téléphone', PHONE, "Ouvre l'application Téléphone pour appeler");
-      phone.addEventListener('click', function () {
-        setTimeout(close, 120);
-      });
+      phone.appendChild(span('cw-option-label', 'Téléphone'));
+      phone.appendChild(span('cw-option-value', PHONE));
+      phone.appendChild(span('cw-option-hint', "Ouvre l'application Téléphone pour appeler"));
+      phone.addEventListener('click', function () { setTimeout(close, 150); });
     } else {
-      phone = makeOption('div');
+      phone = doc.createElement('div');
       phone.className = 'cw-option cw-option--static';
-      fill(phone, 'Téléphone', PHONE, 'Numéro à composer ou à copier');
-      var copy = doc.createElement('button');
-      copy.type = 'button';
-      copy.className = 'cw-copy';
-      copy.textContent = 'COPIER LE NUMERO';
-      copy.setAttribute('aria-label', 'Copier le numéro de téléphone');
-      copy.addEventListener('click', function () {
-        copyPhone(copy);
-      });
-      phone.appendChild(copy);
+      phone.appendChild(span('cw-option-label', 'Téléphone'));
+      var phoneRow = doc.createElement('div');
+      phoneRow.className = 'cw-valuerow';
+      phoneRow.appendChild(span('cw-option-value', PHONE));
+      phoneRow.appendChild(copyBtn(PHONE, 'NUMERO COPIE'));
+      phone.appendChild(phoneRow);
+      phone.appendChild(span('cw-option-hint', 'Numéro à composer ou à copier.'));
     }
 
     panel.appendChild(head);
@@ -249,7 +298,7 @@
     doc.body.appendChild(overlay);
 
     doc.addEventListener('keydown', onKeydown, true);
-    mail.focus();
+    (firstFocus || panel).focus();
   }
 
   // ── Câblage automatique des CTA ──────────────────────────
@@ -274,6 +323,8 @@
     bind: bind,
     isMobile: isMobile,
     mailtoHref: mailtoHref,
+    gmailHref: gmailHref,
+    outlookHref: outlookHref,
     EMAIL: EMAIL,
     PHONE: PHONE,
     PHONE_TEL: PHONE_TEL
