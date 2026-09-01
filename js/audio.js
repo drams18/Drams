@@ -26,6 +26,10 @@
 
 (function (global) {
   const STORAGE_KEY = 'drame.portfolio.sound';
+  // Musique persistée d'une page à l'autre (portfolio ↔ « Construire un projet »).
+  // On mémorise, le temps de la session, la position de lecture + le fait que
+  // l'app veut de la musique : la navigation ne coupe donc plus le fond sonore.
+  const MUSIC_KEY = 'drame.portfolio.music';
 
   // ── Configuration — tout se règle ici ────────────────
   const CONFIG = {
@@ -61,7 +65,13 @@
       this.cfg = cfg;
       this._enabled   = this._loadPref();
       this._unlocked  = false;
-      this._musicWanted = false;   // l'app souhaite-t-elle que la musique tourne ?
+
+      // Reprise de la musique après une navigation dans la même session.
+      const session = this._loadMusicState();
+      this._musicWanted = !!(session && session.wanted); // l'app veut-elle de la musique ?
+      this._resumePos   = session && session.pos > 0 ? session.pos : 0;
+      this._lastSave    = 0;
+
       this._music     = null;
       this._pools     = {};        // name -> [HTMLAudioElement]
       this._poolIdx   = {};        // name -> index round-robin
@@ -83,6 +93,26 @@
     _savePref() {
       try {
         global.localStorage.setItem(STORAGE_KEY, this._enabled ? 'on' : 'off');
+      } catch (e) { /* stockage indisponible : on ignore proprement */ }
+    }
+
+    // ── Persistance de la musique entre les pages (sessionStorage) ──
+    _loadMusicState() {
+      try {
+        return JSON.parse(global.sessionStorage.getItem(MUSIC_KEY)) || null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    _saveMusicState() {
+      try {
+        const m = this._music;
+        const pos = m && isFinite(m.currentTime) ? m.currentTime : (this._resumePos || 0);
+        global.sessionStorage.setItem(MUSIC_KEY, JSON.stringify({
+          wanted: this._musicWanted,
+          pos: pos,
+        }));
       } catch (e) { /* stockage indisponible : on ignore proprement */ }
     }
 
@@ -139,28 +169,53 @@
       a.preload = 'auto';
       a.volume  = clamp01(this.cfg.musicVolume);
       a.addEventListener('error', () => { /* musique absente : silencieux */ });
+
+      // Reprend la lecture là où la page précédente s'était arrêtée.
+      if (this._resumePos > 0) {
+        const seek = () => {
+          try { a.currentTime = this._resumePos; } catch (e) {}
+        };
+        if (a.readyState >= 1) seek();
+        else a.addEventListener('loadedmetadata', seek, { once: true });
+      }
+
+      // Mémorise régulièrement la position pour survivre à un changement de page.
+      a.addEventListener('timeupdate', () => {
+        const t = now();
+        if (t - this._lastSave > 1000) {
+          this._lastSave = t;
+          this._saveMusicState();
+        }
+      });
+
       this._music = a;
     }
 
     playMusic() {
       this._musicWanted = true;
+      this._saveMusicState();
       if (!this._enabled) return;
       this._ensureMusic();
-      if (!this._unlocked) return;         // attend le 1er geste utilisateur
+      // On tente la lecture même avant le 1er geste : après une navigation
+      // interne, le navigateur l'autorise en général et la musique ne coupe pas.
+      // Si elle est refusée, kick() relancera dès le prochain geste utilisateur.
       const p = this._music.play();
-      if (p && p.catch) p.catch(() => {}); // lecture refusée : on n'insiste pas
+      if (p && p.catch) p.catch(() => {});
     }
 
     pauseMusic() {
       if (this._music) this._music.pause();
+      this._saveMusicState();
     }
 
     stopMusic() {
       this._musicWanted = false;
+      this._resumePos = 0;
       if (this._music) {
         this._music.pause();
         try { this._music.currentTime = 0; } catch (e) {}
       }
+      this._saveMusicState();
     }
 
     setMusicVolume(v) {
@@ -255,6 +310,17 @@
     global.addEventListener(evt, kick, { once: true, passive: true, capture: true });
   });
 
+  // ── Continuité de la musique d'une page à l'autre ──
+  // Sauve la position avant de quitter la page, et relance immédiatement
+  // au chargement si la musique tournait (portfolio ↔ « Construire un projet »).
+  const persist = () => manager._saveMusicState();
+  global.addEventListener('pagehide', persist);
+  global.addEventListener('beforeunload', persist);
+  global.addEventListener('visibilitychange', () => {
+    if (global.document.visibilityState === 'hidden') persist();
+  });
+  if (manager._musicWanted) manager.playMusic();
+
   // ── Câblage de l'interface (bouton SOUND + retours légers) ──
   function initUI() {
     const btn = global.document.getElementById('btn-sound');
@@ -276,7 +342,7 @@
     }
 
     // Retour discret sur les liens secondaires de l'accueil (navigation).
-    global.document.querySelectorAll('.cv-link, .tarifs-link').forEach(el => {
+    global.document.querySelectorAll('.cv-link, .tarifs-link, .contact-link').forEach(el => {
       el.addEventListener('click', () => manager.play('click'));
     });
   }

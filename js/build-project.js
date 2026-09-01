@@ -428,17 +428,13 @@
           this._movedAt = this._tick;
         }
 
-        // « Flèche Haut » UNIQUEMENT pour interagir avec / sélectionner une
-        // porte. La touche Entrée reste volontairement sans effet sur les
-        // portes. Le bouton tactile « CHOISIR » simule ArrowUp : il continue
-        // de fonctionner.
+        // « Flèche Haut » (ou bouton tactile « CHOISIR ») = CHOISIR, rien
+        // d'autre : elle sélectionne la porte devant laquelle se tient le
+        // joueur. Sans porte à proximité, la touche est ignorée. Elle ne fait
+        // JAMAIS passer à l'étape suivante — c'est le rôle exclusif d'« Entrée »
+        // (ou du bouton « Valider l'étape »).
         if (this.controls._justPressed('ArrowUp')) {
-          if (this._nearDoor) {
-            this._choose(this._nearDoor);
-          } else if (this._stepHasValue()) {
-            sfx('success');
-            this._advance();
-          }
+          if (this._nearDoor) this._choose(this._nearDoor);
         } else if (this.controls.close) {
           this._back();
         }
@@ -464,11 +460,17 @@
       return best;
     }
 
-    // ── Sélection d'une porte ──────────────────────────
+    // ── Sélection d'une porte (Flèche Haut / bouton « CHOISIR ») ────────
+    // Ne valide jamais l'étape à choix unique : elle se contente de mémoriser
+    // et d'afficher la sélection. Le passage à l'étape suivante est réservé à
+    // « Entrée » / au bouton « Valider l'étape ».
     _choose(door) {
       const step = STEPS[state.step];
 
       if (step.multi) {
+        // Portes d'action de l'étape multi. « TERMINER LA SELECTION » est
+        // l'équivalent tactile d'« Entrée » (indispensable sans clavier) et
+        // « JE NE SAIS PAS » est un choix qui clôt aussi l'étape.
         if (door.special === 'done') {
           sfx('success');
           this._advance();
@@ -493,14 +495,16 @@
         return;
       }
 
-      // Choix unique : mémorise + anime l'ouverture + transition
+      // Choix unique : on MÉMORISE seulement la porte choisie et on la met en
+      // évidence. Aucun avancement ici — il faut ensuite appuyer sur « Entrée »
+      // (ou le bouton « Valider l'étape »).
+      if (state.data[step.key] === door.value) return; // déjà sélectionnée
+      this.doors.forEach((dr) => { dr.selected = (dr === door); });
       state.data[step.key] = door.value;
       saveState();
-      door.opening = true;
-      this._transitioning = true;
-      this._hideNextBtn();
       sfx('open');
-      setTimeout(() => this._advance(), 300);
+      this._toast('Choix : ' + door.label);
+      this._updateNextBtn();
     }
 
     // Un choix est-il déjà fait pour l'étape courante ?
@@ -1160,15 +1164,18 @@
       const sx = d.x - camX + d.w / 2;
       const py = groundY - d.h - 40 + Math.sin(this._tick * 0.08) * 3;
 
-      // Badge d'action au-dessus de la porte. Les étapes à choix unique
-      // n'affichent plus d'indicateur « ENTRER » : on ne garde que la
-      // description de la porte. Les étapes multi conservent le badge
-      // CHOISIR / RETIRER / VALIDER, qui reflète l'état de la sélection.
-      let action = null;
+      // Badge d'action au-dessus de la porte. Il reflète le rôle de la Flèche
+      // Haut : CHOISIR une porte (ou CHOISI quand c'est déjà la sélection en
+      // cours), RETIRER pour désélectionner en multi, VALIDER pour la porte
+      // « TERMINER LA SELECTION ». Le passage à l'étape suivante reste sur
+      // « Entrée » / le bouton « Valider l'étape ».
+      let action;
       if (step.multi) {
         if (d.special === 'done')         action = 'VALIDER';
         else if (d.special === 'unknown') action = 'CHOISIR';
         else                              action = d.selected ? 'RETIRER' : 'CHOISIR';
+      } else {
+        action = state.data[step.key] === d.value ? 'CHOISI' : 'CHOISIR';
       }
 
       ctx.save();
