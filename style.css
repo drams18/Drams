@@ -12,13 +12,16 @@
 
 /* ── Variables ──────────────────────────────────────── */
 :root {
-  /* Nouvelle palette — noir profond + rouge/magenta/violet/cyan */
-  --ink:        #05060b;   /* fond le plus sombre — profondeur */
-  --ink-2:      #090b14;
-  --panel:      #0b0d16;   /* fond des panneaux / modales */
-  --panel-2:    #11131f;
-  --edge:       #2a2f45;   /* liseré discret */
+  /* Palette — BLEU NUIT urbain (Spider-Verse) + rouge/magenta/violet/cyan.
+     Le noir --stroke ne sert plus qu'aux contours « encre » et aux ombres. */
+  --ink:        #0e1630;   /* fond le plus profond — nuit urbaine */
+  --ink-2:      #132048;
+  --panel:      #182449;   /* fond des panneaux / modales (relevé) */
+  --panel-2:    #20305c;
+  --edge:       #3c4c82;   /* liseré discret bleuté */
   --stroke:     #01010a;   /* trait noir épais « encre » comics */
+  --night-2:    #14203f;   /* étape intermédiaire de dégradé */
+  --urban:      #9fb0d8;   /* gris urbain clair — textes secondaires */
 
   --red:        #ff123d;   /* action principale / éléments importants */
   --magenta:    #ff2bb0;   /* titres forts / accents chauds */
@@ -35,6 +38,18 @@
   --halftone: radial-gradient(rgba(255,255,255,0.10) 0.8px, transparent 1.4px);
   --halftone-size: 6px 6px;
 
+  /* Fils de toile — diagonales fines croisées, très discrètes (fonds) */
+  --weblines: repeating-linear-gradient(58deg,
+      transparent 0 26px, rgba(255,255,255,0.028) 26px 27px, transparent 27px 54px),
+    repeating-linear-gradient(-58deg,
+      transparent 0 26px, rgba(255,255,255,0.028) 26px 27px, transparent 27px 54px);
+
+  /* Quart de toile d'araignée — coin de panneau (SVG original, sans fond) */
+  --web-corner: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.1'%3E%3Cpath d='M0 22A22 22 0 0 1 22 0'/%3E%3Cpath d='M0 48A48 48 0 0 1 48 0'/%3E%3Cpath d='M0 78A78 78 0 0 1 78 0'/%3E%3Cpath d='M0 110A110 110 0 0 1 110 0'/%3E%3Cpath d='M0 0 120 20'/%3E%3Cpath d='M0 0 104 60'/%3E%3Cpath d='M0 0 78 78'/%3E%3Cpath d='M0 0 60 104'/%3E%3Cpath d='M0 0 20 120'/%3E%3C/g%3E%3C/svg%3E");
+
+  /* Pictogramme d'araignée géométrique original — utilisé en mask (couleur = currentColor) */
+  --spider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='%23000'%3E%3Cellipse cx='12' cy='13' rx='3' ry='4.2'/%3E%3Ccircle cx='12' cy='8' r='2.1'/%3E%3C/g%3E%3Cg stroke='%23000' stroke-width='1.4' fill='none' stroke-linecap='round'%3E%3Cpath d='M10 9 5.5 4'/%3E%3Cpath d='M14 9 18.5 4'/%3E%3Cpath d='M9 11 4 8 2 10'/%3E%3Cpath d='M9 13 3 13 1 15'/%3E%3Cpath d='M9 15 4 18 2.5 20'/%3E%3Cpath d='M15 11 20 8 22 10'/%3E%3Cpath d='M15 13 21 13 23 15'/%3E%3Cpath d='M15 15 20 18 21.5 20'/%3E%3C/g%3E%3C/svg%3E");
+
   /* Lignes de vitesse (bandes radiales animables) */
   --speedlines: repeating-linear-gradient(115deg,
       transparent 0 14px,
@@ -49,8 +64,8 @@
   --mc-green:   var(--red);
   --mc-dirt:    #2a1830;
   --mc-stone:   #23283c;
-  --mc-sky:     #05060b;
-  --mc-dark:    #05060b;
+  --mc-sky:     var(--ink);
+  --mc-dark:    var(--ink);
   --mc-gold:    var(--cyan);
   --mc-text:    var(--paper);
   --mc-dim:     rgba(0,0,0,0.78);
@@ -111,6 +126,44 @@ a { color: inherit; }
   0%, 100% { box-shadow: 0 0 0 3px var(--stroke), 6px 6px 0 0 var(--red-deep), 0 0 22px rgba(255,18,61,0.45); }
   50%      { box-shadow: 0 0 0 3px var(--stroke), 6px 6px 0 0 var(--magenta-deep), 0 0 40px rgba(255,43,176,0.7); }
 }
+
+/* Spider-sense — anneaux qui s'étendent et s'estompent (via box-shadow,
+   non rognés par overflow:hidden). Garde un cœur néon rouge/magenta. */
+@keyframes spiderSensePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px var(--stroke), 6px 6px 0 0 var(--red-deep),
+      0 0 0 4px rgba(25,232,255,0.35), 0 0 0 4px rgba(255,43,176,0.30),
+      0 0 22px rgba(255,18,61,0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 3px var(--stroke), 6px 6px 0 0 var(--magenta-deep),
+      0 0 0 15px rgba(25,232,255,0), 0 0 0 27px rgba(255,43,176,0),
+      0 0 40px rgba(255,43,176,0.7);
+  }
+}
+
+/* Spider-sense au survol des éléments cliquables — anneau pseudo qui pulse */
+@keyframes senseRing {
+  0%   { transform: scale(1);    opacity: 0.5; }
+  100% { transform: scale(1.14); opacity: 0;   }
+}
+
+/* Coins de toile décoratifs sur les grands panneaux (haut-gauche + bas-droite).
+   Purement décoratif : derrière le contenu, sans interception d'events. */
+.section-modal, .game-intro__card { position: relative; }
+.section-modal::before, .section-modal::after,
+.game-intro__card::before, .game-intro__card::after {
+  content: '';
+  position: absolute;
+  width: 84px; height: 84px;
+  background: var(--web-corner) no-repeat;
+  background-size: 100% 100%;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 3;
+}
+.section-modal::before, .game-intro__card::before { top: 0; left: 0; }
+.section-modal::after,  .game-intro__card::after  { bottom: 0; right: 0; transform: rotate(180deg); }
 
 /* Entrée modale — zoom + clip comics */
 @keyframes comicIn {
@@ -185,10 +238,10 @@ body::after {
   align-items: center;
   justify-content: center;
   background:
-    radial-gradient(120% 80% at 18% 12%, rgba(255,43,176,0.28) 0%, transparent 55%),
-    radial-gradient(120% 90% at 88% 20%, rgba(138,59,255,0.28) 0%, transparent 55%),
-    radial-gradient(140% 120% at 50% 120%, rgba(25,232,255,0.16) 0%, transparent 60%),
-    linear-gradient(180deg, #05060b 0%, #0a0a17 45%, #10091b 72%, #05060b 100%);
+    radial-gradient(120% 80% at 18% 12%, rgba(255,43,176,0.30) 0%, transparent 55%),
+    radial-gradient(120% 90% at 88% 20%, rgba(138,59,255,0.30) 0%, transparent 55%),
+    radial-gradient(140% 120% at 50% 120%, rgba(25,232,255,0.18) 0%, transparent 60%),
+    linear-gradient(180deg, #0e1630 0%, #16234a 44%, #1b1c44 72%, #0e1630 100%);
   position: relative;
   overflow: hidden;
 }
@@ -212,38 +265,53 @@ body::after {
   pointer-events: none;
 }
 
-/* Skyline urbaine en silhouette + rim néon (remplace le sol pixel) */
+/* Skyline urbaine dense façon New York + rim néon (remplace le sol pixel) */
 #screen-welcome::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 120px;
-  background: #04040a;
+  height: 150px;
+  background: linear-gradient(180deg, #060a18 0%, #04040a 55%);
   clip-path: polygon(
-    0 62px, 3% 62px, 3% 40px, 7% 40px, 7% 58px, 11% 58px, 11% 26px, 14% 26px, 14% 54px,
-    19% 54px, 19% 44px, 23% 44px, 23% 60px, 27% 60px, 27% 18px, 30% 18px, 30% 50px,
-    35% 50px, 35% 36px, 39% 36px, 39% 58px, 44% 58px, 44% 30px, 48% 30px, 48% 56px,
-    52% 56px, 52% 40px, 56% 40px, 56% 62px, 61% 62px, 61% 22px, 64% 22px, 64% 52px,
-    69% 52px, 69% 38px, 73% 38px, 73% 58px, 77% 58px, 77% 28px, 80% 28px, 80% 54px,
-    85% 54px, 85% 44px, 89% 44px, 89% 60px, 93% 60px, 93% 34px, 96% 34px, 96% 58px,
-    100% 58px, 100% 120px, 0 120px);
+    0 92px, 2% 92px, 2% 66px, 4% 66px, 4% 84px, 6% 84px, 6% 44px, 7% 44px, 7% 42px, 9% 42px,
+    9% 78px, 11% 78px, 11% 30px, 13% 30px, 13% 26px, 14% 26px, 14% 30px, 15% 30px, 15% 72px,
+    18% 72px, 18% 52px, 21% 52px, 21% 88px, 24% 88px, 24% 20px, 25% 20px, 25% 16px, 26% 16px,
+    26% 20px, 27% 20px, 27% 60px, 30% 60px, 30% 40px, 33% 40px, 33% 82px, 36% 82px, 36% 34px,
+    39% 34px, 39% 66px, 42% 66px, 42% 24px, 43% 24px, 43% 22px, 45% 22px, 45% 58px, 48% 58px,
+    48% 44px, 51% 44px, 51% 90px, 54% 90px, 54% 30px, 56% 30px, 56% 62px, 59% 62px, 59% 18px,
+    60% 18px, 60% 14px, 61% 14px, 61% 18px, 62% 18px, 62% 54px, 65% 54px, 65% 38px, 68% 38px,
+    68% 80px, 71% 80px, 71% 32px, 74% 32px, 74% 64px, 77% 64px, 77% 24px, 79% 24px, 79% 56px,
+    82% 56px, 82% 46px, 85% 46px, 85% 86px, 88% 86px, 88% 28px, 90% 28px, 90% 60px, 93% 60px,
+    93% 40px, 96% 40px, 96% 76px, 98% 76px, 98% 52px, 100% 52px, 100% 150px, 0 150px);
   filter: drop-shadow(0 -2px 4px rgba(25,232,255,0.55)) drop-shadow(0 -6px 14px rgba(255,43,176,0.3));
   pointer-events: none;
 }
 
-/* Couche « lignes de vitesse » + halftone (div .welcome-sky, jusque-là inutilisée) */
+/* Couche « lignes de vitesse » + fils de toile + halftone (div .welcome-sky) */
 .welcome-sky {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   opacity: 0.55;
-  background-image: var(--speedlines), var(--halftone);
-  background-size: 600px 100%, var(--halftone-size);
+  background-image: var(--speedlines), var(--weblines), var(--halftone);
+  background-size: 600px 100%, auto, auto, var(--halftone-size);
   animation: speedSweep 6s linear infinite;
   mix-blend-mode: screen;
+}
+/* Grande toile d'angle discrète, haut-droite de l'accueil */
+.welcome-sky::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 240px; height: 240px;
+  background: var(--web-corner) no-repeat;
+  background-size: 100% 100%;
+  transform: rotate(90deg);
+  transform-origin: top right;
+  opacity: 0.10;
 }
 
 .welcome-content {
@@ -342,6 +410,8 @@ body::after {
   transition: transform 0.12s, box-shadow 0.15s, background 0.18s, border-color 0.15s, filter 0.15s;
 }
 .mc-btn__label {
+  position: relative;
+  z-index: 1;
   font-family: var(--pixel-font);
   font-size: 12px;
   letter-spacing: 1.5px;
@@ -349,6 +419,8 @@ body::after {
   text-shadow: 2px 2px 0 rgba(0,0,0,0.6);
 }
 .mc-btn__hint {
+  position: relative;
+  z-index: 1;
   font-family: var(--body-font);
   font-size: 11.5px;
   font-weight: 600;
@@ -361,10 +433,24 @@ body::after {
 .mc-btn--primary {
   background: linear-gradient(135deg, var(--red) 0%, var(--magenta) 60%, var(--violet) 120%);
   box-shadow: 0 0 0 3px var(--stroke), 6px 6px 0 0 var(--red-deep), 0 0 22px rgba(255,18,61,0.45);
-  animation: neonPulse 2.6s ease-in-out infinite;
+  animation: spiderSensePulse 2.6s ease-in-out infinite;
 }
 .mc-btn--primary .mc-btn__label { font-size: 15px; letter-spacing: 2px; }
 .mc-btn--primary .mc-btn__hint  { color: #ffe6f2; }
+/* Iris de toile au survol — « on entre dans un monde » */
+.mc-btn--primary::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 260px; height: 260px;
+  margin: -130px 0 0 -130px;
+  background: var(--web-corner) no-repeat center / contain;
+  opacity: 0;
+  transform: scale(0.4) rotate(-8deg);
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(.2,.7,.3,1);
+  pointer-events: none;
+}
+.mc-btn--primary:hover::before { opacity: 0.22; transform: scale(1) rotate(0); }
 /* balayage lignes de vitesse au survol */
 .mc-btn--primary::after {
   content: '';
@@ -540,7 +626,7 @@ body::after {
   padding: 20px;
   background:
     radial-gradient(60% 60% at 50% 40%, rgba(255,43,176,0.18) 0%, transparent 70%),
-    rgba(4,5,10,0.9);
+    rgba(9,13,28,0.9);
   overflow: auto;
   animation: fadeIn 0.2s ease;
 }
@@ -603,7 +689,7 @@ body::after {
   background:
     radial-gradient(80% 80% at 50% 50%, transparent 20%, rgba(0,0,0,0.55) 100%),
     var(--halftone),
-    rgba(4,5,10,0.78);
+    rgba(9,13,28,0.8);
   background-size: auto, var(--halftone-size), auto;
   z-index: 100;
 }
@@ -693,15 +779,27 @@ body::after {
 
 /* Titre de sous-section — identité, police pixel */
 .sub-title {
+  position: relative;
   font-family: var(--pixel-font);
   font-size: 10px;
   color: var(--modal-accent);
   letter-spacing: 1px;
   line-height: 1.6;
   margin: 24px 0 14px;
-  padding-left: 10px;
+  padding-left: 30px;
   border-left: 4px solid var(--modal-accent);
   text-shadow: 0 0 10px color-mix(in srgb, var(--modal-accent) 40%, transparent);
+}
+/* Petite araignée stylisée — marqueur récurrent (mask : couleur = accent) */
+.sub-title::before {
+  content: '';
+  position: absolute;
+  left: 11px; top: 50%;
+  width: 15px; height: 15px;
+  transform: translateY(-50%);
+  background: var(--modal-accent);
+  -webkit-mask: var(--spider) center / contain no-repeat;
+          mask: var(--spider) center / contain no-repeat;
 }
 
 .section-divider {
@@ -711,7 +809,7 @@ body::after {
 }
 
 .section-intro {
-  color: #9aa2ac;
+  color: #aab4c8;
   font-size: 13.5px;
   margin-bottom: 18px;
 }
@@ -851,7 +949,7 @@ body::after {
   margin-bottom: 6px;
 }
 .timeline-title { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 3px; line-height: 1.4; }
-.timeline-place { font-size: 13px; color: #9aa2ac; margin-bottom: 8px; }
+.timeline-place { font-size: 13px; color: #aab4c8; margin-bottom: 8px; }
 .timeline-desc  { font-size: 13.5px; color: #c0c4cc; line-height: 1.65; }
 
 /* Expériences */
@@ -971,7 +1069,7 @@ body::after {
   transition: border-color 0.18s, background 0.18s;
   resize: none;
 }
-.form-input::placeholder { color: #7c8494; }
+.form-input::placeholder { color: #8f9bb4; }
 .form-input:focus { border-color: var(--cyan); background: rgba(25,232,255,0.05); }
 .form-textarea { min-height: 110px; }
 .form-btn {
@@ -1089,6 +1187,29 @@ body::after {
 .proj-link:hover { filter: brightness(1.1); }
 .proj-link:active { transform: translateY(1px); box-shadow: 0 0 0 var(--stroke); }
 
+/* ── Spider-sense — anneau au survol des éléments cliquables ─── */
+.proj-card, .social-link, .contact-link { position: relative; }
+.proj-card::after, .social-link::after, .contact-link::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 2px solid var(--cyan);
+  opacity: 0;
+  pointer-events: none;
+}
+.proj-card:hover::after, .social-link:hover::after, .contact-link:hover::after {
+  animation: senseRing 0.95s ease-out infinite;
+}
+.mbtn-enter { position: relative; }
+.mbtn-enter:active::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--cyan);
+  animation: senseRing 0.6s ease-out;
+  pointer-events: none;
+}
+
 /* ── Toast — bulle comics ───────────────────────────── */
 .toast {
   position: fixed;
@@ -1123,7 +1244,7 @@ body::after {
   padding: 8px 12px calc(12px + env(safe-area-inset-bottom, 0px));
   background:
     var(--halftone),
-    linear-gradient(180deg, rgba(5,6,11,0.4), rgba(5,6,11,0.85));
+    linear-gradient(180deg, rgba(10,15,32,0.35), rgba(10,15,32,0.9));
   background-size: var(--halftone-size), auto;
   border-top: 2px solid var(--stroke);
   z-index: 50;
@@ -1173,6 +1294,12 @@ body::after {
 @media (max-width: 600px) {
   .welcome-content { gap: 12px; padding: 24px 18px; }
   .welcome-sky { animation-duration: 9s; opacity: 0.4; }
+  .welcome-sky::after { opacity: 0.06; }
+  /* Effets lourds allégés sur mobile : anneaux spider-sense en continu coupés */
+  .proj-card:hover::after, .social-link:hover::after,
+  .contact-link:hover::after { animation: none; opacity: 0; }
+  .section-modal::before, .section-modal::after,
+  .game-intro__card::before, .game-intro__card::after { opacity: 0.05; }
   .modal-body { padding: 16px 15px; font-size: 14.5px; }
   .modal-header { padding: 12px 13px; }
   .section-modal { box-shadow: 6px 6px 0 0 color-mix(in srgb, var(--modal-accent) 45%, #000), 0 0 30px rgba(0,0,0,0.6); }
@@ -1194,7 +1321,9 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .mc-title { animation: none; text-shadow: -0.03em 0 0 var(--red), 0.03em 0 0 var(--cyan); }
   .mc-eyebrow, .welcome-sky, .mc-btn--primary { animation: none !important; }
-  .mc-btn--primary::after { display: none; }
+  .mc-btn--primary::after, .mc-btn--primary::before { display: none; }
+  .proj-card::after, .social-link::after, .contact-link::after,
+  .mbtn-enter::after { animation: none !important; opacity: 0 !important; }
   .screen, .screen-exit, .screen-enter,
   .section-modal, .game-intro { animation: none !important; }
   * { transition-duration: 0.01ms !important; }

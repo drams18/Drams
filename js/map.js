@@ -7,19 +7,19 @@
 
 'use strict';
 
-const WORLD_WIDTH     = 2160;
+const WORLD_WIDTH     = 1780;
 const GROUND_RATIO    = 0.72;
 const INTERACT_RADIUS = 85;
 
 // ── Player spawn position (left side) ────────────────
 const SPAWN_X = 80;
 
-// ── Palette monde ────────────────────────────────────
+// ── Palette monde — BLEU NUIT urbain (Spider-Verse) ──
 const CITY = {
   ink:      '#01010a',
-  facade:   '#0d1220',
-  facadeHi: '#141c30',
-  asphalt:  '#0a0c15',
+  facade:   '#16223f',
+  facadeHi: '#1e2c50',
+  asphalt:  '#131d33',
   red:      '#ff123d',
   magenta:  '#ff2bb0',
   violet:   '#8a3bff',
@@ -35,9 +35,9 @@ const BUILDINGS_DATA = [
     label: 'PROFIL',
     accent: CITY.cyan,
     wallColor: CITY.facade,
-    wallDark: '#080c16',
-    roofColor: '#0b1120',
-    roofDark: '#05080f',
+    wallDark: '#101a33',
+    roofColor: '#16223f',
+    roofDark: '#0c1428',
     windowColor: CITY.cyan,
     x: 200, w: 230, h: 240,
   },
@@ -46,9 +46,9 @@ const BUILDINGS_DATA = [
     label: 'PARCOURS',
     accent: CITY.violet,
     wallColor: CITY.facade,
-    wallDark: '#080c16',
-    roofColor: '#0b1120',
-    roofDark: '#05080f',
+    wallDark: '#101a33',
+    roofColor: '#16223f',
+    roofDark: '#0c1428',
     windowColor: CITY.violet,
     x: 460, w: 230, h: 240,
   },
@@ -57,9 +57,9 @@ const BUILDINGS_DATA = [
     label: 'CONTACT',
     accent: CITY.magenta,
     wallColor: CITY.facade,
-    wallDark: '#080c16',
-    roofColor: '#0b1120',
-    roofDark: '#05080f',
+    wallDark: '#101a33',
+    roofColor: '#16223f',
+    roofDark: '#0c1428',
     windowColor: CITY.magenta,
     x: 980, w: 230, h: 240,
   },
@@ -68,9 +68,9 @@ const BUILDINGS_DATA = [
     label: 'GALERIE',
     accent: CITY.red,
     wallColor: CITY.facade,
-    wallDark: '#080c16',
-    roofColor: '#0b1120',
-    roofDark: '#05080f',
+    wallDark: '#101a33',
+    roofColor: '#16223f',
+    roofDark: '#0c1428',
     windowColor: CITY.red,
     x: 1260, w: 380, h: 240,
   },
@@ -83,8 +83,9 @@ BUILDINGS_DATA.forEach(b => {
 });
 
 // ── Porte-portail « Construisez votre projet » ──────────
-// Pas une maison : une faille d'énergie isolée, nettement séparée
-// du reste. Interagir dessus ouvre une NOUVELLE PAGE.
+// Pas une maison : une faille d'énergie isolée, logée dans l'espace
+// vide entre PARCOURS (fin x≈690) et CONTACT (début x≈980).
+// Interagir dessus ouvre une NOUVELLE PAGE.
 const SPECIAL_DOOR = {
   id: 'build-project',
   label: 'CONSTRUISEZ VOTRE PROJET',
@@ -92,7 +93,7 @@ const SPECIAL_DOOR = {
   href: 'construire-projet.html',
   accent: CITY.cyan,
   isPortal: true,
-  x: 1900, w: 132, h: 216,
+  x: 769, w: 132, h: 216,
 };
 SPECIAL_DOOR.doorX = SPECIAL_DOOR.x + Math.floor(SPECIAL_DOOR.w / 2);
 
@@ -154,9 +155,9 @@ class GameMap {
     const skyH = canvasH * GROUND_RATIO;
 
     const grad = ctx.createLinearGradient(0, 0, 0, skyH);
-    grad.addColorStop(0, '#05060b');
-    grad.addColorStop(0.5, '#0b0a18');
-    grad.addColorStop(1, '#12081c');
+    grad.addColorStop(0, '#0e1630');
+    grad.addColorStop(0.5, '#16213f');
+    grad.addColorStop(1, '#1b1533');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, skyH);
 
@@ -193,6 +194,23 @@ class GameMap {
     }
     ctx.globalAlpha = 1;
 
+    // Fils de toile — quelques diagonales très ténues dans le ciel lointain
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 5; i++) {
+      const gx = ((i * 261) % (w + 200)) - 100;
+      ctx.beginPath();
+      ctx.moveTo(gx, -20);
+      ctx.lineTo(gx + skyH * 0.7, skyH);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(gx + 140, -20);
+      ctx.lineTo(gx + 140 - skyH * 0.7, skyH);
+      ctx.stroke();
+    }
+    ctx.restore();
+
     // Trame halftone très légère sur le ciel
     const ht = this._halftone(ctx);
     if (ht) {
@@ -201,24 +219,54 @@ class GameMap {
     }
   }
 
-  // Skyline de fond, lointaine (parallaxe forte)
+  // Skyline dense façon New York — 2 couches de parallaxe.
   _drawSkyline(ctx, cameraX, groundY) {
     const w = ctx.canvas.width;
     const base = groundY;
-    ctx.fillStyle = '#080610';
-    const off = -(cameraX * 0.35) % 220;
-    for (let x = off - 220; x < w + 220; x += 220) {
-      const seed = Math.round((x + cameraX * 0.35) / 220);
-      const bh = 60 + ((seed * 53) % 90);
-      const bw = 70 + ((seed * 29) % 60);
-      ctx.fillRect(Math.round(x), base - bh, bw, bh);
-      // quelques fenêtres cyan/magenta ténues
-      ctx.fillStyle = seed % 2 ? 'rgba(25,232,255,0.18)' : 'rgba(255,43,176,0.16)';
-      for (let wy = base - bh + 10; wy < base - 8; wy += 16) {
-        ctx.fillRect(Math.round(x) + 8, wy, 4, 4);
-        ctx.fillRect(Math.round(x) + bw - 14, wy, 4, 4);
+
+    // Couche lointaine (parallaxe forte, sombre, serrée)
+    this._skylineLayer(ctx, cameraX, base, {
+      par: 0.22, step: 120, color: '#0b1122',
+      hMin: 70, hMod: 120, wMin: 46, wMod: 44,
+      winA: 'rgba(25,232,255,0.12)', winB: 'rgba(255,43,176,0.10)',
+    });
+    // Couche proche (parallaxe moyenne, plus haute, plus détaillée)
+    this._skylineLayer(ctx, cameraX, base, {
+      par: 0.4, step: 200, color: '#0d1630',
+      hMin: 96, hMod: 150, wMin: 74, wMod: 66,
+      winA: 'rgba(25,232,255,0.20)', winB: 'rgba(255,43,176,0.18)',
+    });
+  }
+
+  _skylineLayer(ctx, cameraX, base, o) {
+    const w = ctx.canvas.width;
+    const off = -(cameraX * o.par) % o.step;
+    for (let x = off - o.step; x < w + o.step; x += o.step) {
+      const seed = Math.round((x + cameraX * o.par) / o.step);
+      const bh = o.hMin + ((seed * 53) % o.hMod);
+      const bw = o.wMin + ((seed * 29) % o.wMod);
+      const bx = Math.round(x);
+      ctx.fillStyle = o.color;
+      ctx.fillRect(bx, base - bh, bw, bh);
+
+      // Redents / château d'eau / antenne selon le seed → variété NYC
+      const kind = seed % 3;
+      if (kind === 0) {
+        ctx.fillRect(bx + bw * 0.2, base - bh - 18, bw * 0.6, 18);       // redent
+      } else if (kind === 1) {
+        ctx.fillRect(bx + bw * 0.5 - 8, base - bh - 22, 16, 14);         // cuve
+        ctx.fillRect(bx + bw * 0.5 - 2, base - bh - 30, 4, 8);           // mât
+      } else {
+        ctx.fillRect(bx + bw * 0.5 - 1, base - bh - 26, 2, 26);         // antenne
       }
-      ctx.fillStyle = '#080610';
+
+      // Fenêtres allumées cyan / magenta
+      ctx.fillStyle = seed % 2 ? o.winA : o.winB;
+      for (let wy = base - bh + 12; wy < base - 8; wy += 16) {
+        for (let wx = bx + 8; wx < bx + bw - 8; wx += 14) {
+          if ((wx + wy + seed) % 3) ctx.fillRect(wx, wy, 4, 4);
+        }
+      }
     }
   }
 
@@ -374,18 +422,46 @@ class GameMap {
     ctx.fillStyle = rift;
     ctx.fillRect(ix, iy, iw, ih);
 
-    // Anneaux à aberration chromatique
+    // Brins de toile rayonnant depuis le haut de la faille
+    ctx.save();
+    ctx.strokeStyle = `rgba(255,255,255,${(0.10 + 0.10 * glow).toFixed(3)})`;
+    ctx.lineWidth = 1;
+    const anchorX = cx, anchorY = iy + 6;
+    for (let s = -3; s <= 3; s++) {
+      ctx.beginPath();
+      ctx.moveTo(anchorX, anchorY);
+      ctx.lineTo(anchorX + s * (iw / 6), iy + ih - 4);
+      ctx.stroke();
+    }
+    for (let r = ih * 0.28; r < ih; r += ih * 0.3) {
+      ctx.beginPath();
+      ctx.moveTo(anchorX - r * 0.9, anchorY + r * 0.55);
+      ctx.quadraticCurveTo(anchorX, anchorY + r, anchorX + r * 0.9, anchorY + r * 0.55);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Anneaux à aberration chromatique (renforcés) + spider-sense
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
     for (let k = 0; k < 3; k++) {
       const rr = 14 + ((tick * 1.4 + k * 34) % (ih * 0.55));
-      const a  = Math.max(0, 0.5 - rr / (ih * 0.6));
+      const a  = Math.max(0, 0.6 - rr / (ih * 0.6));
       ctx.globalAlpha = a;
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2.5;
       ctx.strokeStyle = CITY.red;
-      ctx.beginPath(); ctx.ellipse(cx - 2, iy + ih * 0.5, rr, rr * 0.7, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(cx - 3, iy + ih * 0.5, rr, rr * 0.7, 0, 0, Math.PI * 2); ctx.stroke();
       ctx.strokeStyle = CITY.cyan;
-      ctx.beginPath(); ctx.ellipse(cx + 2, iy + ih * 0.5, rr, rr * 0.7, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(cx + 3, iy + ih * 0.5, rr, rr * 0.7, 0, 0, Math.PI * 2); ctx.stroke();
+    }
+    // Arcs spider-sense qui s'étendent au-delà de l'ouverture
+    for (let k = 0; k < 2; k++) {
+      const rr = 20 + ((tick * 2 + k * 60) % (d.w * 1.1));
+      ctx.globalAlpha = Math.max(0, 0.4 - rr / (d.w * 1.2));
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = CITY.cyan;
+      ctx.beginPath(); ctx.arc(cx, iy + ih * 0.5, rr, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, iy + ih * 0.5, rr, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
     }
     ctx.restore();
     ctx.globalAlpha = 1;
@@ -472,6 +548,9 @@ class GameMap {
       }
     }
 
+    // Filament de toile discret dans l'angle haut-gauche de la façade
+    this._webFilament(ctx, sx + 3, by + 3, 34, 'rgba(255,255,255,0.9)', 0.10, 1, 1);
+
     // Contour « encre » comics : trait noir + liseré accent
     ctx.strokeStyle = CITY.ink;
     ctx.lineWidth = 3;
@@ -529,27 +608,19 @@ class GameMap {
     ctx.fillStyle = CITY.paper;
     ctx.fillRect(doorX + doorW - 9, doorY + doorH / 2 - 2, 4, 4);
 
-    // Tampon « visité » — pastille néon
+    // Tampon « visité » — pastille néon frappée d'une petite araignée
     if (b.visited) {
       ctx.save();
       const cx = sx + b.w - 16;
       const cy = by + 40;
       ctx.beginPath();
-      ctx.arc(cx, cy, 11, 0, Math.PI * 2);
+      ctx.arc(cx, cy, 12, 0, Math.PI * 2);
       ctx.fillStyle = '#02030a';
       ctx.fill();
       ctx.strokeStyle = b.accent;
       ctx.lineWidth = 2;
       ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(cx - 5, cy);
-      ctx.lineTo(cx - 1, cy + 4);
-      ctx.lineTo(cx + 5, cy - 4);
-      ctx.strokeStyle = b.accent;
-      ctx.lineWidth = 2.5;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.stroke();
+      this._drawSpider(ctx, cx, cy, 13, b.accent);
       ctx.restore();
     }
   }
@@ -574,5 +645,57 @@ class GameMap {
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
     return `${r},${g},${b}`;
+  }
+
+  // Filament de toile ancré à un coin — dirX/dirY = sens vers l'intérieur (+1/-1).
+  _webFilament(ctx, ox, oy, size, color, alpha, dirX, dirY) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = 1;
+    // Rayons
+    for (let i = 0; i <= 4; i++) {
+      const a = (Math.PI / 2) * (i / 4);
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(ox + dirX * Math.cos(a) * size, oy + dirY * Math.sin(a) * size);
+      ctx.stroke();
+    }
+    // Arcs concentriques
+    for (let r = size * 0.35; r <= size; r += size * 0.32) {
+      ctx.beginPath();
+      ctx.arc(ox, oy, r, 0, Math.PI / 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Petite araignée stylisée (corps + 8 pattes) — motif récurrent.
+  _drawSpider(ctx, cx, cy, s, color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = Math.max(1, s * 0.14);
+    ctx.lineCap = 'round';
+    // Pattes
+    for (const sgn of [-1, 1]) {
+      for (let i = 0; i < 4; i++) {
+        const ky = cy - s * 0.5 + i * (s * 0.34);
+        const bend = (i === 0 || i === 3) ? s * 0.5 : s * 0.85;
+        ctx.beginPath();
+        ctx.moveTo(cx + sgn * s * 0.28, ky);
+        ctx.lineTo(cx + sgn * (s * 0.28 + bend), ky - s * 0.28);
+        ctx.lineTo(cx + sgn * (s * 0.28 + bend + s * 0.14), ky + s * 0.1);
+        ctx.stroke();
+      }
+    }
+    // Corps + tête
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + s * 0.12, s * 0.3, s * 0.44, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx, cy - s * 0.42, s * 0.22, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
   }
 }

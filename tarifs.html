@@ -44,13 +44,14 @@
       --pro-2:       #b98bff;
 
       --cyan:       #19e8ff;
-      --ink:        #05060b;
-      --panel:      #0b0d16;
-      --panel-2:    #11131f;
-      --edge:       #2a2f45;
+      --ink:        #0e1630;
+      --panel:      #182449;
+      --panel-2:    #20305c;
+      --edge:       #3c4c82;
       --stroke:     #01010a;
       --red:        #ff123d;
       --red-deep:   #8f0a24;
+      --urban:      #9fb0d8;
 
       --mc-text:    #f5f6ff;
       --pixel-font: 'Press Start 2P', monospace;
@@ -60,6 +61,15 @@
       --halftone-size: 6px 6px;
       --speedlines: repeating-linear-gradient(115deg,
           transparent 0 14px, rgba(255,255,255,0.03) 14px 15px, transparent 15px 30px);
+      --weblines: repeating-linear-gradient(58deg,
+          transparent 0 26px, rgba(255,255,255,0.028) 26px 27px, transparent 27px 54px),
+        repeating-linear-gradient(-58deg,
+          transparent 0 26px, rgba(255,255,255,0.028) 26px 27px, transparent 27px 54px);
+      --web-corner: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.1'%3E%3Cpath d='M0 22A22 22 0 0 1 22 0'/%3E%3Cpath d='M0 48A48 48 0 0 1 48 0'/%3E%3Cpath d='M0 78A78 78 0 0 1 78 0'/%3E%3Cpath d='M0 110A110 110 0 0 1 110 0'/%3E%3Cpath d='M0 0 120 20'/%3E%3Cpath d='M0 0 104 60'/%3E%3Cpath d='M0 0 78 78'/%3E%3Cpath d='M0 0 60 104'/%3E%3Cpath d='M0 0 20 120'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    @keyframes senseRing {
+      0%   { transform: scale(1);    opacity: 0.5; }
+      100% { transform: scale(1.12); opacity: 0;   }
     }
 
     /* Vue Professionnels : bascule l'accent courant sur le violet. */
@@ -80,10 +90,10 @@
       font-family: var(--body-font);
       color: var(--mc-text);
       background:
-        radial-gradient(120% 70% at 15% 0%, rgba(255,43,176,0.22) 0%, transparent 55%),
-        radial-gradient(120% 80% at 90% 8%, rgba(138,59,255,0.22) 0%, transparent 55%),
-        radial-gradient(160% 120% at 50% 120%, rgba(25,232,255,0.12) 0%, transparent 60%),
-        linear-gradient(180deg, #05060b 0%, #0a0a17 45%, #10091b 75%, #05060b 100%) fixed;
+        radial-gradient(120% 70% at 15% 0%, rgba(255,43,176,0.24) 0%, transparent 55%),
+        radial-gradient(120% 80% at 90% 8%, rgba(138,59,255,0.24) 0%, transparent 55%),
+        radial-gradient(160% 120% at 50% 120%, rgba(25,232,255,0.14) 0%, transparent 60%),
+        linear-gradient(180deg, #0e1630 0%, #16234a 45%, #1b1c44 75%, #0e1630 100%) fixed;
       padding: 30px 16px 48px;
       display: flex;
       justify-content: center;
@@ -100,6 +110,7 @@
       opacity: 0.6;
       background-image:
         var(--speedlines),
+        var(--weblines),
         var(--halftone),
         radial-gradient(1.5px 1.5px at 10% 15%, rgba(25,232,255,0.9) 0%, transparent 100%),
         radial-gradient(1px 1px at 25% 8%,  rgba(255,255,255,0.6) 0%, transparent 100%),
@@ -110,8 +121,8 @@
         radial-gradient(1px 1px at 90% 18%, rgba(255,255,255,0.8) 0%, transparent 100%),
         radial-gradient(1px 1px at 15% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
         radial-gradient(1.5px 1.5px at 85% 30%, rgba(25,232,255,0.5) 0%, transparent 100%);
-      background-size: 600px 100%, var(--halftone-size), auto, auto, auto, auto, auto, auto, auto, auto, auto;
-      background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+      background-size: 600px 100%, auto, auto, var(--halftone-size), auto, auto, auto, auto, auto, auto, auto, auto, auto;
+      background-repeat: repeat, repeat, repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
     }
 
     .page {
@@ -391,7 +402,45 @@
       line-height: 1.55;
       color: #fff;
     }
-    .cat-btn__meta { font-size: 12px; color: #9aa7bb; }
+    .cat-btn__meta { font-size: 12px; color: #aab6d2; }
+
+    /* ── Références Spider-Man : coins de toile + spider-sense ── */
+    .choice-card, .panel, .noresult { position: relative; }
+    .choice-card::before, .panel::before, .noresult::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 82px; height: 82px;
+      background: var(--web-corner) no-repeat;
+      background-size: 100% 100%;
+      opacity: 0.07;
+      pointer-events: none;
+    }
+    /* Pas de toile côté bas-droite du panneau : rien sous les lignes de prix. */
+    .noresult::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 82px; height: 82px;
+      background: var(--web-corner) no-repeat;
+      background-size: 100% 100%;
+      opacity: 0.07;
+      pointer-events: none;
+      transform: rotate(180deg);
+    }
+    .choice-card, .cat-btn { position: relative; }
+    .choice-card::after, .cat-btn::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border: 2px solid var(--cyan);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .choice-card:hover::after, .choice-card:focus-visible::after,
+    .cat-btn:hover::after, .cat-btn:focus-visible::after {
+      animation: senseRing 0.95s ease-out infinite;
+    }
 
     /* ── Étape 3 : prestations ───────────────────────────── */
     .panel {
@@ -585,6 +634,9 @@
       .svc__name { font-size: 14.5px; }
       .cat-head { font-size: 10px; }
       .cat-btn__label { font-size: 9px; }
+      .choice-card::after, .cat-btn::after { animation: none !important; opacity: 0 !important; }
+      .choice-card::before, .panel::before, .noresult::before,
+      .noresult::after { opacity: 0.05; }
     }
 
     @media (prefers-reduced-motion: reduce) {

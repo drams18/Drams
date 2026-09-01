@@ -36,7 +36,7 @@
       z-index: 30;
       width: min(92vw, 540px);
       text-align: center;
-      background: var(--panel, #0b0d16);
+      background: var(--panel, #182449);
       border: 3px solid var(--stroke, #01010a);
       box-shadow: 5px 5px 0 var(--stroke, #01010a), 0 0 22px rgba(25,232,255,0.25);
       padding: 8px 14px 10px;
@@ -103,7 +103,7 @@
       padding: 9px 14px;
       cursor: pointer;
       transition: transform .12s ease, filter .15s;
-      animation: bpNextIn .22s ease;
+      animation: bpNextIn .22s ease, bpSense 2.4s ease-in-out .22s infinite;
     }
     .bp-hud__next:hover { filter: brightness(1.1) saturate(1.1); }
     .bp-hud__next:active { transform: translateY(2px); box-shadow: 1px 1px 0 var(--red-deep, #8f0a24); }
@@ -154,8 +154,10 @@
       inset: 0;
       z-index: 200;
       background:
+        repeating-linear-gradient(58deg, transparent 0 22px, rgba(255,255,255,0.06) 22px 23px, transparent 23px 46px),
+        repeating-linear-gradient(-58deg, transparent 0 22px, rgba(255,255,255,0.06) 22px 23px, transparent 23px 46px),
         radial-gradient(60% 60% at 50% 50%, rgba(25,232,255,0.3) 0%, transparent 70%),
-        linear-gradient(115deg, #ff123d 0%, #ff2bb0 32%, #05060b 33%, #05060b 66%, #8a3bff 67%, #19e8ff 100%);
+        linear-gradient(115deg, #ff123d 0%, #ff2bb0 32%, #0e1630 33%, #0e1630 66%, #8a3bff 67%, #19e8ff 100%);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.18s cubic-bezier(.4,0,.2,1);
@@ -175,25 +177,44 @@
       background:
         radial-gradient(80% 80% at 50% 40%, transparent 20%, rgba(0,0,0,0.55) 100%),
         var(--halftone, radial-gradient(rgba(255,255,255,0.1) 0.8px, transparent 1.4px)),
-        rgba(4,5,10,0.86);
+        rgba(9,13,28,0.86);
       background-size: auto, var(--halftone-size, 6px 6px), auto;
       animation: bpPanelIn 0.22s ease;
     }
     @keyframes bpPanelIn { from { opacity: 0; } to { opacity: 1; } }
 
     .bp-panel__card {
+      position: relative;
       width: 100%;
       max-width: 460px;
       margin: auto;
-      background: var(--panel, #0b0d16);
+      background: var(--panel, #182449);
       border: 3px solid var(--stroke, #01010a);
       box-shadow: 10px 10px 0 var(--red-deep, #8f0a24), 0 0 40px rgba(0,0,0,0.6), 0 0 26px rgba(255,43,176,0.25);
       padding: 20px 20px 22px;
       animation: bpCardIn 0.3s cubic-bezier(.22,.61,.36,1);
     }
+    /* Coins de toile décoratifs (SVG original hérité de style.css) */
+    .bp-panel__card::before, .bp-panel__card::after {
+      content: '';
+      position: absolute;
+      width: 80px; height: 80px;
+      background: var(--web-corner) no-repeat;
+      background-size: 100% 100%;
+      opacity: 0.07;
+      pointer-events: none;
+    }
+    .bp-panel__card::before { top: 0; left: 0; }
+    .bp-panel__card::after  { bottom: 0; right: 0; transform: rotate(180deg); }
     @keyframes bpCardIn {
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bpSense {
+      0%, 100% { box-shadow: 4px 4px 0 var(--red-deep, #8f0a24),
+                   0 0 0 3px rgba(25,232,255,0.30), 0 0 0 3px rgba(255,43,176,0.28); }
+      50%      { box-shadow: 4px 4px 0 var(--red-deep, #8f0a24),
+                   0 0 0 13px rgba(25,232,255,0), 0 0 0 22px rgba(255,43,176,0); }
     }
     .bp-panel__card--center { text-align: center; }
 
@@ -309,7 +330,7 @@
       font-family: var(--body-font);
       font-size: 15px;
       color: #fff;
-      background: var(--ink-2, #090b14);
+      background: var(--ink-2, #132048);
       border: 2px solid var(--edge, #2a2f45);
       border-left: 3px solid var(--cyan, #19e8ff);
       padding: 11px 12px;
@@ -352,7 +373,10 @@
       color: #fff;
       border-color: var(--stroke, #01010a);
       box-shadow: 4px 4px 0 var(--red-deep, #8f0a24);
+      animation: bpSense 2.6s ease-in-out infinite;
     }
+    .bp-btn--primary:disabled,
+    .bp-btn--primary[aria-disabled="true"] { animation: none; }
     .bp-btn--primary:hover { filter: brightness(1.1) saturate(1.1); }
     .bp-btn--ghost {
       background: rgba(25,232,255,0.05);
@@ -397,7 +421,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .bp-hud--change, .bp-hud__next,
+      .bp-hud--change, .bp-hud__next, .bp-btn--primary,
       .bp-panel, .bp-panel__card { animation: none !important; }
       .bp-progress__fill, #bp-fade { transition-duration: 0.01ms !important; }
     }

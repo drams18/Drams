@@ -856,9 +856,9 @@
       const skyH = eh * GROUND_RATIO;
 
       const grad = ctx.createLinearGradient(0, 0, 0, skyH);
-      grad.addColorStop(0, '#05060b');
-      grad.addColorStop(0.5, '#0b0a18');
-      grad.addColorStop(1, '#12081c');
+      grad.addColorStop(0, '#0e1630');
+      grad.addColorStop(0.5, '#16213f');
+      grad.addColorStop(1, '#1b1533');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, w, skyH + 2);
 
@@ -888,8 +888,51 @@
         ctx.fillRect((i * 137.5) % w, (i * 71.3) % skyH, 1.5, 1.5);
       }
 
+      // Fils de toile — diagonales très ténues
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 5; i++) {
+        const gx = ((i * 261) % (w + 200)) - 100;
+        ctx.beginPath(); ctx.moveTo(gx, -20); ctx.lineTo(gx + skyH * 0.7, skyH); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(gx + 140, -20); ctx.lineTo(gx + 140 - skyH * 0.7, skyH); ctx.stroke();
+      }
+      ctx.restore();
+
       const ht = getHalftone(ctx);
       if (ht) { ctx.fillStyle = ht; ctx.fillRect(0, 0, w, skyH); }
+
+      // Skyline urbaine dense (2 couches de parallaxe)
+      this._drawSkyline(ctx, skyH);
+    }
+
+    _drawSkyline(ctx, skyH) {
+      const w = ctx.canvas.width;
+      const base = skyH + 2;
+      const camX = this.cameraX;
+      const layer = (par, step, color, hMin, hMod, wMin, wMod, winA, winB) => {
+        const off = -(camX * par) % step;
+        for (let x = off - step; x < w + step; x += step) {
+          const seed = Math.round((x + camX * par) / step);
+          const bh = hMin + ((seed * 53) % hMod);
+          const bw = wMin + ((seed * 29) % wMod);
+          const bx = Math.round(x);
+          ctx.fillStyle = color;
+          ctx.fillRect(bx, base - bh, bw, bh);
+          const kind = seed % 3;
+          if (kind === 0) ctx.fillRect(bx + bw * 0.2, base - bh - 14, bw * 0.6, 14);
+          else if (kind === 1) { ctx.fillRect(bx + bw * 0.5 - 7, base - bh - 18, 14, 12); ctx.fillRect(bx + bw * 0.5 - 2, base - bh - 24, 4, 6); }
+          else ctx.fillRect(bx + bw * 0.5 - 1, base - bh - 22, 2, 22);
+          ctx.fillStyle = seed % 2 ? winA : winB;
+          for (let wy = base - bh + 10; wy < base - 6; wy += 14) {
+            for (let wx = bx + 6; wx < bx + bw - 6; wx += 12) {
+              if ((wx + wy + seed) % 3) ctx.fillRect(wx, wy, 3, 3);
+            }
+          }
+        }
+      };
+      layer(0.18, 110, '#0b1122', 60, 110, 44, 40, 'rgba(25,232,255,0.12)', 'rgba(255,43,176,0.10)');
+      layer(0.34, 180, '#0d1630', 84, 140, 70, 60, 'rgba(25,232,255,0.18)', 'rgba(255,43,176,0.16)');
     }
 
     _drawClouds(ctx, camX) {
@@ -916,7 +959,7 @@
       const w = ctx.canvas.width;
 
       // Bitume
-      ctx.fillStyle = '#0a0c15';
+      ctx.fillStyle = '#131d33';
       ctx.fillRect(0, groundY, w, eh - groundY + 4);
 
       // Arête lumineuse cyan
@@ -1009,7 +1052,25 @@
       ctx.fillStyle = rift;
       ctx.fillRect(ox, oy, ow, oh);
 
-      // Anneaux à aberration chromatique quand on est près
+      // Brins de toile rayonnant depuis le haut de l'ouverture
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255,255,255,' + (0.08 + 0.08 * glow).toFixed(3) + ')';
+      ctx.lineWidth = 1;
+      for (let s = -2; s <= 2; s++) {
+        ctx.beginPath();
+        ctx.moveTo(cx, oy + 4);
+        ctx.lineTo(cx + s * (ow / 4), oy + oh - 4);
+        ctx.stroke();
+      }
+      for (let r = oh * 0.32; r < oh; r += oh * 0.34) {
+        ctx.beginPath();
+        ctx.moveTo(cx - r * 0.85, oy + 4 + r * 0.5);
+        ctx.quadraticCurveTo(cx, oy + 4 + r, cx + r * 0.85, oy + 4 + r * 0.5);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Anneaux à aberration chromatique + arcs spider-sense quand on est près
       if (near) {
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
@@ -1021,6 +1082,14 @@
           ctx.beginPath(); ctx.ellipse(cx - 2, oy + oh * 0.5, rr, rr * 0.7, 0, 0, Math.PI * 2); ctx.stroke();
           ctx.strokeStyle = '#19e8ff';
           ctx.beginPath(); ctx.ellipse(cx + 2, oy + oh * 0.5, rr, rr * 0.7, 0, 0, Math.PI * 2); ctx.stroke();
+        }
+        for (let k = 0; k < 2; k++) {
+          const rr = 16 + ((this._tick * 2 + k * 50) % (d.w * 1.2));
+          ctx.globalAlpha = Math.max(0, 0.38 - rr / (d.w * 1.3));
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#19e8ff';
+          ctx.beginPath(); ctx.arc(cx, oy + oh * 0.5, rr, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke();
+          ctx.beginPath(); ctx.arc(cx, oy + oh * 0.5, rr, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
         }
         ctx.restore();
         ctx.globalAlpha = 1;
@@ -1046,26 +1115,18 @@
         ctx.restore();
       }
 
-      // Badge « choisi » (étape multi) — pastille néon
+      // Badge « choisi » (étape multi) — pastille néon frappée d'une araignée
       if (d.selected) {
         const bcx = sx + d.w - 4;
         const bcy = by - 6;
         ctx.beginPath();
-        ctx.arc(bcx, bcy, 9, 0, Math.PI * 2);
+        ctx.arc(bcx, bcy, 10, 0, Math.PI * 2);
         ctx.fillStyle = '#02030a';
         ctx.fill();
         ctx.strokeStyle = '#ff2bb0';
         ctx.lineWidth = 2;
         ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(bcx - 4, bcy);
-        ctx.lineTo(bcx - 1, bcy + 3);
-        ctx.lineTo(bcx + 4, bcy - 3);
-        ctx.strokeStyle = '#ff2bb0';
-        ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.stroke();
+        drawSpider(ctx, bcx, bcy, 11, '#ff2bb0');
       }
 
       // Panneau au-dessus (texte du choix, sur 1 à 3 lignes)
@@ -1226,6 +1287,33 @@
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
     return r + ',' + g + ',' + b;
+  }
+
+  // Petite araignée stylisée (corps + 8 pattes) — motif récurrent.
+  function drawSpider(ctx, cx, cy, s, color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = Math.max(1, s * 0.14);
+    ctx.lineCap = 'round';
+    for (const sgn of [-1, 1]) {
+      for (let i = 0; i < 4; i++) {
+        const ky = cy - s * 0.5 + i * (s * 0.34);
+        const bend = (i === 0 || i === 3) ? s * 0.5 : s * 0.85;
+        ctx.beginPath();
+        ctx.moveTo(cx + sgn * s * 0.28, ky);
+        ctx.lineTo(cx + sgn * (s * 0.28 + bend), ky - s * 0.28);
+        ctx.lineTo(cx + sgn * (s * 0.28 + bend + s * 0.14), ky + s * 0.1);
+        ctx.stroke();
+      }
+    }
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + s * 0.12, s * 0.3, s * 0.44, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx, cy - s * 0.42, s * 0.22, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
   }
 
   function escapeHtml(s) {

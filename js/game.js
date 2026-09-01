@@ -131,8 +131,10 @@ class Game {
       'position:fixed;inset:0;z-index:9999;opacity:0;pointer-events:none;' +
       'transition:opacity .45s ease;' +
       'background:' +
+        "repeating-linear-gradient(58deg, transparent 0 22px, rgba(255,255,255,0.06) 22px 23px, transparent 23px 46px)," +
+        "repeating-linear-gradient(-58deg, transparent 0 22px, rgba(255,255,255,0.06) 22px 23px, transparent 23px 46px)," +
         'radial-gradient(60% 60% at 50% 50%, rgba(25,232,255,0.35) 0%, transparent 70%),' +
-        'linear-gradient(115deg, #ff123d 0%, #ff2bb0 32%, #05060b 33%, #05060b 66%, #8a3bff 67%, #19e8ff 100%);';
+        'linear-gradient(115deg, #ff123d 0%, #ff2bb0 32%, #0e1630 33%, #0e1630 66%, #8a3bff 67%, #19e8ff 100%);';
     document.body.appendChild(fade);
     void fade.offsetWidth;
     fade.style.opacity = '1';
@@ -180,6 +182,18 @@ class Game {
       ctx.lineTo(sx + w + 34 + i * 10, yy);
       ctx.stroke();
     }
+
+    // Arcs « spider-sense » qui s'étendent autour du bâtiment proche
+    const cx = sx + w / 2;
+    const cy = by + building.h / 2;
+    for (let k = 0; k < 3; k++) {
+      const rr = 30 + ((this._tick * 2 + k * 46) % 150);
+      ctx.globalAlpha = Math.max(0, 0.35 - rr / 200);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = k % 2 ? '#19e8ff' : building.accent;
+      ctx.beginPath(); ctx.arc(cx, cy, rr, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, rr, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke();
+    }
     ctx.restore();
   }
 
@@ -223,7 +237,7 @@ class Game {
     const bh = 12 + padY * 2;
 
     // Cartouche « caption box » comics
-    ctx.fillStyle = 'rgba(3,4,12,0.86)';
+    ctx.fillStyle = 'rgba(10,16,34,0.88)';
     ctx.fillRect(bx, by, bw, bh);
     ctx.strokeStyle = '#01010a';
     ctx.lineWidth = 3;
@@ -262,7 +276,7 @@ class Game {
     const bxp = sx - lw / 2;
 
     // Bulle comics : fond + trait encre + liseré accent + coins
-    ctx.fillStyle = 'rgba(3,4,12,0.9)';
+    ctx.fillStyle = 'rgba(10,16,34,0.9)';
     ctx.fillRect(bxp, py - 17, lw, 24);
     ctx.strokeStyle = '#01010a';
     ctx.lineWidth = 3;
@@ -271,7 +285,7 @@ class Game {
     ctx.lineWidth = 2;
     ctx.strokeRect(bxp - 2, py - 19, lw + 4, 28);
     // queue de bulle vers le bas
-    ctx.fillStyle = 'rgba(3,4,12,0.9)';
+    ctx.fillStyle = 'rgba(10,16,34,0.9)';
     ctx.fillRect(sx - 3, py + 7, 6, 5);
 
     // texte avec décalage RGB

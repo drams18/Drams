@@ -118,28 +118,40 @@ class Player {
 
     // ── Legs ──────────────────────────────── (combinaison sombre)
     const legY = sy + 33;
-    ctx.fillStyle = '#0a0c16';
+    ctx.fillStyle = '#0c1428';
     ctx.fillRect(sx - 9, legY + legSwing, 8, 21);
-    ctx.fillStyle = '#0a0c16';
+    ctx.fillStyle = '#0c1428';
     ctx.fillRect(sx + 2, legY - legSwing, 8, 21);
     // liseré cyan sur la jambe avant
     ctx.fillStyle = 'rgba(25,232,255,0.5)';
     ctx.fillRect(sx + 2, legY - legSwing, 2, 21);
 
     // ── Body ────────────────────────────────
-    ctx.fillStyle = '#12151f';
+    ctx.fillStyle = '#141d33';
     ctx.fillRect(sx - 9, sy + 15, 18, 20);
     // accent magenta poitrine
     ctx.fillStyle = '#ff2bb0';
     ctx.fillRect(sx - 2, sy + 18, 5, 8);
+    // petit emblème géométrique (losange + point) — évocation abstraite, non figurative
+    ctx.strokeStyle = 'rgba(25,232,255,0.9)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(sx + 0.5, sy + 17);
+    ctx.lineTo(sx + 3.5, sy + 21.5);
+    ctx.lineTo(sx + 0.5, sy + 26);
+    ctx.lineTo(sx - 2.5, sy + 21.5);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(25,232,255,0.9)';
+    ctx.fillRect(sx, sy + 21, 1, 1);
     // rim light cyan bord gauche
     ctx.fillStyle = 'rgba(25,232,255,0.55)';
     ctx.fillRect(sx - 9, sy + 15, 2, 20);
 
     // ── Arms ────────────────────────────────
-    ctx.fillStyle = '#101320';
+    ctx.fillStyle = '#141d33';
     ctx.fillRect(sx - 14, sy + 17 + armSwing, 6, 15);
-    ctx.fillStyle = '#101320';
+    ctx.fillStyle = '#141d33';
     ctx.fillRect(sx + 8, sy + 17 - armSwing, 6, 15);
     ctx.fillStyle = 'rgba(25,232,255,0.4)';
     ctx.fillRect(sx - 14, sy + 17 + armSwing, 2, 15);
