@@ -135,6 +135,7 @@ const SECTIONS = {
         accent: '#ff2bb0',
       },
       {
+        short: 'PROSPECTS',
         title: 'Plateforme de recherche de prospects',
         type: 'Projet Personnel',
         tech: ['Node.js', 'Railway', 'HTML', 'CSS', 'JavaScript', 'NoSQL'],
@@ -146,6 +147,7 @@ const SECTIONS = {
         accent: '#8a3bff',
       },
       {
+        short: 'KÉDOUGOU',
         title: 'Wild Kédougou Experience',
         type: 'Plateforme Web',
         tech: ['Cloudflare Workers', 'JavaScript', 'HTML', 'CSS'],

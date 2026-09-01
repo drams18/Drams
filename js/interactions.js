@@ -9,6 +9,8 @@ class InteractionManager {
   constructor() {
     this._visited = new Set();
     this._currentSection = null;
+    this._carouselCleanups = [];
+    this._activeCarousel = null;
 
     this._modal    = document.getElementById('section-modal');
     this._backdrop = document.getElementById('modal-backdrop');
@@ -34,6 +36,18 @@ class InteractionManager {
       if ((e.key === 'Escape' || e.keyCode === 27) && this.isOpen()) {
         e.preventDefault();
         this.close();
+        return;
+      }
+      // Flèches ← / → = navigation dans le carrousel de la section ouverte
+      if (!this.isOpen() || !this._activeCarousel) return;
+      const tag = document.activeElement?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        this._activeCarousel.go(this._activeCarousel.index - 1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        this._activeCarousel.go(this._activeCarousel.index + 1);
       }
     });
   }
@@ -54,11 +68,15 @@ class InteractionManager {
 
     document.documentElement.style.setProperty('--modal-accent', section.accent);
     this._title.textContent = section.label;
+    this._teardownCarousels();
     this._body.innerHTML = this._renderSection(section);
 
     this._modal.classList.remove('hidden');
     this._backdrop.classList.remove('hidden');
     document.body.classList.add('modal-open');
+
+    // Carrousels (Parcours / Galerie) — initialisés une fois la modale visible
+    this._initCarousels();
 
     // 1re entrée dans la maison = nouvelle pièce ; retour = simple ouverture.
     if (window.AudioManager) {
@@ -71,6 +89,7 @@ class InteractionManager {
   close() {
     if (!this._currentSection) return;
     this._currentSection = null;
+    this._teardownCarousels();
     this._modal.classList.add('hidden');
     this._backdrop.classList.add('hidden');
     document.body.classList.remove('modal-open');
@@ -180,33 +199,25 @@ class InteractionManager {
   _renderParcours(section) {
     const { timeline, experiences } = section;
 
-    const timelineHTML = timeline.map(t => `
-      <div class="timeline-item">
-        <div class="timeline-card">
-          <div class="timeline-date">${t.date}</div>
-          <div class="timeline-title">${t.title}</div>
-          <div class="timeline-place">${t.place}</div>
-          <p class="timeline-desc">${t.desc}</p>
-        </div>
-      </div>
-    `).join('');
+    // Chaque étape (formations + expériences) devient une slide du carrousel.
+    const slides = [
+      ...timeline.map(t => ({ ...t, kind: 'FORMATION' })),
+      ...experiences.map(e => ({ ...e, kind: 'EXPÉRIENCE' })),
+    ];
 
-    const expHTML = experiences.map(e => `
-      <div class="exp-item">
-        <div>
-          <div class="exp-date">${e.date}</div>
-          <div class="exp-title">${e.title}</div>
-          <p class="exp-desc">${e.desc}</p>
-        </div>
+    const slideHTML = (s) => `
+      <div class="timeline-card carousel-card">
+        <div class="carousel-card__kind">${s.kind}</div>
+        <div class="timeline-date">${s.date}</div>
+        <div class="timeline-title">${s.title}</div>
+        ${s.place ? `<div class="timeline-place">${s.place}</div>` : ''}
+        <p class="timeline-desc">${s.desc}</p>
       </div>
-    `).join('');
+    `;
 
     return `
-      <h3 class="sub-title">FORMATION</h3>
-      <div class="timeline">${timelineHTML}</div>
-      <div class="section-divider"></div>
-      <h3 class="sub-title">EXPERIENCES</h3>
-      <div class="exp-list">${expHTML}</div>
+      <h3 class="sub-title">PARCOURS</h3>
+      ${this._renderCarousel({ slides, tabLabel: s => s.short || s.title, slideHTML })}
     `;
   }
 
@@ -259,7 +270,7 @@ class InteractionManager {
   }
 
   _renderProjets(section) {
-    const cardsHTML = section.items.map(p => {
+    const slideHTML = (p) => {
       const techHTML  = p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
       const linksHTML = p.links.map(l => `
         <a href="${l.url}" target="_blank" rel="noopener" class="proj-link">${l.label}</a>
@@ -270,7 +281,7 @@ class InteractionManager {
         : '';
 
       return `
-        <div class="proj-card" style="--proj-accent:${p.accent}">
+        <div class="proj-card carousel-card" style="--proj-accent:${p.accent}">
           <div class="proj-type">${p.type}</div>
           <h3 class="proj-title">${p.title}</h3>
           <p class="proj-desc">${p.desc}</p>
@@ -279,12 +290,169 @@ class InteractionManager {
           <div class="proj-links">${linksHTML}</div>
         </div>
       `;
-    }).join('');
+    };
 
     return `
       <h3 class="sub-title">GALERIE PROJETS</h3>
       <p class="section-intro">Applications mobiles, plateformes web, projets personnels.</p>
-      <div class="projets-grid">${cardsHTML}</div>
+      ${this._renderCarousel({ slides: section.items, tabLabel: s => s.short || s.title, slideHTML })}
     `;
+  }
+
+  // ── Carrousel (Parcours & Galerie) ──────────────────
+
+  _renderCarousel({ slides, tabLabel, slideHTML }) {
+    const tabs = slides.map((s, i) => `
+      <button type="button" class="carousel-tab${i === 0 ? ' is-active' : ''}"
+              role="tab" aria-selected="${i === 0 ? 'true' : 'false'}" data-index="${i}">
+        ${tabLabel(s)}
+      </button>
+    `).join('');
+
+    const panels = slides.map((s, i) => `
+      <div class="carousel-slide${i === 0 ? ' is-active' : ''}" role="tabpanel"
+           data-index="${i}" aria-hidden="${i === 0 ? 'false' : 'true'}">
+        ${slideHTML(s)}
+      </div>
+    `).join('');
+
+    return `
+      <div class="carousel" data-carousel>
+        <div class="carousel-tabs" role="tablist">${tabs}</div>
+        <p class="carousel-hint">
+          <span class="carousel-hint__keys" aria-hidden="true">&lsaquo; &rsaquo;</span>
+          <span class="carousel-hint__desktop">Utilisez les flèches du clavier (ou les boutons) pour naviguer — ou cliquez sur un titre</span>
+          <span class="carousel-hint__touch">Glissez de gauche à droite — ou touchez un titre pour naviguer</span>
+        </p>
+        <div class="carousel-viewport">
+          <div class="carousel-track">${panels}</div>
+        </div>
+        <div class="carousel-nav">
+          <button type="button" class="carousel-btn carousel-prev" aria-label="Étape précédente">
+            <span class="carousel-btn__arrow" aria-hidden="true">&lsaquo;</span>
+            <span class="carousel-btn__txt">PRÉCÉDENT</span>
+          </button>
+          <span class="carousel-count"><span class="carousel-cur">1</span> / ${slides.length}</span>
+          <button type="button" class="carousel-btn carousel-next" aria-label="Étape suivante">
+            <span class="carousel-btn__txt">SUIVANT</span>
+            <span class="carousel-btn__arrow" aria-hidden="true">&rsaquo;</span>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  _initCarousels() {
+    this._activeCarousel = null;
+    this._body.querySelectorAll('[data-carousel]').forEach(root => this._setupCarousel(root));
+  }
+
+  _teardownCarousels() {
+    this._carouselCleanups.forEach(fn => { try { fn(); } catch (_) {} });
+    this._carouselCleanups = [];
+    this._activeCarousel = null;
+  }
+
+  _setupCarousel(root) {
+    const tabsWrap = root.querySelector('.carousel-tabs');
+    const track    = root.querySelector('.carousel-track');
+    const view     = root.querySelector('.carousel-viewport');
+    const slides   = Array.from(root.querySelectorAll('.carousel-slide'));
+    const tabs     = Array.from(root.querySelectorAll('.carousel-tab'));
+    const prevBtn  = root.querySelector('.carousel-prev');
+    const nextBtn  = root.querySelector('.carousel-next');
+    const curEl    = root.querySelector('.carousel-cur');
+    if (!slides.length) return;
+
+    let index = 0;
+    const last = slides.length - 1;
+    const clamp = (i) => Math.max(0, Math.min(last, i));
+
+    const syncHeight = () => {
+      view.style.height = slides[index].offsetHeight + 'px';
+    };
+
+    const centerTab = (smooth) => {
+      const t = tabs[index];
+      if (!t) return;
+      const target = t.offsetLeft - (tabsWrap.clientWidth - t.offsetWidth) / 2;
+      tabsWrap.scrollTo({ left: Math.max(0, target), behavior: smooth ? 'smooth' : 'auto' });
+    };
+
+    const render = (smooth) => {
+      track.style.transform = `translateX(${-index * 100}%)`;
+      tabs.forEach((t, i) => {
+        const on = i === index;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      slides.forEach((s, i) => {
+        const on = i === index;
+        s.classList.toggle('is-active', on);
+        s.setAttribute('aria-hidden', on ? 'false' : 'true');
+        // Empêche le focus clavier sur les slides hors écran (navigateurs récents)
+        if (on) s.removeAttribute('inert');
+        else s.setAttribute('inert', '');
+      });
+      if (curEl) curEl.textContent = String(index + 1);
+      prevBtn.disabled = index === 0;
+      nextBtn.disabled = index === last;
+      syncHeight();
+      centerTab(smooth);
+    };
+
+    const go = (i) => {
+      const ni = clamp(i);
+      if (ni === index) return;
+      index = ni;
+      if (window.AudioManager) window.AudioManager.play('click');
+      render(true);
+    };
+
+    tabs.forEach(t => t.addEventListener('click', () => go(parseInt(t.dataset.index, 10))));
+    prevBtn.addEventListener('click', () => go(index - 1));
+    nextBtn.addEventListener('click', () => go(index + 1));
+
+    // Swipe tactile (le desktop utilise onglets / flèches / clavier)
+    let downX = 0, downY = 0, tracking = false;
+    const onDown = (e) => {
+      if (e.pointerType === 'mouse') return;
+      tracking = true; downX = e.clientX; downY = e.clientY;
+    };
+    const onUp = (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = e.clientX - downX;
+      const dy = e.clientY - downY;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        go(index + (dx < 0 ? 1 : -1));
+      }
+    };
+    const onCancel = () => { tracking = false; };
+    view.addEventListener('pointerdown', onDown);
+    view.addEventListener('pointerup', onUp);
+    view.addEventListener('pointercancel', onCancel);
+
+    const onResize = () => { view.style.transition = 'none'; syncHeight(); requestAnimationFrame(() => { view.style.transition = ''; }); };
+    window.addEventListener('resize', onResize);
+
+    const imgs = Array.from(root.querySelectorAll('img'));
+    imgs.forEach(img => img.addEventListener('load', syncHeight));
+
+    this._carouselCleanups.push(() => {
+      window.removeEventListener('resize', onResize);
+      view.removeEventListener('pointerdown', onDown);
+      view.removeEventListener('pointerup', onUp);
+      view.removeEventListener('pointercancel', onCancel);
+    });
+
+    this._activeCarousel = {
+      go,
+      get index() { return index; },
+      count: slides.length,
+    };
+
+    render(false);
+    requestAnimationFrame(() => syncHeight());
   }
 }
