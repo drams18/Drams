@@ -1041,32 +1041,37 @@
       const sx = d.x - camX + d.w / 2;
       const py = groundY - d.h - 40 + Math.sin(this._tick * 0.08) * 3;
 
-      let action;
+      // Badge d'action au-dessus de la porte. Les étapes à choix unique
+      // n'affichent plus d'indicateur « ENTRER » : on ne garde que la
+      // description de la porte. Les étapes multi conservent le badge
+      // CHOISIR / RETIRER / VALIDER, qui reflète l'état de la sélection.
+      let action = null;
       if (step.multi) {
         if (d.special === 'done')         action = 'VALIDER';
         else if (d.special === 'unknown') action = 'CHOISIR';
         else                              action = d.selected ? 'RETIRER' : 'CHOISIR';
-      } else {
-        action = 'ENTRER';
       }
-      const label = (this._touch ? '' : '↑ ') + action;
 
       ctx.save();
-      ctx.font = '9px "Press Start 2P", monospace';
       ctx.textAlign = 'center';
-      const lw = ctx.measureText(label).width + 22;
-      ctx.fillStyle = 'rgba(6,10,16,0.88)';
-      ctx.fillRect(sx - lw / 2, py - 16, lw, 22);
-      ctx.strokeStyle = this._doorAccent(d);
-      ctx.lineWidth = 2;
-      ctx.strokeRect(sx - lw / 2, py - 16, lw, 22);
-      ctx.fillStyle = '#fff';
-      ctx.fillText(label, sx, py);
+
+      if (action) {
+        const label = (this._touch ? '' : '↑ ') + action;
+        ctx.font = '9px "Press Start 2P", monospace';
+        const lw = ctx.measureText(label).width + 22;
+        ctx.fillStyle = 'rgba(6,10,16,0.88)';
+        ctx.fillRect(sx - lw / 2, py - 16, lw, 22);
+        ctx.strokeStyle = this._doorAccent(d);
+        ctx.lineWidth = 2;
+        ctx.strokeRect(sx - lw / 2, py - 16, lw, 22);
+        ctx.fillStyle = '#fff';
+        ctx.fillText(label, sx, py);
+      }
 
       if (d.hint) {
         ctx.font = '6px "Press Start 2P", monospace';
         const hlines = wrapText(ctx, d.hint.toUpperCase(), 190, '6px "Press Start 2P", monospace');
-        let hy = py + 12;
+        let hy = action ? py + 12 : py;
         for (const ln of hlines) {
           const hw = ctx.measureText(ln).width + 14;
           ctx.fillStyle = 'rgba(6,10,16,0.7)';
