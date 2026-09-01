@@ -210,6 +210,7 @@
       border-color: transparent currentColor transparent transparent;
       flex-shrink: 0;
     }
+    .btn-back--no-arrow::before { display: none; }
 
     .btn-cta {
       background: var(--accent);
@@ -914,7 +915,7 @@
       build.href = 'construire-projet.html';
       row.appendChild(build);
 
-      var devis = el('button', 'btn btn-back');
+      var devis = el('button', 'btn btn-back btn-back--no-arrow');
       devis.type = 'button';
       devis.textContent = 'Demander un devis';
       devis.setAttribute('data-contact-cta', '');
