@@ -92,7 +92,7 @@ class Game {
     // Camera (en espace monde)
     this._targetX = this.player.x - ew / 2;
     this._targetX = Math.max(0, Math.min(WORLD_WIDTH - ew, this._targetX));
-    this.cameraX += (this._targetX - this.cameraX) * 0.1;
+    this.cameraX += (this._targetX - this.cameraX) * 0.12;
     const camX = Math.round(this.cameraX);
 
     // Render avec zoom

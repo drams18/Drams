@@ -9,6 +9,8 @@
 const PLAYER_W = 45;
 const PLAYER_H = 54;
 const PLAYER_SPEED = 12;
+const PLAYER_ACCEL = 2.4;    // montée en vitesse : démarrage doux
+const PLAYER_BRAKE = 3.2;    // freinage un peu plus vif à l'arrêt
 
 class Player {
   constructor(x, groundY) {
@@ -26,21 +28,27 @@ class Player {
   get y() { return this.groundY - PLAYER_H; }
 
   move(controls, worldWidth) {
+    // Vitesse cible selon les touches, puis on s'en rapproche progressivement :
+    // le personnage démarre et s'arrête en douceur au lieu de « claquer ».
+    let target = 0;
     if (controls.left) {
-      this.vx = -PLAYER_SPEED;
+      target = -PLAYER_SPEED;
       this.facing = 'left';
     } else if (controls.right) {
-      this.vx = PLAYER_SPEED;
+      target = PLAYER_SPEED;
       this.facing = 'right';
-    } else {
-      this.vx = 0;
     }
+
+    const rate = target === 0 ? PLAYER_BRAKE : PLAYER_ACCEL;
+    if (this.vx < target)      this.vx = Math.min(target, this.vx + rate);
+    else if (this.vx > target) this.vx = Math.max(target, this.vx - rate);
 
     this.x += this.vx;
     this.x = Math.max(PLAYER_W / 2, Math.min(worldWidth - PLAYER_W / 2, this.x));
 
-    if (this.vx !== 0) {
-      this._walkFrame += 0.18;
+    if (Math.abs(this.vx) > 0.4) {
+      // Cadence de marche proportionnelle à la vitesse réelle.
+      this._walkFrame += 0.12 + (Math.abs(this.vx) / PLAYER_SPEED) * 0.08;
     } else {
       // Idle bob
       this._idleBob += 0.05 * this._idleDir;
@@ -71,7 +79,7 @@ class Player {
   }
 
   _drawSprite(ctx, sx, sy) {
-    const walk = this.vx !== 0;
+    const walk = Math.abs(this.vx) > 0.4;
     const legSwing = walk ? Math.sin(this._walkFrame) * 8 : 0;
     const armSwing = walk ? Math.sin(this._walkFrame) * 6 : 0;
 

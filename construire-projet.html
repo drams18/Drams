@@ -42,12 +42,34 @@
       backdrop-filter: blur(3px);
       pointer-events: none;
     }
-    .bp-hud__counter {
+    /* Barre de progression (remplace le compteur texte, plus lisible d'un coup d'œil) */
+    .bp-progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .bp-progress__label {
       font-family: var(--pixel-font);
-      font-size: 8px;
-      letter-spacing: 2px;
+      font-size: 7px;
+      letter-spacing: 1px;
       color: var(--mc-gold);
       text-shadow: 1px 1px 0 rgba(0,0,0,0.7);
+      white-space: nowrap;
+    }
+    .bp-progress__track {
+      position: relative;
+      width: min(56vw, 240px);
+      height: 6px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.18);
+      overflow: hidden;
+    }
+    .bp-progress__fill {
+      position: absolute;
+      inset: 0 80% 0 0;
+      background: var(--mc-gold);
+      transition: right 0.45s cubic-bezier(.22,.61,.36,1);
     }
     .bp-hud__title {
       font-family: var(--pixel-font);
@@ -55,7 +77,7 @@
       line-height: 1.5;
       letter-spacing: 1px;
       color: #fff;
-      margin: 7px 0 4px;
+      margin: 8px 0 4px;
       text-shadow: 2px 2px 0 rgba(0,0,0,0.6);
     }
     .bp-hud__help {
@@ -63,6 +85,38 @@
       font-size: 12.5px;
       line-height: 1.5;
       color: #cdd8e6;
+    }
+
+    /* Bouton « valider l'étape » — apparaît dès qu'un choix existe.
+       Sert d'équivalent tactile à la touche Entrée. */
+    .bp-hud__next {
+      pointer-events: auto;
+      display: inline-block;
+      margin: 11px auto 2px;
+      font-family: var(--pixel-font);
+      font-size: 8px;
+      letter-spacing: 1px;
+      color: #fff;
+      background: var(--mc-green);
+      border: 2px solid rgba(255,255,255,0.25);
+      box-shadow: 0 3px 0 #2d4e15;
+      padding: 9px 14px;
+      cursor: pointer;
+      transition: transform .12s ease, background .15s;
+      animation: bpNextIn .22s ease;
+    }
+    .bp-hud__next:hover { background: #69b436; }
+    .bp-hud__next:active { transform: translateY(2px); box-shadow: 0 1px 0 #2d4e15; }
+    @keyframes bpNextIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Rejoué à chaque changement d'étape pour une transition douce du HUD */
+    .bp-hud--change { animation: bpHudSwap .32s cubic-bezier(.22,.61,.36,1); }
+    @keyframes bpHudSwap {
+      from { opacity: .3; transform: translateX(-50%) translateY(-6px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
     .bp-quit {
       pointer-events: auto;
@@ -82,6 +136,8 @@
       .bp-hud { top: 54px; width: 94vw; padding: 7px 10px 9px; }
       .bp-hud__title { font-size: 9.5px; }
       .bp-hud__help { font-size: 11.5px; }
+      .bp-hud__next-hint { display: none; }
+      .bp-hud__next { margin-top: 9px; padding: 10px 16px; }
     }
     @media (max-width: 380px) {
       .bp-hud__help { display: none; }
@@ -100,7 +156,7 @@
       background: #0a0a12;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.24s ease;
+      transition: opacity 0.18s cubic-bezier(.4,0,.2,1);
     }
     #bp-fade.bp-fade--on { opacity: 1; }
 
@@ -116,7 +172,7 @@
       padding: 24px 16px 90px;
       background: rgba(4,7,12,0.86);
       backdrop-filter: blur(4px);
-      animation: bpPanelIn 0.28s ease;
+      animation: bpPanelIn 0.22s ease;
     }
     @keyframes bpPanelIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -128,6 +184,11 @@
       border: 2px solid var(--mc-gold);
       box-shadow: 0 0 0 1px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.6);
       padding: 20px 20px 22px;
+      animation: bpCardIn 0.3s cubic-bezier(.22,.61,.36,1);
+    }
+    @keyframes bpCardIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     .bp-panel__card--center { text-align: center; }
 
@@ -165,6 +226,67 @@
       font-size: 14px;
       color: #fff;
       line-height: 1.5;
+    }
+
+    /* En-tête d'une ligne de récap : libellé + bouton « Modifier cette étape » */
+    .bp-recap-row__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .bp-recap-row__head dt { margin-bottom: 0; }
+    .bp-recap-edit-btn {
+      flex: none;
+      font-family: var(--body-font);
+      font-size: 10.5px;
+      letter-spacing: 0.3px;
+      color: var(--mc-gold);
+      background: transparent;
+      border: 1px solid rgba(255,215,0,0.4);
+      padding: 4px 9px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .bp-recap-edit-btn:hover,
+    .bp-recap-edit-btn.is-active {
+      background: rgba(255,215,0,0.16);
+      border-color: var(--mc-gold);
+      color: #fff;
+    }
+
+    /* Liste des choix possibles, dépliée sous la ligne */
+    .bp-recap-choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 11px;
+    }
+    .bp-choice-chip {
+      font-family: var(--body-font);
+      font-size: 12px;
+      color: #cdd8e6;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.22);
+      padding: 7px 10px;
+      cursor: pointer;
+      transition: background 0.14s, border-color 0.14s, color 0.14s;
+    }
+    .bp-choice-chip:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.5);
+      color: #fff;
+    }
+    .bp-choice-chip.is-on {
+      background: var(--mc-green);
+      border-color: var(--mc-green);
+      color: #fff;
+    }
+    .bp-choice-done {
+      flex: 1 1 100%;
+      min-width: 0;
+      margin-top: 4px;
     }
 
     /* Formulaire */
@@ -211,6 +333,15 @@
       transition: transform 0.1s, background 0.15s, border-color 0.15s;
     }
     .bp-btn:active { transform: translateY(2px); }
+    .bp-btn:disabled,
+    .bp-btn[aria-disabled="true"] {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+      filter: grayscale(0.35);
+    }
+    .bp-btn--primary:disabled:hover { background: var(--mc-green); }
     .bp-btn--primary {
       background: var(--mc-green);
       color: #fff;
@@ -258,6 +389,12 @@
       .bp-panel__card { padding: 18px 16px 20px; }
       .bp-btn { min-width: 100%; }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bp-hud--change, .bp-hud__next,
+      .bp-panel, .bp-panel__card { animation: none !important; }
+      .bp-progress__fill, #bp-fade { transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 <body>
@@ -271,10 +408,13 @@
   <button id="bp-back" type="button" class="game-home-btn bp-back-btn">Etape precedente</button>
 
   <div id="bp-hud" class="bp-hud">
-    <div class="bp-hud__counter" id="bp-counter">ETAPE 1 / 5</div>
+    <div class="bp-progress">
+      <span class="bp-progress__label" id="bp-counter">1 / 5</span>
+      <span class="bp-progress__track"><span class="bp-progress__fill" id="bp-progress-fill"></span></span>
+    </div>
     <h1 class="bp-hud__title" id="bp-title">QUE VOULEZ-VOUS CREER ?</h1>
     <p class="bp-hud__help" id="bp-help"></p>
-    <button type="button" id="bp-quit" class="bp-quit">Revenir au portfolio</button>
+    <button type="button" id="bp-next" class="bp-hud__next hidden">Valider l'etape<span class="bp-hud__next-hint"> &middot; Entree</span> &#9654;</button>
   </div>
 
   <div id="bp-toast" class="toast hidden"></div>
@@ -285,9 +425,10 @@
       <h2 class="bp-panel__title">VOTRE PROJET</h2>
       <dl class="bp-recap-list" id="bp-recap-list"></dl>
       <div class="bp-panel__actions">
-        <button type="button" class="bp-btn bp-btn--ghost" id="bp-recap-edit">Modifier mes choix</button>
+        <button type="button" class="bp-btn bp-btn--ghost" id="bp-recap-edit">Tout recommencer</button>
         <button type="button" class="bp-btn bp-btn--primary" id="bp-recap-next">Continuer</button>
       </div>
+      <p class="bp-form-status" id="bp-recap-status" role="status" aria-live="polite"></p>
       <a class="bp-panel__exit" href="index.html">Revenir au portfolio</a>
     </div>
   </section>

@@ -27,6 +27,9 @@
 
   const STORAGE_KEY = 'drame.buildproject';
 
+  // Libellé affiché quand une étape n'a reçu aucune sélection.
+  const NO_CHOICE = 'Aucun choix';
+
   // Adresse de repli affichée si l'envoi échoue (même que le portfolio).
   const CONTACT_EMAIL = 'arphandrame0@gmail.com';
 
@@ -38,8 +41,9 @@
   const STEPS = [
     {
       key: 'projectType',
+      recapLabel: 'TYPE DE PROJET',
       title: 'QUE VOULEZ-VOUS CREER ?',
-      help: 'Choisissez ce qui ressemble le plus à votre idée. Rien n\'est définitif.',
+      help: 'Vous pourrez modifier vos choix à la fin en cas de doute.',
       multi: false,
       doors: [
         { value: 'Site web',                       label: 'SITE WEB',           hint: 'Presenter votre activite en ligne' },
@@ -53,6 +57,7 @@
     },
     {
       key: 'clientType',
+      recapLabel: 'PROFIL',
       title: 'POUR QUI EST CE PROJET ?',
       help: 'Cela m\'aide à adapter ma proposition. Choisissez « Je ne sais pas » si vous hésitez.',
       multi: false,
@@ -67,6 +72,7 @@
     },
     {
       key: 'need',
+      recapLabel: 'BESOIN',
       title: 'DE QUOI AVEZ-VOUS BESOIN ?',
       help: 'Dites-moi simplement où vous en êtes aujourd\'hui.',
       multi: false,
@@ -83,6 +89,7 @@
     },
     {
       key: 'features',
+      recapLabel: 'FONCTIONNALITES',
       title: 'QUELLES FONCTIONNALITES VOUS INTERESSENT ?',
       help: 'Vous pouvez en choisir plusieurs. Passez par « Je ne sais pas » pour continuer sans choisir.',
       multi: true,
@@ -101,6 +108,7 @@
     },
     {
       key: 'budget',
+      recapLabel: 'BUDGET',
       title: 'QUEL EST VOTRE BUDGET ?',
       help: 'Ce n\'est pas un prix définitif, juste une indication pour comprendre votre projet.',
       multi: false,
@@ -160,16 +168,16 @@
     const d = state.data;
     const feat = d.featuresUnknown
       ? 'Je ne sais pas'
-      : (d.features.length ? d.features.join(', ') : 'Non précisé');
+      : (d.features.length ? d.features.join(', ') : NO_CHOICE);
 
     return [
       'Nouvelle demande de projet',
       '',
-      'Type : '            + (d.projectType || 'Non précisé'),
-      'Profil : '          + (d.clientType  || 'Non précisé'),
-      'Besoin : '          + (d.need        || 'Non précisé'),
+      'Type : '            + (d.projectType || NO_CHOICE),
+      'Profil : '          + (d.clientType  || NO_CHOICE),
+      'Besoin : '          + (d.need        || NO_CHOICE),
       'Fonctionnalités : ' + feat,
-      'Budget : '          + (d.budget      || 'Non précisé'),
+      'Budget : '          + (d.budget      || NO_CHOICE),
       '',
       'Informations du client',
       '',
@@ -182,6 +190,18 @@
       '',
       (d.message || 'Non précisé'),
     ].join('\n');
+  }
+
+  // ── Sélection : une étape est-elle restée sans aucun choix ? ──
+  function isStepEmpty(step) {
+    const d = state.data;
+    if (step.multi) return !d.featuresUnknown && d.features.length === 0;
+    return !d[step.key];
+  }
+
+  // Toutes les étapes sont-elles à « Aucun choix » ? (bloque l'envoi)
+  function allStepsEmpty() {
+    return STEPS.every(isStepEmpty);
   }
 
   // ── Moteur ────────────────────────────────────────────
@@ -208,6 +228,8 @@
       this._tick = 0;
       this._nearDoor = null;
       this._transitioning = false;
+      this._moved = false;      // le joueur a-t-il déjà bougé ? (rappel clavier)
+      this._movedAt = 0;
       this.doors = [];
       this.worldWidth = 1200;
 
@@ -256,12 +278,52 @@
         window.location.href = 'index.html';
       });
 
+      // Bouton « valider l'étape » : équivalent tactile de la touche Entrée.
+      document.getElementById('bp-next')?.addEventListener('click', () => {
+        if (state.phase !== 'walk' || this._transitioning) return;
+        sfx('success');
+        this._advance();
+      });
+
+      // Touche Entrée : elle NE DOIT JAMAIS ouvrir, sélectionner ou valider une
+      // porte — seule la flèche Haut le permet. Entrée se contente de valider
+      // l'étape courante quand un choix a déjà été fait (équivalent du bouton
+      // « Valider l'étape »). Neutre dans les champs de formulaire.
+      window.addEventListener('keydown', (e) => {
+        if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
+        const tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+        if (state.phase === 'walk') {
+          if (this._transitioning) return;
+          // Aucune interaction avec la porte devant soi : on ne fait qu'avancer
+          // si l'étape possède déjà une valeur.
+          if (this._stepHasValue()) {
+            e.preventDefault();
+            sfx('success');
+            this._advance();
+          }
+        } else if (state.phase === 'recap') {
+          const t = document.activeElement;
+          if (!t || t === document.body) {
+            e.preventDefault();
+            document.getElementById('bp-recap-next')?.click();
+          }
+        }
+      });
+
       document.getElementById('bp-recap-edit')?.addEventListener('click', () => {
         sfx('close');
         this._transitioning = true;
         this._fade(() => this._buildStep(0));
       });
       document.getElementById('bp-recap-next')?.addEventListener('click', () => {
+        // Blocage : impossible de continuer si aucune étape n'a de choix.
+        if (allStepsEmpty()) {
+          sfx('close');
+          this._updateRecapGate();
+          return;
+        }
         sfx('open');
         state.phase = 'form';
         this._prefillForm();
@@ -290,12 +352,18 @@
 
       if (walk) {
         const step = STEPS[state.step];
-        document.getElementById('bp-counter').textContent =
-          'ETAPE ' + (state.step + 1) + ' / ' + STEPS.length;
+        const counter = document.getElementById('bp-counter');
+        if (counter) counter.textContent = (state.step + 1) + ' / ' + STEPS.length;
+        const fill = document.getElementById('bp-progress-fill');
+        if (fill) fill.style.right = (100 - Math.round(((state.step + 1) / STEPS.length) * 100)) + '%';
         document.getElementById('bp-title').textContent = step.title;
         document.getElementById('bp-help').textContent  = step.help;
-        back.textContent = state.step === 0 ? 'Retour au portfolio' : 'Etape precedente';
+        back.textContent = state.step === 0 ? 'Revenir au portfolio' : 'Etape precedente';
+
+        // Transition douce du HUD à chaque changement d'étape.
+        if (hud) { hud.classList.remove('bp-hud--change'); void hud.offsetWidth; hud.classList.add('bp-hud--change'); }
       }
+      this._updateNextBtn();
 
       document.getElementById('bp-recap')?.classList.toggle('hidden', state.phase !== 'recap');
       document.getElementById('bp-form')?.classList.toggle('hidden', state.phase !== 'form');
@@ -355,16 +423,32 @@
         this.player.move(this.controls, this.worldWidth);
         this._nearDoor = this._findNearDoor();
 
-        if (this.controls.interact && this._nearDoor) {
-          this._choose(this._nearDoor);
+        if (!this._moved && (this.controls.left || this.controls.right)) {
+          this._moved = true;
+          this._movedAt = this._tick;
+        }
+
+        // « Flèche Haut » UNIQUEMENT pour interagir avec / sélectionner une
+        // porte. La touche Entrée reste volontairement sans effet sur les
+        // portes. Le bouton tactile « CHOISIR » simule ArrowUp : il continue
+        // de fonctionner.
+        if (this.controls._justPressed('ArrowUp')) {
+          if (this._nearDoor) {
+            this._choose(this._nearDoor);
+          } else if (this._stepHasValue()) {
+            sfx('success');
+            this._advance();
+          }
         } else if (this.controls.close) {
           this._back();
         }
+
+        this._updateNextBtn();
       }
       this.controls.flush();
 
       for (const d of this.doors) {
-        if (d.opening && d.open < 1) d.open = Math.min(1, d.open + 0.09);
+        if (d.opening && d.open < 1) d.open = Math.min(1, d.open + 0.13);
       }
 
       this._render();
@@ -414,12 +498,33 @@
       saveState();
       door.opening = true;
       this._transitioning = true;
+      this._hideNextBtn();
       sfx('open');
-      setTimeout(() => this._advance(), 430);
+      setTimeout(() => this._advance(), 300);
+    }
+
+    // Un choix est-il déjà fait pour l'étape courante ?
+    _stepHasValue() {
+      const step = STEPS[state.step];
+      if (!step) return false;
+      if (step.multi) return state.data.featuresUnknown || state.data.features.length > 0;
+      return !!state.data[step.key];
+    }
+
+    _hideNextBtn() {
+      document.getElementById('bp-next')?.classList.add('hidden');
+    }
+
+    _updateNextBtn() {
+      const btn = document.getElementById('bp-next');
+      if (!btn) return;
+      const show = state.phase === 'walk' && !this._transitioning && this._stepHasValue();
+      btn.classList.toggle('hidden', !show);
     }
 
     _advance() {
       this._transitioning = true;
+      this._hideNextBtn();
       sfx('transition');
       this._fade(() => {
         if (state.step < STEPS.length - 1) {
@@ -436,6 +541,7 @@
     _back() {
       if (this._transitioning) return;
       this._transitioning = true;
+      this._hideNextBtn();
       sfx('close');
       this._fade(() => {
         if (state.step === 0) { window.location.href = 'index.html'; return; }
@@ -448,29 +554,157 @@
       f.classList.add('bp-fade--on');
       setTimeout(() => {
         midCb();
-        setTimeout(() => f.classList.remove('bp-fade--on'), 40);
-      }, 240);
+        requestAnimationFrame(() => requestAnimationFrame(() => f.classList.remove('bp-fade--on')));
+      }, 190);
     }
 
     // ── Récapitulatif ──────────────────────────────────
-    _renderRecap() {
+    _recapValue(step) {
       const d = state.data;
-      const feat = d.featuresUnknown
-        ? 'Je ne sais pas'
-        : (d.features.length ? d.features.join(', ') : 'Non précisé');
+      if (step.key === 'features') {
+        if (d.featuresUnknown) return 'Je ne sais pas';
+        return d.features.length ? d.features.join(', ') : NO_CHOICE;
+      }
+      return d[step.key] || NO_CHOICE;
+    }
 
-      const rows = [
-        ['TYPE DE PROJET',   d.projectType || 'Non précisé'],
-        ['PROFIL',           d.clientType  || 'Non précisé'],
-        ['BESOIN',           d.need        || 'Non précisé'],
-        ['FONCTIONNALITES',  feat],
-        ['BUDGET',           d.budget      || 'Non précisé'],
-      ];
+    // Bloque « Continuer » tant qu'aucune étape n'a de choix + message associé.
+    _updateRecapGate() {
+      const empty = allStepsEmpty();
+      const btn = document.getElementById('bp-recap-next');
+      if (btn) {
+        btn.disabled = empty;
+        btn.setAttribute('aria-disabled', empty ? 'true' : 'false');
+      }
+      const status = document.getElementById('bp-recap-status');
+      if (status) {
+        status.textContent = empty
+          ? 'Sélectionnez au moins un élément dans les étapes pour continuer.'
+          : '';
+        status.className = empty
+          ? 'bp-form-status bp-form-status--error'
+          : 'bp-form-status';
+      }
+      return empty;
+    }
 
+    _renderRecap() {
       const list = document.getElementById('bp-recap-list');
-      list.innerHTML = rows.map(([k, v]) =>
-        '<div class="bp-recap-row"><dt>' + k + '</dt><dd>' + escapeHtml(v) + '</dd></div>'
+      list.innerHTML = STEPS.map((step, i) =>
+        '<div class="bp-recap-row" data-step="' + i + '">' +
+          '<div class="bp-recap-row__head">' +
+            '<dt>' + escapeHtml(step.recapLabel) + '</dt>' +
+            '<button type="button" class="bp-recap-edit-btn" data-edit="' + i + '">Modifier cette etape</button>' +
+          '</div>' +
+          '<dd data-val="' + i + '">' + escapeHtml(this._recapValue(step)) + '</dd>' +
+          '<div class="bp-recap-choices hidden" data-choices="' + i + '"></div>' +
+        '</div>'
       ).join('');
+
+      list.querySelectorAll('.bp-recap-edit-btn').forEach((btn) => {
+        btn.addEventListener('click', () => this._toggleRecapEditor(Number(btn.dataset.edit)));
+      });
+
+      this._updateRecapGate();
+    }
+
+    _updateRecapValue(i) {
+      const dd = document.querySelector('.bp-recap-row[data-step="' + i + '"] dd[data-val]');
+      if (dd) dd.textContent = this._recapValue(STEPS[i]);
+      this._updateRecapGate();
+    }
+
+    _toggleRecapEditor(i) {
+      const box = document.querySelector('.bp-recap-choices[data-choices="' + i + '"]');
+      if (!box) return;
+      const wasOpen = !box.classList.contains('hidden');
+
+      // On ne garde qu'un éditeur ouvert à la fois.
+      document.querySelectorAll('.bp-recap-choices').forEach((el) => {
+        el.classList.add('hidden');
+        el.innerHTML = '';
+      });
+      document.querySelectorAll('.bp-recap-edit-btn').forEach((b) => b.classList.remove('is-active'));
+
+      if (wasOpen) { sfx('close'); return; }
+
+      sfx('open');
+      document.querySelector('.bp-recap-edit-btn[data-edit="' + i + '"]')?.classList.add('is-active');
+      this._renderRecapChoices(i, box);
+      box.classList.remove('hidden');
+    }
+
+    _closeRecapEditor(box, i) {
+      box.classList.add('hidden');
+      box.innerHTML = '';
+      document.querySelector('.bp-recap-edit-btn[data-edit="' + i + '"]')?.classList.remove('is-active');
+    }
+
+    _renderRecapChoices(i, box) {
+      const step = STEPS[i];
+      const d = state.data;
+      const options = step.doors.filter((dr) => !dr.special);
+
+      if (step.multi) {
+        box.innerHTML =
+          options.map((o) =>
+            '<button type="button" class="bp-choice-chip' +
+              ((!d.featuresUnknown && d.features.includes(o.value)) ? ' is-on' : '') +
+              '" data-val="' + escapeHtml(o.value) + '">' + escapeHtml(o.label) + '</button>'
+          ).join('') +
+          '<button type="button" class="bp-choice-chip' + (d.featuresUnknown ? ' is-on' : '') +
+            '" data-unknown="1">JE NE SAIS PAS</button>' +
+          '<button type="button" class="bp-btn bp-btn--primary bp-choice-done">Termine</button>';
+
+        box.querySelectorAll('.bp-choice-chip[data-val]').forEach((b) => {
+          b.addEventListener('click', () => {
+            d.featuresUnknown = false;
+            const set = new Set(d.features);
+            if (set.has(b.dataset.val)) set.delete(b.dataset.val);
+            else set.add(b.dataset.val);
+            d.features = Array.from(set);
+            saveState();
+            sfx('click');
+            b.classList.toggle('is-on');
+            box.querySelector('.bp-choice-chip[data-unknown]')?.classList.remove('is-on');
+            this._updateRecapValue(i);
+          });
+        });
+
+        box.querySelector('.bp-choice-chip[data-unknown]')?.addEventListener('click', () => {
+          d.featuresUnknown = true;
+          d.features = [];
+          saveState();
+          sfx('click');
+          this._renderRecapChoices(i, box);
+          this._updateRecapValue(i);
+        });
+
+        box.querySelector('.bp-choice-done')?.addEventListener('click', () => {
+          sfx('close');
+          this._closeRecapEditor(box, i);
+        });
+        return;
+      }
+
+      // Choix unique : un clic remplace la valeur et referme l'éditeur.
+      box.innerHTML = options.map((o) =>
+        '<button type="button" class="bp-choice-chip' +
+          (d[step.key] === o.value ? ' is-on' : '') +
+          '" data-val="' + escapeHtml(o.value) + '">' + escapeHtml(o.label) + '</button>'
+      ).join('');
+
+      box.querySelectorAll('.bp-choice-chip[data-val]').forEach((b) => {
+        b.addEventListener('click', () => {
+          d[step.key] = b.dataset.val;
+          saveState();
+          sfx('success');
+          box.querySelectorAll('.bp-choice-chip').forEach((c) => c.classList.remove('is-on'));
+          b.classList.add('is-on');
+          this._updateRecapValue(i);
+          setTimeout(() => this._closeRecapEditor(box, i), 240);
+        });
+      });
     }
 
     // ── Formulaire ─────────────────────────────────────
@@ -525,6 +759,14 @@
       state.data.message = msg;
       saveState();
 
+      // Blocage final juste avant l'envoi : au moins une étape doit avoir un choix.
+      if (allStepsEmpty()) {
+        status.textContent =
+          'Sélectionnez au moins un élément dans les étapes précédentes avant d\'envoyer votre demande.';
+        status.className = 'bp-form-status bp-form-status--error';
+        return;
+      }
+
       // Champs attendus par le template EmailJS existant.
       form.from_name.value  = (prenom + ' ' + nom).trim();
       form.from_email.value = email;
@@ -577,7 +819,7 @@
 
       this._targetX = this.player.x - ew / 2;
       this._targetX = Math.max(0, Math.min(Math.max(0, this.worldWidth - ew), this._targetX));
-      this.cameraX += (this._targetX - this.cameraX) * 0.1;
+      this.cameraX += (this._targetX - this.cameraX) * 0.12;
       const camX = Math.round(this.cameraX);
 
       ctx.clearRect(0, 0, w, h);
@@ -838,7 +1080,17 @@
     }
 
     _drawHintBar(ctx, ew, eh) {
+      // Le rappel clavier s'efface en douceur une fois que le joueur a compris
+      // (dès qu'il s'est déplacé) — l'écran reste ainsi dégagé.
+      let alpha = 1;
+      if (this._moved) {
+        alpha = 1 - (this._tick - this._movedAt - 36) / 48;
+        if (alpha <= 0) return;
+        if (alpha > 1) alpha = 1;
+      }
+
       ctx.save();
+      ctx.globalAlpha = alpha;
       ctx.font = '8px "Press Start 2P", monospace';
       const KEY = '#ffe066';
       const LBL = 'rgba(255,255,255,0.82)';
