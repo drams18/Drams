@@ -80,7 +80,11 @@ class Game {
     // Interact with nearby building
     this._nearBuilding = this.map.nearBuilding(this.player.x, this.player.groundY);
     if (!modalOpen && this._nearBuilding && this.controls.interact) {
-      this.interactions.open(this._nearBuilding.id);
+      if (this._nearBuilding.isPortal) {
+        this._enterPortal(this._nearBuilding);
+      } else {
+        this.interactions.open(this._nearBuilding.id);
+      }
     }
 
     this.controls.flush();
@@ -112,6 +116,26 @@ class Game {
     ctx.restore();
 
     requestAnimationFrame(() => this._loop());
+  }
+
+  _enterPortal(portal) {
+    if (this._leaving) return;
+    this._leaving = true;
+
+    // Même logique audio qu'une entrée de maison : SFX de transition.
+    if (window.AudioManager) window.AudioManager.play('transition');
+
+    const fade = document.createElement('div');
+    fade.style.cssText =
+      'position:fixed;inset:0;z-index:9999;background:#0a0a12;opacity:0;' +
+      'transition:opacity .45s ease;pointer-events:none;';
+    document.body.appendChild(fade);
+    void fade.offsetWidth;
+    fade.style.opacity = '1';
+
+    const go = () => { window.location.href = portal.href || 'construire-projet.html'; };
+    fade.addEventListener('transitionend', go, { once: true });
+    setTimeout(go, 700); // filet de sécurité si transitionend ne se déclenche pas
   }
 
   _drawBuildingGlow(ctx, building, camX, canvasH) {
@@ -189,7 +213,7 @@ class Game {
     ctx.font = '9px "Press Start 2P", monospace';
     ctx.textAlign = 'center';
     const action = this._touch ? 'ENTRER' : '↑ ENTRER';
-    const label  = `${action} · ${building.label}`;
+    const label  = `${action} · ${building.promptLabel || building.label}`;
     const lw = ctx.measureText(label).width + 22;
 
     ctx.fillStyle = 'rgba(6,10,16,0.86)';

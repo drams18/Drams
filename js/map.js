@@ -5,7 +5,7 @@
 
 'use strict';
 
-const WORLD_WIDTH     = 1900;
+const WORLD_WIDTH     = 2160;
 const GROUND_RATIO    = 0.72;
 const INTERACT_RADIUS = 85;
 
@@ -38,17 +38,6 @@ const BUILDINGS_DATA = [
     x: 460, w: 230, h: 240,
   },
   {
-    id: 'passions',
-    label: 'PASSIONS',
-    accent: '#ff8a65',
-    wallColor: '#7c5c3e',
-    wallDark: '#604830',
-    roofColor: '#8b4513',
-    roofDark: '#6b3510',
-    windowColor: '#ff8a65',
-    x: 720, w: 230, h: 240,
-  },
-  {
     id: 'contact',
     label: 'CONTACT',
     accent: '#ce93d8',
@@ -78,6 +67,21 @@ BUILDINGS_DATA.forEach(b => {
   b.visited = false;
 });
 
+// ── Porte indépendante « Construisez votre projet » ──────
+// Ce n'est pas une maison : une porte-portail isolée, plus à droite,
+// nettement séparée du village. Interagir dessus ouvre une NOUVELLE
+// PAGE (construire-projet.html), pas une fenêtre.
+const SPECIAL_DOOR = {
+  id: 'build-project',
+  label: 'CONSTRUISEZ VOTRE PROJET',
+  promptLabel: 'CONSTRUIRE UN PROJET',
+  href: 'construire-projet.html',
+  accent: '#ffb000',
+  isPortal: true,
+  x: 1900, w: 132, h: 216,
+};
+SPECIAL_DOOR.doorX = SPECIAL_DOOR.x + Math.floor(SPECIAL_DOOR.w / 2);
+
 // ── Clouds ───────────────────────────────────────────
 const CLOUDS = [
   { x: 100,  y: 55,  w: 100, h: 38 },
@@ -100,6 +104,7 @@ class GameMap {
       const dist = Math.abs(playerX - b.doorX);
       if (dist < INTERACT_RADIUS) return b;
     }
+    if (Math.abs(playerX - SPECIAL_DOOR.doorX) < INTERACT_RADIUS) return SPECIAL_DOOR;
     return null;
   }
 
@@ -111,6 +116,7 @@ class GameMap {
     this._drawGround(ctx, cameraX, groundY, canvasH);
     this._drawTrees(ctx, cameraX, groundY);
     this._drawBuildings(ctx, cameraX, groundY, tick);
+    this._drawPortal(ctx, cameraX, groundY, tick);
   }
 
   _drawSky(ctx, canvasH) {
@@ -166,6 +172,18 @@ class GameMap {
         ctx.fillRect(px + b.w / 2 - 14, groundY + 2, 28, 14);
       }
     }
+
+    // Chemin doré vers la porte-portail (le distingue des maisons)
+    const pathX = SPECIAL_DOOR.doorX - cameraX;
+    if (pathX > -80 && pathX < w + 80) {
+      for (let i = 0; i < 5; i++) {
+        const tileX = pathX - 40 + i * 18;
+        ctx.fillStyle = i % 2 ? '#c8912e' : '#d9a441';
+        ctx.fillRect(tileX, groundY + 2, 14, 14);
+        ctx.fillStyle = 'rgba(255,220,150,0.35)';
+        ctx.fillRect(tileX, groundY + 2, 14, 2);
+      }
+    }
   }
 
   _drawTrees(ctx, cameraX, groundY) {
@@ -196,6 +214,105 @@ class GameMap {
       if (sx > ctx.canvas.width + 50 || sx + b.w < -50) continue;
       this._drawBuilding(ctx, b, sx, groundY, tick);
     }
+  }
+
+  // Porte-portail isolée : arche de pierre + porte magique + panneau.
+  // Volontairement SANS toit ni murs pour ne pas ressembler à une maison.
+  _drawPortal(ctx, cameraX, groundY, tick) {
+    const d  = SPECIAL_DOOR;
+    const sx = d.x - cameraX;
+    if (sx > ctx.canvas.width + 60 || sx + d.w < -60) return;
+
+    const by     = groundY - d.h;
+    const pillarW = 20;
+    const glow   = 0.55 + 0.45 * Math.sin(tick * 0.06);
+
+    // Halo général
+    ctx.save();
+    ctx.globalAlpha = 0.12 + 0.06 * Math.sin(tick * 0.06);
+    ctx.fillStyle = d.accent;
+    ctx.fillRect(sx - 16, by - 10, d.w + 32, d.h + 10);
+    ctx.restore();
+
+    // Socle
+    ctx.fillStyle = '#4a4a4a';
+    ctx.fillRect(sx - 10, groundY - 10, d.w + 20, 10);
+    ctx.fillStyle = '#5f5f5f';
+    ctx.fillRect(sx - 10, groundY - 10, d.w + 20, 3);
+
+    // Piliers de pierre
+    for (const px of [sx, sx + d.w - pillarW]) {
+      ctx.fillStyle = '#8d8d8d';
+      ctx.fillRect(px, by, pillarW, d.h);
+      ctx.fillStyle = '#6f6f6f';
+      for (let y = by; y < groundY; y += 16) ctx.fillRect(px, y, pillarW, 1);
+      ctx.fillStyle = '#a5a5a5';
+      ctx.fillRect(px, by, 3, d.h);
+      ctx.fillStyle = '#5c5c5c';
+      ctx.fillRect(px + pillarW - 3, by, 3, d.h);
+    }
+
+    // Linteau (haut de l'arche)
+    const lintelH = 26;
+    ctx.fillStyle = '#8d8d8d';
+    ctx.fillRect(sx - 8, by, d.w + 16, lintelH);
+    ctx.fillStyle = '#6f6f6f';
+    ctx.fillRect(sx - 8, by + lintelH - 3, d.w + 16, 3);
+    ctx.fillStyle = '#a5a5a5';
+    ctx.fillRect(sx - 8, by, d.w + 16, 3);
+
+    // Ouverture magique entre les piliers
+    const ix = sx + pillarW;
+    const iw = d.w - pillarW * 2;
+    const iy = by + lintelH;
+    const ih = d.h - lintelH;
+    const grad = ctx.createLinearGradient(ix, iy, ix, iy + ih);
+    grad.addColorStop(0, `rgba(255,220,150,${(0.30 + 0.25 * glow).toFixed(2)})`);
+    grad.addColorStop(0.5, `rgba(255,176,0,${(0.22 + 0.20 * glow).toFixed(2)})`);
+    grad.addColorStop(1, 'rgba(120,70,0,0.10)');
+    ctx.fillStyle = '#241a08';
+    ctx.fillRect(ix, iy, iw, ih);
+    ctx.fillStyle = grad;
+    ctx.fillRect(ix, iy, iw, ih);
+
+    // Battant de porte entrouvert
+    ctx.fillStyle = '#3a2a12';
+    ctx.fillRect(ix, iy, Math.round(iw * 0.42), ih);
+    ctx.fillStyle = '#4c3718';
+    ctx.fillRect(ix + 4, iy + 6, Math.round(iw * 0.42) - 8, 14);
+    ctx.fillRect(ix + 4, iy + 26, Math.round(iw * 0.42) - 8, ih - 34);
+    ctx.fillStyle = '#ffd700';
+    ctx.fillRect(ix + Math.round(iw * 0.42) - 8, iy + ih / 2 - 2, 4, 4);
+
+    // Motes de lumière qui flottent
+    ctx.fillStyle = `rgba(255,224,160,${(0.4 + 0.4 * glow).toFixed(2)})`;
+    for (let i = 0; i < 5; i++) {
+      const mx = ix + 6 + ((i * 53 + tick * 1.3) % (iw - 10));
+      const my = iy + ih - 12 - ((i * 37 + tick * 1.7) % (ih - 20));
+      ctx.fillRect(Math.round(mx), Math.round(my), 3, 3);
+    }
+
+    // Panneau suspendu au linteau
+    const signW = d.w + 40;
+    const signX = sx + d.w / 2 - signW / 2;
+    const signY = by - 44;
+    ctx.fillStyle = '#2c1a08';
+    ctx.fillRect(signX, signY, signW, 38);
+    ctx.fillStyle = d.accent;
+    ctx.fillRect(signX, signY, signW, 3);
+    ctx.fillRect(signX, signY + 35, signW, 3);
+    ctx.fillStyle = '#1c1206';
+    ctx.fillRect(sx + d.w / 2 - 2, by - 6, 4, 6);
+
+    ctx.save();
+    ctx.font = 'bold 8px "Press Start 2P", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = d.accent;
+    ctx.shadowColor = d.accent;
+    ctx.shadowBlur = 6;
+    ctx.fillText('CONSTRUISEZ', sx + d.w / 2, signY + 16);
+    ctx.fillText('VOTRE PROJET', sx + d.w / 2, signY + 29);
+    ctx.restore();
   }
 
   _drawBuilding(ctx, b, sx, groundY, tick) {

@@ -82,19 +82,6 @@ const SECTIONS = {
     ],
   },
 
-  passions: {
-    id: 'passions',
-    label: 'PASSIONS',
-    accent: '#ff8a65',
-    items: [
-      { title: 'Sport', desc: 'Football, musculation — l\'esprit d\'équipe et la discipline comme moteurs.' },
-      { title: 'Gaming', desc: 'Jeux vidéo depuis l\'enfance. Source d\'inspiration créative pour mes projets interactifs.' },
-      { title: 'Tech & Veille', desc: 'Suivi des dernières tendances en dev mobile, IA et architecture logicielle.' },
-      { title: 'Culture', desc: 'Ouverture sur le monde, diversité culturelle, apprentissage des langues.' },
-      { title: 'Voyages', desc: 'Explorer de nouvelles villes, découvrir d\'autres façons de penser et de vivre.' },
-    ],
-  },
-
   contact: {
     id: 'contact',
     label: 'CONTACT',

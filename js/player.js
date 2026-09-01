@@ -8,7 +8,7 @@
 
 const PLAYER_W = 45;
 const PLAYER_H = 54;
-const PLAYER_SPEED = 8;
+const PLAYER_SPEED = 12;
 
 class Player {
   constructor(x, groundY) {

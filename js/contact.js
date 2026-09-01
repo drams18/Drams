@@ -33,17 +33,23 @@
   }
 
   // ── Constructeurs de liens e-mail ────────────────────────
-  function mailtoHref(subject) {
-    return 'mailto:' + EMAIL +
-      (subject ? '?subject=' + encodeURIComponent(subject) : '');
+  // `body` est facultatif : permet de préremplir le corps du message
+  // (ex. depuis la recherche de tarifs.html). Rétrocompatible.
+  function mailtoHref(subject, body) {
+    var p = [];
+    if (subject) p.push('subject=' + encodeURIComponent(subject));
+    if (body) p.push('body=' + encodeURIComponent(body));
+    return 'mailto:' + EMAIL + (p.length ? '?' + p.join('&') : '');
   }
-  function gmailHref(subject) {
+  function gmailHref(subject, body) {
     return 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(EMAIL) +
-      (subject ? '&su=' + encodeURIComponent(subject) : '');
+      (subject ? '&su=' + encodeURIComponent(subject) : '') +
+      (body ? '&body=' + encodeURIComponent(body) : '');
   }
-  function outlookHref(subject) {
+  function outlookHref(subject, body) {
     return 'https://outlook.live.com/mail/0/deeplink/compose?to=' + encodeURIComponent(EMAIL) +
-      (subject ? '&subject=' + encodeURIComponent(subject) : '');
+      (subject ? '&subject=' + encodeURIComponent(subject) : '') +
+      (body ? '&body=' + encodeURIComponent(body) : '');
   }
 
   // ── Styles (injectés une seule fois) ─────────────────────
@@ -211,6 +217,7 @@
   function open(opts) {
     opts = opts || {};
     var subject = opts.subject || '';
+    var body = opts.body || '';
     if (overlay) close();
     injectStyles();
     lastFocus = doc.activeElement;
@@ -263,10 +270,10 @@
       'Ouvrez votre messagerie habituelle, ou copiez l\'adresse.'));
     var svc = doc.createElement('div');
     svc.className = 'cw-svc-row';
-    var firstFocus = svcLink('Gmail', gmailHref(subject));
+    var firstFocus = svcLink('Gmail', gmailHref(subject, body));
     svc.appendChild(firstFocus);
-    svc.appendChild(svcLink('Outlook', outlookHref(subject)));
-    svc.appendChild(svcLink('Application e-mail', mailtoHref(subject), true));
+    svc.appendChild(svcLink('Outlook', outlookHref(subject, body)));
+    svc.appendChild(svcLink('Application e-mail', mailtoHref(subject, body), true));
     mail.appendChild(svc);
 
     // ── Téléphone : appel + SMS sur mobile, texte simple sur desktop ──
@@ -284,7 +291,8 @@
 
       var sms = doc.createElement('a');
       sms.className = 'cw-option';
-      sms.href = 'sms:' + PHONE_TEL + (subject ? '?&body=' + encodeURIComponent(subject) : '');
+      sms.href = 'sms:' + PHONE_TEL +
+        ((body || subject) ? '?&body=' + encodeURIComponent(body || subject) : '');
       sms.appendChild(span('cw-option-label', 'Téléphone — message'));
       sms.appendChild(span('cw-option-value', PHONE));
       sms.appendChild(span('cw-option-hint', "Ouvre l'application Messages pour envoyer un SMS"));
@@ -321,7 +329,10 @@
     el.__cwBound = true;
     el.addEventListener('click', function (e) {
       e.preventDefault();
-      open({ subject: el.getAttribute('data-contact-subject') || '' });
+      open({
+        subject: el.getAttribute('data-contact-subject') || '',
+        body: el.getAttribute('data-contact-body') || ''
+      });
     });
   }
 

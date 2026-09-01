@@ -128,7 +128,6 @@ class InteractionManager {
     switch (section.id) {
       case 'profile':  return this._renderProfile(section);
       case 'parcours': return this._renderParcours(section);
-      case 'passions': return this._renderPassions(section);
       case 'contact':  return this._renderContact(section);
       case 'projets':  return this._renderProjets(section);
       default:         return '<p>Contenu à venir.</p>';
@@ -208,21 +207,6 @@ class InteractionManager {
       <div class="section-divider"></div>
       <h3 class="sub-title">EXPERIENCES</h3>
       <div class="exp-list">${expHTML}</div>
-    `;
-  }
-
-  _renderPassions(section) {
-    const cardsHTML = section.items.map(item => `
-      <div class="passion-card">
-        <div class="passion-title">${item.title}</div>
-        <p class="passion-desc">${item.desc}</p>
-      </div>
-    `).join('');
-
-    return `
-      <h3 class="sub-title">MES PASSIONS</h3>
-      <p class="section-intro">Ce qui me fait bouger, penser, créer.</p>
-      <div class="passions-grid">${cardsHTML}</div>
     `;
   }
 
