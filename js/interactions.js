@@ -22,6 +22,13 @@ class InteractionManager {
   _bind() {
     this._closeBtn?.addEventListener('click', () => this.close());
     this._backdrop?.addEventListener('click', () => this.close());
+
+    // Ouvrir un projet (lien de la galerie) = action importante.
+    this._body?.addEventListener('click', (e) => {
+      if (e.target.closest('.proj-link') && window.AudioManager) {
+        window.AudioManager.play('success');
+      }
+    });
     // Échap ferme la fenêtre (comme le clic sur le fond), y compris Contact
     document.addEventListener('keydown', (e) => {
       if ((e.key === 'Escape' || e.keyCode === 27) && this.isOpen()) {
@@ -38,6 +45,7 @@ class InteractionManager {
     const section = SECTIONS[buildingId];
     if (!section) return;
 
+    const firstVisit = !this._visited.has(buildingId);
     this._currentSection = buildingId;
     this._visited.add(buildingId);
 
@@ -52,6 +60,11 @@ class InteractionManager {
     this._backdrop.classList.remove('hidden');
     document.body.classList.add('modal-open');
 
+    // 1re entrée dans la maison = nouvelle pièce ; retour = simple ouverture.
+    if (window.AudioManager) {
+      window.AudioManager.play(firstVisit ? 'transition' : 'open');
+    }
+
     if (buildingId === 'contact') this._bindContactForm();
   }
 
@@ -61,6 +74,7 @@ class InteractionManager {
     this._modal.classList.add('hidden');
     this._backdrop.classList.add('hidden');
     document.body.classList.remove('modal-open');
+    if (window.AudioManager) window.AudioManager.play('close');
     // Music keeps playing — only game exit stops it
   }
 
@@ -69,6 +83,7 @@ class InteractionManager {
   _bindContactForm() {
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
+        if (window.AudioManager) window.AudioManager.play('click');
         const value = btn.dataset.copy;
         await navigator.clipboard.writeText(value);
         const prev = btn.textContent;
@@ -95,6 +110,7 @@ class InteractionManager {
         await emailjs.sendForm('service_kju3n28', 'template_pili6gr', form);
         status.textContent = 'Message envoyé !';
         status.classList.add('success');
+        if (window.AudioManager) window.AudioManager.play('success');
         setTimeout(() => this.close(), 1500);
       } catch (err) {
         console.error('EmailJS error:', err);

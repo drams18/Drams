@@ -204,27 +204,16 @@ class Game {
 }
 
 // ── Background music ──────────────────────────────────
-// Audio created lazily on first user gesture for mobile/WebView compatibility
-
-let bgMusic = null;
-
-function _initAudio() {
-  if (bgMusic) return;
-  bgMusic = new Audio('assets/audio/bg-music.mp3');
-  bgMusic.loop   = true;
-  bgMusic.volume = 0.3;
-}
+// Déléguée au gestionnaire central (js/audio.js) : création paresseuse,
+// déverrouillage au 1er geste utilisateur (iOS/WebView), respect du
+// choix SOUND ON/OFF. bg-music.mp3 reste géré exactement comme avant.
 
 function startMusic() {
-  _initAudio();
-  const p = bgMusic.play();
-  if (p !== undefined) p.catch(() => {});
+  if (window.AudioManager) window.AudioManager.playMusic();
 }
 
 function stopMusic() {
-  if (!bgMusic) return;
-  bgMusic.pause();
-  bgMusic.currentTime = 0;
+  if (window.AudioManager) window.AudioManager.stopMusic();
 }
 
 // ── Boot ─────────────────────────────────────────────
@@ -262,7 +251,10 @@ function showGameIntro() {
   const closeIntro = () => intro.classList.add('hidden');
 
   document.getElementById('btn-intro-close')
-    ?.addEventListener('click', closeIntro, { once: true });
+    ?.addEventListener('click', () => {
+      if (window.AudioManager) window.AudioManager.play('click');
+      closeIntro();
+    }, { once: true });
 
   // Se ferme aussi dès le premier déplacement / première touche mobile
   const onKey = (e) => {
@@ -282,6 +274,7 @@ function startGame() {
   const game    = document.getElementById('screen-game');
 
   // Init + play audio synchronously inside the user gesture (required on iOS/WebView)
+  if (window.AudioManager) window.AudioManager.unlock();
   startMusic();
 
   welcome.classList.remove('screen-enter');
@@ -293,6 +286,9 @@ function startGame() {
     game.classList.remove('hidden', 'screen-enter');
     void game.offsetWidth;              // reflow → rejoue l'animation d'entrée
     game.classList.add('screen-enter');
+
+    // Entrée dans le village = arrivée dans une nouvelle pièce
+    if (window.AudioManager) window.AudioManager.play('transition');
 
     if (!_game) {
       _game = new Game();               // créé une seule fois
@@ -306,6 +302,7 @@ function goHome() {
   const welcome = document.getElementById('screen-welcome');
   const game    = document.getElementById('screen-game');
 
+  if (window.AudioManager) window.AudioManager.play('close');
   stopMusic();
   if (_game && _game.interactions) _game.interactions.close();
 
@@ -321,11 +318,9 @@ function goHome() {
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('btn-start');
   if (btn) {
-    // Pre-unlock audio on any touch/click before the start button (iOS WebView)
+    // Pré-déverrouille l'audio au moindre contact avant le clic (iOS WebView).
     const unlock = () => {
-      _initAudio();
-      // Trigger a silent play/pause to unlock the audio context on iOS
-      bgMusic.play().then(() => bgMusic.pause()).catch(() => {});
+      if (window.AudioManager) window.AudioManager.unlock();
       btn.removeEventListener('touchstart', unlock);
       btn.removeEventListener('mousedown',  unlock);
     };

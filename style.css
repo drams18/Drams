@@ -341,6 +341,34 @@ a { color: inherit; }
 .game-home-btn:hover { background: rgba(20,28,42,0.95); border-color: rgba(255,255,255,0.55); }
 .game-home-btn:active { transform: translateY(2px); }
 
+/* Bouton SOUND ON / OFF — coupe toute la sortie audio, choix mémorisé.
+   Même niveau que le bouton Accueil : visible à l'accueil et en jeu
+   (une modale ouverte le recouvre, comme le bouton Accueil). */
+.sound-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 60;
+  font-family: var(--pixel-font);
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #fff;
+  background: rgba(12,16,24,0.82);
+  border: 2px solid rgba(255,255,255,0.28);
+  padding: 10px 14px;
+  cursor: pointer;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.6);
+  backdrop-filter: blur(3px);
+  transition: background 0.15s, border-color 0.15s, transform 0.1s, color 0.15s;
+}
+.sound-toggle:hover { background: rgba(20,28,42,0.95); border-color: rgba(255,255,255,0.55); }
+.sound-toggle:active { transform: translateY(2px); }
+.sound-toggle--off { color: #9aa7bb; border-color: rgba(255,255,255,0.16); }
+
+@media (max-width: 600px) {
+  .sound-toggle { font-size: 8px; padding: 9px 11px; }
+}
+
 /* Overlay d'introduction au jeu (première partie) */
 .game-intro {
   position: fixed;

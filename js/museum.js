@@ -147,7 +147,7 @@ const SECTIONS = {
         role: 'Projet personnel — idée, conception et développement réalisés seul.',
         desc: 'Plateforme permettant de rechercher une enseigne qui a besoin d\'un site web ou d\'une mise à jour.',
         links: [
-          { label: 'Accéder', url: 'https://drams18.github.io/Prospectly/index.html' },
+          { label: 'Accéder', url: 'https://prospectly.hitmind-pro.workers.dev/' },
         ],
         accent: '#a5d6a7',
       },
