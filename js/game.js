@@ -125,10 +125,14 @@ class Game {
     // Même logique audio qu'une entrée de maison : SFX de transition.
     if (window.AudioManager) window.AudioManager.play('transition');
 
+    // Flash chromatique + wipe en panneaux vers la page suivante.
     const fade = document.createElement('div');
     fade.style.cssText =
-      'position:fixed;inset:0;z-index:9999;background:#0a0a12;opacity:0;' +
-      'transition:opacity .45s ease;pointer-events:none;';
+      'position:fixed;inset:0;z-index:9999;opacity:0;pointer-events:none;' +
+      'transition:opacity .45s ease;' +
+      'background:' +
+        'radial-gradient(60% 60% at 50% 50%, rgba(25,232,255,0.35) 0%, transparent 70%),' +
+        'linear-gradient(115deg, #ff123d 0%, #ff2bb0 32%, #05060b 33%, #05060b 66%, #8a3bff 67%, #19e8ff 100%);';
     document.body.appendChild(fade);
     void fade.offsetWidth;
     fade.style.opacity = '1';
@@ -141,16 +145,41 @@ class Game {
   _drawBuildingGlow(ctx, building, camX, canvasH) {
     const groundY = Math.round(canvasH * GROUND_RATIO);
     const sx = building.x - camX;
+    const w  = building.w;
     const by = groundY - building.h;
     const pulse = 0.08 + 0.06 * Math.sin(this._tick * 0.08);
 
     ctx.save();
+
+    // Double contour « encre » comics décalé (rouge + cyan)
+    ctx.globalAlpha = 0.5 + pulse * 2;
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#ff123d';
+    ctx.strokeRect(sx - 12, by - 32, w + 24, building.h + 32);
+    ctx.strokeStyle = '#19e8ff';
+    ctx.strokeRect(sx - 8, by - 28, w + 16, building.h + 28);
+
+    // Halo accent
     ctx.shadowColor = building.accent;
     ctx.shadowBlur  = 28;
     ctx.strokeStyle = building.accent;
-    ctx.lineWidth   = 2;
     ctx.globalAlpha = pulse * 3;
-    ctx.strokeRect(sx - 10, by - 30, building.w + 20, building.h + 30);
+    ctx.strokeRect(sx - 10, by - 30, w + 20, building.h + 30);
+
+    // Lignes de vitesse latérales
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 0.35 + pulse;
+    ctx.strokeStyle = building.accent;
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 4; i++) {
+      const yy = by + 20 + i * (building.h / 4);
+      ctx.beginPath();
+      ctx.moveTo(sx - 16 - i * 6, yy);
+      ctx.lineTo(sx - 34 - i * 10, yy);
+      ctx.moveTo(sx + w + 16 + i * 6, yy);
+      ctx.lineTo(sx + w + 34 + i * 10, yy);
+      ctx.stroke();
+    }
     ctx.restore();
   }
 
@@ -188,14 +217,29 @@ class Game {
     const padY  = 9;
     let x = Math.round(w / 2 - totalW / 2);
 
-    ctx.fillStyle = 'rgba(6,10,16,0.72)';
-    ctx.fillRect(x - padX, hintY - 10 - padY, totalW + padX * 2, 12 + padY * 2);
-    ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+    const bx = x - padX;
+    const by = hintY - 10 - padY;
+    const bw = totalW + padX * 2;
+    const bh = 12 + padY * 2;
+
+    // Cartouche « caption box » comics
+    ctx.fillStyle = 'rgba(3,4,12,0.86)';
+    ctx.fillRect(bx, by, bw, bh);
+    ctx.strokeStyle = '#01010a';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(bx + 1.5, by + 1.5, bw - 3, bh - 3);
+    ctx.strokeStyle = '#19e8ff';
     ctx.lineWidth = 1;
-    ctx.strokeRect(x - padX, hintY - 10 - padY, totalW + padX * 2, 12 + padY * 2);
+    ctx.strokeRect(bx - 2, by - 2, bw + 4, bh + 4);
+    ctx.fillStyle = '#ff123d';
+    ctx.fillRect(bx - 4, by - 4, 6, 6);
+    ctx.fillRect(bx + bw - 2, by + bh - 2, 6, 6);
 
     ctx.textAlign = 'left';
     for (let i = 0; i < segments.length; i++) {
+      // léger décalage RGB
+      ctx.fillStyle = 'rgba(255,18,61,0.5)';
+      ctx.fillText(segments[i].text, x - 0.6, hintY);
       ctx.fillStyle = segments[i].color;
       ctx.fillText(segments[i].text, x, hintY);
       x += widths[i];
@@ -214,13 +258,27 @@ class Game {
     ctx.textAlign = 'center';
     const action = this._touch ? 'ENTRER' : '↑ ENTRER';
     const label  = `${action} · ${building.promptLabel || building.label}`;
-    const lw = ctx.measureText(label).width + 22;
+    const lw = ctx.measureText(label).width + 24;
+    const bxp = sx - lw / 2;
 
-    ctx.fillStyle = 'rgba(6,10,16,0.86)';
-    ctx.fillRect(sx - lw / 2, py - 16, lw, 22);
+    // Bulle comics : fond + trait encre + liseré accent + coins
+    ctx.fillStyle = 'rgba(3,4,12,0.9)';
+    ctx.fillRect(bxp, py - 17, lw, 24);
+    ctx.strokeStyle = '#01010a';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(bxp + 1.5, py - 15.5, lw - 3, 21);
     ctx.strokeStyle = building.accent;
     ctx.lineWidth = 2;
-    ctx.strokeRect(sx - lw / 2, py - 16, lw, 22);
+    ctx.strokeRect(bxp - 2, py - 19, lw + 4, 28);
+    // queue de bulle vers le bas
+    ctx.fillStyle = 'rgba(3,4,12,0.9)';
+    ctx.fillRect(sx - 3, py + 7, 6, 5);
+
+    // texte avec décalage RGB
+    ctx.fillStyle = 'rgba(255,18,61,0.55)';
+    ctx.fillText(label, sx - 0.8, py);
+    ctx.fillStyle = 'rgba(25,232,255,0.55)';
+    ctx.fillText(label, sx + 0.8, py);
     ctx.fillStyle = '#fff';
     ctx.fillText(label, sx, py);
     ctx.restore();

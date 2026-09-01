@@ -9,7 +9,7 @@ const SECTIONS = {
   profile: {
     id: 'profile',
     label: 'PROFIL & SKILLS',
-    accent: '#4fc3f7',
+    accent: '#19e8ff',
     bio: {
       name: 'Arphan DRAME',
       title: 'Développeur Full Stack',
@@ -46,7 +46,7 @@ const SECTIONS = {
   parcours: {
     id: 'parcours',
     label: 'PARCOURS',
-    accent: '#81c784',
+    accent: '#8a3bff',
     timeline: [
       {
         date: '2020 — 2022',
@@ -85,7 +85,7 @@ const SECTIONS = {
   contact: {
     id: 'contact',
     label: 'CONTACT',
-    accent: '#ce93d8',
+    accent: '#ff2bb0',
     email: 'arphandrame0@gmail.com',
     phone: '07 67 31 84 26',
     links: [
@@ -103,7 +103,7 @@ const SECTIONS = {
   projets: {
     id: 'projets',
     label: 'GALERIE PROJETS',
-    accent: '#ffd54f',
+    accent: '#ff123d',
     items: [
       {
         title: 'ISLAAH',
@@ -114,7 +114,7 @@ const SECTIONS = {
         links: [
           { label: 'Télécharger', url: 'https://apps.apple.com/us/app/islaah/id6758726142' },
         ],
-        accent: '#81c784',
+        accent: '#19e8ff',
       },
       {
         title: 'SKYWALK',
@@ -125,7 +125,7 @@ const SECTIONS = {
         links: [
           { label: 'Accéder', url: 'https://skywalk-chi.vercel.app/auth/login' },
         ],
-        accent: '#4fc3f7',
+        accent: '#ff2bb0',
       },
       {
         title: 'Plateforme de recherche de prospects',
@@ -136,7 +136,7 @@ const SECTIONS = {
         links: [
           { label: 'Accéder', url: 'https://prospectly.hitmind-pro.workers.dev/' },
         ],
-        accent: '#a5d6a7',
+        accent: '#8a3bff',
       },
       {
         title: 'Wild Kédougou Experience',
@@ -147,7 +147,7 @@ const SECTIONS = {
         links: [
           { label: 'Voir le projet', url: 'https://wild-kedougou-experience.hitmind-pro.workers.dev/' },
         ],
-        accent: '#ff8a65',
+        accent: '#ff123d',
       },
     ],
   },

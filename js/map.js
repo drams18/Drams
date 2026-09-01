@@ -1,6 +1,8 @@
 /* ══════════════════════════════════════════════════════
-   MAP.JS — Side-scroller world (Minecraft pixel art)
-   Spawn left, all buildings to the right, close together
+   MAP.JS — Side-scroller world (ville nocturne néon / comics)
+   Spawn left, all buildings to the right, close together.
+   Réécriture visuelle uniquement : structure de données, API
+   (nearBuilding / draw) et positions INCHANGÉES.
    ══════════════════════════════════════════════════════ */
 
 'use strict';
@@ -12,51 +14,64 @@ const INTERACT_RADIUS = 85;
 // ── Player spawn position (left side) ────────────────
 const SPAWN_X = 80;
 
+// ── Palette monde ────────────────────────────────────
+const CITY = {
+  ink:      '#01010a',
+  facade:   '#0d1220',
+  facadeHi: '#141c30',
+  asphalt:  '#0a0c15',
+  red:      '#ff123d',
+  magenta:  '#ff2bb0',
+  violet:   '#8a3bff',
+  cyan:     '#19e8ff',
+  paper:    '#f5f6ff',
+};
+
 // ── Buildings layout ─────────────────────────────────
-// Packed together to the right of spawn, 30px gaps
+// Packed together to the right of spawn. Couleurs = nouvelle DA.
 const BUILDINGS_DATA = [
   {
     id: 'profile',
     label: 'PROFIL',
-    accent: '#4fc3f7',
-    wallColor: '#5c7a3e',
-    wallDark: '#4a6232',
-    roofColor: '#7c3012',
-    roofDark: '#5c2009',
-    windowColor: '#4fc3f7',
+    accent: CITY.cyan,
+    wallColor: CITY.facade,
+    wallDark: '#080c16',
+    roofColor: '#0b1120',
+    roofDark: '#05080f',
+    windowColor: CITY.cyan,
     x: 200, w: 230, h: 240,
   },
   {
     id: 'parcours',
     label: 'PARCOURS',
-    accent: '#81c784',
-    wallColor: '#6b5c3e',
-    wallDark: '#534830',
-    roofColor: '#3a6b52',
-    roofDark: '#2a5040',
-    windowColor: '#81c784',
+    accent: CITY.violet,
+    wallColor: CITY.facade,
+    wallDark: '#080c16',
+    roofColor: '#0b1120',
+    roofDark: '#05080f',
+    windowColor: CITY.violet,
     x: 460, w: 230, h: 240,
   },
   {
     id: 'contact',
     label: 'CONTACT',
-    accent: '#ce93d8',
-    wallColor: '#3e5c7c',
-    wallDark: '#304860',
-    roofColor: '#6b3e8b',
-    roofDark: '#502e6b',
-    windowColor: '#ce93d8',
+    accent: CITY.magenta,
+    wallColor: CITY.facade,
+    wallDark: '#080c16',
+    roofColor: '#0b1120',
+    roofDark: '#05080f',
+    windowColor: CITY.magenta,
     x: 980, w: 230, h: 240,
   },
   {
     id: 'projets',
     label: 'GALERIE',
-    accent: '#ffd54f',
-    wallColor: '#5c4a2a',
-    wallDark: '#483a20',
-    roofColor: '#8b6914',
-    roofDark: '#6b510f',
-    windowColor: '#ffd54f',
+    accent: CITY.red,
+    wallColor: CITY.facade,
+    wallDark: '#080c16',
+    roofColor: '#0b1120',
+    roofDark: '#05080f',
+    windowColor: CITY.red,
     x: 1260, w: 380, h: 240,
   },
 ];
@@ -67,22 +82,21 @@ BUILDINGS_DATA.forEach(b => {
   b.visited = false;
 });
 
-// ── Porte indépendante « Construisez votre projet » ──────
-// Ce n'est pas une maison : une porte-portail isolée, plus à droite,
-// nettement séparée du village. Interagir dessus ouvre une NOUVELLE
-// PAGE (construire-projet.html), pas une fenêtre.
+// ── Porte-portail « Construisez votre projet » ──────────
+// Pas une maison : une faille d'énergie isolée, nettement séparée
+// du reste. Interagir dessus ouvre une NOUVELLE PAGE.
 const SPECIAL_DOOR = {
   id: 'build-project',
   label: 'CONSTRUISEZ VOTRE PROJET',
   promptLabel: 'CONSTRUIRE UN PROJET',
   href: 'construire-projet.html',
-  accent: '#ffb000',
+  accent: CITY.cyan,
   isPortal: true,
   x: 1900, w: 132, h: 216,
 };
 SPECIAL_DOOR.doorX = SPECIAL_DOOR.x + Math.floor(SPECIAL_DOOR.w / 2);
 
-// ── Clouds ───────────────────────────────────────────
+// ── Nuées de lumière / smog (parallaxe) ──────────────
 const CLOUDS = [
   { x: 100,  y: 55,  w: 100, h: 38 },
   { x: 450,  y: 38,  w: 80,  h: 30 },
@@ -91,12 +105,13 @@ const CLOUDS = [
   { x: 1550, y: 62,  w: 110, h: 40 },
 ];
 
-// ── Decorative trees ─────────────────────────────────
+// ── Lampadaires / enseignes néon en silhouette ───────
 const TREES = [50, 390, 650, 900, 1160, 1680];
 
 class GameMap {
   constructor() {
     this._cloudOffset = 0;
+    this._htPattern = null;
   }
 
   nearBuilding(playerX, playerY) {
@@ -108,103 +123,187 @@ class GameMap {
     return null;
   }
 
+  // Trame halftone mise en cache (une seule fois).
+  _halftone(ctx) {
+    if (this._htPattern) return this._htPattern;
+    const p = document.createElement('canvas');
+    p.width = p.height = 6;
+    const c = p.getContext('2d');
+    c.fillStyle = 'rgba(255,255,255,0.05)';
+    c.beginPath();
+    c.arc(1.6, 1.6, 1, 0, Math.PI * 2);
+    c.fill();
+    this._htPattern = ctx.createPattern(p, 'repeat');
+    return this._htPattern;
+  }
+
   draw(ctx, cameraX, canvasH, tick) {
     const groundY = Math.round(canvasH * GROUND_RATIO);
 
-    this._drawSky(ctx, canvasH);
+    this._drawSky(ctx, canvasH, tick);
+    this._drawSkyline(ctx, cameraX, groundY);
     this._drawClouds(ctx, cameraX, groundY);
     this._drawGround(ctx, cameraX, groundY, canvasH);
-    this._drawTrees(ctx, cameraX, groundY);
+    this._drawTrees(ctx, cameraX, groundY, tick);
     this._drawBuildings(ctx, cameraX, groundY, tick);
     this._drawPortal(ctx, cameraX, groundY, tick);
   }
 
-  _drawSky(ctx, canvasH) {
-    const grad = ctx.createLinearGradient(0, 0, 0, canvasH * GROUND_RATIO);
-    grad.addColorStop(0, '#5ba3d9');
-    grad.addColorStop(0.6, '#87ceeb');
-    grad.addColorStop(1, '#c9e8f5');
+  _drawSky(ctx, canvasH, tick) {
+    const w = ctx.canvas.width;
+    const skyH = canvasH * GROUND_RATIO;
+
+    const grad = ctx.createLinearGradient(0, 0, 0, skyH);
+    grad.addColorStop(0, '#05060b');
+    grad.addColorStop(0.5, '#0b0a18');
+    grad.addColorStop(1, '#12081c');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, ctx.canvas.width, canvasH * GROUND_RATIO);
+    ctx.fillRect(0, 0, w, skyH);
+
+    // Disque lumineux (lune / néon lointain) magenta→violet
+    const cx = w * 0.78;
+    const cy = skyH * 0.34;
+    const r  = Math.max(60, w * 0.09);
+    const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 3);
+    halo.addColorStop(0, 'rgba(255,43,176,0.5)');
+    halo.addColorStop(0.35, 'rgba(138,59,255,0.22)');
+    halo.addColorStop(1, 'rgba(138,59,255,0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(0, 0, w, skyH);
+    ctx.fillStyle = 'rgba(255,60,190,0.85)';
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Halo bas cyan (pollution lumineuse urbaine)
+    const low = ctx.createLinearGradient(0, skyH - 120, 0, skyH);
+    low.addColorStop(0, 'rgba(25,232,255,0)');
+    low.addColorStop(1, 'rgba(25,232,255,0.16)');
+    ctx.fillStyle = low;
+    ctx.fillRect(0, skyH - 120, w, 120);
+
+    // Éclats / étoiles fixes (parallaxe nulle, semis déterministe)
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    for (let i = 0; i < 60; i++) {
+      const sx = (i * 137.5) % w;
+      const sy = (i * 89.3) % skyH;
+      const tw = 0.4 + 0.6 * Math.abs(Math.sin(tick * 0.04 + i));
+      ctx.globalAlpha = tw;
+      ctx.fillRect(sx, sy, 1.5, 1.5);
+    }
+    ctx.globalAlpha = 1;
+
+    // Trame halftone très légère sur le ciel
+    const ht = this._halftone(ctx);
+    if (ht) {
+      ctx.fillStyle = ht;
+      ctx.fillRect(0, 0, w, skyH);
+    }
+  }
+
+  // Skyline de fond, lointaine (parallaxe forte)
+  _drawSkyline(ctx, cameraX, groundY) {
+    const w = ctx.canvas.width;
+    const base = groundY;
+    ctx.fillStyle = '#080610';
+    const off = -(cameraX * 0.35) % 220;
+    for (let x = off - 220; x < w + 220; x += 220) {
+      const seed = Math.round((x + cameraX * 0.35) / 220);
+      const bh = 60 + ((seed * 53) % 90);
+      const bw = 70 + ((seed * 29) % 60);
+      ctx.fillRect(Math.round(x), base - bh, bw, bh);
+      // quelques fenêtres cyan/magenta ténues
+      ctx.fillStyle = seed % 2 ? 'rgba(25,232,255,0.18)' : 'rgba(255,43,176,0.16)';
+      for (let wy = base - bh + 10; wy < base - 8; wy += 16) {
+        ctx.fillRect(Math.round(x) + 8, wy, 4, 4);
+        ctx.fillRect(Math.round(x) + bw - 14, wy, 4, 4);
+      }
+      ctx.fillStyle = '#080610';
+    }
   }
 
   _drawClouds(ctx, cameraX, groundY) {
-    ctx.fillStyle = 'rgba(255,255,255,0.9)';
     for (const c of CLOUDS) {
       const cx = c.x - cameraX * 0.2;
-      ctx.fillRect(cx + 10, c.y, c.w - 20, c.h);
-      ctx.fillRect(cx, c.y + 8, c.w, c.h - 14);
-      ctx.fillRect(cx + 15, c.y - 8, c.w - 30, 16);
+      const g = ctx.createLinearGradient(cx, c.y, cx, c.y + c.h);
+      g.addColorStop(0, 'rgba(138,59,255,0.10)');
+      g.addColorStop(1, 'rgba(25,232,255,0.05)');
+      ctx.fillStyle = g;
+      ctx.fillRect(cx, c.y + 6, c.w, c.h - 12);
+      ctx.fillRect(cx + 12, c.y, c.w - 24, c.h);
     }
   }
 
   _drawGround(ctx, cameraX, groundY, canvasH) {
     const w = ctx.canvas.width;
 
-    // Grass layer
-    ctx.fillStyle = '#5d9c34';
-    ctx.fillRect(0, groundY, w, 18);
-    ctx.fillStyle = '#4a8029';
-    for (let bx = (-cameraX % 18); bx < w; bx += 18) {
-      ctx.fillRect(Math.round(bx), groundY, 1, 18);
-    }
+    // Bitume
+    ctx.fillStyle = CITY.asphalt;
+    ctx.fillRect(0, groundY, w, canvasH - groundY);
 
-    // Dirt layer
-    ctx.fillStyle = '#8b5e3c';
-    ctx.fillRect(0, groundY + 18, w, canvasH - groundY - 18);
-    ctx.fillStyle = '#7a5232';
-    ctx.fillRect(0, groundY + 18, w, 1);
-    ctx.fillRect(0, groundY + 36, w, 1);
-    for (let bx = (-cameraX % 36); bx < w; bx += 36) {
-      ctx.fillRect(Math.round(bx), groundY + 18, 1, 18);
-    }
-    for (let bx = (-cameraX % 36 + 18); bx < w; bx += 36) {
-      ctx.fillRect(Math.round(bx), groundY + 36, 1, 18);
-    }
+    // Arête lumineuse cyan au niveau du sol
+    ctx.fillStyle = 'rgba(25,232,255,0.9)';
+    ctx.fillRect(0, groundY, w, 2);
+    ctx.fillStyle = 'rgba(25,232,255,0.18)';
+    ctx.fillRect(0, groundY + 2, w, 6);
 
-    // Stone path under buildings
+    // Reflets / lignes de perspective
+    ctx.fillStyle = 'rgba(255,43,176,0.10)';
+    for (let bx = (-cameraX % 64); bx < w; bx += 64) {
+      ctx.fillRect(Math.round(bx), groundY + 10, 1, canvasH - groundY - 10);
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    ctx.fillRect(0, groundY + 22, w, 1);
+
+    // Plaque néon devant chaque immeuble
     for (const b of BUILDINGS_DATA) {
       const px = b.x - cameraX;
       if (px > -b.w && px < w + b.w) {
-        ctx.fillStyle = '#9e9e9e';
-        ctx.fillRect(px + b.w / 2 - 16, groundY, 32, 18);
-        ctx.fillStyle = '#888';
-        ctx.fillRect(px + b.w / 2 - 14, groundY + 2, 28, 14);
+        ctx.fillStyle = 'rgba(255,255,255,0.05)';
+        ctx.fillRect(px + b.w / 2 - 18, groundY + 2, 36, 12);
+        ctx.fillStyle = b.accent;
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(px + b.w / 2 - 18, groundY + 2, 36, 2);
+        ctx.globalAlpha = 1;
       }
     }
 
-    // Chemin doré vers la porte-portail (le distingue des maisons)
+    // Traînée d'énergie vers le portail
     const pathX = SPECIAL_DOOR.doorX - cameraX;
-    if (pathX > -80 && pathX < w + 80) {
-      for (let i = 0; i < 5; i++) {
-        const tileX = pathX - 40 + i * 18;
-        ctx.fillStyle = i % 2 ? '#c8912e' : '#d9a441';
-        ctx.fillRect(tileX, groundY + 2, 14, 14);
-        ctx.fillStyle = 'rgba(255,220,150,0.35)';
-        ctx.fillRect(tileX, groundY + 2, 14, 2);
+    if (pathX > -120 && pathX < w + 120) {
+      for (let i = 0; i < 6; i++) {
+        const tileX = pathX - 54 + i * 18;
+        ctx.fillStyle = i % 2 ? 'rgba(25,232,255,0.35)' : 'rgba(255,43,176,0.3)';
+        ctx.fillRect(tileX, groundY + 3, 13, 10);
+        ctx.fillStyle = 'rgba(255,255,255,0.4)';
+        ctx.fillRect(tileX, groundY + 3, 13, 2);
       }
     }
   }
 
-  _drawTrees(ctx, cameraX, groundY) {
-    for (const tx of TREES) {
+  _drawTrees(ctx, cameraX, groundY, tick) {
+    for (let t = 0; t < TREES.length; t++) {
+      const tx = TREES[t];
       const sx = tx - cameraX;
       if (sx < -40 || sx > ctx.canvas.width + 40) continue;
 
-      ctx.fillStyle = '#6b4423';
-      ctx.fillRect(sx - 5, groundY - 45, 10, 45);
-      ctx.fillStyle = '#5a3519';
-      ctx.fillRect(sx - 5, groundY - 45, 2, 45);
+      const col = t % 2 ? CITY.cyan : CITY.magenta;
 
-      ctx.fillStyle = '#3d7a1e';
-      ctx.fillRect(sx - 20, groundY - 80, 40, 18);
-      ctx.fillStyle = '#4a9128';
-      ctx.fillRect(sx - 15, groundY - 94, 30, 18);
-      ctx.fillStyle = '#3d7a1e';
-      ctx.fillRect(sx - 10, groundY - 106, 20, 16);
-      ctx.fillStyle = '#5db832';
-      ctx.fillRect(sx - 18, groundY - 78, 6, 6);
-      ctx.fillRect(sx + 8, groundY - 92, 6, 6);
+      // Mât
+      ctx.fillStyle = '#05060d';
+      ctx.fillRect(sx - 3, groundY - 92, 6, 92);
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      ctx.fillRect(sx - 3, groundY - 92, 2, 92);
+
+      // Bras + luminaire néon
+      ctx.fillStyle = '#05060d';
+      ctx.fillRect(sx - 18, groundY - 92, 22, 6);
+      ctx.fillStyle = col;
+      ctx.globalAlpha = 0.9;
+      ctx.fillRect(sx - 22, groundY - 90, 8, 8);
+      ctx.globalAlpha = 0.18 + 0.06 * Math.sin(tick * 0.1 + t);
+      ctx.fillRect(sx - 30, groundY - 96, 24, 60);
+      ctx.globalAlpha = 1;
     }
   }
 
@@ -216,200 +315,237 @@ class GameMap {
     }
   }
 
-  // Porte-portail isolée : arche de pierre + porte magique + panneau.
+  // Faille d'énergie « Construisez votre projet » — pièce maîtresse.
   // Volontairement SANS toit ni murs pour ne pas ressembler à une maison.
   _drawPortal(ctx, cameraX, groundY, tick) {
     const d  = SPECIAL_DOOR;
     const sx = d.x - cameraX;
-    if (sx > ctx.canvas.width + 60 || sx + d.w < -60) return;
+    if (sx > ctx.canvas.width + 120 || sx + d.w < -120) return;
 
-    const by     = groundY - d.h;
-    const pillarW = 20;
-    const glow   = 0.55 + 0.45 * Math.sin(tick * 0.06);
+    const by      = groundY - d.h;
+    const cx      = sx + d.w / 2;
+    const pillarW = 18;
+    const glow    = 0.55 + 0.45 * Math.sin(tick * 0.06);
 
-    // Halo général
-    ctx.save();
-    ctx.globalAlpha = 0.12 + 0.06 * Math.sin(tick * 0.06);
-    ctx.fillStyle = d.accent;
-    ctx.fillRect(sx - 16, by - 10, d.w + 32, d.h + 10);
-    ctx.restore();
+    // Halo général large
+    const halo = ctx.createRadialGradient(cx, by + d.h * 0.5, 10, cx, by + d.h * 0.5, d.h);
+    halo.addColorStop(0, `rgba(25,232,255,${(0.30 + 0.20 * glow).toFixed(3)})`);
+    halo.addColorStop(0.4, `rgba(255,43,176,${(0.16 + 0.12 * glow).toFixed(3)})`);
+    halo.addColorStop(1, 'rgba(138,59,255,0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(sx - d.w, by - 60, d.w * 3, d.h + 120);
 
-    // Socle
-    ctx.fillStyle = '#4a4a4a';
-    ctx.fillRect(sx - 10, groundY - 10, d.w + 20, 10);
-    ctx.fillStyle = '#5f5f5f';
-    ctx.fillRect(sx - 10, groundY - 10, d.w + 20, 3);
+    // Faisceau vertical vers le ciel
+    const beam = ctx.createLinearGradient(0, by - 80, 0, by + d.h);
+    beam.addColorStop(0, 'rgba(25,232,255,0)');
+    beam.addColorStop(1, `rgba(25,232,255,${(0.10 + 0.10 * glow).toFixed(3)})`);
+    ctx.fillStyle = beam;
+    ctx.fillRect(cx - pillarW, by - 80, pillarW * 2, d.h + 80);
 
-    // Piliers de pierre
+    // Monolithes sombres
     for (const px of [sx, sx + d.w - pillarW]) {
-      ctx.fillStyle = '#8d8d8d';
+      ctx.fillStyle = '#04040c';
       ctx.fillRect(px, by, pillarW, d.h);
-      ctx.fillStyle = '#6f6f6f';
-      for (let y = by; y < groundY; y += 16) ctx.fillRect(px, y, pillarW, 1);
-      ctx.fillStyle = '#a5a5a5';
-      ctx.fillRect(px, by, 3, d.h);
-      ctx.fillStyle = '#5c5c5c';
-      ctx.fillRect(px + pillarW - 3, by, 3, d.h);
+      ctx.fillStyle = d.accent;
+      ctx.globalAlpha = 0.55 + 0.25 * glow;
+      ctx.fillRect(px + (px === sx ? pillarW - 2 : 0), by, 2, d.h);
+      ctx.globalAlpha = 1;
     }
 
-    // Linteau (haut de l'arche)
-    const lintelH = 26;
-    ctx.fillStyle = '#8d8d8d';
-    ctx.fillRect(sx - 8, by, d.w + 16, lintelH);
-    ctx.fillStyle = '#6f6f6f';
-    ctx.fillRect(sx - 8, by + lintelH - 3, d.w + 16, 3);
-    ctx.fillStyle = '#a5a5a5';
-    ctx.fillRect(sx - 8, by, d.w + 16, 3);
+    // Linteau
+    ctx.fillStyle = '#04040c';
+    ctx.fillRect(sx - 8, by - 16, d.w + 16, 18);
+    ctx.fillStyle = d.accent;
+    ctx.globalAlpha = 0.6 + 0.3 * glow;
+    ctx.fillRect(sx - 8, by - 2, d.w + 16, 2);
+    ctx.globalAlpha = 1;
 
-    // Ouverture magique entre les piliers
+    // Ouverture : dégradé d'énergie
     const ix = sx + pillarW;
     const iw = d.w - pillarW * 2;
-    const iy = by + lintelH;
-    const ih = d.h - lintelH;
-    const grad = ctx.createLinearGradient(ix, iy, ix, iy + ih);
-    grad.addColorStop(0, `rgba(255,220,150,${(0.30 + 0.25 * glow).toFixed(2)})`);
-    grad.addColorStop(0.5, `rgba(255,176,0,${(0.22 + 0.20 * glow).toFixed(2)})`);
-    grad.addColorStop(1, 'rgba(120,70,0,0.10)');
-    ctx.fillStyle = '#241a08';
+    const iy = by;
+    const ih = d.h;
+    ctx.fillStyle = '#02030a';
     ctx.fillRect(ix, iy, iw, ih);
-    ctx.fillStyle = grad;
+    const rift = ctx.createLinearGradient(ix, iy, ix, iy + ih);
+    rift.addColorStop(0, `rgba(25,232,255,${(0.35 + 0.30 * glow).toFixed(3)})`);
+    rift.addColorStop(0.5, `rgba(255,43,176,${(0.25 + 0.20 * glow).toFixed(3)})`);
+    rift.addColorStop(1, 'rgba(138,59,255,0.14)');
+    ctx.fillStyle = rift;
     ctx.fillRect(ix, iy, iw, ih);
 
-    // Battant de porte entrouvert
-    ctx.fillStyle = '#3a2a12';
-    ctx.fillRect(ix, iy, Math.round(iw * 0.42), ih);
-    ctx.fillStyle = '#4c3718';
-    ctx.fillRect(ix + 4, iy + 6, Math.round(iw * 0.42) - 8, 14);
-    ctx.fillRect(ix + 4, iy + 26, Math.round(iw * 0.42) - 8, ih - 34);
-    ctx.fillStyle = '#ffd700';
-    ctx.fillRect(ix + Math.round(iw * 0.42) - 8, iy + ih / 2 - 2, 4, 4);
+    // Anneaux à aberration chromatique
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let k = 0; k < 3; k++) {
+      const rr = 14 + ((tick * 1.4 + k * 34) % (ih * 0.55));
+      const a  = Math.max(0, 0.5 - rr / (ih * 0.6));
+      ctx.globalAlpha = a;
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = CITY.red;
+      ctx.beginPath(); ctx.ellipse(cx - 2, iy + ih * 0.5, rr, rr * 0.7, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = CITY.cyan;
+      ctx.beginPath(); ctx.ellipse(cx + 2, iy + ih * 0.5, rr, rr * 0.7, 0, 0, Math.PI * 2); ctx.stroke();
+    }
+    ctx.restore();
+    ctx.globalAlpha = 1;
+
+    // Battant entrouvert (silhouette)
+    ctx.fillStyle = '#05060f';
+    ctx.fillRect(ix, iy, Math.round(iw * 0.4), ih);
+    ctx.fillStyle = d.accent;
+    ctx.globalAlpha = 0.5;
+    ctx.fillRect(ix + Math.round(iw * 0.4) - 2, iy, 2, ih);
+    ctx.globalAlpha = 1;
 
     // Motes de lumière qui flottent
-    ctx.fillStyle = `rgba(255,224,160,${(0.4 + 0.4 * glow).toFixed(2)})`;
-    for (let i = 0; i < 5; i++) {
+    ctx.fillStyle = `rgba(255,255,255,${(0.5 + 0.4 * glow).toFixed(3)})`;
+    for (let i = 0; i < 8; i++) {
       const mx = ix + 6 + ((i * 53 + tick * 1.3) % (iw - 10));
       const my = iy + ih - 12 - ((i * 37 + tick * 1.7) % (ih - 20));
       ctx.fillRect(Math.round(mx), Math.round(my), 3, 3);
     }
 
-    // Panneau suspendu au linteau
-    const signW = d.w + 40;
-    const signX = sx + d.w / 2 - signW / 2;
-    const signY = by - 44;
-    ctx.fillStyle = '#2c1a08';
+    // Panneau suspendu (texte inchangé)
+    const signW = d.w + 44;
+    const signX = cx - signW / 2;
+    const signY = by - 52;
+    ctx.fillStyle = '#03040c';
     ctx.fillRect(signX, signY, signW, 38);
     ctx.fillStyle = d.accent;
     ctx.fillRect(signX, signY, signW, 3);
     ctx.fillRect(signX, signY + 35, signW, 3);
-    ctx.fillStyle = '#1c1206';
-    ctx.fillRect(sx + d.w / 2 - 2, by - 6, 4, 6);
+    ctx.fillStyle = '#03040c';
+    ctx.fillRect(cx - 2, by - 14, 4, 14);
 
     ctx.save();
     ctx.font = 'bold 8px "Press Start 2P", monospace';
     ctx.textAlign = 'center';
-    ctx.fillStyle = d.accent;
+    ctx.fillStyle = CITY.paper;
     ctx.shadowColor = d.accent;
-    ctx.shadowBlur = 6;
-    ctx.fillText('CONSTRUISEZ', sx + d.w / 2, signY + 16);
-    ctx.fillText('VOTRE PROJET', sx + d.w / 2, signY + 29);
+    ctx.shadowBlur = 10;
+    ctx.fillText('CONSTRUISEZ', cx, signY + 16);
+    ctx.fillText('VOTRE PROJET', cx, signY + 29);
     ctx.restore();
   }
 
   _drawBuilding(ctx, b, sx, groundY, tick) {
     const by = groundY - b.h;
 
-    // Foundation
-    ctx.fillStyle = '#5a5a5a';
-    ctx.fillRect(sx - 4, groundY - 8, b.w + 8, 8);
+    // Ombre portée au sol
+    ctx.fillStyle = 'rgba(0,0,0,0.45)';
+    ctx.fillRect(sx - 6, groundY, b.w + 12, 6);
 
-    // Main wall
-    ctx.fillStyle = b.wallColor;
+    // Facade — dégradé sombre
+    const fac = ctx.createLinearGradient(sx, by, sx, groundY);
+    fac.addColorStop(0, CITY.facadeHi);
+    fac.addColorStop(1, b.wallDark);
+    ctx.fillStyle = fac;
     ctx.fillRect(sx, by, b.w, b.h);
-    ctx.fillStyle = b.wallDark;
-    const plankW = 18;
-    for (let px = sx; px < sx + b.w; px += plankW) {
-      ctx.fillRect(px, by, 1, b.h);
-    }
-    for (let py = by; py < groundY; py += 24) {
-      ctx.fillRect(sx, py, b.w, 1);
+
+    // Trame halftone sur la façade
+    const ht = this._halftone(ctx);
+    if (ht) {
+      ctx.save();
+      ctx.globalAlpha = 0.6;
+      ctx.fillStyle = ht;
+      ctx.fillRect(sx, by, b.w, b.h);
+      ctx.restore();
     }
 
-    // Roof
-    const roofH = 28;
-    ctx.fillStyle = b.roofColor;
-    ctx.fillRect(sx - 8, by - roofH, b.w + 16, roofH);
+    // Nervures structurelles verticales
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    for (let px = sx + 16; px < sx + b.w; px += 24) ctx.fillRect(px, by, 2, b.h);
+
+    // Grille de fenêtres allumées (accent), motif déterministe
+    const winY0 = by + 26;
+    const cols  = Math.max(2, Math.floor((b.w - 24) / 34));
+    const rows  = Math.max(3, Math.floor((b.h - 90) / 30));
+    const winW = 20, winH = 16;
+    const gapX = (b.w - 24 - cols * winW) / Math.max(1, cols - 1);
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const wx = sx + 12 + c * (winW + gapX);
+        const wy = winY0 + r * 30;
+        const lit = ((r * 7 + c * 3 + b.x) % 5) !== 0;
+        this._drawWindow(ctx, wx, wy, winW, winH, b.windowColor, lit, tick + r + c);
+      }
+    }
+
+    // Contour « encre » comics : trait noir + liseré accent
+    ctx.strokeStyle = CITY.ink;
+    ctx.lineWidth = 3;
+    ctx.strokeRect(sx + 1.5, by + 1.5, b.w - 3, b.h - 3);
+    ctx.strokeStyle = b.accent;
+    ctx.globalAlpha = 0.4 + 0.15 * Math.sin(tick * 0.05);
+    ctx.lineWidth = 1;
+    ctx.strokeRect(sx + 3, by + 3, b.w - 6, b.h - 6);
+    ctx.globalAlpha = 1;
+
+    // Toit + antenne
     ctx.fillStyle = b.roofDark;
-    ctx.fillRect(sx - 8, by - 2, b.w + 16, 4);
-    for (let py = by - roofH; py < by; py += 8) {
-      ctx.fillRect(sx - 8, py, b.w + 16, 1);
-    }
-    ctx.fillRect(sx - 8, by - roofH, b.w + 16, 4);
+    ctx.fillRect(sx - 6, by - 10, b.w + 12, 12);
+    ctx.strokeStyle = CITY.ink;
+    ctx.lineWidth = 3;
+    ctx.strokeRect(sx - 4.5, by - 8.5, b.w + 9, 10);
+    ctx.fillStyle = '#05060d';
+    ctx.fillRect(sx + b.w - 26, by - 34, 3, 26);
+    const blink = (Math.sin(tick * 0.14 + b.x) > 0.6);
+    ctx.fillStyle = blink ? CITY.red : 'rgba(255,18,61,0.25)';
+    ctx.fillRect(sx + b.w - 28, by - 38, 7, 5);
 
-    // Windows
-    const winY = by + 40;
-    const winH = 36;
-    const winW = 28;
-    const glowPulse = 0.7 + 0.3 * Math.sin(tick * 0.05);
-    this._drawWindow(ctx, sx + 22, winY, winW, winH, b.windowColor, glowPulse);
-    this._drawWindow(ctx, sx + b.w - 22 - winW, winY, winW, winH, b.windowColor, glowPulse);
-    if (b.w > 300) {
-      this._drawWindow(ctx, sx + b.w / 2 - winW / 2, winY, winW, winH, b.windowColor, glowPulse);
-    }
-
-    // Door
-    const doorW = 42;
-    const doorH = 69;
-    const doorX = sx + Math.floor(b.w / 2) - Math.floor(doorW / 2);
-    const doorY = groundY - doorH;
-    ctx.fillStyle = '#3a1f0a';
-    ctx.fillRect(doorX, doorY, doorW, doorH);
-    ctx.fillStyle = '#5a3515';
-    ctx.fillRect(doorX - 2, doorY - 2, doorW + 4, 4);
-    ctx.fillRect(doorX - 2, doorY - 2, 4, doorH + 2);
-    ctx.fillRect(doorX + doorW - 2, doorY - 2, 4, doorH + 2);
-    ctx.fillStyle = '#4a2808';
-    ctx.fillRect(doorX + 3, doorY + 4, doorW - 6, 14);
-    ctx.fillRect(doorX + 3, doorY + 22, doorW - 6, 18);
-    ctx.fillStyle = '#ffd700';
-    ctx.fillRect(doorX + doorW - 8, doorY + doorH / 2 - 2, 4, 4);
-
-    // Sign / Label
-    const signY = by + 8;
-    const signW = b.w - 20;
-    ctx.fillStyle = '#2c1a08';
-    ctx.fillRect(sx + 10, signY, signW, 24);
+    // Enseigne néon en toiture (texte b.label inchangé)
+    const signY = by + 6;
+    const signW = b.w - 16;
+    ctx.fillStyle = '#03040c';
+    ctx.fillRect(sx + 8, signY, signW, 22);
     ctx.fillStyle = b.accent;
-    ctx.fillRect(sx + 10, signY, signW, 2);
-    ctx.fillRect(sx + 10, signY + 22, signW, 2);
+    ctx.fillRect(sx + 8, signY, signW, 2);
+    ctx.fillRect(sx + 8, signY + 20, signW, 2);
     ctx.save();
     ctx.font = 'bold 9px "Press Start 2P", monospace';
     ctx.textAlign = 'center';
-    ctx.fillStyle = b.accent;
+    ctx.fillStyle = CITY.paper;
     ctx.shadowColor = b.accent;
-    ctx.shadowBlur = 4;
-    ctx.fillText(b.label, sx + b.w / 2, signY + 16);
+    ctx.shadowBlur = 8;
+    ctx.fillText(b.label, sx + b.w / 2, signY + 15);
     ctx.restore();
 
-    // Visited checkmark
+    // Porte au pied de l'immeuble
+    const doorW = 42;
+    const doorH = 66;
+    const doorX = sx + Math.floor(b.w / 2) - Math.floor(doorW / 2);
+    const doorY = groundY - doorH;
+    ctx.fillStyle = '#02030a';
+    ctx.fillRect(doorX, doorY, doorW, doorH);
+    const dg = ctx.createLinearGradient(doorX, doorY, doorX, doorY + doorH);
+    dg.addColorStop(0, `rgba(${this._hexToRgb(b.accent)},0.35)`);
+    dg.addColorStop(1, `rgba(${this._hexToRgb(b.accent)},0.05)`);
+    ctx.fillStyle = dg;
+    ctx.fillRect(doorX + 3, doorY + 3, doorW - 6, doorH - 6);
+    ctx.strokeStyle = b.accent;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(doorX + 1, doorY + 1, doorW - 2, doorH - 2);
+    ctx.fillStyle = CITY.paper;
+    ctx.fillRect(doorX + doorW - 9, doorY + doorH / 2 - 2, 4, 4);
+
+    // Tampon « visité » — pastille néon
     if (b.visited) {
       ctx.save();
       const cx = sx + b.w - 16;
-      const cy = by + roofH - 44;
-      const r = 11;
-      // Circle background
+      const cy = by + 40;
       ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.fillStyle = '#1b5e20';
+      ctx.arc(cx, cy, 11, 0, Math.PI * 2);
+      ctx.fillStyle = '#02030a';
       ctx.fill();
-      ctx.strokeStyle = '#69f0ae';
+      ctx.strokeStyle = b.accent;
       ctx.lineWidth = 2;
       ctx.stroke();
-      // Checkmark stroke
       ctx.beginPath();
       ctx.moveTo(cx - 5, cy);
       ctx.lineTo(cx - 1, cy + 4);
       ctx.lineTo(cx + 5, cy - 4);
-      ctx.strokeStyle = '#69f0ae';
+      ctx.strokeStyle = b.accent;
       ctx.lineWidth = 2.5;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
@@ -418,18 +554,19 @@ class GameMap {
     }
   }
 
-  _drawWindow(ctx, wx, wy, ww, wh, color, glowPulse) {
-    ctx.fillStyle = '#2c1a08';
-    ctx.fillRect(wx - 2, wy - 2, ww + 4, wh + 4);
-    ctx.fillStyle = 'rgba(20,30,40,0.8)';
-    ctx.fillRect(wx, wy, ww, wh);
-    ctx.fillStyle = '#3a2510';
-    ctx.fillRect(wx + ww / 2 - 1, wy, 2, wh);
-    ctx.fillRect(wx, wy + wh / 2 - 1, ww, 2);
-    ctx.fillStyle = `rgba(${this._hexToRgb(color)},${(0.12 * glowPulse).toFixed(2)})`;
-    ctx.fillRect(wx, wy, ww, wh);
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.fillRect(wx + 3, wy + 3, 5, 4);
+  _drawWindow(ctx, wx, wy, ww, wh, color, lit, tick) {
+    ctx.fillStyle = '#03040c';
+    ctx.fillRect(wx - 1, wy - 1, ww + 2, wh + 2);
+    if (lit) {
+      const flick = 0.55 + 0.25 * Math.abs(Math.sin(tick * 0.05));
+      ctx.fillStyle = `rgba(${this._hexToRgb(color)},${flick.toFixed(3)})`;
+      ctx.fillRect(wx, wy, ww, wh);
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.fillRect(wx + 2, wy + 2, 4, 3);
+    } else {
+      ctx.fillStyle = 'rgba(10,16,26,0.9)';
+      ctx.fillRect(wx, wy, ww, wh);
+    }
   }
 
   _hexToRgb(hex) {
