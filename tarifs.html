@@ -1053,11 +1053,10 @@
       var frag = doc.createDocumentFragment();
 
       frag.appendChild(navRow([
-        gotoBtn('btn-back', 'Changer de profil', 'choix')
+        gotoBtn('btn-back', 'Tarifs', 'choix')
       ]));
 
       var crumbs = el('p', 'crumbs');
-      crumbs.innerHTML = 'Tarifs / <b>' + PROFILES[profile].label + '</b>';
       frag.appendChild(crumbs);
 
       frag.appendChild(el('p', 'lead', 'Choisissez la catégorie qui correspond à votre besoin.'));
@@ -1090,11 +1089,9 @@
 
       frag.appendChild(navRow([
         gotoBtn('btn-back', 'Retour aux catégories', profile),
-        gotoBtn('btn-back', 'Changer de profil', 'choix')
       ]));
 
       var crumbs = el('p', 'crumbs');
-      crumbs.innerHTML = 'Tarifs / ' + PROFILES[profile].label + ' / <b>' + cat.label + '</b>';
       frag.appendChild(crumbs);
 
       var panel = el('main', 'panel');
