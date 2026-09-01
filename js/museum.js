@@ -49,24 +49,28 @@ const SECTIONS = {
     accent: '#8a3bff',
     timeline: [
       {
+        short: 'BTS',
         date: '2020 — 2022',
         title: 'BTS Systèmes Numériques',
         place: 'Lycée Jules Ferry — Versailles',
         desc: 'Option Électronique (SN option B). BTS obtenu + Certification Pix. Projet de fin d\'études : Jardin connecté (IoT).',
       },
       {
+        short: 'DORANCO',
         date: '2022 — 2023',
         title: 'Formation Développeur Web Full Stack',
         place: 'Doranco — Paris',
         desc: 'Formation complète : front-end (React, Angular, responsive/UX), back-end (Node.js, PHP, API REST/GraphQL), bases SQL/NoSQL, sécurité web, DevOps (Git, CI/CD, Docker) et méthodes Agile.',
       },
       {
+        short: 'BOOTCAMP',
         date: '2023',
         title: 'Bootcamp Full Stack — Le Réacteur',
         place: 'Paris',
         desc: 'Formation intensive full stack web & mobile. Plongée dans React, Node.js, React Native et les bonnes pratiques du développement moderne.',
       },
       {
+        short: 'MASTER',
         date: '2023 — Présent',
         title: 'Master ASI',
         place: 'ETNA / YNOV — Paris',
@@ -75,6 +79,7 @@ const SECTIONS = {
     ],
     experiences: [
       {
+        short: 'FREELANCE',
         date: '2023 — Présent',
         title: 'Développeur Full Stack Freelance',
         desc: 'Développement d\'applications web et mobiles. Projets : ISLAAH (app mobile), SKYWALK (plateforme SaaS).',
@@ -106,6 +111,7 @@ const SECTIONS = {
     accent: '#ff123d',
     items: [
       {
+        short: 'ISLAAH',
         title: 'ISLAAH',
         type: 'Application Mobile',
         tech: ['React Native', 'Symfony', 'MySQL', 'Cloudflare', 'Railway', 'Expo'],
@@ -117,6 +123,7 @@ const SECTIONS = {
         accent: '#19e8ff',
       },
       {
+        short: 'SKYWALK',
         title: 'SKYWALK',
         type: 'Plateforme Web SaaS',
         tech: ['React', 'NestJS', 'PostgreSQL', 'Docker'],
