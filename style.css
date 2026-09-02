@@ -175,6 +175,12 @@ a { color: inherit; }
   from { transform: translate(-50%, -48%) scale(0.94); opacity: 0; }
   to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
+/* Variante pour un élément déjà centré par flexbox (pas de translate -50%) */
+@keyframes comicInFlex {
+  from { opacity: 0; transform: scale(0.9); clip-path: inset(45% 0 45% 0); }
+  60%  { opacity: 1; clip-path: inset(0 0 0 0); }
+  to   { opacity: 1; transform: scale(1); clip-path: inset(0 0 0 0); }
+}
 
 /* Transitions d'écran — wipe + flash + RGB */
 @keyframes screenExit {
@@ -762,6 +768,9 @@ body::after {
   padding: 22px 24px;
   overflow-y: auto;
   overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   flex: 1;
   font-family: var(--body-font);
   font-size: 15px;
@@ -1506,14 +1515,16 @@ body::after {
   background-size: auto, var(--halftone-size), auto;
 }
 .audio-hint.hidden { display: none; }
-.audio-hint--in  { animation: fadeIn 0.22s ease; }
-.audio-hint--in .audio-hint__card { animation: comicIn 0.34s cubic-bezier(.2,.7,.3,1); }
-.audio-hint--out { animation: fadeIn 0.18s ease reverse; }
+.audio-hint--in  { animation: fadeIn 0.2s ease both; }
+.audio-hint--in .audio-hint__card { animation: comicInFlex 0.36s cubic-bezier(.22,.68,.32,1) both; }
+.audio-hint--out { animation: fadeIn 0.2s ease reverse both; }
 
 .audio-hint__card {
   position: relative;
   width: 100%;
   max-width: 400px;
+  transform-origin: center;
+  will-change: transform, opacity;
   background: var(--panel);
   border: 3px solid var(--stroke);
   box-shadow: 8px 8px 0 var(--magenta-deep), 0 0 46px rgba(255,43,176,0.3);
