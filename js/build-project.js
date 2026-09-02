@@ -21,9 +21,12 @@
   const INTERACT_RADIUS = 82;
   const SPAWN_X         = 90;
   const FIRST_DOOR_X    = 320;
-  const DOOR_SPACING    = 220;
-  const DOOR_W          = 94;
-  const DOOR_H          = 152;
+  const DOOR_SPACING    = 230;
+  // Portes volontairement plus compactes qu'avant : elles libèrent l'espace
+  // vertical nécessaire pour empiler, sans chevauchement, le titre puis
+  // l'action (CHOISIR) puis la description au-dessus de chaque porte.
+  const DOOR_W          = 84;
+  const DOOR_H          = 128;
 
   const STORAGE_KEY = 'drame.buildproject';
 
@@ -261,6 +264,18 @@
       this.zoom = Math.min(2.2, Math.max(1, window.innerWidth / 900));
       const eh = Math.round(this.canvas.height / this.zoom);
       this.player.groundY = Math.round(eh * GROUND_RATIO);
+      // Les portes déjà en place suivent la nouvelle hauteur utile
+      // (rotation d'écran) pour garder de la place au titre au-dessus.
+      const dh = this._doorHeight();
+      if (this.doors) this.doors.forEach((d) => { d.h = dh; });
+    }
+
+    // Hauteur d'une porte : compacte, et encore réduite sur écran très bas
+    // (paysage mobile) afin que le titre + « CHOISIR » tiennent au-dessus
+    // sans jamais recouvrir la porte.
+    _doorHeight() {
+      const eh = this.canvas.height / this.zoom;
+      return Math.round(Math.max(90, Math.min(DOOR_H, eh * 0.26)));
     }
 
     _relabelMobile() {
@@ -379,6 +394,7 @@
       state.phase = 'walk';
       const step  = STEPS[index];
 
+      const doorH = this._doorHeight();
       this.doors = step.doors.map((d, i) => ({
         value:   d.value,
         label:   d.label,
@@ -386,7 +402,7 @@
         special: d.special || null,
         x: FIRST_DOOR_X + i * DOOR_SPACING,
         w: DOOR_W,
-        h: DOOR_H,
+        h: doorH,
         open: 0,
         opening: false,
         selected: this._isSelected(step, d),
@@ -837,17 +853,15 @@
       this._drawGround(ctx, camX, groundY, eh);
       this._drawTrees(ctx, camX, groundY);
 
+      const focus = state.phase === 'walk' && !this._transitioning;
       for (const d of this.doors) {
         const sx = d.x - camX;
         if (sx > ew + 80 || sx + d.w < -80) continue;
-        this._drawDoor(ctx, d, sx, groundY, d === this._nearDoor && !this._transitioning);
+        this._drawDoor(ctx, d, sx, groundY, focus && d === this._nearDoor);
       }
 
       this.player.draw(ctx, camX);
 
-      if (this._nearDoor && state.phase === 'walk' && !this._transitioning) {
-        this._drawPrompt(ctx, camX, groundY);
-      }
       if (!this._touch && state.phase === 'walk') {
         this._drawHintBar(ctx, ew, eh);
       }
@@ -1119,10 +1133,12 @@
         ctx.restore();
       }
 
-      // Badge « choisi » (étape multi) — pastille néon frappée d'une araignée
+      // Badge « choisi » (étape multi) — pastille néon frappée d'une araignée.
+      // Placée sur le montant de la porte (et non au-dessus) pour ne jamais
+      // empiéter sur le cartouche de titre.
       if (d.selected) {
         const bcx = sx + d.w - 4;
-        const bcy = by - 6;
+        const bcy = by + 12;
         ctx.beginPath();
         ctx.arc(bcx, bcy, 10, 0, Math.PI * 2);
         ctx.fillStyle = '#02030a';
@@ -1133,88 +1149,127 @@
         drawSpider(ctx, bcx, bcy, 11, '#ff2bb0');
       }
 
-      // Panneau au-dessus (texte du choix, sur 1 à 3 lignes)
-      const sbW = Math.max(d.w + 46, 148);
-      const sbX = Math.round(sx + d.w / 2 - sbW / 2);
-      const lines = wrapText(ctx, d.label, sbW - 16, '7px "Press Start 2P", monospace');
-      const sbH = 12 + lines.length * 11;
-      const sbY = by - 24 - sbH;
+      // ── Légende de la porte : hiérarchie verticale stricte ──
+      //     TITRE  →  (↑ CHOISIR)  →  (description)  →  PORTE
+      // Les blocs sont empilés au-dessus de la porte avec un vrai interligne.
+      // Le TITRE est toujours le bloc le plus haut : rien ne peut le recouvrir.
+      this._drawDoorCaption(ctx, d, Math.round(sx + d.w / 2), by, accent, near);
+    }
 
+    // Empile, sans aucun chevauchement, la légende au-dessus d'une porte.
+    //   • hors focus  : seul le TITRE est affiché ;
+    //   • devant la porte : TITRE, puis l'action (rôle de la Flèche Haut),
+    //     puis la description courte — chacun dans son cartouche, séparés par
+    //     un interligne calculé pour tenir même sur petit écran.
+    _drawDoorCaption(ctx, d, cx, by, accent, near) {
+      const step = STEPS[state.step];
+      const wob  = near ? Math.sin(this._tick * 0.08) * 3 : 0;
+
+      // Texte d'action — uniquement devant la porte.
+      let action = null;
+      if (near) {
+        if (step && step.multi) {
+          if (d.special === 'done')         action = 'VALIDER';
+          else if (d.special === 'unknown') action = 'CHOISIR';
+          else                              action = d.selected ? 'RETIRER' : 'CHOISIR';
+        } else {
+          action = (step && state.data[step.key] === d.value) ? 'CHOISI' : 'CHOISIR';
+        }
+      }
+
+      // Description courte — uniquement devant la porte.
+      const descLines = (near && d.hint)
+        ? wrapText(ctx, d.hint.toUpperCase(), 172, '6px "Press Start 2P", monospace')
+        : [];
+
+      // Titre — toujours présent.
+      const titleW  = Math.max(d.w + 40, 128);
+      const titleLn = wrapText(ctx, d.label, titleW - 16, '7px "Press Start 2P", monospace');
+      const titleH  = 9 + titleLn.length * 10;
+      const actionH = action ? 20 : 0;
+      let   descH   = descLines.length ? descLines.length * 10 + 4 : 0;
+
+      // Bande verticale disponible : entre le bas du HUD (plafond) et le
+      // haut de la porte. On y fait tenir les blocs par priorité
+      // TITRE > ACTION > DESCRIPTION, en réduisant d'abord les interlignes,
+      // puis, en dernier recours sur écran très bas (paysage mobile), en
+      // masquant la description — le titre et « CHOISIR » restent lisibles
+      // et jamais chevauchés.
+      const marginAboveDoor = 12;
+      const ceiling = (this._touch ? 128 : 118) / this.zoom;
+      let room = (by - marginAboveDoor) - ceiling;
+
+      const fits = (g) => titleH + actionH + descH +
+        g * ((descH ? 1 : 0) + (actionH ? 1 : 0)) <= room;
+
+      let gap = 9;
+      if (!fits(gap)) gap = 4;
+      if (!fits(gap) && descH) { descH = 0; }        // on sacrifie la description
+      if (!fits(gap)) gap = 2;
+
+      // Empilement de bas (porte) vers le haut : action (collée à la porte),
+      // puis description, puis titre (bloc le plus haut). L'ordre de lecture
+      // haut → bas est donc : TITRE, ce que fait la porte, comment la choisir.
+      let bottom = by - marginAboveDoor + wob;
+
+      if (action) {
+        const top   = bottom - actionH;
+        const label = (this._touch ? '' : '↑ ') + action;
+        ctx.save();
+        ctx.font = '9px "Press Start 2P", monospace';
+        ctx.textAlign = 'center';
+        const lw = ctx.measureText(label).width + 22;
+        const ly = top + 15;
+        ctx.fillStyle = 'rgba(3,4,12,0.92)';
+        ctx.fillRect(cx - lw / 2, top, lw, actionH);
+        ctx.strokeStyle = '#01010a';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(cx - lw / 2 + 1.5, top + 1.5, lw - 3, actionH - 3);
+        ctx.strokeStyle = accent;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(cx - lw / 2 - 2, top - 2, lw + 4, actionH + 4);
+        ctx.fillStyle = 'rgba(255,18,61,0.55)';
+        ctx.fillText(label, cx - 0.8, ly);
+        ctx.fillStyle = 'rgba(25,232,255,0.55)';
+        ctx.fillText(label, cx + 0.8, ly);
+        ctx.fillStyle = '#fff';
+        ctx.fillText(label, cx, ly);
+        ctx.restore();
+        bottom = top - gap;
+      }
+
+      if (descH) {
+        const top = bottom - descH;
+        ctx.save();
+        ctx.font = '6px "Press Start 2P", monospace';
+        ctx.textAlign = 'center';
+        descLines.forEach((ln, i) => {
+          const w  = ctx.measureText(ln).width + 14;
+          const ly = top + 8 + i * 10;
+          ctx.fillStyle = 'rgba(3,4,12,0.82)';
+          ctx.fillRect(cx - w / 2, ly - 8, w, 11);
+          ctx.fillStyle = 'rgba(255,255,255,0.85)';
+          ctx.fillText(ln, cx, ly);
+        });
+        ctx.restore();
+        bottom = top - gap;
+      }
+
+      // Titre : bloc le plus haut, jamais recouvert.
+      const top  = bottom - titleH;
+      const sbX  = Math.round(cx - titleW / 2);
       ctx.fillStyle = '#03040c';
-      ctx.fillRect(sbX, sbY, sbW, sbH);
+      ctx.fillRect(sbX, top, titleW, titleH);
       ctx.fillStyle = accent;
-      ctx.fillRect(sbX, sbY, sbW, 2);
-      ctx.fillRect(sbX, sbY + sbH - 2, sbW, 2);
-      ctx.fillStyle = '#03040c';
-      ctx.fillRect(sx + d.w / 2 - 2, sbY + sbH, 4, 12);
-
+      ctx.fillRect(sbX, top, titleW, 2);
+      ctx.fillRect(sbX, top + titleH - 2, titleW, 2);
       ctx.save();
       ctx.font = '7px "Press Start 2P", monospace';
       ctx.textAlign = 'center';
       ctx.fillStyle = '#f5f6ff';
       ctx.shadowColor = accent;
       ctx.shadowBlur = 6;
-      lines.forEach((ln, i) => ctx.fillText(ln, sx + d.w / 2, sbY + 12 + i * 11));
-      ctx.restore();
-    }
-
-    _drawPrompt(ctx, camX, groundY) {
-      const d  = this._nearDoor;
-      const step = STEPS[state.step];
-      const sx = d.x - camX + d.w / 2;
-      const py = groundY - d.h - 40 + Math.sin(this._tick * 0.08) * 3;
-
-      // Badge d'action au-dessus de la porte. Il reflète le rôle de la Flèche
-      // Haut : CHOISIR une porte (ou CHOISI quand c'est déjà la sélection en
-      // cours), RETIRER pour désélectionner en multi, VALIDER pour la porte
-      // « TERMINER LA SELECTION ». Le passage à l'étape suivante reste sur
-      // « Entrée » / le bouton « Valider l'étape ».
-      let action;
-      if (step.multi) {
-        if (d.special === 'done')         action = 'VALIDER';
-        else if (d.special === 'unknown') action = 'CHOISIR';
-        else                              action = d.selected ? 'RETIRER' : 'CHOISIR';
-      } else {
-        action = state.data[step.key] === d.value ? 'CHOISI' : 'CHOISIR';
-      }
-
-      ctx.save();
-      ctx.textAlign = 'center';
-
-      if (action) {
-        const label = (this._touch ? '' : '↑ ') + action;
-        const accent = this._doorAccent(d);
-        ctx.font = '9px "Press Start 2P", monospace';
-        const lw = ctx.measureText(label).width + 24;
-        ctx.fillStyle = 'rgba(3,4,12,0.92)';
-        ctx.fillRect(sx - lw / 2, py - 17, lw, 24);
-        ctx.strokeStyle = '#01010a';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(sx - lw / 2 + 1.5, py - 15.5, lw - 3, 21);
-        ctx.strokeStyle = accent;
-        ctx.lineWidth = 2;
-        ctx.strokeRect(sx - lw / 2 - 2, py - 19, lw + 4, 28);
-        ctx.fillStyle = 'rgba(255,18,61,0.55)';
-        ctx.fillText(label, sx - 0.8, py);
-        ctx.fillStyle = 'rgba(25,232,255,0.55)';
-        ctx.fillText(label, sx + 0.8, py);
-        ctx.fillStyle = '#fff';
-        ctx.fillText(label, sx, py);
-      }
-
-      if (d.hint) {
-        ctx.font = '6px "Press Start 2P", monospace';
-        const hlines = wrapText(ctx, d.hint.toUpperCase(), 190, '6px "Press Start 2P", monospace');
-        let hy = action ? py + 12 : py;
-        for (const ln of hlines) {
-          const hw = ctx.measureText(ln).width + 14;
-          ctx.fillStyle = 'rgba(3,4,12,0.8)';
-          ctx.fillRect(sx - hw / 2, hy - 8, hw, 12);
-          ctx.fillStyle = 'rgba(255,255,255,0.82)';
-          ctx.fillText(ln, sx, hy);
-          hy += 12;
-        }
-      }
+      titleLn.forEach((ln, i) => ctx.fillText(ln, cx, top + 11 + i * 10));
       ctx.restore();
     }
 

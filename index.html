@@ -98,6 +98,25 @@
 
   <div class="toast hidden" id="toast"></div>
 
+  <!-- Modal d'information audio — s'affiche une fois par visiteur, juste
+       après « Let's go ! ». Réutilise le système audio existant (AudioManager). -->
+  <div id="audio-hint" class="audio-hint hidden" role="dialog" aria-modal="true"
+       aria-labelledby="audio-hint-title" aria-describedby="audio-hint-text">
+    <div class="audio-hint__card">
+      <span class="audio-hint__eyebrow">Expérience</span>
+      <h2 class="audio-hint__title" id="audio-hint-title">ACTIVEZ LE SON</h2>
+      <p class="audio-hint__text" id="audio-hint-text">
+        Activez le son pour profiter pleinement de l'expérience.
+      </p>
+      <p class="audio-hint__note">
+        Vous pouvez l'activer ou le couper à tout moment avec le bouton SOUND, en haut de l'écran.
+      </p>
+      <button type="button" id="audio-hint-continue" class="mc-btn mc-btn--primary">
+        <span class="mc-btn__label">Continuer</span>
+      </button>
+    </div>
+  </div>
+
   <script>
     if(/Mobi|Android/i.test(navigator.userAgent)){
       document.querySelectorAll('.desktop-only').forEach(el => el.style.display='none');

@@ -365,6 +365,66 @@ function showGameIntro() {
   mb?.addEventListener('touchstart', closeIntro, { once: true, passive: true });
 }
 
+// ── Modal d'information audio ─────────────────────────
+// Affichée une seule fois par visiteur, juste après « Let's go ! », pour
+// recommander d'activer le son. Elle NE crée aucun second moteur audio :
+// tout passe par window.AudioManager (musique, SFX, bouton SOUND). Une fois
+// vue (mémorisée dans localStorage), « Let's go ! » enchaîne directement.
+const AUDIO_HINT_KEY = 'drame.portfolio.audioHint';
+
+function audioHintSeen() {
+  try { return localStorage.getItem(AUDIO_HINT_KEY) === 'seen'; }
+  catch (e) { return true; }   // stockage indisponible : on n'insiste pas
+}
+
+function markAudioHintSeen() {
+  try { localStorage.setItem(AUDIO_HINT_KEY, 'seen'); } catch (e) { /* noop */ }
+}
+
+function showAudioHint(onContinue) {
+  const modal = document.getElementById('audio-hint');
+  const btn   = document.getElementById('audio-hint-continue');
+  if (!modal || !btn) { onContinue(); return; }
+
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    markAudioHintSeen();
+    btn.removeEventListener('click', finish);
+    window.removeEventListener('keydown', onKey);
+    if (window.AudioManager) window.AudioManager.play('click');
+    modal.classList.add('audio-hint--out');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      modal.classList.remove('audio-hint--in', 'audio-hint--out');
+    }, 180);
+    onContinue();
+  };
+  const onKey = (e) => {
+    if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Escape') {
+      e.preventDefault();
+      finish();
+    }
+  };
+
+  modal.classList.remove('hidden');
+  void modal.offsetWidth;
+  modal.classList.add('audio-hint--in');
+  btn.addEventListener('click', finish);
+  window.addEventListener('keydown', onKey);
+  try { btn.focus({ preventScroll: true }); } catch (e) { try { btn.focus(); } catch (_) {} }
+}
+
+function onStartClick() {
+  if (audioHintSeen()) { startGame(); return; }
+  // Le clic « Let's go ! » amorce déjà l'audio (geste utilisateur) ; le jeu
+  // ne démarre qu'après « Continuer », lui aussi un geste utilisateur — la
+  // lecture audio iOS/WebView reste donc autorisée.
+  if (window.AudioManager) window.AudioManager.unlock();
+  showAudioHint(startGame);
+}
+
 function startGame() {
   const welcome = document.getElementById('screen-welcome');
   const game    = document.getElementById('screen-game');
@@ -422,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     btn.addEventListener('touchstart', unlock, { passive: true });
     btn.addEventListener('mousedown',  unlock);
-    btn.addEventListener('click', startGame);
+    btn.addEventListener('click', onStartClick);
   }
 
   document.getElementById('btn-home')?.addEventListener('click', goHome);
