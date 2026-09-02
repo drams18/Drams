@@ -1218,6 +1218,18 @@ body::after {
   text-transform: uppercase;
   color: var(--proj-accent, var(--magenta));
 }
+/* Projet mis en avant — mention discrète sur la carte */
+.proj-pick {
+  font-family: var(--body-font);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--proj-accent, var(--magenta)) 65%, #fff);
+  border: 1px solid color-mix(in srgb, var(--proj-accent, var(--magenta)) 45%, transparent);
+  padding: 2px 7px;
+  white-space: nowrap;
+}
 .proj-title  { font-size: 16px; font-weight: 800; color: #fff; line-height: 1.35; }
 .proj-desc   { font-size: 13.5px; color: #b0b4bc; line-height: 1.65; }
 .proj-role {
@@ -1361,6 +1373,20 @@ body::after {
   text-shadow: 0 0 8px color-mix(in srgb, var(--tab-accent, var(--modal-accent)) 55%, transparent);
 }
 
+/* Onglet d'un projet mis en avant — pastille discrète dans le coin */
+.carousel-tab.is-pick { position: relative; }
+.carousel-tab.is-pick::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--tab-accent, var(--modal-accent));
+  box-shadow: 0 0 6px color-mix(in srgb, var(--tab-accent, var(--modal-accent)) 70%, transparent);
+}
+
 /* Intitulé de catégorie inséré dans la barre d'onglets */
 .carousel-group {
   flex: 0 0 auto;
@@ -1401,6 +1427,8 @@ body::after {
   border: 1px solid var(--edge);
   padding: 1px 7px;
 }
+.carousel-hint__grp { white-space: nowrap; color: color-mix(in srgb, var(--modal-accent) 80%, #fff); }
+.carousel-hint__grp b { font-weight: 800; }
 .carousel-hint__touch { display: none; }
 
 /* Fenêtre — masque le débordement horizontal, hauteur animée */

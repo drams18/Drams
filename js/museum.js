@@ -5,7 +5,7 @@
    Données réelles. Ne pas exagérer les expériences :
      • SkyWalk = projet de groupe (équipe de 7).
      • Pool Party Experience = projet EN COURS.
-     • Wild Kédougou / Prospectly / ISLAAH = projets PERSONNELS.
+     • Wild Kédougou / Prospectly / ISLAAH / OneDay = projets PERSONNELS.
      • Projets DevPhantom = travail d'équipe (~4 personnes).
    ══════════════════════════════════════════════════════ */
 
@@ -150,6 +150,8 @@ const SECTIONS = {
     label: 'GALERIE PROJETS',
     accent: '#ff123d',
     // Triés Professionnel → Personnel → Scolaire.
+    // pick: true → projet mis en avant (« à ne pas rater ») : repère discret
+    // sur l'onglet + mention sur la carte.
     items: [
       {
         short: 'INFINITIA',
@@ -167,6 +169,7 @@ const SECTIONS = {
         title: 'Allsab-MS',
         type: 'Intranet',
         category: 'Professionnel',
+        pick: true,
         tech: ['PHP', 'Symfony', 'MySQL'],
         role: 'Projet DevPhantom, en équipe — l\'un des premiers projets que j\'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.',
         desc: 'Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.',
@@ -215,6 +218,7 @@ const SECTIONS = {
         title: 'BADN',
         type: 'Application Mobile',
         category: 'Professionnel',
+        pick: true,
         tech: ['React Native', 'Node.js'],
         role: 'Projet interne DevPhantom, en équipe. J\'étais principalement impliqué sur le développement backend.',
         desc: 'Application pour organiser des sorties entre amis : définition d\'un budget, choix d\'un lieu et d\'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d\'autres.',
@@ -226,6 +230,7 @@ const SECTIONS = {
         title: 'Wild Kédougou Experience',
         type: 'Plateforme de réservation',
         category: 'Personnel',
+        pick: true,
         tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Supabase', 'Google Calendar API', 'Brevo', 'Cloudflare Workers', 'PWA', 'SEO'],
         role: 'Projet personnel — conception et développement complets (frontend, backend serverless, intégrations).',
         desc: 'Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l\'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.',
@@ -252,6 +257,7 @@ const SECTIONS = {
         title: 'ISLAAH',
         type: 'Application Mobile',
         category: 'Personnel',
+        pick: true,
         tech: ['React Native', 'Symfony', 'MySQL', 'Cloudflare', 'Railway', 'Expo'],
         role: 'Projet personnel — conception et développement complet : app mobile, API et mise en production.',
         desc: 'Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l\'App Store.',
@@ -274,10 +280,24 @@ const SECTIONS = {
         accent: '#ff123d',
       },
       {
+        short: 'ONEDAY',
+        title: 'OneDay',
+        type: 'PWA de planification',
+        category: 'Personnel',
+        tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'React Router', 'Supabase', 'PostgreSQL', 'PWA', 'Web Push', 'Cloudflare Pages', 'Cloudflare Workers'],
+        role: 'Projet personnel — conception et développement complets (frontend, backend serverless, notifications push). PWA que j\'ai construite pour organiser mes journées, mieux travailler et m\'installer des habitudes.',
+        desc: 'Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d\'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d\'avancement, modèles de journée réutilisables (« programmes ») applicables à n\'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.',
+        links: [
+          { label: 'Voir le projet', url: 'https://oneday-5s9.pages.dev/' },
+        ],
+        accent: '#19e8ff',
+      },
+      {
         short: 'SKYWALK',
         title: 'SkyWalk',
         type: 'Plateforme Web',
         category: 'Scolaire',
+        pick: true,
         tech: ['React', 'TypeScript', 'Vite', 'Tailwind', 'React Query', 'NestJS', 'PostgreSQL', 'TypeORM', 'JWT', 'Docker', 'Nginx', 'GitLab CI'],
         role: 'Projet réalisé en équipe de 7 (ETNA — Grand Projet d\'Étude). J\'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d\'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l\'architecture technique et à la documentation / au diagramme d\'architecture.',
         desc: 'Plateforme web destinée à accompagner les personnes dans leurs projets d\'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d\'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.',

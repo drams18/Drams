@@ -39,6 +39,7 @@ class InteractionManager {
         return;
       }
       // Flèches ← / → = navigation dans le carrousel de la section ouverte
+      // Entrée = passer à la catégorie suivante (galerie de projets)
       if (!this.isOpen() || !this._activeCarousel) return;
       const tag = document.activeElement?.tagName;
       if (tag === 'INPUT' || tag === 'TEXTAREA') return;
@@ -48,6 +49,13 @@ class InteractionManager {
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
         this._activeCarousel.go(this._activeCarousel.index + 1);
+      } else if (e.key === 'Enter') {
+        // Ne pas court-circuiter l'activation native d'un bouton / lien ciblé.
+        if (tag === 'BUTTON' || tag === 'A') return;
+        if (this._activeCarousel.hasGroups) {
+          e.preventDefault();
+          this._activeCarousel.nextGroup();
+        }
       }
     });
   }
@@ -311,10 +319,11 @@ class InteractionManager {
         : '';
 
       const catHTML = p.category ? `<span class="proj-cat">${p.category}</span>` : '';
+      const pickHTML = p.pick ? '<span class="proj-pick">★ À ne pas rater</span>' : '';
 
       return `
-        <div class="proj-card carousel-card" style="--proj-accent:${accent}">
-          <div class="proj-meta">${catHTML}<span class="proj-type">${p.type}</span></div>
+        <div class="proj-card carousel-card${p.pick ? ' is-pick' : ''}" style="--proj-accent:${accent}">
+          <div class="proj-meta">${catHTML}<span class="proj-type">${p.type}</span>${pickHTML}</div>
           <h3 class="proj-title">${p.title}</h3>
           <p class="proj-desc">${p.desc}</p>
           ${roleHTML}
@@ -332,6 +341,7 @@ class InteractionManager {
         tabLabel: s => s.short || s.title,
         tabAccent: catAccent,
         tabGroup: s => s.category,
+        tabMark: s => !!s.pick,
         slideHTML,
       })}
     `;
@@ -339,11 +349,12 @@ class InteractionManager {
 
   // ── Carrousel (Parcours & Galerie) ──────────────────
 
-  _renderCarousel({ slides, tabLabel, slideHTML, tabAccent, tabGroup }) {
+  _renderCarousel({ slides, tabLabel, slideHTML, tabAccent, tabGroup, tabMark }) {
     let lastGroup = null;
     const tabs = slides.map((s, i) => {
       const acc = tabAccent ? tabAccent(s) : '';
       const grp = tabGroup ? tabGroup(s) : null;
+      const pick = tabMark ? tabMark(s) : false;
       let sep = '';
       if (grp && grp !== lastGroup) {
         // Intitulé de catégorie inséré dans la barre d'onglets (non cliquable).
@@ -351,8 +362,9 @@ class InteractionManager {
         lastGroup = grp;
       }
       return `${sep}
-      <button type="button" class="carousel-tab${i === 0 ? ' is-active' : ''}"
+      <button type="button" class="carousel-tab${i === 0 ? ' is-active' : ''}${pick ? ' is-pick' : ''}"
               role="tab" aria-selected="${i === 0 ? 'true' : 'false'}" data-index="${i}"
+              ${pick ? 'title="À ne pas rater"' : ''}
               ${acc ? `style="--tab-accent:${acc}"` : ''}>
         ${tabLabel(s)}
       </button>`;
@@ -360,17 +372,24 @@ class InteractionManager {
 
     const panels = slides.map((s, i) => `
       <div class="carousel-slide${i === 0 ? ' is-active' : ''}" role="tabpanel"
-           data-index="${i}" aria-hidden="${i === 0 ? 'false' : 'true'}">
+           data-index="${i}" aria-hidden="${i === 0 ? 'false' : 'true'}"
+           ${tabGroup ? `data-group="${tabGroup(s)}"` : ''}>
         ${slideHTML(s)}
       </div>
     `).join('');
+
+    // La navigation par catégorie (Entrée) n'a de sens que si les slides
+    // sont groupées : on n'affiche l'astuce que dans ce cas.
+    const groupHint = tabGroup
+      ? ' <span class="carousel-hint__grp">— <b>Entrée</b> : catégorie suivante</span>'
+      : '';
 
     return `
       <div class="carousel" data-carousel>
         <div class="carousel-tabs" role="tablist">${tabs}</div>
         <p class="carousel-hint">
           <span class="carousel-hint__keys" aria-hidden="true">&lsaquo; &rsaquo;</span>
-          <span class="carousel-hint__desktop">Utilisez les flèches du clavier (ou les boutons) pour naviguer — ou cliquez sur un titre</span>
+          <span class="carousel-hint__desktop">Utilisez les flèches du clavier (ou les boutons) pour naviguer — ou cliquez sur un titre${groupHint}</span>
           <span class="carousel-hint__touch">Glissez de gauche à droite — ou touchez un titre pour naviguer</span>
         </p>
         <div class="carousel-viewport">
@@ -416,6 +435,19 @@ class InteractionManager {
     let index = 0;
     const last = slides.length - 1;
     const clamp = (i) => Math.max(0, Math.min(last, i));
+
+    // Groupes (catégories) : « Entrée » saute au 1er projet du groupe suivant,
+    // en boucle. Sans groupes (ex. Parcours), la touche reste inactive.
+    const groups = slides.map(s => s.dataset.group || '');
+    const orderedGroups = [...new Set(groups.filter(Boolean))];
+    const hasGroups = orderedGroups.length >= 2;
+    const nextGroup = () => {
+      if (!hasGroups) return;
+      const cur = orderedGroups.indexOf(groups[index]);
+      const target = orderedGroups[(cur + 1) % orderedGroups.length];
+      const ti = groups.indexOf(target);
+      if (ti >= 0) go(ti);
+    };
 
     const syncHeight = () => {
       view.style.height = slides[index].offsetHeight + 'px';
@@ -497,6 +529,8 @@ class InteractionManager {
 
     this._activeCarousel = {
       go,
+      nextGroup,
+      hasGroups,
       get index() { return index; },
       count: slides.length,
     };
