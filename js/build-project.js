@@ -19,14 +19,25 @@
   // ── Réglages monde (locaux : map.js n'est PAS chargé ici) ──
   const GROUND_RATIO    = 0.74;
   const INTERACT_RADIUS = 82;
-  const SPAWN_X         = 90;
-  const FIRST_DOOR_X    = 320;
+  const SPAWN_X         = 210;   // entre la porte de RETOUR (gauche) et les choix (droite)
+  const FIRST_DOOR_X    = 380;
   const DOOR_SPACING    = 230;
   // Portes volontairement plus compactes qu'avant : elles libèrent l'espace
   // vertical nécessaire pour empiler, sans chevauchement, le titre puis
   // l'action (CHOISIR) puis la description au-dessus de chaque porte.
   const DOOR_W          = 84;
   const DOOR_H          = 128;
+
+  // ── Porte de RETOUR ───────────────────────────────────
+  // Délibérément à part : placée TOUT À GAUCHE, avant le spawn et les portes
+  // de choix, avec une identité visuelle qui ne partage RIEN avec elles —
+  // vert « sortie » (couleur absente de la palette des choix), battant plein
+  // (pas une faille d'énergie), chambranle de pierre chaude, grande flèche
+  // gravée vers la gauche, halo lent et non clignotant. Impossible à
+  // confondre avec une porte de choix.
+  const BACK_DOOR_X     = 44;
+  const BACK_DOOR_W     = 80;
+  const BACK_ACCENT     = '#37e39b';
 
   // Nuées de smog (parallaxe) — constantes : définies une fois, pas par frame.
   const BP_CLOUDS = [
@@ -243,10 +254,12 @@
       this._targetX = 0;
       this._tick = 0;
       this._nearDoor = null;
+      this._nearBack = false;   // le joueur est-il devant la porte de RETOUR ?
       this._transitioning = false;
       this._moved = false;      // le joueur a-t-il déjà bougé ? (rappel clavier)
       this._movedAt = 0;
       this.doors = [];
+      this._backDoor = null;    // { x, w, h } — porte de RETOUR, tout à gauche
       this.worldWidth = 1200;
 
       // Voile de transition (créé une fois)
@@ -286,6 +299,7 @@
       // (rotation d'écran) pour garder de la place au titre au-dessus.
       const dh = this._doorHeight();
       if (this.doors) this.doors.forEach((d) => { d.h = dh; });
+      if (this._backDoor) this._backDoor.h = dh;
     }
 
     // Hauteur d'une porte : compacte, et encore réduite sur écran très bas
@@ -426,6 +440,8 @@
         selected: this._isSelected(step, d),
       }));
 
+      this._backDoor = { x: BACK_DOOR_X, w: BACK_DOOR_W, h: doorH };
+
       this.worldWidth = FIRST_DOOR_X + (step.doors.length - 1) * DOOR_SPACING + 240;
       this.player.x = SPAWN_X;
       this.player.facing = 'right';
@@ -433,6 +449,7 @@
       this.cameraX = instant ? 0 : this.cameraX;
       this._targetX = 0;
       this._nearDoor = null;
+      this._nearBack = false;
       this._transitioning = false;
 
       this._syncUI();
@@ -455,7 +472,8 @@
 
       if (walk) {
         this.player.move(this.controls, this.worldWidth);
-        this._nearDoor = this._findNearDoor();
+        this._nearBack = this._isNearBack();
+        this._nearDoor = this._nearBack ? null : this._findNearDoor();
 
         if (!this._moved && (this.controls.left || this.controls.right)) {
           this._moved = true;
@@ -468,7 +486,8 @@
         // JAMAIS passer à l'étape suivante — c'est le rôle exclusif d'« Entrée »
         // (ou du bouton « Valider l'étape »).
         if (this.controls._justPressed('ArrowUp')) {
-          if (this._nearDoor) this._choose(this._nearDoor);
+          if (this._nearBack)      this._back();
+          else if (this._nearDoor) this._choose(this._nearDoor);
         } else if (this.controls.close) {
           this._back();
         }
@@ -494,6 +513,12 @@
         if (dist < bestDist) { best = d; bestDist = dist; }
       }
       return best;
+    }
+
+    _isNearBack() {
+      const bd = this._backDoor;
+      if (!bd) return false;
+      return Math.abs(this.player.x - (bd.x + bd.w / 2)) < INTERACT_RADIUS;
     }
 
     // ── Sélection d'une porte (Flèche Haut / bouton « CHOISIR ») ────────
@@ -874,6 +899,10 @@
       this._drawTrees(ctx, camX, groundY);
 
       const focus = state.phase === 'walk' && !this._transitioning;
+
+      // Porte de RETOUR — dessinée en premier, tout à gauche, à part.
+      this._drawBackDoor(ctx, camX, groundY, ew, focus && this._nearBack);
+
       for (const d of this.doors) {
         const sx = d.x - camX;
         if (sx > ew + 80 || sx + d.w < -80) continue;
@@ -1051,6 +1080,20 @@
         ctx.globalAlpha = 0.5;
         ctx.fillRect(px - 18, groundY + 2, 36, 2);
         ctx.globalAlpha = 1;
+      }
+
+      // Paillasson devant la porte de RETOUR — matière (pas de néon), teinte verte
+      if (this._backDoor) {
+        const px = this._backDoor.x + this._backDoor.w / 2 - camX;
+        if (px > -40 && px < w + 40) {
+          ctx.fillStyle = 'rgba(55,227,155,0.12)';
+          ctx.fillRect(px - 24, groundY + 2, 48, 10);
+          ctx.fillStyle = 'rgba(55,227,155,0.5)';
+          ctx.fillRect(px - 24, groundY + 2, 48, 2);
+          ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+          ctx.lineWidth = 1;
+          for (let i = -18; i <= 18; i += 9) ctx.strokeRect(px + i, groundY + 4, 6, 6);
+        }
       }
     }
 
@@ -1317,6 +1360,135 @@
       ctx.textAlign = 'center';
       ctx.fillStyle = '#f5f6ff';
       ctx.shadowColor = accent;
+      ctx.shadowBlur = 6;
+      titleLn.forEach((ln, i) => ctx.fillText(ln, cx, top + 11 + i * 10));
+      ctx.restore();
+    }
+
+    // ── Porte de RETOUR ────────────────────────────────
+    // Aucune brique partagée avec _drawDoor : battant plein, chambranle de
+    // pierre, flèche gravée, halo vert lent. Elle doit se lire au premier
+    // coup d'œil comme « la sortie », jamais comme un choix.
+    _drawBackDoor(ctx, camX, groundY, ew, near) {
+      const bd = this._backDoor;
+      if (!bd) return;
+      const sx = bd.x - camX;
+      if (sx > ew + 80 || sx + bd.w < -80) return;
+
+      const by  = groundY - bd.h;
+      const cx  = sx + bd.w / 2;
+      const rgb = hexToRgb(BACK_ACCENT);
+      const pulse = 0.5 + 0.5 * Math.sin(this._tick * 0.05);
+
+      // Halo vert doux (lent, non clignotant — à l'opposé du spider-sense)
+      const halo = ctx.createRadialGradient(cx, by + bd.h * 0.5, 6, cx, by + bd.h * 0.5, bd.h * 0.95);
+      halo.addColorStop(0, 'rgba(' + rgb + ',' + ((near ? 0.30 : 0.15) + 0.07 * pulse).toFixed(3) + ')');
+      halo.addColorStop(1, 'rgba(' + rgb + ',0)');
+      ctx.fillStyle = halo;
+      ctx.fillRect(sx - bd.w, by - 46, bd.w * 3, bd.h + 92);
+
+      // Chambranle massif — pierre chaude, tranche avec l'univers néon froid
+      ctx.fillStyle = '#2a1e12';
+      ctx.fillRect(sx - 10, by - 16, bd.w + 20, bd.h + 16);
+      ctx.fillStyle = '#0c0a06';
+      ctx.fillRect(sx - 4, by - 8, bd.w + 8, bd.h + 8);
+      // linteau
+      ctx.fillStyle = '#3a2a19';
+      ctx.fillRect(sx - 14, by - 22, bd.w + 28, 10);
+
+      // Battant PLEIN (une vraie porte, pas une faille d'énergie)
+      ctx.fillStyle = '#123821';
+      ctx.fillRect(sx, by, bd.w, bd.h);
+      ctx.fillStyle = '#0e2c1a';
+      ctx.fillRect(sx + 4, by + 4, bd.w - 8, bd.h - 8);
+
+      // Panneaux menuisés haut / bas — code visuel d'une porte réelle
+      ctx.strokeStyle = 'rgba(' + rgb + ',0.5)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(sx + 10, by + 10, bd.w - 20, bd.h * 0.40);
+      ctx.strokeRect(sx + 10, by + bd.h * 0.54, bd.w - 20, bd.h * 0.38);
+
+      // Liseré vert sur tout le pourtour du battant
+      ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.65 + 0.35 * pulse).toFixed(3) + ')';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(sx + 1, by + 1, bd.w - 2, bd.h - 2);
+
+      // Grande flèche GAUCHE gravée au centre — « on repart en arrière »
+      const ay = by + bd.h * 0.5;
+      const as = Math.min(17, bd.w * 0.26);
+      const ax = cx + as * 0.35;
+      ctx.fillStyle = near ? '#eafff4' : 'rgba(234,255,244,0.82)';
+      ctx.beginPath();
+      ctx.moveTo(ax - as, ay);
+      ctx.lineTo(ax, ay - as);
+      ctx.lineTo(ax, ay - as * 0.4);
+      ctx.lineTo(ax + as, ay - as * 0.4);
+      ctx.lineTo(ax + as, ay + as * 0.4);
+      ctx.lineTo(ax, ay + as * 0.4);
+      ctx.lineTo(ax, ay + as);
+      ctx.closePath();
+      ctx.fill();
+
+      // Poignée ronde côté gauche
+      ctx.fillStyle = '#f4e7c8';
+      ctx.beginPath();
+      ctx.arc(sx + 12, ay, 3.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      const title = state.step === 0 ? 'RETOUR AU PORTFOLIO' : 'ETAPE PRECEDENTE';
+      this._drawBackCaption(ctx, Math.round(cx), by, near, title);
+    }
+
+    _drawBackCaption(ctx, cx, by, near, title) {
+      const wob = near ? Math.sin(this._tick * 0.06) * 2 : 0;
+
+      const titleW  = Math.max(BACK_DOOR_W + 60, 152);
+      const titleLn = wrapText(ctx, title, titleW - 16, '7px "Press Start 2P", monospace');
+      const titleH  = 9 + titleLn.length * 10;
+
+      // Sur écran très bas, on sacrifie la pastille « RETOUR » pour garder le
+      // titre lisible et jamais chevauché par le HUD (même règle que les choix).
+      const ceiling  = (this._touch ? 128 : 118) / this.zoom;
+      const room     = (by - 12) - ceiling;
+      const showAct  = near && (titleH + 20 + 9 <= room);
+      const actionH  = showAct ? 20 : 0;
+
+      let bottom = by - 12 + wob;
+
+      if (showAct) {
+        const label = (this._touch ? '' : '↑ ') + 'RETOUR';
+        const top   = bottom - actionH;
+        ctx.save();
+        ctx.font = '9px "Press Start 2P", monospace';
+        ctx.textAlign = 'center';
+        const lw = ctx.measureText(label).width + 22;
+        ctx.fillStyle = 'rgba(3,12,7,0.94)';
+        ctx.fillRect(cx - lw / 2, top, lw, actionH);
+        ctx.strokeStyle = '#01060a';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(cx - lw / 2 + 1.5, top + 1.5, lw - 3, actionH - 3);
+        ctx.strokeStyle = BACK_ACCENT;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(cx - lw / 2 - 2, top - 2, lw + 4, actionH + 4);
+        ctx.fillStyle = '#eafff4';
+        ctx.fillText(label, cx, top + 15);
+        ctx.restore();
+        bottom = top - 9;
+      }
+
+      const top = bottom - titleH;
+      const sbX = Math.round(cx - titleW / 2);
+      ctx.fillStyle = '#06130c';
+      ctx.fillRect(sbX, top, titleW, titleH);
+      ctx.fillStyle = BACK_ACCENT;
+      ctx.fillRect(sbX, top, titleW, 2);
+      ctx.fillRect(sbX, top + titleH - 2, titleW, 2);
+      ctx.fillRect(sbX, top, 3, titleH);            // coin marqué « sortie »
+      ctx.save();
+      ctx.font = '7px "Press Start 2P", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#eafff4';
+      ctx.shadowColor = BACK_ACCENT;
       ctx.shadowBlur = 6;
       titleLn.forEach((ln, i) => ctx.fillText(ln, cx, top + 11 + i * 10));
       ctx.restore();
