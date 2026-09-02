@@ -4,6 +4,7 @@
 
    Données réelles. Ne pas exagérer les expériences :
      • SkyWalk = projet de groupe (équipe de 7).
+     • Crowdin (clone) = projet scolaire ETNA en binôme.
      • Pool Party Experience = projet EN COURS.
      • Wild Kédougou / Prospectly / ISLAAH / OneDay = projets PERSONNELS.
      • Projets DevPhantom = travail d'équipe (~4 personnes).
@@ -305,6 +306,17 @@ const SECTIONS = {
           { label: 'Accéder', url: 'https://skywalk-chi.vercel.app/' },
         ],
         accent: '#ff2bb0',
+      },
+      {
+        short: 'CROWDIN',
+        title: 'Crowdin (clone)',
+        type: 'Plateforme de localisation',
+        category: 'Scolaire',
+        tech: ['Symfony 7', 'PHP 8', 'Doctrine ORM', 'PostgreSQL', 'Twig', 'Docker', 'Bootstrap'],
+        role: 'Projet scolaire ETNA réalisé en binôme (déc. 2024 – janv. 2025) ; j\'ai porté la majeure partie du développement : modélisation Doctrine et migrations, CRUD projets / langues / sources / traductions, import et export CSV, verrouillage des chaînes sources, inscription avec vérification d\'e-mail, contrôle d\'accès par voter.',
+        desc: 'Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d\'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d\'accès par rôles.',
+        links: [],
+        accent: '#8a3bff',
       },
     ],
   },
