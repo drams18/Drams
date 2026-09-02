@@ -9,8 +9,11 @@
 class Game {
   constructor() {
     this.canvas = document.getElementById('gameCanvas');
-    this.ctx    = this.canvas.getContext('2d');
+    // alpha:false → le compositeur saute la transparence du canvas (la scène
+    // couvre tout l'écran de toute façon). Gain net à chaque frame.
+    this.ctx    = this.canvas.getContext('2d', { alpha: false });
     this.ctx.imageSmoothingEnabled = false;
+    this._loop  = this._loop.bind(this);   // pas de closure allouée par frame
 
     this.controls     = new Controls();
     this.mobile       = new MobileControls(this.controls);
@@ -34,9 +37,20 @@ class Game {
       'ontouchstart' in window || window.innerWidth <= 900;
 
     this._resize();
-    window.addEventListener('resize', () => this._resize());
+    // Resize coalescé sur une frame (évite plusieurs _resize par salve d'events).
+    window.addEventListener('resize', () => {
+      if (this._resizeQueued) return;
+      this._resizeQueued = true;
+      requestAnimationFrame(() => { this._resizeQueued = false; this._resize(); });
+    });
 
-    requestAnimationFrame(() => this._loop());
+    // Les mesures de texte du HUD sont mises en cache ; on les recalcule une
+    // fois la police pixel chargée (sinon largeurs basées sur le fallback).
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => { this._hud = null; this._prompt = null; });
+    }
+
+    requestAnimationFrame(this._loop);
   }
 
   _resize() {
@@ -53,7 +67,7 @@ class Game {
     // En pause quand on est revenu à l'accueil : on garde la boucle
     // vivante mais on ne calcule/dessine rien.
     if (document.getElementById('screen-game').classList.contains('hidden')) {
-      requestAnimationFrame(() => this._loop());
+      requestAnimationFrame(this._loop);
       return;
     }
 
@@ -89,6 +103,14 @@ class Game {
 
     this.controls.flush();
 
+    // Fenêtre de section ouverte : le panneau (fond ~90 % opaque) masque la
+    // scène. On garde la boucle vivante mais on ne redessine pas la ville —
+    // gros gain CPU/GPU pendant la lecture du contenu.
+    if (modalOpen) {
+      requestAnimationFrame(this._loop);
+      return;
+    }
+
     // Camera (en espace monde)
     this._targetX = this.player.x - ew / 2;
     this._targetX = Math.max(0, Math.min(WORLD_WIDTH - ew, this._targetX));
@@ -115,7 +137,7 @@ class Game {
 
     ctx.restore();
 
-    requestAnimationFrame(() => this._loop());
+    requestAnimationFrame(this._loop);
   }
 
   _enterPortal(portal) {
@@ -161,12 +183,14 @@ class Game {
     ctx.strokeStyle = '#19e8ff';
     ctx.strokeRect(sx - 8, by - 28, w + 16, building.h + 28);
 
-    // Halo accent
-    ctx.shadowColor = building.accent;
-    ctx.shadowBlur  = 28;
+    // Halo accent — empilement de contours dégradés (remplace un ctx.shadowBlur
+    // de 28 px par frame, l'une des opérations canvas les plus coûteuses).
     ctx.strokeStyle = building.accent;
-    ctx.globalAlpha = pulse * 3;
-    ctx.strokeRect(sx - 10, by - 30, w + 20, building.h + 30);
+    for (let g = 0; g < 4; g++) {
+      ctx.globalAlpha = (pulse * 3) * (1 - g / 4);
+      ctx.lineWidth = 2 + g * 4;
+      ctx.strokeRect(sx - 10 - g * 3, by - 30 - g * 3, w + 20 + g * 6, building.h + 30 + g * 6);
+    }
 
     // Lignes de vitesse latérales
     ctx.shadowBlur = 0;
@@ -219,12 +243,18 @@ class Game {
       { text: '↓',            color: KEY },
     ];
 
-    let totalW = 0;
-    const widths = segments.map(s => {
-      const sw = ctx.measureText(s.text).width;
-      totalW += sw;
-      return sw;
-    });
+    // measureText × 8 par frame pour une chaîne fixe → mesuré une seule fois.
+    if (!this._hud) {
+      let tw = 0;
+      const ws = segments.map(s => {
+        const sw = ctx.measureText(s.text).width;
+        tw += sw;
+        return sw;
+      });
+      this._hud = { widths: ws, totalW: tw };
+    }
+    const widths = this._hud.widths;
+    const totalW = this._hud.totalW;
 
     const hintY = h - 20;
     const padX  = 14;
@@ -270,9 +300,17 @@ class Game {
     ctx.save();
     ctx.font = '9px "Press Start 2P", monospace';
     ctx.textAlign = 'center';
-    const action = this._touch ? 'ENTRER' : '↑ ENTRER';
-    const label  = `${action} · ${building.promptLabel || building.label}`;
-    const lw = ctx.measureText(label).width + 24;
+    // Libellé + largeur mesurés une fois par bâtiment (chaîne constante).
+    this._prompt = this._prompt || Object.create(null);
+    let pc = this._prompt[building.id];
+    if (!pc) {
+      const action = this._touch ? 'ENTRER' : '↑ ENTRER';
+      const lbl = `${action} · ${building.promptLabel || building.label}`;
+      pc = { label: lbl, lw: ctx.measureText(lbl).width + 24 };
+      this._prompt[building.id] = pc;
+    }
+    const label = pc.label;
+    const lw = pc.lw;
     const bxp = sx - lw / 2;
 
     // Bulle comics : fond + trait encre + liseré accent + coins

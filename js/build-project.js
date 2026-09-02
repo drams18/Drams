@@ -28,6 +28,16 @@
   const DOOR_W          = 84;
   const DOOR_H          = 128;
 
+  // Nuées de smog (parallaxe) — constantes : définies une fois, pas par frame.
+  const BP_CLOUDS = [
+    { x: 120,  y: 50, w: 100, h: 36 },
+    { x: 520,  y: 34, w: 84,  h: 30 },
+    { x: 900,  y: 66, w: 120, h: 40 },
+    { x: 1400, y: 44, w: 96,  h: 34 },
+    { x: 1950, y: 58, w: 110, h: 38 },
+    { x: 2450, y: 40, w: 90,  h: 30 },
+  ];
+
   const STORAGE_KEY = 'drame.buildproject';
 
   // Libellé affiché quand une étape n'a reçu aucune sélection.
@@ -211,8 +221,11 @@
   class BuildProject {
     constructor() {
       this.canvas = document.getElementById('bpCanvas');
-      this.ctx    = this.canvas.getContext('2d');
+      this.ctx    = this.canvas.getContext('2d', { alpha: false });
       this.ctx.imageSmoothingEnabled = false;
+      this._loop  = this._loop.bind(this);   // pas de closure allouée par frame
+      this._grad  = Object.create(null);     // dégradés dépendant de la taille
+      this._cloudGrads = null;
 
       this.controls = new Controls();
       this.mobile   = new MobileControls(this.controls);
@@ -244,13 +257,17 @@
       this._toastEl = document.getElementById('bp-toast');
 
       this._resize();
-      window.addEventListener('resize', () => this._resize());
+      window.addEventListener('resize', () => {
+        if (this._resizeQueued) return;
+        this._resizeQueued = true;
+        requestAnimationFrame(() => { this._resizeQueued = false; this._resize(); });
+      });
 
       this._relabelMobile();
       this._bindUI();
 
       this._buildStep(state.step, true);
-      requestAnimationFrame(() => this._loop());
+      requestAnimationFrame(this._loop);
 
       // La musique reprend l'ambiance du portfolio (démarre au 1er geste,
       // exactement comme dans le jeu — géré par js/audio.js).
@@ -261,6 +278,7 @@
       this.canvas.width  = window.innerWidth;
       this.canvas.height = window.innerHeight;
       this.ctx.imageSmoothingEnabled = false;
+      this._grad = Object.create(null);   // dégradés taille-dépendants à refaire
       this.zoom = Math.min(2.2, Math.max(1, window.innerWidth / 900));
       const eh = Math.round(this.canvas.height / this.zoom);
       this.player.groundY = Math.round(eh * GROUND_RATIO);
@@ -430,7 +448,7 @@
 
     // ── Boucle ─────────────────────────────────────────
     _loop() {
-      if (document.hidden) { requestAnimationFrame(() => this._loop()); return; }
+      if (document.hidden) { requestAnimationFrame(this._loop); return; }
 
       this._tick++;
       const walk = state.phase === 'walk' && !this._transitioning;
@@ -463,8 +481,10 @@
         if (d.opening && d.open < 1) d.open = Math.min(1, d.open + 0.13);
       }
 
-      this._render();
-      requestAnimationFrame(() => this._loop());
+      // Écrans « recap » / « form » / « done » : un panneau plein écran (~90 %
+      // opaque) recouvre le canvas → inutile de continuer à dessiner la scène.
+      if (walk || this._transitioning) this._render();
+      requestAnimationFrame(this._loop);
     }
 
     _findNearDoor() {
@@ -873,31 +893,37 @@
       const w = ctx.canvas.width;
       const skyH = eh * GROUND_RATIO;
 
-      const grad = ctx.createLinearGradient(0, 0, 0, skyH);
-      grad.addColorStop(0, '#0e1630');
-      grad.addColorStop(0.5, '#16213f');
-      grad.addColorStop(1, '#1b1533');
-      ctx.fillStyle = grad;
+      // Dégradés du ciel : ne dépendent que de la taille → mis en cache.
+      let sk = this._grad.sky;
+      if (!sk) {
+        const cx = w * 0.24, cy = skyH * 0.32, r = Math.max(50, w * 0.08);
+        const grad = ctx.createLinearGradient(0, 0, 0, skyH);
+        grad.addColorStop(0, '#0e1630');
+        grad.addColorStop(0.5, '#16213f');
+        grad.addColorStop(1, '#1b1533');
+        const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 3);
+        halo.addColorStop(0, 'rgba(255,43,176,0.45)');
+        halo.addColorStop(0.4, 'rgba(138,59,255,0.2)');
+        halo.addColorStop(1, 'rgba(138,59,255,0)');
+        const low = ctx.createLinearGradient(0, skyH - 110, 0, skyH);
+        low.addColorStop(0, 'rgba(25,232,255,0)');
+        low.addColorStop(1, 'rgba(25,232,255,0.16)');
+        sk = this._grad.sky = { grad, halo, low, cx, cy, r };
+      }
+
+      ctx.fillStyle = sk.grad;
       ctx.fillRect(0, 0, w, skyH + 2);
 
       // Disque lumineux magenta / violet
-      const cx = w * 0.24, cy = skyH * 0.32, r = Math.max(50, w * 0.08);
-      const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 3);
-      halo.addColorStop(0, 'rgba(255,43,176,0.45)');
-      halo.addColorStop(0.4, 'rgba(138,59,255,0.2)');
-      halo.addColorStop(1, 'rgba(138,59,255,0)');
-      ctx.fillStyle = halo;
+      ctx.fillStyle = sk.halo;
       ctx.fillRect(0, 0, w, skyH);
       ctx.fillStyle = 'rgba(255,60,190,0.8)';
       ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.arc(sk.cx, sk.cy, sk.r, 0, Math.PI * 2);
       ctx.fill();
 
       // Halo bas cyan
-      const low = ctx.createLinearGradient(0, skyH - 110, 0, skyH);
-      low.addColorStop(0, 'rgba(25,232,255,0)');
-      low.addColorStop(1, 'rgba(25,232,255,0.16)');
-      ctx.fillStyle = low;
+      ctx.fillStyle = sk.low;
       ctx.fillRect(0, skyH - 110, w, 110);
 
       // Éclats fixes
@@ -924,52 +950,75 @@
       this._drawSkyline(ctx, skyH);
     }
 
+    // Skyline 100 % statique : pré-rendue en buffers, blittée avec parallaxe
+    // (2 drawImage au lieu de ~1500 fillRect par frame).
     _drawSkyline(ctx, skyH) {
-      const w = ctx.canvas.width;
-      const base = skyH + 2;
+      const s = this._ensureBpSkyline(ctx.canvas.width, skyH + 2);
       const camX = this.cameraX;
-      const layer = (par, step, color, hMin, hMod, wMin, wMod, winA, winB) => {
-        const off = -(camX * par) % step;
-        for (let x = off - step; x < w + step; x += step) {
-          const seed = Math.round((x + camX * par) / step);
+      ctx.drawImage(s.far.buf,  Math.round(s.far.x0  - camX * s.far.par),  s.base - s.far.h);
+      ctx.drawImage(s.near.buf, Math.round(s.near.x0 - camX * s.near.par), s.base - s.near.h);
+    }
+
+    _ensureBpSkyline(w, base) {
+      if (this._grad.skyline && this._grad.skyline.base === base) return this._grad.skyline;
+
+      const span = Math.max(1600, this.worldWidth || 1200);
+      const bake = (par, step, color, hMin, hMod, wMin, wMod, winA, winB) => {
+        const S0 = -2;
+        const S1 = Math.ceil((w + span * par) / step) + 2;
+        const bufH = hMin + hMod + 32;
+        const buf = document.createElement('canvas');
+        buf.width  = (S1 - S0 + 1) * step;
+        buf.height = bufH;
+        const g = buf.getContext('2d');
+        const b = bufH;
+        for (let seed = S0; seed <= S1; seed++) {
+          const bx = (seed - S0) * step;
           const bh = hMin + ((seed * 53) % hMod);
           const bw = wMin + ((seed * 29) % wMod);
-          const bx = Math.round(x);
-          ctx.fillStyle = color;
-          ctx.fillRect(bx, base - bh, bw, bh);
+          g.fillStyle = color;
+          g.fillRect(bx, b - bh, bw, bh);
           const kind = seed % 3;
-          if (kind === 0) ctx.fillRect(bx + bw * 0.2, base - bh - 14, bw * 0.6, 14);
-          else if (kind === 1) { ctx.fillRect(bx + bw * 0.5 - 7, base - bh - 18, 14, 12); ctx.fillRect(bx + bw * 0.5 - 2, base - bh - 24, 4, 6); }
-          else ctx.fillRect(bx + bw * 0.5 - 1, base - bh - 22, 2, 22);
-          ctx.fillStyle = seed % 2 ? winA : winB;
-          for (let wy = base - bh + 10; wy < base - 6; wy += 14) {
+          if (kind === 0) g.fillRect(bx + bw * 0.2, b - bh - 14, bw * 0.6, 14);
+          else if (kind === 1) { g.fillRect(bx + bw * 0.5 - 7, b - bh - 18, 14, 12); g.fillRect(bx + bw * 0.5 - 2, b - bh - 24, 4, 6); }
+          else g.fillRect(bx + bw * 0.5 - 1, b - bh - 22, 2, 22);
+          g.fillStyle = seed % 2 ? winA : winB;
+          for (let wy = b - bh + 10; wy < b - 6; wy += 14) {
             for (let wx = bx + 6; wx < bx + bw - 6; wx += 12) {
-              if ((wx + wy + seed) % 3) ctx.fillRect(wx, wy, 3, 3);
+              if ((wx + wy + seed) % 3) g.fillRect(wx, wy, 3, 3);
             }
           }
         }
+        return { buf, x0: S0 * step, par, h: bufH };
       };
-      layer(0.18, 110, '#0b1122', 60, 110, 44, 40, 'rgba(25,232,255,0.12)', 'rgba(255,43,176,0.10)');
-      layer(0.34, 180, '#0d1630', 84, 140, 70, 60, 'rgba(25,232,255,0.18)', 'rgba(255,43,176,0.16)');
+
+      this._grad.skyline = {
+        base,
+        far:  bake(0.18, 110, '#0b1122', 60, 110, 44, 40, 'rgba(25,232,255,0.12)', 'rgba(255,43,176,0.10)'),
+        near: bake(0.34, 180, '#0d1630', 84, 140, 70, 60, 'rgba(25,232,255,0.18)', 'rgba(255,43,176,0.16)'),
+      };
+      return this._grad.skyline;
     }
 
     _drawClouds(ctx, camX) {
-      const clouds = [
-        { x: 120, y: 50, w: 100, h: 36 },
-        { x: 520, y: 34, w: 84, h: 30 },
-        { x: 900, y: 66, w: 120, h: 40 },
-        { x: 1400, y: 44, w: 96, h: 34 },
-        { x: 1950, y: 58, w: 110, h: 38 },
-        { x: 2450, y: 40, w: 90, h: 30 },
-      ];
-      for (const c of clouds) {
+      const clouds = BP_CLOUDS;
+      if (!this._cloudGrads) {
+        this._cloudGrads = clouds.map(c => {
+          const g = ctx.createLinearGradient(0, c.y, 0, c.y + c.h);
+          g.addColorStop(0, 'rgba(138,59,255,0.1)');
+          g.addColorStop(1, 'rgba(25,232,255,0.05)');
+          return g;
+        });
+      }
+      for (let i = 0; i < clouds.length; i++) {
+        const c = clouds[i];
         const cx = c.x - camX * 0.2;
-        const g = ctx.createLinearGradient(cx, c.y, cx, c.y + c.h);
-        g.addColorStop(0, 'rgba(138,59,255,0.1)');
-        g.addColorStop(1, 'rgba(25,232,255,0.05)');
-        ctx.fillStyle = g;
-        ctx.fillRect(cx + 10, c.y, c.w - 20, c.h);
-        ctx.fillRect(cx, c.y + 8, c.w, c.h - 14);
+        ctx.save();
+        ctx.translate(cx, 0);
+        ctx.fillStyle = this._cloudGrads[i];
+        ctx.fillRect(10, c.y, c.w - 20, c.h);
+        ctx.fillRect(0, c.y + 8, c.w, c.h - 14);
+        ctx.restore();
       }
     }
 

@@ -113,6 +113,19 @@ class GameMap {
   constructor() {
     this._cloudOffset = 0;
     this._htPattern = null;
+    this._rgb        = Object.create(null);  // mémo _hexToRgb
+    this._grad       = Object.create(null);  // dégradés dépendant de la taille (invalidés au resize)
+    this._cloudGrads = null;                 // dégradés nuages (constants)
+    this._labels     = Object.create(null);  // sprites de texte néon pré-rendus
+    this._sky        = null;                  // { under, over } — ciel statique bufferisé
+    this._skyline    = null;                  // { far, near }   — skyline statique bufferisée
+    this._sizeKey    = '';
+
+    // Les sprites de texte néon sont pré-rendus : si la police pixel n'est pas
+    // encore chargée au 1er rendu, on jette le cache une fois prête.
+    if (typeof document !== 'undefined' && document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => { this._labels = Object.create(null); });
+    }
   }
 
   nearBuilding(playerX, playerY) {
@@ -141,6 +154,15 @@ class GameMap {
   draw(ctx, cameraX, canvasH, tick) {
     const groundY = Math.round(canvasH * GROUND_RATIO);
 
+    // Invalide les buffers/dégradés statiques uniquement quand la taille change.
+    const sizeKey = ctx.canvas.width + 'x' + canvasH;
+    if (sizeKey !== this._sizeKey) {
+      this._sizeKey = sizeKey;
+      this._sky     = null;
+      this._skyline = null;
+      this._grad    = Object.create(null);
+    }
+
     this._drawSky(ctx, canvasH, tick);
     this._drawSkyline(ctx, cameraX, groundY);
     this._drawClouds(ctx, cameraX, groundY);
@@ -153,37 +175,11 @@ class GameMap {
   _drawSky(ctx, canvasH, tick) {
     const w = ctx.canvas.width;
     const skyH = canvasH * GROUND_RATIO;
+    const sky = this._ensureSky(w, skyH);
 
-    const grad = ctx.createLinearGradient(0, 0, 0, skyH);
-    grad.addColorStop(0, '#0e1630');
-    grad.addColorStop(0.5, '#16213f');
-    grad.addColorStop(1, '#1b1533');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, w, skyH);
+    ctx.drawImage(sky.under, 0, 0);
 
-    // Disque lumineux (lune / néon lointain) magenta→violet
-    const cx = w * 0.78;
-    const cy = skyH * 0.34;
-    const r  = Math.max(60, w * 0.09);
-    const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 3);
-    halo.addColorStop(0, 'rgba(255,43,176,0.5)');
-    halo.addColorStop(0.35, 'rgba(138,59,255,0.22)');
-    halo.addColorStop(1, 'rgba(138,59,255,0)');
-    ctx.fillStyle = halo;
-    ctx.fillRect(0, 0, w, skyH);
-    ctx.fillStyle = 'rgba(255,60,190,0.85)';
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Halo bas cyan (pollution lumineuse urbaine)
-    const low = ctx.createLinearGradient(0, skyH - 120, 0, skyH);
-    low.addColorStop(0, 'rgba(25,232,255,0)');
-    low.addColorStop(1, 'rgba(25,232,255,0.16)');
-    ctx.fillStyle = low;
-    ctx.fillRect(0, skyH - 120, w, 120);
-
-    // Éclats / étoiles fixes (parallaxe nulle, semis déterministe)
+    // Éclats / étoiles — seul élément animé du ciel (scintillement).
     ctx.fillStyle = 'rgba(255,255,255,0.75)';
     for (let i = 0; i < 60; i++) {
       const sx = (i * 137.5) % w;
@@ -194,91 +190,161 @@ class GameMap {
     }
     ctx.globalAlpha = 1;
 
-    // Fils de toile — quelques diagonales très ténues dans le ciel lointain
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-    ctx.lineWidth = 1;
+    ctx.drawImage(sky.over, 0, 0);
+  }
+
+  // Ciel 100 % statique pré-rendu : dégradés + lune + halos (calque « under »,
+  // sous les étoiles) puis fils de toile + trame halftone (calque « over »).
+  // Élimine ~5 créations de dégradés + 3 grands fillRect par frame.
+  _ensureSky(w, skyH) {
+    if (this._sky) return this._sky;
+    const H = Math.ceil(skyH);
+    const make = () => {
+      const c = document.createElement('canvas');
+      c.width = w; c.height = H;
+      return c;
+    };
+
+    const under = make();
+    const u = under.getContext('2d');
+    const grad = u.createLinearGradient(0, 0, 0, skyH);
+    grad.addColorStop(0, '#0e1630');
+    grad.addColorStop(0.5, '#16213f');
+    grad.addColorStop(1, '#1b1533');
+    u.fillStyle = grad;
+    u.fillRect(0, 0, w, skyH);
+
+    const cx = w * 0.78;
+    const cy = skyH * 0.34;
+    const r  = Math.max(60, w * 0.09);
+    const halo = u.createRadialGradient(cx, cy, 0, cx, cy, r * 3);
+    halo.addColorStop(0, 'rgba(255,43,176,0.5)');
+    halo.addColorStop(0.35, 'rgba(138,59,255,0.22)');
+    halo.addColorStop(1, 'rgba(138,59,255,0)');
+    u.fillStyle = halo;
+    u.fillRect(0, 0, w, skyH);
+    u.fillStyle = 'rgba(255,60,190,0.85)';
+    u.beginPath();
+    u.arc(cx, cy, r, 0, Math.PI * 2);
+    u.fill();
+
+    const low = u.createLinearGradient(0, skyH - 120, 0, skyH);
+    low.addColorStop(0, 'rgba(25,232,255,0)');
+    low.addColorStop(1, 'rgba(25,232,255,0.16)');
+    u.fillStyle = low;
+    u.fillRect(0, skyH - 120, w, 120);
+
+    const over = make();
+    const o = over.getContext('2d');
+    o.strokeStyle = 'rgba(255,255,255,0.05)';
+    o.lineWidth = 1;
     for (let i = 0; i < 5; i++) {
       const gx = ((i * 261) % (w + 200)) - 100;
-      ctx.beginPath();
-      ctx.moveTo(gx, -20);
-      ctx.lineTo(gx + skyH * 0.7, skyH);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(gx + 140, -20);
-      ctx.lineTo(gx + 140 - skyH * 0.7, skyH);
-      ctx.stroke();
+      o.beginPath();
+      o.moveTo(gx, -20);
+      o.lineTo(gx + skyH * 0.7, skyH);
+      o.stroke();
+      o.beginPath();
+      o.moveTo(gx + 140, -20);
+      o.lineTo(gx + 140 - skyH * 0.7, skyH);
+      o.stroke();
     }
-    ctx.restore();
-
-    // Trame halftone très légère sur le ciel
-    const ht = this._halftone(ctx);
+    const ht = this._halftone(o);
     if (ht) {
-      ctx.fillStyle = ht;
-      ctx.fillRect(0, 0, w, skyH);
+      o.fillStyle = ht;
+      o.fillRect(0, 0, w, skyH);
     }
+
+    this._sky = { under, over };
+    return this._sky;
   }
 
-  // Skyline dense façon New York — 2 couches de parallaxe.
+  // Skyline dense façon New York — 2 couches de parallaxe, 100 % statiques :
+  // pré-rendues une fois dans des buffers, puis blittées avec décalage
+  // parallaxe (2 drawImage/frame au lieu de ~2500 fillRect).
   _drawSkyline(ctx, cameraX, groundY) {
-    const w = ctx.canvas.width;
-    const base = groundY;
-
-    // Couche lointaine (parallaxe forte, sombre, serrée)
-    this._skylineLayer(ctx, cameraX, base, {
-      par: 0.22, step: 120, color: '#0b1122',
-      hMin: 70, hMod: 120, wMin: 46, wMod: 44,
-      winA: 'rgba(25,232,255,0.12)', winB: 'rgba(255,43,176,0.10)',
-    });
-    // Couche proche (parallaxe moyenne, plus haute, plus détaillée)
-    this._skylineLayer(ctx, cameraX, base, {
-      par: 0.4, step: 200, color: '#0d1630',
-      hMin: 96, hMod: 150, wMin: 74, wMod: 66,
-      winA: 'rgba(25,232,255,0.20)', winB: 'rgba(255,43,176,0.18)',
-    });
+    const s = this._ensureSkyline(ctx.canvas.width);
+    ctx.drawImage(s.far.buf,  Math.round(s.far.x0  - cameraX * s.far.par),  groundY - s.far.h);
+    ctx.drawImage(s.near.buf, Math.round(s.near.x0 - cameraX * s.near.par), groundY - s.near.h);
   }
 
-  _skylineLayer(ctx, cameraX, base, o) {
-    const w = ctx.canvas.width;
-    const off = -(cameraX * o.par) % o.step;
-    for (let x = off - o.step; x < w + o.step; x += o.step) {
-      const seed = Math.round((x + cameraX * o.par) / o.step);
-      const bh = o.hMin + ((seed * 53) % o.hMod);
-      const bw = o.wMin + ((seed * 29) % o.wMod);
-      const bx = Math.round(x);
-      ctx.fillStyle = o.color;
-      ctx.fillRect(bx, base - bh, bw, bh);
+  _ensureSkyline(w) {
+    if (this._skyline) return this._skyline;
 
-      // Redents / château d'eau / antenne selon le seed → variété NYC
-      const kind = seed % 3;
-      if (kind === 0) {
-        ctx.fillRect(bx + bw * 0.2, base - bh - 18, bw * 0.6, 18);       // redent
-      } else if (kind === 1) {
-        ctx.fillRect(bx + bw * 0.5 - 8, base - bh - 22, 16, 14);         // cuve
-        ctx.fillRect(bx + bw * 0.5 - 2, base - bh - 30, 4, 8);           // mât
-      } else {
-        ctx.fillRect(bx + bw * 0.5 - 1, base - bh - 26, 2, 26);         // antenne
-      }
+    const bake = (o) => {
+      // Plage de « seeds » couvrant tout le déplacement caméra + le viewport.
+      const S0 = -2;
+      const S1 = Math.ceil((w + WORLD_WIDTH * o.par) / o.step) + 2;
+      const bufH = o.hMin + o.hMod + 40;
+      const buf = document.createElement('canvas');
+      buf.width  = (S1 - S0 + 1) * o.step;
+      buf.height = bufH;
+      const g = buf.getContext('2d');
+      const base = bufH;
 
-      // Fenêtres allumées cyan / magenta
-      ctx.fillStyle = seed % 2 ? o.winA : o.winB;
-      for (let wy = base - bh + 12; wy < base - 8; wy += 16) {
-        for (let wx = bx + 8; wx < bx + bw - 8; wx += 14) {
-          if ((wx + wy + seed) % 3) ctx.fillRect(wx, wy, 4, 4);
+      for (let seed = S0; seed <= S1; seed++) {
+        const bx = (seed - S0) * o.step;
+        const bh = o.hMin + ((seed * 53) % o.hMod);
+        const bw = o.wMin + ((seed * 29) % o.wMod);
+        g.fillStyle = o.color;
+        g.fillRect(bx, base - bh, bw, bh);
+
+        // Redents / château d'eau / antenne selon le seed → variété NYC
+        const kind = seed % 3;
+        if (kind === 0) {
+          g.fillRect(bx + bw * 0.2, base - bh - 18, bw * 0.6, 18);       // redent
+        } else if (kind === 1) {
+          g.fillRect(bx + bw * 0.5 - 8, base - bh - 22, 16, 14);         // cuve
+          g.fillRect(bx + bw * 0.5 - 2, base - bh - 30, 4, 8);           // mât
+        } else {
+          g.fillRect(bx + bw * 0.5 - 1, base - bh - 26, 2, 26);          // antenne
+        }
+
+        // Fenêtres allumées cyan / magenta
+        g.fillStyle = seed % 2 ? o.winA : o.winB;
+        for (let wy = base - bh + 12; wy < base - 8; wy += 16) {
+          for (let wx = bx + 8; wx < bx + bw - 8; wx += 14) {
+            if ((wx + wy + seed) % 3) g.fillRect(wx, wy, 4, 4);
+          }
         }
       }
-    }
+      return { buf, x0: S0 * o.step, par: o.par, h: bufH };
+    };
+
+    this._skyline = {
+      far: bake({
+        par: 0.22, step: 120, color: '#0b1122',
+        hMin: 70, hMod: 120, wMin: 46, wMod: 44,
+        winA: 'rgba(25,232,255,0.12)', winB: 'rgba(255,43,176,0.10)',
+      }),
+      near: bake({
+        par: 0.4, step: 200, color: '#0d1630',
+        hMin: 96, hMod: 150, wMin: 74, wMod: 66,
+        winA: 'rgba(25,232,255,0.20)', winB: 'rgba(255,43,176,0.18)',
+      }),
+    };
+    return this._skyline;
   }
 
   _drawClouds(ctx, cameraX, groundY) {
-    for (const c of CLOUDS) {
+    // Dégradés verticaux constants → créés une seule fois.
+    if (!this._cloudGrads) {
+      this._cloudGrads = CLOUDS.map(c => {
+        const g = ctx.createLinearGradient(0, c.y, 0, c.y + c.h);
+        g.addColorStop(0, 'rgba(138,59,255,0.10)');
+        g.addColorStop(1, 'rgba(25,232,255,0.05)');
+        return g;
+      });
+    }
+    for (let i = 0; i < CLOUDS.length; i++) {
+      const c = CLOUDS[i];
       const cx = c.x - cameraX * 0.2;
-      const g = ctx.createLinearGradient(cx, c.y, cx, c.y + c.h);
-      g.addColorStop(0, 'rgba(138,59,255,0.10)');
-      g.addColorStop(1, 'rgba(25,232,255,0.05)');
-      ctx.fillStyle = g;
-      ctx.fillRect(cx, c.y + 6, c.w, c.h - 12);
-      ctx.fillRect(cx + 12, c.y, c.w - 24, c.h);
+      ctx.save();
+      ctx.translate(cx, 0);
+      ctx.fillStyle = this._cloudGrads[i];
+      ctx.fillRect(0, c.y + 6, c.w, c.h - 12);
+      ctx.fillRect(12, c.y, c.w - 24, c.h);
+      ctx.restore();
     }
   }
 
@@ -494,15 +560,11 @@ class GameMap {
     ctx.fillStyle = '#03040c';
     ctx.fillRect(cx - 2, by - 14, 4, 14);
 
-    ctx.save();
-    ctx.font = 'bold 8px "Press Start 2P", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = CITY.paper;
-    ctx.shadowColor = d.accent;
-    ctx.shadowBlur = 10;
-    ctx.fillText('CONSTRUISEZ', cx, signY + 16);
-    ctx.fillText('VOTRE PROJET', cx, signY + 29);
-    ctx.restore();
+    const pf = 'bold 8px "Press Start 2P", monospace';
+    const l1 = this._neonLabel('CONSTRUISEZ', d.accent, 10, pf);
+    const l2 = this._neonLabel('VOTRE PROJET', d.accent, 10, pf);
+    ctx.drawImage(l1.c, Math.round(cx - l1.w / 2), Math.round(signY + 16 - l1.baseline));
+    ctx.drawImage(l2.c, Math.round(cx - l2.w / 2), Math.round(signY + 29 - l2.baseline));
   }
 
   _drawBuilding(ctx, b, sx, groundY, tick) {
@@ -512,12 +574,19 @@ class GameMap {
     ctx.fillStyle = 'rgba(0,0,0,0.45)';
     ctx.fillRect(sx - 6, groundY, b.w + 12, 6);
 
-    // Facade — dégradé sombre
-    const fac = ctx.createLinearGradient(sx, by, sx, groundY);
-    fac.addColorStop(0, CITY.facadeHi);
-    fac.addColorStop(1, b.wallDark);
+    // Facade — dégradé sombre (vertical, indépendant de la caméra → mis en cache)
+    let fac = this._grad['fac_' + b.id];
+    if (!fac) {
+      fac = ctx.createLinearGradient(0, by, 0, groundY);
+      fac.addColorStop(0, CITY.facadeHi);
+      fac.addColorStop(1, b.wallDark);
+      this._grad['fac_' + b.id] = fac;
+    }
+    ctx.save();
+    ctx.translate(sx, 0);
     ctx.fillStyle = fac;
-    ctx.fillRect(sx, by, b.w, b.h);
+    ctx.fillRect(0, by, b.w, b.h);
+    ctx.restore();
 
     // Trame halftone sur la façade
     const ht = this._halftone(ctx);
@@ -581,14 +650,10 @@ class GameMap {
     ctx.fillStyle = b.accent;
     ctx.fillRect(sx + 8, signY, signW, 2);
     ctx.fillRect(sx + 8, signY + 20, signW, 2);
-    ctx.save();
-    ctx.font = 'bold 9px "Press Start 2P", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = CITY.paper;
-    ctx.shadowColor = b.accent;
-    ctx.shadowBlur = 8;
-    ctx.fillText(b.label, sx + b.w / 2, signY + 15);
-    ctx.restore();
+    const sign = this._neonLabel(b.label, b.accent, 8, 'bold 9px "Press Start 2P", monospace');
+    ctx.drawImage(sign.c,
+      Math.round(sx + b.w / 2 - sign.w / 2),
+      Math.round(signY + 15 - sign.baseline));
 
     // Porte au pied de l'immeuble
     const doorW = 42;
@@ -597,11 +662,18 @@ class GameMap {
     const doorY = groundY - doorH;
     ctx.fillStyle = '#02030a';
     ctx.fillRect(doorX, doorY, doorW, doorH);
-    const dg = ctx.createLinearGradient(doorX, doorY, doorX, doorY + doorH);
-    dg.addColorStop(0, `rgba(${this._hexToRgb(b.accent)},0.35)`);
-    dg.addColorStop(1, `rgba(${this._hexToRgb(b.accent)},0.05)`);
+    let dg = this._grad['door_' + b.id];
+    if (!dg) {
+      dg = ctx.createLinearGradient(0, doorY, 0, doorY + doorH);
+      dg.addColorStop(0, `rgba(${this._hexToRgb(b.accent)},0.35)`);
+      dg.addColorStop(1, `rgba(${this._hexToRgb(b.accent)},0.05)`);
+      this._grad['door_' + b.id] = dg;
+    }
+    ctx.save();
+    ctx.translate(doorX, 0);
     ctx.fillStyle = dg;
-    ctx.fillRect(doorX + 3, doorY + 3, doorW - 6, doorH - 6);
+    ctx.fillRect(3, doorY + 3, doorW - 6, doorH - 6);
+    ctx.restore();
     ctx.strokeStyle = b.accent;
     ctx.lineWidth = 2;
     ctx.strokeRect(doorX + 1, doorY + 1, doorW - 2, doorH - 2);
@@ -641,10 +713,45 @@ class GameMap {
   }
 
   _hexToRgb(hex) {
+    let v = this._rgb[hex];
+    if (v !== undefined) return v;
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
-    return `${r},${g},${b}`;
+    v = `${r},${g},${b}`;
+    this._rgb[hex] = v;
+    return v;
+  }
+
+  // Sprite de texte néon (texte blanc + halo flou) pré-rendu une seule fois,
+  // puis blitté chaque frame : évite un ctx.shadowBlur par frame (très coûteux).
+  // Reproduit un fillText centré, baseline alphabétique.
+  _neonLabel(text, color, blur, font) {
+    const key = font + '|' + blur + '|' + color + '|' + text;
+    let rec = this._labels[key];
+    if (rec) return rec;
+
+    const c = document.createElement('canvas');
+    let g = c.getContext('2d');
+    g.font = font;
+    const tw  = Math.ceil(g.measureText(text).width);
+    const pad = Math.ceil(blur) + 6;
+    c.width  = tw + pad * 2;
+    c.height = 16 + pad * 2;
+
+    g = c.getContext('2d');
+    g.font = font;
+    g.textAlign = 'center';
+    g.textBaseline = 'alphabetic';
+    g.fillStyle = CITY.paper;
+    g.shadowColor = color;
+    g.shadowBlur = blur;
+    const baseline = c.height - pad;
+    g.fillText(text, c.width / 2, baseline);
+
+    rec = { c, w: c.width, h: c.height, baseline };
+    this._labels[key] = rec;
+    return rec;
   }
 
   // Filament de toile ancré à un coin — dirX/dirY = sens vers l'intérieur (+1/-1).
