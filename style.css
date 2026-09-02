@@ -901,6 +901,34 @@ body::after {
 }
 .skill-badge:hover { background: rgba(255,255,255,0.08); transform: translateY(-1px); }
 
+/* Message de positionnement — mis en avant sous la bio */
+.profile-positioning {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #dfe4ee;
+  border-left: 4px solid var(--modal-accent);
+  background: rgba(255,255,255,0.04);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+/* Compétences par catégorie */
+.skill-groups { display: flex; flex-direction: column; gap: 14px; }
+.skill-group__label {
+  font-family: var(--body-font);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--modal-accent);
+  margin-bottom: 7px;
+}
+.skill-group .skill-badge { color: #d7dbe4; border-color: var(--edge); }
+
+/* Qualités / posture */
+.qualities { display: flex; flex-wrap: wrap; gap: 8px; }
+.qualities .tag { border-left: 3px solid var(--modal-accent); }
+
 /* Langues */
 .langs-list { display: flex; flex-wrap: wrap; gap: 10px; }
 .lang-item {
@@ -960,6 +988,42 @@ body::after {
 .timeline-title { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 3px; line-height: 1.4; }
 .timeline-place { font-size: 13px; color: #aab4c8; margin-bottom: 8px; }
 .timeline-desc  { font-size: 13.5px; color: #c0c4cc; line-height: 1.65; }
+.timeline-context {
+  font-size: 13px;
+  color: #cdd3de;
+  line-height: 1.6;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid var(--modal-accent);
+}
+.timeline-details {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: #c0c4cc;
+  line-height: 1.6;
+}
+.timeline-details li { margin-bottom: 5px; }
+.timeline-role {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #c6cad2;
+  line-height: 1.55;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid var(--modal-accent);
+}
+.timeline-role__k {
+  display: block;
+  font-family: var(--body-font);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--modal-accent);
+  margin-bottom: 2px;
+}
 
 /* Expériences */
 .exp-list { display: flex; flex-direction: column; gap: 14px; }
@@ -1132,6 +1196,19 @@ body::after {
   box-shadow: 5px 5px 0 var(--stroke), 0 0 20px color-mix(in srgb, var(--proj-accent, var(--magenta)) 40%, transparent);
 }
 .proj-emoji  { font-size: 30px; }
+/* Ligne méta : catégorie de projet + type */
+.proj-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.proj-cat {
+  font-family: var(--body-font);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--proj-accent, var(--magenta));
+  background: color-mix(in srgb, var(--proj-accent, var(--magenta)) 16%, transparent);
+  border: 1px solid var(--proj-accent, var(--magenta));
+  padding: 3px 8px;
+}
 /* Catégorie — INFORMATION : police classique */
 .proj-type   {
   font-family: var(--body-font);
@@ -1196,6 +1273,17 @@ body::after {
 .proj-link:hover { filter: brightness(1.1); }
 .proj-link:active { transform: translateY(1px); box-shadow: 0 0 0 var(--stroke); }
 
+/* Projet sans lien public : mention « Indisponible » non cliquable */
+.proj-link--off {
+  color: #8b93a5;
+  background: rgba(255,255,255,0.05);
+  border-color: var(--edge);
+  cursor: default;
+  font-weight: 700;
+}
+.proj-link--off::after { border-color: transparent transparent transparent #8b93a5; opacity: 0.6; }
+.proj-link--off:hover { filter: none; }
+
 /* ══ Carrousel — Parcours & Galerie ═══════════════════
    Onglets = navigation (titres d'étape à la place de numéros).
    Piste horizontale + hauteur animée sur la slide active. */
@@ -1252,6 +1340,45 @@ body::after {
 .carousel-tab:focus-visible {
   outline: 2px solid var(--modal-accent);
   outline-offset: 2px;
+}
+
+/* ── Galerie : repère couleur par catégorie ─────────────
+   Chaque onglet porte la couleur de sa catégorie (var --tab-accent,
+   posée en inline) ; par défaut on retombe sur --modal-accent. */
+.carousel-tab {
+  border-top: 3px solid var(--tab-accent, transparent);
+}
+.carousel-tab:hover {
+  border-color: var(--tab-accent, var(--modal-accent));
+  border-top-color: var(--tab-accent, var(--modal-accent));
+  box-shadow: 3px 3px 0 var(--stroke), 0 0 10px color-mix(in srgb, var(--tab-accent, var(--modal-accent)) 40%, transparent);
+}
+.carousel-tab.is-active {
+  color: var(--tab-accent, var(--modal-accent));
+  border-color: var(--tab-accent, var(--modal-accent));
+  background: color-mix(in srgb, var(--tab-accent, var(--modal-accent)) 18%, var(--panel-2));
+  box-shadow: 3px 3px 0 var(--stroke), 0 0 16px color-mix(in srgb, var(--tab-accent, var(--modal-accent)) 50%, transparent);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--tab-accent, var(--modal-accent)) 55%, transparent);
+}
+
+/* Intitulé de catégorie inséré dans la barre d'onglets */
+.carousel-group {
+  flex: 0 0 auto;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  font-family: var(--body-font);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #7f8aa0;
+  padding: 0 4px 0 8px;
+  border-left: 2px solid var(--edge);
+}
+.carousel-group:first-child { border-left: 0; padding-left: 2px; }
+@media (max-width: 640px) {
+  .carousel-group { font-size: 8px; padding: 0 3px 0 5px; letter-spacing: 1px; }
 }
 
 /* Indication de navigation — discrète, sous les onglets */

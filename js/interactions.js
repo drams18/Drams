@@ -154,7 +154,9 @@ class InteractionManager {
   }
 
   _renderProfile(section) {
-    const { bio, skills } = section;
+    const { bio } = section;
+    const skillGroups = section.skillGroups || [];
+    const qualities   = section.qualities || [];
 
     const socialsHTML = bio.socials.map(s => `
       <a href="${s.url}" target="_blank" rel="noopener" class="social-link">
@@ -169,9 +171,26 @@ class InteractionManager {
       </div>
     `).join('');
 
-    // Skills as colored badges (no progress bars)
-    const skillsHTML = skills.map(s => `
-      <span class="skill-badge" style="border-color:${s.color};color:${s.color}">${s.name}</span>
+    // Message de positionnement — mis en avant juste sous la bio.
+    const positioningHTML = section.positioning
+      ? `<p class="profile-positioning">${section.positioning}</p>`
+      : '';
+
+    // Qualités / posture professionnelle.
+    const qualitiesHTML = qualities.length
+      ? `<div class="section-divider"></div>
+         <h3 class="sub-title">QUALITES</h3>
+         <div class="qualities">${qualities.map(q => `<span class="tag">${q}</span>`).join('')}</div>`
+      : '';
+
+    // Compétences organisées par catégorie (badges, sans barre de progression).
+    const skillsHTML = skillGroups.map(g => `
+      <div class="skill-group">
+        <div class="skill-group__label">${g.label}</div>
+        <div class="skills-badges">
+          ${g.items.map(name => `<span class="skill-badge">${name}</span>`).join('')}
+        </div>
+      </div>
     `).join('');
 
     return `
@@ -186,10 +205,12 @@ class InteractionManager {
         </div>
       </div>
       <p class="profile-bio">${bio.description}</p>
+      ${positioningHTML}
       <div class="social-links">${socialsHTML}</div>
       <div class="section-divider"></div>
       <h3 class="sub-title">COMPETENCES</h3>
-      <div class="skills-badges">${skillsHTML}</div>
+      <div class="skill-groups">${skillsHTML}</div>
+      ${qualitiesHTML}
       <div class="section-divider"></div>
       <h3 class="sub-title">LANGUES</h3>
       <div class="langs-list">${langsHTML}</div>
@@ -197,23 +218,26 @@ class InteractionManager {
   }
 
   _renderParcours(section) {
-    const { timeline, experiences } = section;
+    // Une étape = une slide / un onglet : BAC · BTS · ETNA · DEVPHANTOM · AUTRES.
+    const slides = section.steps || [];
 
-    // Chaque étape (formations + expériences) devient une slide du carrousel.
-    const slides = [
-      ...timeline.map(t => ({ ...t, kind: 'FORMATION' })),
-      ...experiences.map(e => ({ ...e, kind: 'EXPÉRIENCE' })),
-    ];
-
-    const slideHTML = (s) => `
-      <div class="timeline-card carousel-card">
-        <div class="carousel-card__kind">${s.kind}</div>
-        <div class="timeline-date">${s.date}</div>
-        <div class="timeline-title">${s.title}</div>
-        ${s.place ? `<div class="timeline-place">${s.place}</div>` : ''}
-        <p class="timeline-desc">${s.desc}</p>
-      </div>
-    `;
+    const slideHTML = (s) => {
+      const detailsHTML = (s.details && s.details.length)
+        ? `<ul class="timeline-details">${s.details.map(d => `<li>${d}</li>`).join('')}</ul>`
+        : '';
+      return `
+        <div class="timeline-card carousel-card">
+          <div class="carousel-card__kind">${s.kind}</div>
+          <div class="timeline-date">${s.date}</div>
+          <div class="timeline-title">${s.title}</div>
+          ${s.place ? `<div class="timeline-place">${s.place}</div>` : ''}
+          ${s.context ? `<p class="timeline-context">${s.context}</p>` : ''}
+          ${s.desc ? `<p class="timeline-desc">${s.desc}</p>` : ''}
+          ${detailsHTML}
+          ${s.role ? `<p class="timeline-role"><span class="timeline-role__k">Mon rôle</span>${s.role}</p>` : ''}
+        </div>
+      `;
+    };
 
     return `
       <h3 class="sub-title">PARCOURS</h3>
@@ -270,19 +294,27 @@ class InteractionManager {
   }
 
   _renderProjets(section) {
+    // Une couleur par catégorie → repère visuel dans la galerie (carte + onglet).
+    const catAccent = (p) => CATEGORY_ACCENT[p.category] || p.accent || section.accent;
+
     const slideHTML = (p) => {
-      const techHTML  = p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
-      const linksHTML = p.links.map(l => `
-        <a href="${l.url}" target="_blank" rel="noopener" class="proj-link">${l.label}</a>
-      `).join('');
+      const accent   = catAccent(p);
+      const techHTML = p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
+      const linksHTML = (p.links && p.links.length)
+        ? p.links.map(l => `
+            <a href="${l.url}" target="_blank" rel="noopener" class="proj-link">${l.label}</a>
+          `).join('')
+        : '<span class="proj-link proj-link--off" aria-disabled="true">Indisponible</span>';
 
       const roleHTML = p.role
         ? `<p class="proj-role"><span class="proj-role__k">Mon rôle</span>${p.role}</p>`
         : '';
 
+      const catHTML = p.category ? `<span class="proj-cat">${p.category}</span>` : '';
+
       return `
-        <div class="proj-card carousel-card" style="--proj-accent:${p.accent}">
-          <div class="proj-type">${p.type}</div>
+        <div class="proj-card carousel-card" style="--proj-accent:${accent}">
+          <div class="proj-meta">${catHTML}<span class="proj-type">${p.type}</span></div>
           <h3 class="proj-title">${p.title}</h3>
           <p class="proj-desc">${p.desc}</p>
           ${roleHTML}
@@ -294,20 +326,37 @@ class InteractionManager {
 
     return `
       <h3 class="sub-title">GALERIE PROJETS</h3>
-      <p class="section-intro">Applications mobiles, plateformes web, projets personnels.</p>
-      ${this._renderCarousel({ slides: section.items, tabLabel: s => s.short || s.title, slideHTML })}
+      <p class="section-intro">Projets rangés par catégorie et par couleur : professionnels (DevPhantom), personnels et scolaires.</p>
+      ${this._renderCarousel({
+        slides: section.items,
+        tabLabel: s => s.short || s.title,
+        tabAccent: catAccent,
+        tabGroup: s => s.category,
+        slideHTML,
+      })}
     `;
   }
 
   // ── Carrousel (Parcours & Galerie) ──────────────────
 
-  _renderCarousel({ slides, tabLabel, slideHTML }) {
-    const tabs = slides.map((s, i) => `
+  _renderCarousel({ slides, tabLabel, slideHTML, tabAccent, tabGroup }) {
+    let lastGroup = null;
+    const tabs = slides.map((s, i) => {
+      const acc = tabAccent ? tabAccent(s) : '';
+      const grp = tabGroup ? tabGroup(s) : null;
+      let sep = '';
+      if (grp && grp !== lastGroup) {
+        // Intitulé de catégorie inséré dans la barre d'onglets (non cliquable).
+        sep = `<span class="carousel-group" aria-hidden="true">${grp}</span>`;
+        lastGroup = grp;
+      }
+      return `${sep}
       <button type="button" class="carousel-tab${i === 0 ? ' is-active' : ''}"
-              role="tab" aria-selected="${i === 0 ? 'true' : 'false'}" data-index="${i}">
+              role="tab" aria-selected="${i === 0 ? 'true' : 'false'}" data-index="${i}"
+              ${acc ? `style="--tab-accent:${acc}"` : ''}>
         ${tabLabel(s)}
-      </button>
-    `).join('');
+      </button>`;
+    }).join('');
 
     const panels = slides.map((s, i) => `
       <div class="carousel-slide${i === 0 ? ' is-active' : ''}" role="tabpanel"

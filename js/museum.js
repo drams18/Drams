@@ -1,9 +1,22 @@
 /* ══════════════════════════════════════════════════════
    MUSEUM.JS — Portfolio data (sections content)
-   Arphan DRAME — Développeur Full Stack
+   Arphan DRAME — Développeur Web Full Stack
+
+   Données réelles. Ne pas exagérer les expériences :
+     • SkyWalk = projet de groupe (équipe de 7).
+     • Pool Party Experience = projet EN COURS.
+     • Wild Kédougou / Prospectly / ISLAAH = projets PERSONNELS.
+     • Projets DevPhantom = travail d'équipe (~4 personnes).
    ══════════════════════════════════════════════════════ */
 
 'use strict';
+
+// Couleur dédiée à chaque catégorie de projet (galerie : carte + onglet).
+const CATEGORY_ACCENT = {
+  'Professionnel': '#19e8ff', // cyan
+  'Personnel':     '#ff2bb0', // magenta
+  'Scolaire':      '#8a3bff', // violet
+};
 
 const SECTIONS = {
   profile: {
@@ -12,10 +25,10 @@ const SECTIONS = {
     accent: '#19e8ff',
     bio: {
       name: 'Arphan DRAME',
-      title: 'Développeur Full Stack',
-      location: 'Paris, Île-de-France',
-      availability: 'Disponible immédiatement',
-      description: 'Développeur Full Stack passionné, spécialisé en React, React Native et Symfony. Curieux, autonome, j\'aime construire des produits qui ont du sens — des apps mobiles aux plateformes web complexes.',
+      title: 'Développeur Web Full Stack',
+      location: 'Île-de-France',
+      availability: 'Alternance chez DevPhantom',
+      description: 'Développeur Web Full Stack. Je pars d\'un besoin métier, je le comprends, et je le transforme en solution concrète — du frontend au backend. Je m\'intègre vite à une base de code existante et j\'apprends les outils nécessaires au projet.',
       photo: 'assets/img/profile.jpg',
       languages: [
         { label: 'Français', level: 'Natif' },
@@ -28,18 +41,30 @@ const SECTIONS = {
         { label: 'LinkedIn', url: 'https://www.linkedin.com/in/arphan-drame/' },
       ],
     },
-    skills: [
-      { name: 'React Native', level: 92, color: '#61dafb' },
-      { name: 'Symfony', level: 88, color: '#5656b1' },
-      { name: 'MySQL', level: 85, color: '#f29111' },
-      { name: 'Expo', level: 85, color: '#895e89' },
-      { name: 'Node.js', level: 85, color: '#3c873a' },
-      { name: 'React', level: 88, color: '#00d8ff' },
-      { name: 'TypeScript', level: 85, color: '#3178c6' },
-      { name: 'NestJS', level: 75, color: '#e0234e' },
-      { name: 'Docker', level: 70, color: '#2496ed' },
-      { name: 'PostgreSQL', level: 72, color: '#336791' },
-      { name: 'Python', level: 40, color: '#ffd43b' },
+
+    // Message principal affiché en avant du bloc compétences.
+    positioning: 'Je peux m\'adapter à un environnement technique existant, comprendre rapidement un projet et apprendre les outils nécessaires pour répondre au besoin.',
+
+    qualities: [
+      'Adaptabilité',
+      'Apprentissage rapide',
+      'Autonomie',
+      'Résolution de problèmes',
+      'Esprit d\'analyse',
+      'Travail d\'équipe',
+      'Comprendre un besoin métier',
+      'Frontend & Backend',
+    ],
+
+    // Compétences organisées par catégorie (pas de barres de pourcentage).
+    skillGroups: [
+      { label: 'Frontend', items: ['React', 'React Native', 'Next.js', 'TypeScript', 'JavaScript', 'Vite', 'Tailwind CSS', 'Redux / Zustand'] },
+      { label: 'Backend', items: ['Node.js', 'Express', 'NestJS', 'Symfony', 'Laravel', 'PHP', 'Python', 'REST API', 'GraphQL'] },
+      { label: 'Bases de données', items: ['MySQL', 'PostgreSQL', 'Supabase', 'Prisma', 'TypeORM'] },
+      { label: 'DevOps / Infrastructure', items: ['Docker', 'Git', 'GitHub', 'GitLab', 'CI/CD', 'Nginx', 'AWS', 'GCP', 'Cloudflare'] },
+      { label: 'Tests', items: ['Jest', 'Cypress', 'Vitest', 'Playwright'] },
+      { label: 'Outils / conception', items: ['Figma', 'Jira', 'Bruno', 'API REST'] },
+      { label: 'IA / LLM', items: ['Intégration IA / LLM', 'Modèles locaux & API IA selon les projets'] },
     ],
   },
 
@@ -47,42 +72,57 @@ const SECTIONS = {
     id: 'parcours',
     label: 'PARCOURS',
     accent: '#8a3bff',
-    timeline: [
+    // Une entrée = un onglet du carrousel : BAC · BTS · ETNA · DEVPHANTOM · AUTRES
+    steps: [
+      {
+        short: 'BAC',
+        kind: 'ACADÉMIQUE',
+        date: '2020',
+        title: 'Baccalauréat STI2D',
+        place: 'Sciences et Technologies de l\'Industrie et du Développement Durable',
+        desc: 'Bac technologique à dominante sciences de l\'ingénieur : premières bases en électronique, programmation et démarche de projet.',
+      },
       {
         short: 'BTS',
-        date: '2020 — 2022',
-        title: 'BTS Systèmes Numériques',
-        place: 'Lycée Jules Ferry — Versailles',
-        desc: 'Option Électronique (SN option B). BTS obtenu + Certification Pix. Projet de fin d\'études : Jardin connecté (IoT).',
+        kind: 'ACADÉMIQUE',
+        date: '2021 — début 2022',
+        title: 'BTS Systèmes Numériques — option B Électronique et Communication',
+        context: 'Projet de fin d\'études réalisé en équipe : « Jardin connecté » — permettre à un jardinier de surveiller et contrôler à distance l\'humidité de son sol depuis une interface sur téléphone.',
+        desc: 'Formation orientée systèmes embarqués, électronique et communication numérique.',
+        role: 'Ma contribution : travail sur le capteur d\'humidité, Arduino Uno, programmation en C / C++. Le câblage, le prototype et certains composants ont été réalisés avec l\'équipe.',
       },
       {
-        short: 'DORANCO',
-        date: '2022 — 2023',
-        title: 'Formation Développeur Web Full Stack',
-        place: 'Doranco — Paris',
-        desc: 'Formation complète : front-end (React, Angular, responsive/UX), back-end (Node.js, PHP, API REST/GraphQL), bases SQL/NoSQL, sécurité web, DevOps (Git, CI/CD, Docker) et méthodes Agile.',
+        short: 'ETNA',
+        kind: 'ACADÉMIQUE',
+        date: '2023 — 2026',
+        title: 'ETNA — Bachelor puis Master',
+        details: [
+          'Bachelor Concepteur Développeur d\'Applications Web (2023 → 2024)',
+          'Master Architecte de Systèmes d\'Information (2024 → 2026)',
+        ],
+        desc: 'Une formation qui m\'a permis de travailler sur des projets techniques en équipe et de développer une approche orientée architecture, développement et résolution de problèmes.',
       },
       {
-        short: 'BOOTCAMP',
-        date: '2023',
-        title: 'Bootcamp Full Stack — Le Réacteur',
-        place: 'Paris',
-        desc: 'Formation intensive full stack web & mobile. Plongée dans React, Node.js, React Native et les bonnes pratiques du développement moderne.',
+        short: 'DEVPHANTOM',
+        kind: 'PROFESSIONNEL',
+        date: '01/2024 — 10/2026',
+        title: 'Développeur Web Full Stack — Alternance',
+        place: 'DevPhantom · en parallèle de l\'ETNA · équipe d\'environ 4 personnes',
+        context: 'Après les rendez-vous clients : compréhension du besoin, récupération des idées et fonctionnalités, définition de la solution, développement ou reprise de projets, création de fonctionnalités et de SaaS. Travail avec Jira, méthodologie Agile, adaptation aux contraintes techniques et métier.',
+        desc: 'Une caractéristique importante de mon profil ici : m\'adapter rapidement à un nouveau projet et apprendre les technologies nécessaires au besoin.',
+        role: 'Projets clients : Infinitia, Allsab-MS, Hexagon, GEXP. Projets internes (applications mobiles) : BADN, Ilamiria. Détail dans la Galerie.',
       },
       {
-        short: 'MASTER',
-        date: '2023 — Présent',
-        title: 'Master ASI',
-        place: 'ETNA / YNOV — Paris',
-        desc: 'Architecture des Systèmes d\'Information. Approfondissement des architectures logicielles, microservices, cloud et DevOps.',
-      },
-    ],
-    experiences: [
-      {
-        short: 'FREELANCE',
-        date: '2023 — Présent',
-        title: 'Développeur Full Stack Freelance',
-        desc: 'Développement d\'applications web et mobiles. Projets : ISLAAH (app mobile), SKYWALK (plateforme SaaS).',
+        short: 'AUTRES',
+        kind: 'PROFESSIONNEL',
+        date: 'Avant / pendant le parcours informatique',
+        title: 'Autres expériences',
+        desc: 'Un parcours varié, à l\'aise dans la relation avec le public, avant de me consacrer au développement. Ces expériences restent secondaires par rapport au développement informatique.',
+        details: [
+          'City One — RATP : accueil et accompagnement des voyageurs dans le métro, vente de titres de transport, assistance aux usagers.',
+          'City One — missions d\'accueil : accueil du public, standard téléphonique, orientation des visiteurs, dans différents environnements professionnels (dont La Poste Mobile).',
+          'Super U : expérience de vente pendant environ un mois.',
+        ],
       },
     ],
   },
@@ -109,54 +149,142 @@ const SECTIONS = {
     id: 'projets',
     label: 'GALERIE PROJETS',
     accent: '#ff123d',
+    // Triés Professionnel → Personnel → Scolaire.
     items: [
       {
-        short: 'ISLAAH',
-        title: 'ISLAAH',
-        type: 'Application Mobile',
-        tech: ['React Native', 'Symfony', 'MySQL', 'Cloudflare', 'Railway', 'Expo'],
-        role: 'Conception et développement complet — app mobile, API et mise en production.',
-        desc: 'Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l\'App Store.',
+        short: 'INFINITIA',
+        title: 'Infinitia',
+        type: 'Plateforme Web',
+        category: 'Professionnel',
+        tech: ['Symfony', 'Node.js', 'NestJS', 'MySQL'],
+        role: 'Projet DevPhantom, en équipe. J\'ai participé à la création à partir de zéro après un échange avec le client : conception de la base de données, développement du backend, préparation de l\'architecture du projet.',
+        desc: 'Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n\'a finalement pas été terminée, le client ayant cessé de répondre.',
+        links: [],
+        accent: '#19e8ff',
+      },
+      {
+        short: 'ALLSAB-MS',
+        title: 'Allsab-MS',
+        type: 'Intranet',
+        category: 'Professionnel',
+        tech: ['PHP', 'Symfony', 'MySQL'],
+        role: 'Projet DevPhantom, en équipe — l\'un des premiers projets que j\'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.',
+        desc: 'Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.',
         links: [
-          { label: 'Télécharger', url: 'https://apps.apple.com/us/app/islaah/id6758726142' },
+          { label: 'Voir le site', url: 'https://allsab-ms.com/' },
+        ],
+        accent: '#8a3bff',
+      },
+      {
+        short: 'HEXAGON',
+        title: 'Hexagon',
+        type: 'Plateforme Web',
+        category: 'Professionnel',
+        tech: ['PHP', 'Symfony', 'JavaScript', 'MySQL'],
+        role: 'Projet DevPhantom, en équipe. Développement de plusieurs CRUD, de fonctionnalités liées à la communication interne, et participation à l\'évolution de la plateforme.',
+        desc: 'Plateforme destinée à faciliter le travail opérationnel et la communication interne.',
+        links: [],
+        accent: '#ff2bb0',
+      },
+      {
+        short: 'GEXP',
+        title: 'GEXP',
+        type: 'Plateforme Web',
+        category: 'Professionnel',
+        tech: ['PHP', 'Symfony', 'MySQL'],
+        role: 'Projet DevPhantom, en équipe. Développement de CRUD, génération de rapports, exports PDF, Excel et CSV.',
+        desc: 'Plateforme destinée à faciliter la génération de rapports et la communication interne.',
+        links: [],
+        accent: '#19e8ff',
+      },
+      {
+        short: 'ILAMIRIA',
+        title: 'Ilamiria',
+        type: 'Application Mobile',
+        category: 'Professionnel',
+        tech: ['React Native'],
+        role: 'Projet interne DevPhantom, réalisé en équipe.',
+        desc: 'Application mobile développée chez DevPhantom et publiée sur l\'App Store.',
+        links: [
+          { label: 'App Store', url: 'https://apps.apple.com/fr/app/ilamiria/id6749936753' },
+        ],
+        accent: '#8a3bff',
+      },
+      {
+        short: 'BADN',
+        title: 'BADN',
+        type: 'Application Mobile',
+        category: 'Professionnel',
+        tech: ['React Native', 'Node.js'],
+        role: 'Projet interne DevPhantom, en équipe. J\'étais principalement impliqué sur le développement backend.',
+        desc: 'Application pour organiser des sorties entre amis : définition d\'un budget, choix d\'un lieu et d\'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d\'autres.',
+        links: [],
+        accent: '#ff123d',
+      },
+      {
+        short: 'KÉDOUGOU',
+        title: 'Wild Kédougou Experience',
+        type: 'Plateforme de réservation',
+        category: 'Personnel',
+        tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Supabase', 'Google Calendar API', 'Brevo', 'Cloudflare Workers', 'PWA', 'SEO'],
+        role: 'Projet personnel — conception et développement complets (frontend, backend serverless, intégrations).',
+        desc: 'Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l\'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.',
+        links: [
+          { label: 'Voir le projet', url: 'https://wild-kedougou-experience.hitmind-pro.workers.dev/' },
         ],
         accent: '#19e8ff',
       },
       {
-        short: 'SKYWALK',
-        title: 'SKYWALK',
-        type: 'Plateforme Web SaaS',
-        tech: ['React', 'NestJS', 'PostgreSQL', 'Docker'],
-        role: 'Développement front-end et back-end, conteneurisation et déploiement.',
-        desc: 'Plateforme d\'expatriation SaaS. Interface React moderne, API NestJS robuste, déployée avec Docker et Nginx.',
+        short: 'POOL PARTY',
+        title: 'Pool Party Experience',
+        type: 'Site vitrine WordPress',
+        category: 'Personnel',
+        tech: ['WordPress', 'PHP', 'CSS'],
+        role: 'Projet en cours, réalisé pour un ami — création et intégration d\'un site vitrine WordPress.',
+        desc: 'Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.',
         links: [
-          { label: 'Accéder', url: 'https://skywalk-chi.vercel.app/auth/login' },
+          { label: 'Voir le site', url: 'https://poolparty-experience.fr/' },
         ],
         accent: '#ff2bb0',
       },
       {
-        short: 'PROSPECTS',
+        short: 'ISLAAH',
+        title: 'ISLAAH',
+        type: 'Application Mobile',
+        category: 'Personnel',
+        tech: ['React Native', 'Symfony', 'MySQL', 'Cloudflare', 'Railway', 'Expo'],
+        role: 'Projet personnel — conception et développement complet : app mobile, API et mise en production.',
+        desc: 'Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l\'App Store.',
+        links: [
+          { label: 'Télécharger', url: 'https://apps.apple.com/us/app/islaah/id6758726142' },
+        ],
+        accent: '#8a3bff',
+      },
+      {
+        short: 'PROSPECTLY',
         title: 'Plateforme de recherche de prospects',
-        type: 'Projet Personnel',
+        type: 'Projet personnel',
+        category: 'Personnel',
         tech: ['Node.js', 'Railway', 'HTML', 'CSS', 'JavaScript', 'NoSQL'],
         role: 'Projet personnel — idée, conception et développement réalisés seul.',
         desc: 'Plateforme permettant de rechercher une enseigne qui a besoin d\'un site web ou d\'une mise à jour.',
         links: [
           { label: 'Accéder', url: 'https://prospectly.hitmind-pro.workers.dev/' },
         ],
-        accent: '#8a3bff',
+        accent: '#ff123d',
       },
       {
-        short: 'KÉDOUGOU',
-        title: 'Wild Kédougou Experience',
+        short: 'SKYWALK',
+        title: 'SkyWalk',
         type: 'Plateforme Web',
-        tech: ['Cloudflare Workers', 'JavaScript', 'HTML', 'CSS'],
-        role: 'Développement complet du site et déploiement sur Cloudflare Workers.',
-        desc: 'Plateforme immersive dédiée à la découverte du Kédougou : nature sauvage, faune et expériences de voyage au cœur du Sénégal oriental.',
+        category: 'Scolaire',
+        tech: ['React', 'TypeScript', 'Vite', 'Tailwind', 'React Query', 'NestJS', 'PostgreSQL', 'TypeORM', 'JWT', 'Docker', 'Nginx', 'GitLab CI'],
+        role: 'Projet réalisé en équipe de 7 (ETNA — Grand Projet d\'Étude). J\'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d\'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l\'architecture technique et à la documentation / au diagramme d\'architecture.',
+        desc: 'Plateforme web destinée à accompagner les personnes dans leurs projets d\'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d\'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.',
         links: [
-          { label: 'Voir le projet', url: 'https://wild-kedougou-experience.hitmind-pro.workers.dev/' },
+          { label: 'Accéder', url: 'https://skywalk-chi.vercel.app/' },
         ],
-        accent: '#ff123d',
+        accent: '#ff2bb0',
       },
     ],
   },

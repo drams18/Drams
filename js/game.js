@@ -50,7 +50,31 @@ class Game {
       document.fonts.ready.then(() => { this._hud = null; this._prompt = null; });
     }
 
-    requestAnimationFrame(this._loop);
+    this._running = false;
+    this._rafId   = 0;
+    this.start();
+
+    // Onglet remis au premier plan : on relance une frame proprement
+    // (la boucle s'était arrêtée sur document.hidden).
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && this._running && !this._rafId) {
+        this._rafId = requestAnimationFrame(this._loop);
+      }
+    });
+  }
+
+  // Démarre / relance la boucle de rendu (idempotent).
+  start() {
+    if (this._running) return;
+    this._running = true;
+    if (!this._rafId) this._rafId = requestAnimationFrame(this._loop);
+  }
+
+  // Stoppe complètement la boucle : plus aucune frame planifiée tant que
+  // start() n'est pas rappelé (retour à l'accueil → 0 % CPU).
+  stop() {
+    this._running = false;
+    if (this._rafId) { cancelAnimationFrame(this._rafId); this._rafId = 0; }
   }
 
   _resize() {
@@ -64,10 +88,18 @@ class Game {
   }
 
   _loop() {
+    this._rafId = 0;
+    if (!this._running) return;
+
+    // Onglet en arrière-plan : on ne redessine pas la ville (grosse économie
+    // CPU/GPU quand la page reste ouverte sans être regardée). La boucle
+    // repart sur l'évènement visibilitychange.
+    if (document.hidden) return;
+
     // En pause quand on est revenu à l'accueil : on garde la boucle
     // vivante mais on ne calcule/dessine rien.
     if (document.getElementById('screen-game').classList.contains('hidden')) {
-      requestAnimationFrame(this._loop);
+      this._rafId = requestAnimationFrame(this._loop);
       return;
     }
 
@@ -107,7 +139,7 @@ class Game {
     // scène. On garde la boucle vivante mais on ne redessine pas la ville —
     // gros gain CPU/GPU pendant la lecture du contenu.
     if (modalOpen) {
-      requestAnimationFrame(this._loop);
+      this._rafId = requestAnimationFrame(this._loop);
       return;
     }
 
@@ -137,7 +169,7 @@ class Game {
 
     ctx.restore();
 
-    requestAnimationFrame(this._loop);
+    this._rafId = requestAnimationFrame(this._loop);
   }
 
   _enterPortal(portal) {
@@ -487,6 +519,8 @@ function startGame() {
     if (!_game) {
       _game = new Game();               // créé une seule fois
       showGameIntro();
+    } else {
+      _game.start();                    // relance la boucle de rendu
     }
     _setMobileBtns('flex');
   }, 500);
@@ -499,6 +533,7 @@ function goHome() {
   if (window.AudioManager) window.AudioManager.play('close');
   stopMusic();
   if (_game && _game.interactions) _game.interactions.close();
+  if (_game) _game.stop();             // stoppe la boucle → 0 % CPU à l'accueil
 
   game.classList.add('hidden');
   game.classList.remove('screen-enter');
