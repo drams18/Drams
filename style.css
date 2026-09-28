@@ -115,10 +115,11 @@ a { color: inherit; }
   97% { transform: translate(-1px,0) skewX(0); }
 }
 
-/* Balayage lignes de vitesse (défile en fond) */
+/* Balayage lignes de vitesse (défile en fond) — via transform (compositeur
+   GPU) : animer background-position forçait un repaint plein écran par frame. */
 @keyframes speedSweep {
-  from { background-position: 0 0, 0 0; }
-  to   { background-position: 600px 0, 0 0; }
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(600px, 0, 0); }
 }
 
 /* Pulsation néon */
@@ -218,7 +219,9 @@ body::after {
   opacity: 0.5;
   background:
     repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0 1px, transparent 1px 3px);
-  mix-blend-mode: overlay;
+  /* Pas de mix-blend-mode : sur fond sombre, overlay + noir ≈ alpha normal,
+     mais le blend forçait un recalcul plein écran à chaque frame (canvas,
+     animations). */
 }
 
 /* ── Screens ────────────────────────────────────────── */
@@ -302,10 +305,22 @@ body::after {
   z-index: 0;
   pointer-events: none;
   opacity: 0.55;
-  background-image: var(--speedlines), var(--weblines), var(--halftone);
-  background-size: 600px 100%, auto, auto, var(--halftone-size);
+  overflow: hidden;
+  /* Fond statique (rasterisé une seule fois). Motifs blancs → screen ≡ alpha
+     normal, donc pas de mix-blend-mode (coûteux en plein écran). */
+  background-image: var(--weblines), var(--halftone);
+  background-size: auto, auto, var(--halftone-size);
+}
+/* Lignes de vitesse sur leur propre calque, déplacé par transform */
+.welcome-sky::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -600px; right: 0;
+  background-image: var(--speedlines);
+  background-size: 600px 100%;
+  will-change: transform;
   animation: speedSweep 6s linear infinite;
-  mix-blend-mode: screen;
 }
 /* Grande toile d'angle discrète, haut-droite de l'accueil */
 .welcome-sky::after {
@@ -1630,7 +1645,8 @@ body::after {
 /* ── Responsive ─────────────────────────────────────── */
 @media (max-width: 600px) {
   .welcome-content { gap: 12px; padding: 24px 18px; }
-  .welcome-sky { animation-duration: 9s; opacity: 0.4; }
+  .welcome-sky { opacity: 0.4; }
+  .welcome-sky::before { animation-duration: 9s; }
   .welcome-sky::after { opacity: 0.06; }
   /* Effets lourds allégés sur mobile : anneaux spider-sense en continu coupés */
   .proj-card:hover::after, .social-link:hover::after,
@@ -1747,7 +1763,7 @@ body::after {
   .audio-hint--in, .audio-hint--out,
   .audio-hint--in .audio-hint__card { animation: none !important; }
   .mc-title { animation: none; text-shadow: -0.03em 0 0 var(--red), 0.03em 0 0 var(--cyan); }
-  .mc-eyebrow, .welcome-sky, .mc-btn--primary { animation: none !important; }
+  .mc-eyebrow, .welcome-sky::before, .mc-btn--primary { animation: none !important; }
   .mc-btn--primary::after, .mc-btn--primary::before { display: none; }
   .proj-card::after, .social-link::after, .contact-link::after,
   .mbtn-enter::after { animation: none !important; opacity: 0 !important; }
