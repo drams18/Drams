@@ -32,9 +32,7 @@ class Game {
 
     // Appareil tactile : les boutons à l'écran + l'intro suffisent,
     // on n'affiche pas le rappel clavier dessiné sur le canvas.
-    this._touch = (window.matchMedia &&
-      window.matchMedia('(hover: none) and (pointer: coarse)').matches) ||
-      'ontouchstart' in window || window.innerWidth <= 900;
+    this._touch = isTouchUI();
 
     this._resize();
     // Resize coalescé sur une frame (évite plusieurs _resize par salve d'events).
@@ -75,6 +73,25 @@ class Game {
   stop() {
     this._running = false;
     if (this._rafId) { cancelAnimationFrame(this._rafId); this._rafId = 0; }
+  }
+
+  // Téléporte le joueur (lien profond) et cale la caméra sur lui sans
+  // travelling : on « arrive » directement devant la bonne maison.
+  placeAt(x) {
+    this.player.x = Math.max(0, Math.min(WORLD_WIDTH, x));
+    const ew = this.canvas.width / this.zoom;
+    this._targetX = Math.max(0, Math.min(WORLD_WIDTH - ew, this.player.x - ew / 2));
+    this.cameraX = this._targetX;
+  }
+
+  // Route de ce que le joueur regarde : fenêtre ouverte, sinon maison / portail
+  // devant lequel il se tient. Sert au bouton « Mode classique ».
+  currentRoute() {
+    const open = this.interactions.currentRoute();
+    if (open) return open;
+    const b = this._nearBuilding;
+    if (!b) return '';
+    return b.isPortal ? '#portail' : (window.Deeplink ? window.Deeplink.build(b.id) : '');
   }
 
   _resize() {
@@ -385,127 +402,69 @@ function stopMusic() {
 // ── Boot ─────────────────────────────────────────────
 
 let _game = null;         // instance unique (créée à la 1re partie)
-let _introShown = false;  // l'intro du jeu ne s'affiche qu'une fois
 
 function _setMobileBtns(display) {
   const mb = document.getElementById('mobile-btns');
   if (mb) mb.style.display = display;
 }
 
-function showGameIntro() {
-  if (_introShown) return;
-  _introShown = true;
+// ── Écran d'entrée unique ─────────────────────────────
+// Accueil + information son + commandes réunis sur un seul écran (plus de
+// modale audio ni d'intro du village enchaînées après « Let's go ! »).
+// L'aide est dépliée à la 1re visite, repliée ensuite.
+const FIRST_VISIT_KEY = 'drame.portfolio.audioHint';   // clé historique conservée
 
-  const intro = document.getElementById('game-intro');
-  const list  = document.getElementById('game-intro-list');
-  if (!intro || !list) return;
+function firstVisit() {
+  try { return localStorage.getItem(FIRST_VISIT_KEY) !== 'seen'; }
+  catch (e) { return false; }
+}
 
-  const touch = (window.matchMedia &&
-    window.matchMedia('(hover: none) and (pointer: coarse)').matches) ||
-    'ontouchstart' in window || window.innerWidth <= 900;
+function markVisited() {
+  try { localStorage.setItem(FIRST_VISIT_KEY, 'seen'); } catch (e) { /* noop */ }
+}
 
-  list.innerHTML = touch
-    ? `<li><b>◀ &nbsp;▶</b><span>Se déplacer dans le village</span></li>
+function renderWelcomeHelp() {
+  const list = document.getElementById('welcome-controls');
+  if (list && isTouchUI()) {
+    list.innerHTML =
+      `<li><b>◀ &nbsp;▶</b><span>Se déplacer dans le village</span></li>
        <li><b>ENTRER</b><span>Entrer dans une maison quand vous êtes devant la porte</span></li>
-       <li><b>FERMER</b><span>Fermer une fenêtre ouverte</span></li>`
-    : `<li><b>← &nbsp;→</b><span>Se déplacer (ou les touches A / D)</span></li>
-       <li><b>↑</b><span>Entrer dans une maison (ou la touche W)</span></li>
-       <li><b>↓</b><span>Fermer une fenêtre (ou la touche S)</span></li>`;
-
-  intro.classList.remove('hidden');
-
-  const closeIntro = () => intro.classList.add('hidden');
-
-  document.getElementById('btn-intro-close')
-    ?.addEventListener('click', () => {
-      if (window.AudioManager) window.AudioManager.play('click');
-      closeIntro();
-    }, { once: true });
-
-  // Se ferme aussi dès le premier déplacement / première touche mobile
-  const onKey = (e) => {
-    if (['ArrowLeft','ArrowRight','ArrowUp','KeyA','KeyD','KeyW','KeyQ','KeyZ'].includes(e.code)) {
-      closeIntro();
-      window.removeEventListener('keydown', onKey);
-    }
-  };
-  window.addEventListener('keydown', onKey);
-
-  const mb = document.getElementById('mobile-btns');
-  mb?.addEventListener('touchstart', closeIntro, { once: true, passive: true });
+       <li><b>FERMER</b><span>Fermer une fenêtre ouverte</span></li>`;
+  }
+  const help = document.getElementById('welcome-help');
+  if (help && firstVisit()) help.open = true;
 }
 
-// ── Modal d'information audio ─────────────────────────
-// Affichée une seule fois par visiteur, juste après « Let's go ! », pour
-// recommander d'activer le son. Elle NE crée aucun second moteur audio :
-// tout passe par window.AudioManager (musique, SFX, bouton SOUND). Une fois
-// vue (mémorisée dans localStorage), « Let's go ! » enchaîne directement.
-const AUDIO_HINT_KEY = 'drame.portfolio.audioHint';
-
-function audioHintSeen() {
-  try { return localStorage.getItem(AUDIO_HINT_KEY) === 'seen'; }
-  catch (e) { return true; }   // stockage indisponible : on n'insiste pas
+// ── Liens profonds (grammaire commune : js/deeplink.js) ──
+// #projets/skywalk → joueur devant la GALERIE, fenêtre ouverte sur SkyWalk.
+// #portail → devant « Construisez votre projet ». #ville → départ normal.
+function applyRoute(route, delay) {
+  if (!_game || !route) return;
+  if (route.kind === 'portail') { _game.placeAt(SPECIAL_DOOR.doorX); return; }
+  if (route.kind !== 'section') return;
+  const b = BUILDINGS_DATA.find(x => x.id === route.section);
+  if (!b) return;
+  _game.placeAt(b.doorX);
+  // Petit temps d'arrivée : on voit la maison avant que la fenêtre s'ouvre.
+  setTimeout(() => {
+    if (_game.interactions.isOpen()) _game.interactions.close();
+    _game.interactions.open(b.id, { slide: route.slug });
+  }, delay);
 }
 
-function markAudioHintSeen() {
-  try { localStorage.setItem(AUDIO_HINT_KEY, 'seen'); } catch (e) { /* noop */ }
-}
-
-function showAudioHint(onContinue) {
-  const modal = document.getElementById('audio-hint');
-  const btn   = document.getElementById('audio-hint-continue');
-  if (!modal || !btn) { onContinue(); return; }
-
-  let done = false;
-  const finish = () => {
-    if (done) return;
-    done = true;
-    markAudioHintSeen();
-    btn.removeEventListener('click', finish);
-    window.removeEventListener('keydown', onKey);
-    if (window.AudioManager) window.AudioManager.play('click');
-    modal.classList.add('audio-hint--out');
-    setTimeout(() => {
-      modal.classList.add('hidden');
-      modal.classList.remove('audio-hint--in', 'audio-hint--out');
-    }, 180);
-    onContinue();
-  };
-  const onKey = (e) => {
-    if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Escape') {
-      e.preventDefault();
-      finish();
-    }
-  };
-
-  modal.classList.remove('hidden');
-  void modal.offsetWidth;
-  modal.classList.add('audio-hint--in');
-  btn.addEventListener('click', finish);
-  window.addEventListener('keydown', onKey);
-  try { btn.focus({ preventScroll: true }); } catch (e) { try { btn.focus(); } catch (_) {} }
-}
-
-function onStartClick() {
-  if (audioHintSeen()) { startGame(); return; }
-  // Le clic « Let's go ! » amorce déjà l'audio (geste utilisateur) ; le jeu
-  // ne démarre qu'après « Continuer », lui aussi un geste utilisateur — la
-  // lecture audio iOS/WebView reste donc autorisée.
-  if (window.AudioManager) window.AudioManager.unlock();
-  showAudioHint(startGame);
-}
-
-function startGame() {
+// instant : arrivée directe dans la ville (lien profond / depuis le mode
+// classique) — pas d'animation de sortie de l'accueil.
+function startGame(route, instant) {
   const welcome = document.getElementById('screen-welcome');
   const game    = document.getElementById('screen-game');
 
-  // Init + play audio synchronously inside the user gesture (required on iOS/WebView)
+  // Init + play audio synchronously inside the user gesture (required on iOS/WebView).
+  // Arrivée directe sans geste : la musique démarre au 1er geste (audio.js).
   if (window.AudioManager) window.AudioManager.unlock();
   startMusic();
+  markVisited();
 
-  welcome.classList.remove('screen-enter');
-  welcome.classList.add('screen-exit');
-  setTimeout(() => {
+  const enter = () => {
     welcome.classList.add('hidden');
     welcome.classList.remove('screen-exit');
 
@@ -516,35 +475,39 @@ function startGame() {
     // Entrée dans le village = arrivée dans une nouvelle pièce
     if (window.AudioManager) window.AudioManager.play('transition');
 
-    if (!_game) {
-      _game = new Game();               // créé une seule fois
-      showGameIntro();
-    } else {
-      _game.start();                    // relance la boucle de rendu
-    }
+    if (!_game) _game = new Game();     // créé une seule fois
+    else _game.start();                 // relance la boucle de rendu
     _setMobileBtns('flex');
-  }, 500);
+
+    applyRoute(route, instant ? 380 : 260);
+  };
+
+  if (instant) { enter(); return; }
+  welcome.classList.remove('screen-enter');
+  welcome.classList.add('screen-exit');
+  setTimeout(enter, 500);
 }
 
-function goHome() {
-  const welcome = document.getElementById('screen-welcome');
-  const game    = document.getElementById('screen-game');
-
-  if (window.AudioManager) window.AudioManager.play('close');
-  stopMusic();
-  if (_game && _game.interactions) _game.interactions.close();
-  if (_game) _game.stop();             // stoppe la boucle → 0 % CPU à l'accueil
-
-  game.classList.add('hidden');
-  game.classList.remove('screen-enter');
-  _setMobileBtns('none');
-
-  welcome.classList.remove('hidden', 'screen-exit', 'screen-enter');
-  void welcome.offsetWidth;
-  welcome.classList.add('screen-enter');
+// ── Passage en mode classique ─────────────────────────
+// Emporte le contexte : fenêtre ouverte (et slide) ou maison devant laquelle
+// se tient le joueur → même fragment côté classique (index.html#projets/skywalk).
+function switchToClassic(e) {
+  const a = e.currentTarget;
+  const route = _game && !document.getElementById('screen-game').classList.contains('hidden')
+    ? _game.currentRoute()
+    : '';
+  e.preventDefault();
+  if (window.AudioManager) {
+    window.AudioManager.play('close');
+    window.AudioManager.stopMusic();     // le mode classique est silencieux
+  }
+  window.location.href = a.getAttribute('href').split('#')[0] + route;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (window.Deeplink) window.Deeplink.setMode('aventure');
+  renderWelcomeHelp();
+
   const btn = document.getElementById('btn-start');
   if (btn) {
     // Pré-déverrouille l'audio au moindre contact avant le clic (iOS WebView).
@@ -555,8 +518,25 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     btn.addEventListener('touchstart', unlock, { passive: true });
     btn.addEventListener('mousedown',  unlock);
-    btn.addEventListener('click', onStartClick);
+    btn.addEventListener('click', () => startGame(null, false));
   }
 
-  document.getElementById('btn-home')?.addEventListener('click', goHome);
+  document.querySelectorAll('[data-switch-classic]').forEach(a => {
+    a.addEventListener('click', switchToClassic);
+  });
+
+  // Lien profond à l'arrivée : on entre directement dans la ville.
+  const route = window.Deeplink ? window.Deeplink.parse(location.hash) : null;
+  if (route) startGame(route, true);
+
+  // Fragment modifié à la main pendant la partie → on y va.
+  window.addEventListener('hashchange', () => {
+    const r = window.Deeplink ? window.Deeplink.parse(location.hash) : null;
+    if (!r) return;
+    if (!_game || document.getElementById('screen-game').classList.contains('hidden')) {
+      startGame(r, true);
+    } else {
+      applyRoute(r, 0);
+    }
+  });
 });

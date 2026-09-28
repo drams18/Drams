@@ -11,54 +11,9 @@
    ══════════════════════════════════════════════════════ */
 
 /* ── Variables ──────────────────────────────────────── */
+/* Les primitives de la DA (palette, trames, polices) vivent dans
+   css/tokens.css, chargé AVANT cette feuille par chaque page. */
 :root {
-  /* Palette — BLEU NUIT urbain (Spider-Verse) + rouge/magenta/violet/cyan.
-     Le noir --stroke ne sert plus qu'aux contours « encre » et aux ombres. */
-  --ink:        #0e1630;   /* fond le plus profond — nuit urbaine */
-  --ink-2:      #132048;
-  --panel:      #182449;   /* fond des panneaux / modales (relevé) */
-  --panel-2:    #20305c;
-  --edge:       #3c4c82;   /* liseré discret bleuté */
-  --stroke:     #01010a;   /* trait noir épais « encre » comics */
-  --night-2:    #14203f;   /* étape intermédiaire de dégradé */
-  --urban:      #9fb0d8;   /* gris urbain clair — textes secondaires */
-
-  --red:        #ff123d;   /* action principale / éléments importants */
-  --magenta:    #ff2bb0;   /* titres forts / accents chauds */
-  --violet:     #8a3bff;   /* secondaire */
-  --cyan:       #19e8ff;   /* tout ce qui est interactif */
-  --paper:      #f5f6ff;   /* texte */
-
-  --red-deep:   #8f0a24;
-  --magenta-deep: #8a1668;
-  --cyan-dim:   rgba(25, 232, 255, 0.14);
-  --magenta-dim: rgba(255, 43, 176, 0.14);
-
-  /* Trame halftone réutilisable (points) */
-  --halftone: radial-gradient(rgba(255,255,255,0.10) 0.8px, transparent 1.4px);
-  --halftone-size: 6px 6px;
-
-  /* Fils de toile — diagonales fines croisées, très discrètes (fonds) */
-  --weblines: repeating-linear-gradient(58deg,
-      transparent 0 26px, rgba(255,255,255,0.028) 26px 27px, transparent 27px 54px),
-    repeating-linear-gradient(-58deg,
-      transparent 0 26px, rgba(255,255,255,0.028) 26px 27px, transparent 27px 54px);
-
-  /* Quart de toile d'araignée — coin de panneau (SVG original, sans fond) */
-  --web-corner: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.1'%3E%3Cpath d='M0 22A22 22 0 0 1 22 0'/%3E%3Cpath d='M0 48A48 48 0 0 1 48 0'/%3E%3Cpath d='M0 78A78 78 0 0 1 78 0'/%3E%3Cpath d='M0 110A110 110 0 0 1 110 0'/%3E%3Cpath d='M0 0 120 20'/%3E%3Cpath d='M0 0 104 60'/%3E%3Cpath d='M0 0 78 78'/%3E%3Cpath d='M0 0 60 104'/%3E%3Cpath d='M0 0 20 120'/%3E%3C/g%3E%3C/svg%3E");
-
-  /* Pictogramme d'araignée géométrique original — utilisé en mask (couleur = currentColor) */
-  --spider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='%23000'%3E%3Cellipse cx='12' cy='13' rx='3' ry='4.2'/%3E%3Ccircle cx='12' cy='8' r='2.1'/%3E%3C/g%3E%3Cg stroke='%23000' stroke-width='1.4' fill='none' stroke-linecap='round'%3E%3Cpath d='M10 9 5.5 4'/%3E%3Cpath d='M14 9 18.5 4'/%3E%3Cpath d='M9 11 4 8 2 10'/%3E%3Cpath d='M9 13 3 13 1 15'/%3E%3Cpath d='M9 15 4 18 2.5 20'/%3E%3Cpath d='M15 11 20 8 22 10'/%3E%3Cpath d='M15 13 21 13 23 15'/%3E%3Cpath d='M15 15 20 18 21.5 20'/%3E%3C/g%3E%3C/svg%3E");
-
-  /* Lignes de vitesse (bandes radiales animables) */
-  --speedlines: repeating-linear-gradient(115deg,
-      transparent 0 14px,
-      rgba(255,255,255,0.035) 14px 15px,
-      transparent 15px 30px);
-
-  --pixel-font: 'Press Start 2P', monospace;
-  --body-font:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-
   /* ── Compat : anciens noms encore lus ailleurs (construire-projet.html,
      interactions.js…) — re-mappés sur la nouvelle DA ──────────────── */
   --mc-green:   var(--red);
@@ -151,9 +106,8 @@ a { color: inherit; }
 
 /* Coins de toile décoratifs sur les grands panneaux (haut-gauche + bas-droite).
    Purement décoratif : derrière le contenu, sans interception d'events. */
-.section-modal, .game-intro__card { position: relative; }
-.section-modal::before, .section-modal::after,
-.game-intro__card::before, .game-intro__card::after {
+.section-modal { position: relative; }
+.section-modal::before, .section-modal::after {
   content: '';
   position: absolute;
   width: 84px; height: 84px;
@@ -163,8 +117,8 @@ a { color: inherit; }
   pointer-events: none;
   z-index: 3;
 }
-.section-modal::before, .game-intro__card::before { top: 0; left: 0; }
-.section-modal::after,  .game-intro__card::after  { bottom: 0; right: 0; transform: rotate(180deg); }
+.section-modal::before { top: 0; left: 0; }
+.section-modal::after  { bottom: 0; right: 0; transform: rotate(180deg); }
 
 /* Entrée modale — zoom + clip comics */
 @keyframes comicIn {
@@ -243,9 +197,8 @@ body::after {
    ÉCRAN D'ACCUEIL
    ══════════════════════════════════════════════════════ */
 #screen-welcome {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex;               /* centrage par margin:auto sur .welcome-content :
+                                  reste défilable si le contenu dépasse */
   background:
     radial-gradient(120% 80% at 18% 12%, rgba(255,43,176,0.30) 0%, transparent 55%),
     radial-gradient(120% 90% at 88% 20%, rgba(138,59,255,0.30) 0%, transparent 55%),
@@ -253,6 +206,7 @@ body::after {
     linear-gradient(180deg, #0e1630 0%, #16234a 44%, #1b1c44 72%, #0e1630 100%);
   position: relative;
   overflow: hidden;
+  overflow-y: auto;          /* aide dépliée sur petit écran : on peut défiler */
 }
 
 /* Éclats / lumières de la ville — décor discret */
@@ -336,6 +290,7 @@ body::after {
 }
 
 .welcome-content {
+  margin: auto;
   position: relative;
   z-index: 1;
   text-align: center;
@@ -549,6 +504,13 @@ body::after {
 .mc-help__body ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
 .mc-help__body li { display: flex; gap: 10px; align-items: center; }
 .mc-help__body li span { color: #c6d2e0; }
+.mc-help__sound {
+  margin: 12px 0 0 !important;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(255,43,176,0.35);
+  font-size: 12px;
+  color: #9fb0c4 !important;
+}
 .mc-help__body b {
   font-family: var(--pixel-font);
   font-size: 9px;
@@ -560,6 +522,32 @@ body::after {
   text-align: center;
   flex-shrink: 0;
 }
+
+/* ── Lien « Mode classique » (accueil aventure) ────── */
+.welcome-switch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-bottom: 2px dashed rgba(25,232,255,0.35);
+  transition: border-color 0.15s, color 0.15s;
+}
+.welcome-switch__k {
+  font-family: var(--pixel-font);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--cyan);
+}
+.welcome-switch__v {
+  font-family: var(--body-font);
+  font-size: 12px;
+  color: #9fb0c4;
+}
+.welcome-switch:hover { border-color: var(--cyan); }
+.welcome-switch:hover .welcome-switch__v { color: #d7e3f0; }
 
 /* ══════════════════════════════════════════════════════
    ÉCRAN DE JEU
@@ -574,6 +562,7 @@ body::after {
 
 /* Bouton retour accueil — onglet comics néon */
 .game-home-btn {
+  text-decoration: none;
   position: fixed;
   top: 12px;
   left: 12px;
@@ -635,73 +624,6 @@ body::after {
 @media (max-width: 600px) {
   .sound-toggle { font-size: 8px; padding: 9px 11px; }
 }
-
-/* Overlay d'introduction au jeu (première partie) */
-.game-intro {
-  position: fixed;
-  inset: 0;
-  z-index: 260;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background:
-    radial-gradient(60% 60% at 50% 40%, rgba(255,43,176,0.18) 0%, transparent 70%),
-    rgba(9,13,28,0.9);
-  overflow: auto;
-  animation: fadeIn 0.2s ease;
-}
-.game-intro.hidden { display: none; }
-.game-intro__card {
-  width: 100%;
-  max-width: 440px;
-  max-height: 92vh;
-  overflow: auto;
-  background: var(--panel);
-  border: 3px solid var(--stroke);
-  box-shadow: 8px 8px 0 var(--red-deep), 0 0 46px rgba(255,18,61,0.35);
-  padding: 24px 22px 22px;
-  text-align: left;
-}
-.game-intro__title {
-  font-family: var(--pixel-font);
-  font-size: 13px;
-  letter-spacing: 1px;
-  color: var(--magenta);
-  margin-bottom: 14px;
-  text-shadow: -0.03em 0 0 var(--red), 0.03em 0 0 var(--cyan), 0 0 14px rgba(255,43,176,0.5);
-}
-.game-intro__text {
-  font-family: var(--body-font);
-  font-size: 14px;
-  line-height: 1.65;
-  color: #d5dbe6;
-  margin-bottom: 16px;
-}
-.game-intro__list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-  font-family: var(--body-font);
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: #c2cad4;
-}
-.game-intro__list li { display: flex; gap: 11px; align-items: flex-start; }
-.game-intro__list b {
-  font-family: var(--pixel-font);
-  font-size: 9px;
-  color: var(--cyan);
-  background: rgba(25,232,255,0.08);
-  border: 1px solid var(--cyan);
-  padding: 5px 7px;
-  min-width: 78px;
-  text-align: center;
-  flex-shrink: 0;
-}
-.game-intro__card .mc-btn--primary { max-width: none; }
 
 /* ── Modal backdrop ─────────────────────────────────── */
 .modal-backdrop {
@@ -943,6 +865,8 @@ body::after {
 /* Qualités / posture */
 .qualities { display: flex; flex-wrap: wrap; gap: 8px; }
 .qualities .tag { border-left: 3px solid var(--modal-accent); }
+/* « Je recherche un CDI » — l'information clé, mise en avant (rouge = important) */
+.tag--seeking { border-color: var(--red); color: #fff; background: rgba(255,18,61,0.16); }
 
 /* Langues */
 .langs-list { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -1621,6 +1545,7 @@ body::after {
   flex-shrink: 0;
 }
 .mbtn:active { background: rgba(25,232,255,0.2); box-shadow: 0 0 0 var(--stroke); }
+.mbtn__arrow { display: block; color: var(--cyan); pointer-events: none; }
 .mbtn-enter {
   font-size: 8px;
   flex: 1;
@@ -1651,8 +1576,7 @@ body::after {
   /* Effets lourds allégés sur mobile : anneaux spider-sense en continu coupés */
   .proj-card:hover::after, .social-link:hover::after,
   .contact-link:hover::after { animation: none; opacity: 0; }
-  .section-modal::before, .section-modal::after,
-  .game-intro__card::before, .game-intro__card::after { opacity: 0.05; }
+  .section-modal::before, .section-modal::after { opacity: 0.05; }
   .modal-body { padding: 16px 15px; font-size: 14.5px; }
   .modal-header { padding: 12px 13px; }
   .section-modal { box-shadow: 6px 6px 0 0 color-mix(in srgb, var(--modal-accent) 45%, #000), 0 0 30px rgba(0,0,0,0.6); }
@@ -1670,104 +1594,14 @@ body::after {
   .passions-grid { grid-template-columns: 1fr; }
 }
 
-/* ── Modal d'information audio (accueil, après « Let's go ! ») ── */
-.audio-hint {
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background:
-    radial-gradient(60% 60% at 50% 42%, rgba(25,232,255,0.16) 0%, transparent 70%),
-    var(--halftone),
-    rgba(9,13,28,0.92);
-  background-size: auto, var(--halftone-size), auto;
-}
-.audio-hint.hidden { display: none; }
-.audio-hint--in  { animation: fadeIn 0.2s ease both; }
-.audio-hint--in .audio-hint__card { animation: comicInFlex 0.36s cubic-bezier(.22,.68,.32,1) both; }
-.audio-hint--out { animation: fadeIn 0.2s ease reverse both; }
-
-.audio-hint__card {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-  transform-origin: center;
-  will-change: transform, opacity;
-  background: var(--panel);
-  border: 3px solid var(--stroke);
-  box-shadow: 8px 8px 0 var(--magenta-deep), 0 0 46px rgba(255,43,176,0.3);
-  padding: 24px 22px 22px;
-  text-align: center;
-}
-.audio-hint__card::before,
-.audio-hint__card::after {
-  content: '';
-  position: absolute;
-  width: 74px;
-  height: 74px;
-  background: var(--web-corner) no-repeat;
-  background-size: 100% 100%;
-  opacity: 0.07;
-  pointer-events: none;
-}
-.audio-hint__card::before { top: 0; left: 0; }
-.audio-hint__card::after  { bottom: 0; right: 0; transform: rotate(180deg); }
-
-.audio-hint__eyebrow {
-  display: inline-block;
-  font-family: var(--pixel-font);
-  font-size: 7px;
-  letter-spacing: 2px;
-  color: var(--cyan);
-  border: 1px solid var(--cyan);
-  padding: 4px 8px;
-  margin-bottom: 12px;
-  text-shadow: 1px 1px 0 rgba(0,0,0,0.6);
-}
-.audio-hint__title {
-  font-family: var(--pixel-font);
-  font-size: 13px;
-  line-height: 1.5;
-  letter-spacing: 1px;
-  color: var(--magenta);
-  margin-bottom: 12px;
-  text-shadow: -0.03em 0 0 var(--red), 0.03em 0 0 var(--cyan), 0 0 14px rgba(255,43,176,0.5);
-}
-.audio-hint__text {
-  font-family: var(--body-font);
-  font-size: 14px;
-  line-height: 1.6;
-  color: #e4e9f2;
-  margin-bottom: 10px;
-}
-.audio-hint__note {
-  font-family: var(--body-font);
-  font-size: 12px;
-  line-height: 1.5;
-  color: #9fb0c4;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 600px) {
-  .audio-hint__card { padding: 20px 16px 18px; }
-  .audio-hint__title { font-size: 11px; }
-  .audio-hint__text { font-size: 13px; }
-  .audio-hint__card::before, .audio-hint__card::after { opacity: 0.05; }
-}
-
 /* Respect des préférences de mouvement réduit */
 @media (prefers-reduced-motion: reduce) {
-  .audio-hint--in, .audio-hint--out,
-  .audio-hint--in .audio-hint__card { animation: none !important; }
   .mc-title { animation: none; text-shadow: -0.03em 0 0 var(--red), 0.03em 0 0 var(--cyan); }
   .mc-eyebrow, .welcome-sky::before, .mc-btn--primary { animation: none !important; }
   .mc-btn--primary::after, .mc-btn--primary::before { display: none; }
   .proj-card::after, .social-link::after, .contact-link::after,
   .mbtn-enter::after { animation: none !important; opacity: 0 !important; }
   .screen, .screen-exit, .screen-enter,
-  .section-modal, .game-intro { animation: none !important; }
+  .section-modal { animation: none !important; }
   * { transition-duration: 0.01ms !important; }
 }

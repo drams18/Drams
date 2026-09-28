@@ -6,6 +6,14 @@
 
 'use strict';
 
+// Détection UNIQUE « interface tactile » pour tout le portfolio (boutons à
+// l'écran, libellés tactiles, rappel clavier masqué). Basée sur le pointeur
+// réel, pas sur la largeur d'écran ni le user-agent : un PC tactile piloté
+// à la souris garde l'interface clavier, une tablette a les boutons.
+function isTouchUI() {
+  return !!(window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+}
+
 class Controls {
   constructor() {
     this._keys = {};

@@ -63,9 +63,12 @@ class InteractionManager {
   isOpen() { return this._currentSection !== null; }
   currentSection() { return this._currentSection; }
 
-  open(buildingId) {
+  // opts.slide : slug de la slide à afficher d'emblée (lien profond,
+  // ex. #projets/skywalk). Sans slug → 1re slide, comme avant.
+  open(buildingId, opts) {
     const section = SECTIONS[buildingId];
     if (!section) return;
+    this._initialSlug = (opts && opts.slide) || null;
 
     const firstVisit = !this._visited.has(buildingId);
     this._currentSection = buildingId;
@@ -85,6 +88,7 @@ class InteractionManager {
 
     // Carrousels (Parcours / Galerie) — initialisés une fois la modale visible
     this._initCarousels();
+    this._syncRoute();
 
     // 1re entrée dans la maison = nouvelle pièce ; retour = simple ouverture.
     if (window.AudioManager) {
@@ -103,6 +107,27 @@ class InteractionManager {
     document.body.classList.remove('modal-open');
     if (window.AudioManager) window.AudioManager.play('close');
     // Music keeps playing — only game exit stops it
+    this._syncRoute();
+  }
+
+  // ── Lien profond ────────────────────────────────────
+  // Route courante (grammaire commune js/deeplink.js) : section ouverte +
+  // slide affichée. null quand aucune fenêtre n'est ouverte.
+  currentRoute() {
+    if (!this._currentSection || !window.Deeplink) return null;
+    const slug = this._activeCarousel ? this._activeCarousel.slug : null;
+    return window.Deeplink.build(this._currentSection, slug);
+  }
+
+  // Reflète la lecture en cours dans l'URL (sans créer d'historique) : un
+  // rechargement ou un passage en mode classique retombe au même endroit.
+  _syncRoute() {
+    if (!window.history || !history.replaceState) return;
+    const route = this.currentRoute() || '#ville';
+    if (location.hash !== route) {
+      history.replaceState(null, '', location.pathname + location.search + route);
+    }
+    if (typeof this.onRouteChange === 'function') this.onRouteChange(route);
   }
 
   // ── Contact form ────────────────────────────────────
@@ -124,6 +149,7 @@ class InteractionManager {
     const btn    = document.getElementById('form-submit');
     const status = document.getElementById('form-status');
     if (!form) return;
+    window.ContactForm?.warm(form);
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -133,8 +159,8 @@ class InteractionManager {
       status.className   = 'form-status';
 
       try {
-        // Remplacer 'YOUR_SERVICE_ID' et 'YOUR_TEMPLATE_ID' par vos valeurs EmailJS
-        await emailjs.sendForm('service_kju3n28', 'template_pili6gr', form);
+        // Configuration EmailJS + chargement du SDK : js/contact-form.js
+        await window.ContactForm.sendForm(form);
         status.textContent = 'Message envoyé !';
         status.classList.add('success');
         if (window.AudioManager) window.AudioManager.play('success');
@@ -207,6 +233,7 @@ class InteractionManager {
           <h2 class="profile-name">${bio.name}</h2>
           <div class="profile-title">${bio.title}</div>
           <div class="profile-tags">
+            ${bio.seeking ? `<span class="tag tag--seeking">${bio.seeking}</span>` : ''}
             <span class="tag">${bio.availability}</span>
             <span class="tag">${bio.location}</span>
           </div>
@@ -373,6 +400,7 @@ class InteractionManager {
     const panels = slides.map((s, i) => `
       <div class="carousel-slide${i === 0 ? ' is-active' : ''}" role="tabpanel"
            data-index="${i}" aria-hidden="${i === 0 ? 'false' : 'true'}"
+           ${s.slug ? `data-slug="${s.slug}"` : ''}
            ${tabGroup ? `data-group="${tabGroup(s)}"` : ''}>
         ${slideHTML(s)}
       </div>
@@ -432,7 +460,12 @@ class InteractionManager {
     const curEl    = root.querySelector('.carousel-cur');
     if (!slides.length) return;
 
-    let index = 0;
+    // Slide de départ : celle du lien profond si elle existe, sinon la 1re.
+    const wanted = this._initialSlug
+      ? slides.findIndex(s => s.dataset.slug === this._initialSlug)
+      : -1;
+    this._initialSlug = null;
+    let index = wanted > 0 ? wanted : 0;
     const last = slides.length - 1;
     const clamp = (i) => Math.max(0, Math.min(last, i));
 
@@ -488,6 +521,7 @@ class InteractionManager {
       index = ni;
       if (window.AudioManager) window.AudioManager.play('click');
       render(true);
+      this._syncRoute();
     };
 
     tabs.forEach(t => t.addEventListener('click', () => go(parseInt(t.dataset.index, 10))));
@@ -532,10 +566,14 @@ class InteractionManager {
       nextGroup,
       hasGroups,
       get index() { return index; },
+      get slug() { return slides[index].dataset.slug || null; },
       count: slides.length,
     };
 
+    // Ouverture directe sur une slide (lien profond) : pas de glissement
+    // depuis la 1re, on arrive déjà au bon endroit.
+    if (index > 0) track.style.transition = 'none';
     render(false);
-    requestAnimationFrame(() => syncHeight());
+    requestAnimationFrame(() => { syncHeight(); track.style.transition = ''; });
   }
 }

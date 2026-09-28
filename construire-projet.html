@@ -3,10 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Construisez votre projet</title>
+  <title>Construisez votre projet — Arphan Drame</title>
+  <link rel="canonical" href="https://drams18.github.io/Drams/construire-projet.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Construisez votre projet — Arphan Drame">
+  <meta property="og:description" content="Construisez votre demande de projet pas à pas, dans l'univers du portfolio d'Arphan DRAME.">
+  <meta property="og:url" content="https://drams18.github.io/Drams/construire-projet.html">
+  <meta property="og:image" content="https://drams18.github.io/Drams/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="description" content="Construisez votre demande de projet pas à pas, dans l'univers du portfolio d'Arphan DRAME.">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="style.css">
   <style>
     /* ── Page « Construisez votre projet » — extension du jeu ── */
@@ -513,15 +522,13 @@
     </div>
   </section>
 
+  <!-- EmailJS : chargé à la demande par js/contact-form.js (même config que le portfolio) -->
+  <script src="js/contact-form.js"></script>
+  <script src="js/deeplink.js"></script>
   <script>
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
-      document.querySelectorAll('.desktop-only').forEach(el => el.style.display = 'none');
-    }
+    // Retour au portfolio = dernier mode utilisé, devant le portail.
+    Deeplink.rewriteHomeLinks(document, true);
   </script>
-
-  <!-- EmailJS — MÊME configuration que le formulaire de contact du portfolio -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>emailjs.init('a8mKuHS56bPD-ydT0');</script>
 
   <script src="js/audio.js"></script>
   <script src="js/controls.js"></script>

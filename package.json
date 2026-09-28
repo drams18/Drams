@@ -1,5 +1,8 @@
 {
-  "dependencies": {
-    "@emailjs/browser": "^4.4.1"
+  "name": "drams-portfolio",
+  "private": true,
+  "description": "Portfolio d'Arphan Drame — mode classique + mode aventure (HTML/CSS/JS vanilla, aucune dépendance)",
+  "scripts": {
+    "build": "node scripts/build-classic.mjs"
   }
 }

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Mode aventure — Arphan Drame, Développeur Web Full Stack</title>
+  <meta name="description" content="Portfolio interactif d'Arphan DRAME — Développeur Full Stack Île-de-France. Explorez la ville : chaque maison est une section du portfolio.">
+  <link rel="canonical" href="https://drams18.github.io/Drams/aventure.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Arphan Drame — Portfolio">
+  <meta property="og:title" content="Mode aventure — le portfolio d'Arphan Drame">
+  <meta property="og:description" content="Explorez la ville et découvrez mon parcours autrement.">
+  <meta property="og:url" content="https://drams18.github.io/Drams/aventure.html">
+  <meta property="og:image" content="https://drams18.github.io/Drams/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0e1630">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button id="btn-sound" type="button" class="sound-toggle" aria-pressed="true"
+          aria-label="Activer ou couper tous les sons">
+    <span class="sound-toggle__label">SOUND ON</span>
+  </button>
+
+  <div id="screen-welcome" class="screen active">
+    <div class="welcome-sky"></div>
+    <div class="welcome-content">
+      <h1 class="mc-title">ARPHAN DRAME</h1>
+      <p class="mc-subtitle">Développeur Web Full Stack</p>
+      <p class="mc-location">Frontend & Backend · s'adapte vite à une nouvelle stack — Île-de-France</p>
+
+      <div class="welcome-actions">
+        <button class="mc-btn mc-btn--primary" id="btn-start">
+          <span class="mc-btn__label">Let's go !</span>
+          <span class="mc-btn__hint">Explorer mon portfolio</span>
+        </button>
+
+        <div class="welcome-secondary">
+          <a href="assets/CV.pdf" target="_blank" rel="noopener" class="mc-btn mc-btn--ghost cv-link">
+            <span class="mc-btn__label">CV</span>
+            <span class="mc-btn__hint">Mon CV en PDF</span>
+          </a>
+          <a href="tarifs.html" class="mc-btn mc-btn--ghost tarifs-link">
+            <span class="mc-btn__label">Tarifs</span>
+            <span class="mc-btn__hint">Mes prestations</span>
+          </a>
+        </div>
+
+        <button type="button" class="mc-btn mc-btn--ghost contact-link"
+                data-contact-cta data-contact-subject="Prise de contact — Portfolio">
+          <span class="mc-btn__label">Contact</span>
+          <span class="mc-btn__hint">Me joindre directement</span>
+        </button>
+      </div>
+
+      <!-- Écran d'entrée unique : commandes + son (ex-intro du village et
+           ex-modale audio). Déplié à la 1re visite (js/game.js). -->
+      <details class="mc-help" id="welcome-help">
+        <summary>COMMENT ÇA MARCHE ?</summary>
+        <div class="mc-help__body">
+          <p>Un mini-jeu : déplacez votre personnage et entrez dans les maisons pour découvrir chaque section (profil, parcours, projets, contact). Une porte à part mène à « Construisez votre projet ».</p>
+          <ul id="welcome-controls">
+            <li><b>← →</b><span>Se déplacer (ou A / D)</span></li>
+            <li><b>↑</b><span>Entrer dans une maison (ou W)</span></li>
+            <li><b>↓</b><span>Fermer une fenêtre (ou S)</span></li>
+          </ul>
+          <p class="mc-help__sound">Le son (musique et effets) fait partie de l'expérience. Il est recommandé de l'activer. Vous pouvez l'activer ou le couper à tout moment avec le bouton SOUND, en haut de l'écran.</p>
+        </div>
+      </details>
+
+      <a href="index.html" class="welcome-switch" data-switch-classic>
+        <span class="welcome-switch__k">Mode classique</span>
+        <span class="welcome-switch__v">L'essentiel en 2 minutes, sans jouer</span>
+      </a>
+    </div>
+  </div>
+
+  <div id="screen-game" class="screen hidden">
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Passage en mode classique : emporte la section / le projet consulté -->
+    <a id="btn-classic" href="index.html" class="game-home-btn" data-switch-classic>Mode classique</a>
+  </div>
+
+  <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+  <div id="section-modal" class="section-modal hidden">
+    <div class="modal-header">
+      <div id="modal-title" class="modal-title"></div>
+      <button id="modal-close" class="modal-close">FERMER</button>
+    </div>
+    <div id="modal-body" class="modal-body"></div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <script src="js/deeplink.js"></script>
+  <!-- EmailJS : chargé à la demande (1er focus dans le formulaire) -->
+  <script src="js/contact-form.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/museum.js"></script>
+  <script src="js/contact.js"></script>
+  <script src="js/controls.js"></script>
+  <script src="js/mobileControls.js"></script>
+  <script src="js/interactions.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

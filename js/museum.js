@@ -2,6 +2,12 @@
    MUSEUM.JS — Portfolio data (sections content)
    Arphan DRAME — Développeur Web Full Stack
 
+   Source UNIQUE du contenu, lue par les deux modes :
+     • mode aventure  → modales des maisons (js/interactions.js)
+     • mode classique → HTML généré par scripts/build-classic.mjs
+       (npm run build après toute modification de ce fichier)
+   `slug` = identifiant stable utilisé dans les liens (#projets/skywalk).
+
    Données réelles. Ne pas exagérer les expériences :
      • SkyWalk = projet de groupe (équipe de 7).
      • Crowdin (clone) = projet scolaire ETNA en binôme.
@@ -29,6 +35,8 @@ const SECTIONS = {
       title: 'Développeur Web Full Stack',
       location: 'Île-de-France',
       availability: 'Alternance chez DevPhantom',
+      // Ce que je recherche — information n°1 pour un recruteur (mode classique : hero).
+      seeking: 'En recherche de CDI (dès sept. 2026)',
       description: 'Développeur Web Full Stack. Je pars d\'un besoin métier, je le comprends, et je le transforme en solution concrète — du frontend au backend. Je m\'intègre vite à une base de code existante et j\'apprends les outils nécessaires au projet.',
       photo: 'assets/img/profile.jpg',
       languages: [
@@ -77,6 +85,7 @@ const SECTIONS = {
     steps: [
       {
         short: 'BAC',
+        slug: 'bac',
         kind: 'ACADÉMIQUE',
         date: '2020',
         title: 'Baccalauréat STI2D',
@@ -85,6 +94,7 @@ const SECTIONS = {
       },
       {
         short: 'BTS',
+        slug: 'bts',
         kind: 'ACADÉMIQUE',
         date: '2021 — début 2022',
         title: 'BTS Systèmes Numériques — option B Électronique et Communication',
@@ -94,6 +104,7 @@ const SECTIONS = {
       },
       {
         short: 'ETNA',
+        slug: 'etna',
         kind: 'ACADÉMIQUE',
         date: '2023 — 2026',
         title: 'ETNA — Bachelor puis Master',
@@ -105,6 +116,7 @@ const SECTIONS = {
       },
       {
         short: 'DEVPHANTOM',
+        slug: 'devphantom',
         kind: 'PROFESSIONNEL',
         date: '01/2024 — 10/2026',
         title: 'Développeur Web Full Stack — Alternance',
@@ -115,6 +127,7 @@ const SECTIONS = {
       },
       {
         short: 'AUTRES',
+        slug: 'autres',
         kind: 'PROFESSIONNEL',
         date: 'Avant / pendant le parcours informatique',
         title: 'Autres expériences',
@@ -139,11 +152,6 @@ const SECTIONS = {
       { label: 'LinkedIn', url: 'https://www.linkedin.com/in/arphan-drame/', color: '#0a66c2' },
       { label: 'Voir mon CV en PDF', url: 'assets/CV.pdf', color: '#1da1f2' },
     ],
-    emailjs: {
-      serviceId: 'service_portfolio',
-      templateId: 'template_contact',
-      publicKey: 'YOUR_PUBLIC_KEY',
-    },
   },
 
   projets: {
@@ -156,6 +164,7 @@ const SECTIONS = {
     items: [
       {
         short: 'INFINITIA',
+        slug: 'infinitia',
         title: 'Infinitia',
         type: 'Plateforme Web',
         category: 'Professionnel',
@@ -167,6 +176,7 @@ const SECTIONS = {
       },
       {
         short: 'ALLSAB-MS',
+        slug: 'allsab-ms',
         title: 'Allsab-MS',
         type: 'Intranet',
         category: 'Professionnel',
@@ -181,6 +191,7 @@ const SECTIONS = {
       },
       {
         short: 'HEXAGON',
+        slug: 'hexagon',
         title: 'Hexagon',
         type: 'Plateforme Web',
         category: 'Professionnel',
@@ -192,6 +203,7 @@ const SECTIONS = {
       },
       {
         short: 'GEXP',
+        slug: 'gexp',
         title: 'GEXP',
         type: 'Plateforme Web',
         category: 'Professionnel',
@@ -203,6 +215,7 @@ const SECTIONS = {
       },
       {
         short: 'ILAMIRIA',
+        slug: 'ilamiria',
         title: 'Ilamiria',
         type: 'Application Mobile',
         category: 'Professionnel',
@@ -216,6 +229,7 @@ const SECTIONS = {
       },
       {
         short: 'BADN',
+        slug: 'badn',
         title: 'BADN',
         type: 'Application Mobile',
         category: 'Professionnel',
@@ -228,6 +242,7 @@ const SECTIONS = {
       },
       {
         short: 'KÉDOUGOU',
+        slug: 'wild-kedougou',
         title: 'Wild Kédougou Experience',
         type: 'Plateforme de réservation',
         category: 'Personnel',
@@ -242,6 +257,7 @@ const SECTIONS = {
       },
       {
         short: 'POOL PARTY',
+        slug: 'pool-party',
         title: 'Pool Party Experience',
         type: 'Site vitrine WordPress',
         category: 'Personnel',
@@ -255,6 +271,7 @@ const SECTIONS = {
       },
       {
         short: 'ISLAAH',
+        slug: 'islaah',
         title: 'ISLAAH',
         type: 'Application Mobile',
         category: 'Personnel',
@@ -269,6 +286,7 @@ const SECTIONS = {
       },
       {
         short: 'PROSPECTLY',
+        slug: 'prospectly',
         title: 'Plateforme de recherche de prospects',
         type: 'Projet personnel',
         category: 'Personnel',
@@ -282,6 +300,7 @@ const SECTIONS = {
       },
       {
         short: 'ONEDAY',
+        slug: 'oneday',
         title: 'OneDay',
         type: 'PWA de planification',
         category: 'Personnel',
@@ -295,6 +314,7 @@ const SECTIONS = {
       },
       {
         short: 'SKYWALK',
+        slug: 'skywalk',
         title: 'SkyWalk',
         type: 'Plateforme Web',
         category: 'Scolaire',
@@ -309,6 +329,7 @@ const SECTIONS = {
       },
       {
         short: 'CROWDIN',
+        slug: 'crowdin',
         title: 'Crowdin (clone)',
         type: 'Plateforme de localisation',
         category: 'Scolaire',
@@ -321,3 +342,8 @@ const SECTIONS = {
     ],
   },
 };
+
+// Lecture côté Node (scripts/build-classic.mjs) — sans effet dans le navigateur.
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { SECTIONS, CATEGORY_ACCENT };
+}

@@ -3,137 +3,607 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>La pépite - Drame Arphan</title>
-  <meta name="description" content="Portfolio interactif d'Arphan DRAME — Développeur Full Stack Île-de-France">
+  <title>Arphan Drame — Développeur Web Full Stack · Île-de-France</title>
+  <meta name="description" content="Portfolio d'Arphan DRAME, Développeur Web Full Stack en Île-de-France. En recherche de CDI (dès sept. 2026). Parcours, compétences, projets professionnels (DevPhantom), personnels et scolaires.">
+  <link rel="canonical" href="https://drams18.github.io/Drams/">
+  <meta property="og:type" content="profile">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Arphan Drame — Portfolio">
+  <meta property="og:title" content="Arphan Drame — Développeur Web Full Stack">
+  <meta property="og:description" content="En recherche de CDI (dès sept. 2026). Découvrez mon parcours, mes compétences et mes projets — en lecture rapide ou en explorant la ville.">
+  <meta property="og:url" content="https://drams18.github.io/Drams/">
+  <meta property="og:image" content="https://drams18.github.io/Drams/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0e1630">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="icon" href="assets/img/favicon.png">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .desktop-only { display: none; }
-    @media (min-width: 768px) {
-      .desktop-only { display: block; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/classic.css">
+  <!-- build:jsonld -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Arphan Drame",
+  "jobTitle": "Développeur Web Full Stack",
+  "url": "https://drams18.github.io/Drams/",
+  "email": "mailto:arphandrame0@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "Île-de-France",
+    "addressCountry": "FR"
+  },
+  "sameAs": [
+    "https://github.com/drams18",
+    "https://www.linkedin.com/in/arphan-drame/"
+  ],
+  "knowsLanguage": [
+    "Français",
+    "Anglais",
+    "Espagnol",
+    "Arabe"
+  ],
+  "knowsAbout": [
+    "React",
+    "React Native",
+    "Next.js",
+    "TypeScript",
+    "JavaScript",
+    "Vite",
+    "Tailwind CSS",
+    "Redux / Zustand",
+    "Node.js",
+    "Express",
+    "NestJS",
+    "Symfony",
+    "Laravel",
+    "PHP",
+    "Python",
+    "REST API",
+    "GraphQL",
+    "MySQL",
+    "PostgreSQL",
+    "Supabase",
+    "Prisma",
+    "TypeORM",
+    "Docker",
+    "Git",
+    "GitHub",
+    "GitLab",
+    "CI/CD",
+    "Nginx",
+    "AWS",
+    "GCP",
+    "Cloudflare",
+    "Jest",
+    "Cypress",
+    "Vitest",
+    "Playwright",
+    "Figma",
+    "Jira",
+    "Bruno",
+    "API REST",
+    "Intégration IA / LLM",
+    "Modèles locaux & API IA selon les projets"
+  ],
+  "alumniOf": {
+    "@type": "CollegeOrUniversity",
+    "name": "ETNA"
+  },
+  "worksFor": {
+    "@type": "Organization",
+    "name": "DevPhantom"
+  }
+}
+  </script>
+  <!-- /build:jsonld -->
 </head>
 <body>
-  <button id="btn-sound" type="button" class="sound-toggle" aria-pressed="true"
-          aria-label="Activer ou couper tous les sons">
-    <span class="sound-toggle__label">SOUND ON</span>
-  </button>
+  <!-- ══════════════════════════════════════════════════════
+       MODE CLASSIQUE — le « plan » de la ville.
+       Le contenu entre les marqueurs build:content est GÉNÉRÉ depuis
+       js/museum.js : ne pas l'éditer ici, lancer `npm run build`.
+       ══════════════════════════════════════════════════════ -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-house" viewBox="0 0 24 24">
+      <path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="miter"/>
+    </symbol>
+  </svg>
 
-  <div id="screen-welcome" class="screen active">
-    <div class="welcome-sky"></div>
-    <div class="welcome-content">
-      <h1 class="mc-title">ARPHAN DRAME</h1>
-      <p class="mc-subtitle">Développeur Web Full Stack</p>
-      <p class="mc-location">Frontend & Backend · s'adapte vite à une nouvelle stack — Île-de-France</p>
+  <a class="skip" href="#profil">Aller au contenu</a>
 
-      <div class="welcome-actions">
-        <button class="mc-btn mc-btn--primary" id="btn-start">
-          <span class="mc-btn__label">Let's go !</span>
-          <span class="mc-btn__hint">Explorer mon portfolio</span>
-        </button>
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="#top" aria-label="Arphan Drame — haut de page">A. DRAME</a>
+      <nav class="nav" aria-label="Sections">
+        <a href="#profil">Profil</a>
+        <a href="#parcours">Expérience</a>
+        <a href="#projets">Projets</a>
+        <a href="#competences">Compétences</a>
+        <a href="#formation">Formation</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="topbar__actions">
+        <a class="topbar__cv" href="assets/CV.pdf" target="_blank" rel="noopener">CV</a>
+        <a class="switch" href="aventure.html#ville" data-switch-adventure data-follow-route
+           title="Passer en mode aventure — à l'endroit que vous lisez">
+          <svg class="house-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-house"/></svg>
+          <span>Mode aventure</span>
+        </a>
+      </div>
+    </div>
+  </header>
 
-        <div class="welcome-secondary">
-          <a href="assets/CV.pdf" target="_blank" rel="noopener" class="mc-btn mc-btn--ghost cv-link">
-            <span class="mc-btn__label">CV</span>
-            <span class="mc-btn__hint">Mon CV en PDF</span>
-          </a>
-          <a href="tarifs.html" class="mc-btn mc-btn--ghost tarifs-link">
-            <span class="mc-btn__label">Tarifs</span>
-            <span class="mc-btn__hint">Mes prestations</span>
-          </a>
+  <main id="main">
+    <!-- build:content -->
+    <section class="hero" id="top" data-route="ville" aria-labelledby="hero-name">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="wrap hero__inner">
+        <div class="hero__id">
+          <p class="eyebrow">Portfolio</p>
+          <h1 class="hero__name" id="hero-name">ARPHAN DRAME</h1>
+          <p class="hero__title">Développeur Web Full Stack</p>
+          <p class="hero__loc">Frontend &amp; Backend · s'adapte vite à une nouvelle stack — Île-de-France</p>
+          <p class="hero__seeking"><span class="pulse" aria-hidden="true"></span>En recherche de CDI (dès sept. 2026)</p>
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="assets/CV.pdf" target="_blank" rel="noopener">Voir mon CV</a>
+            <button type="button" class="btn btn--ghost" data-contact-cta data-contact-subject="Prise de contact — Portfolio">Me contacter</button>
+          </div>
+          <div class="hero__social">
+            <a class="btn btn--small" href="https://github.com/drams18" target="_blank" rel="noopener">GitHub</a>
+            <a class="btn btn--small" href="https://www.linkedin.com/in/arphan-drame/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
         </div>
 
-        <button type="button" class="mc-btn mc-btn--ghost contact-link"
-                data-contact-cta data-contact-subject="Prise de contact — Portfolio">
-          <span class="mc-btn__label">Contact</span>
-          <span class="mc-btn__hint">Me joindre directement</span>
-        </button>
+        <div class="choice" aria-labelledby="choice-title">
+          <h2 class="choice__title" id="choice-title">Deux façons de me découvrir</h2>
+          <p class="choice__lead">Le même parcours, les mêmes projets : à lire, ou à explorer.</p>
+          <div class="choice__grid">
+            <a class="mode-card mode-card--classic" href="#profil">
+              <span class="mode-card__preview" aria-hidden="true">
+                <span class="pv-page">
+                  <span class="pv-bar pv-bar--name"></span>
+                  <span class="pv-bar pv-bar--sub"></span>
+                  <span class="pv-cards">
+                    <span class="pv-card" style="--c:#19e8ff"></span>
+                    <span class="pv-card" style="--c:#ff2bb0"></span>
+                    <span class="pv-card" style="--c:#8a3bff"></span>
+                  </span>
+                  <span class="pv-chips"><i></i><i></i><i></i><i></i></span>
+                </span>
+              </span>
+              <span class="mode-card__body">
+                <span class="mode-card__k"><svg class="mode-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 7V5h8v2M3 8h18v11H3zM3 13h18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="miter"/></svg>Mode classique</span>
+                <span class="mode-card__t">Découvrez mon parcours, mes compétences et mes projets.</span>
+                <span class="mode-card__meta">L'essentiel en 2 minutes · vous y êtes</span>
+                <span class="mode-card__go">Lire le portfolio</span>
+              </span>
+            </a>
+            <a class="mode-card mode-card--adventure" href="aventure.html#ville" data-switch-adventure data-fixed-route>
+              <span class="mode-card__preview" aria-hidden="true"><svg class="pv-city" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="pv-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b1c44"/><stop offset="1" stop-color="#0e1630"/></linearGradient>
+      <radialGradient id="pv-portal"><stop offset="0" stop-color="#19e8ff" stop-opacity=".9"/><stop offset=".6" stop-color="#8a3bff" stop-opacity=".5"/><stop offset="1" stop-color="#8a3bff" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="320" height="180" fill="url(#pv-sky)"/>
+    <g fill="#fff" opacity=".6"><circle cx="24" cy="18" r="1"/><circle cx="96" cy="30" r="1"/><circle cx="170" cy="14" r="1.2"/><circle cx="250" cy="26" r="1"/><circle cx="300" cy="12" r="1"/></g>
+    <path class="pv-far" fill="#131d3a" d="M0 96h18V70h12v18h14V56h10v30h16V64h14v22h20V50h8v36h18V60h14v28h16V46h10v40h20V66h14v24h18V58h12v30h20V70h16v26h20v84H0z"/>
+    <g>
+      <rect x="30" y="90" width="46" height="62" fill="#16223f" stroke="#01010a" stroke-width="2"/>
+      <rect x="27" y="84" width="52" height="8" fill="#0c1428" stroke="#19e8ff" stroke-width="1.5"/>
+      <rect x="39" y="104" width="8" height="7" fill="#19e8ff" opacity="0.35"/><rect x="59" y="104" width="8" height="7" fill="#19e8ff" opacity="0.75"/><rect x="39" y="118" width="8" height="7" fill="#19e8ff" opacity="0.75"/><rect x="59" y="118" width="8" height="7" fill="#19e8ff" opacity="0.35"/><rect x="39" y="132" width="8" height="7" fill="#19e8ff" opacity="0.35"/><rect x="59" y="132" width="8" height="7" fill="#19e8ff" opacity="0.75"/>
+      <rect x="47" y="134" width="12" height="18" fill="#0c1428" stroke="#19e8ff" stroke-width="1.5"/>
+    </g><g>
+      <rect x="84" y="90" width="46" height="62" fill="#16223f" stroke="#01010a" stroke-width="2"/>
+      <rect x="81" y="84" width="52" height="8" fill="#0c1428" stroke="#8a3bff" stroke-width="1.5"/>
+      <rect x="93" y="104" width="8" height="7" fill="#8a3bff" opacity="0.35"/><rect x="113" y="104" width="8" height="7" fill="#8a3bff" opacity="0.75"/><rect x="93" y="118" width="8" height="7" fill="#8a3bff" opacity="0.75"/><rect x="113" y="118" width="8" height="7" fill="#8a3bff" opacity="0.35"/><rect x="93" y="132" width="8" height="7" fill="#8a3bff" opacity="0.35"/><rect x="113" y="132" width="8" height="7" fill="#8a3bff" opacity="0.75"/>
+      <rect x="101" y="134" width="12" height="18" fill="#0c1428" stroke="#8a3bff" stroke-width="1.5"/>
+    </g><g>
+      <rect x="186" y="90" width="46" height="62" fill="#16223f" stroke="#01010a" stroke-width="2"/>
+      <rect x="183" y="84" width="52" height="8" fill="#0c1428" stroke="#ff2bb0" stroke-width="1.5"/>
+      <rect x="195" y="104" width="8" height="7" fill="#ff2bb0" opacity="0.35"/><rect x="215" y="104" width="8" height="7" fill="#ff2bb0" opacity="0.75"/><rect x="195" y="118" width="8" height="7" fill="#ff2bb0" opacity="0.75"/><rect x="215" y="118" width="8" height="7" fill="#ff2bb0" opacity="0.35"/><rect x="195" y="132" width="8" height="7" fill="#ff2bb0" opacity="0.35"/><rect x="215" y="132" width="8" height="7" fill="#ff2bb0" opacity="0.75"/>
+      <rect x="203" y="134" width="12" height="18" fill="#0c1428" stroke="#ff2bb0" stroke-width="1.5"/>
+    </g><g>
+      <rect x="240" y="90" width="70" height="62" fill="#16223f" stroke="#01010a" stroke-width="2"/>
+      <rect x="237" y="84" width="76" height="8" fill="#0c1428" stroke="#ff123d" stroke-width="1.5"/>
+      <rect x="249" y="104" width="8" height="7" fill="#ff123d" opacity="0.35"/><rect x="293" y="104" width="8" height="7" fill="#ff123d" opacity="0.75"/><rect x="249" y="118" width="8" height="7" fill="#ff123d" opacity="0.75"/><rect x="293" y="118" width="8" height="7" fill="#ff123d" opacity="0.35"/><rect x="249" y="132" width="8" height="7" fill="#ff123d" opacity="0.35"/><rect x="293" y="132" width="8" height="7" fill="#ff123d" opacity="0.75"/>
+      <rect x="269" y="134" width="12" height="18" fill="#0c1428" stroke="#ff123d" stroke-width="1.5"/>
+    </g>
+    <ellipse class="pv-portal" cx="158" cy="128" rx="18" ry="26" fill="url(#pv-portal)"/>
+    <ellipse cx="158" cy="128" rx="11" ry="20" fill="none" stroke="#19e8ff" stroke-width="2"/>
+    <rect y="152" width="320" height="28" fill="#131d33"/>
+    <rect y="152" width="320" height="2" fill="#19e8ff" opacity=".55"/>
+    <g class="pv-hero"><rect x="118" y="134" width="8" height="12" fill="#ff123d" stroke="#01010a"/><rect x="118" y="127" width="8" height="7" fill="#f5f6ff" stroke="#01010a"/><rect x="118" y="146" width="3" height="6" fill="#01010a"/><rect x="123" y="146" width="3" height="6" fill="#01010a"/></g>
+  </svg></span>
+              <span class="mode-card__body">
+                <span class="mode-card__k"><svg class="mode-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></svg>Mode aventure</span>
+                <span class="mode-card__t">Explorez mon univers et découvrez mon parcours autrement.</span>
+                <span class="mode-card__meta">Environ 5 minutes · son recommandé · clavier ou boutons tactiles</span>
+                <span class="mode-card__go" data-resume="Reprendre la balade">Entrer dans la ville</span>
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <details class="mc-help desktop-only">
-        <summary>COMMENT ÇA MARCHE ?</summary>
-        <div class="mc-help__body">
-          <p>Un mini-jeu : déplacez votre personnage et entrez dans les maisons pour découvrir chaque section (profil, parcours, projets, contact). Une porte à part mène à « Construisez votre projet ».</p>
-          <ul>
-            <li><b>← →</b><span>Se déplacer (ou A / D)</span></li>
-            <li><b>↑</b><span>Entrer dans une maison (ou W)</span></li>
-            <li><b>↓</b><span>Fermer une fenêtre (ou S)</span></li>
+    <section class="sec" id="profil" data-route="profil" style="--sec:#19e8ff" aria-labelledby="profil-title">
+      <div class="wrap">
+      <header class="sec-head">
+        <h2 class="sec-title" id="profil-title">À propos</h2>
+        <a class="sec-house" href="aventure.html#profil" data-switch-adventure
+           title="Voir cette section dans le mode aventure">
+          <svg class="house-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison PROFIL</span>
+        </a>
+        
+      </header>
+        <div class="about">
+          <div class="about__text">
+            <p class="about__bio">Développeur Web Full Stack. Je pars d'un besoin métier, je le comprends, et je le transforme en solution concrète — du frontend au backend. Je m'intègre vite à une base de code existante et j'apprends les outils nécessaires au projet.</p>
+            <p class="about__pos">Je peux m'adapter à un environnement technique existant, comprendre rapidement un projet et apprendre les outils nécessaires pour répondre au besoin.</p>
+          </div>
+          
+        <dl class="facts">
+          <div class="fact">
+            <dt>Expérience</dt>
+            <dd><strong>DevPhantom</strong><span>Alternance Full Stack · 01/2024 — 10/2026</span></dd>
+          </div>
+          <div class="fact">
+            <dt>Formation</dt>
+            <dd><strong>ETNA — Bachelor puis Master</strong><span>2023 — 2026</span></dd>
+          </div>
+          <div class="fact">
+            <dt>Projets</dt>
+            <dd><strong>13 projets</strong><span>6 pro · 5 perso · 2 scolaires</span></dd>
+          </div>
+          <div class="fact">
+            <dt>App Store</dt>
+            <dd><strong>2 applications publiées</strong><span>Ilamiria (en équipe) · ISLAAH (projet perso)</span></dd>
+          </div>
+        </dl>
+        </div>
+        <div class="about__meta">
+          <div><h3 class="mini-title">Qualités</h3><ul class="inline-list"><li>Adaptabilité</li><li>Apprentissage rapide</li><li>Autonomie</li><li>Résolution de problèmes</li><li>Esprit d'analyse</li><li>Travail d'équipe</li><li>Comprendre un besoin métier</li><li>Frontend &amp; Backend</li></ul></div>
+          <div><h3 class="mini-title">Langues</h3><ul class="inline-list inline-list--langs"><li><strong>Français</strong> Natif</li><li><strong>Anglais</strong> B2</li><li><strong>Espagnol</strong> A2</li><li><strong>Arabe</strong> A2</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="parcours" data-route="parcours/devphantom" style="--sec:#8a3bff" aria-labelledby="parcours-title">
+      <div class="wrap">
+      <header class="sec-head">
+        <h2 class="sec-title" id="parcours-title">Expérience</h2>
+        <a class="sec-house" href="aventure.html#parcours" data-switch-adventure
+           title="Voir cette section dans le mode aventure">
+          <svg class="house-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison PARCOURS</span>
+        </a>
+        
+      </header>
+        <article class="card step step--main" id="parcours/devphantom" data-route="parcours/devphantom">
+          <p class="step__kind">PROFESSIONNEL</p>
+          <p class="step__date">01/2024 — 10/2026</p>
+          <h3 class="step__title">Développeur Web Full Stack — Alternance</h3>
+          <p class="step__place">DevPhantom · en parallèle de l'ETNA · équipe d'environ 4 personnes</p>
+          <p class="step__context">Après les rendez-vous clients : compréhension du besoin, récupération des idées et fonctionnalités, définition de la solution, développement ou reprise de projets, création de fonctionnalités et de SaaS. Travail avec Jira, méthodologie Agile, adaptation aux contraintes techniques et métier.</p>
+          <p class="step__desc">Une caractéristique importante de mon profil ici : m'adapter rapidement à un nouveau projet et apprendre les technologies nécessaires au besoin.</p>
+          
+          
+          <h4 class="mini-title">Projets réalisés chez DevPhantom (en équipe)</h4>
+          <ul class="step__projects">
+            <li><a href="#projets/infinitia"><strong>Infinitia</strong><span>Plateforme Web</span></a></li>
+            <li><a href="#projets/allsab-ms"><strong>Allsab-MS</strong><span>Intranet</span></a></li>
+            <li><a href="#projets/hexagon"><strong>Hexagon</strong><span>Plateforme Web</span></a></li>
+            <li><a href="#projets/gexp"><strong>GEXP</strong><span>Plateforme Web</span></a></li>
+            <li><a href="#projets/ilamiria"><strong>Ilamiria</strong><span>Application Mobile</span></a></li>
+            <li><a href="#projets/badn"><strong>BADN</strong><span>Application Mobile</span></a></li>
           </ul>
-        </div>
-      </details>
-    </div>
-  </div>
-
-  <div id="screen-game" class="screen hidden">
-    <canvas id="gameCanvas"></canvas>
-
-    <button id="btn-home" type="button" class="game-home-btn">Accueil</button>
-
-    <div id="game-intro" class="game-intro hidden">
-      <div class="game-intro__card">
-        <h2 class="game-intro__title">BIENVENUE DANS LE VILLAGE</h2>
-        <p class="game-intro__text">
-          Chaque maison est une section de mon portfolio. Déplacez-vous jusqu'à
-          une porte, puis entrez pour lire le contenu. Vous pouvez revenir à
-          l'accueil à tout moment avec le bouton en haut à gauche.
-        </p>
-        <ul class="game-intro__list" id="game-intro-list"></ul>
-        <button type="button" id="btn-intro-close" class="mc-btn mc-btn--primary">
-          <span class="mc-btn__label">C'est parti</span>
-        </button>
+        </article>
+        <details class="card step step--more" id="parcours/autres" data-route="parcours/autres">
+          <summary><span class="step__kind">PROFESSIONNEL</span><span class="step__title">Autres expériences</span><span class="step__date">Avant / pendant le parcours informatique</span></summary>
+          <p class="step__desc">Un parcours varié, à l'aise dans la relation avec le public, avant de me consacrer au développement. Ces expériences restent secondaires par rapport au développement informatique.</p>
+          <ul class="step__details"><li>City One — RATP : accueil et accompagnement des voyageurs dans le métro, vente de titres de transport, assistance aux usagers.</li><li>City One — missions d'accueil : accueil du public, standard téléphonique, orientation des visiteurs, dans différents environnements professionnels (dont La Poste Mobile).</li><li>Super U : expérience de vente pendant environ un mois.</li></ul>
+        </details>
       </div>
+    </section>
+
+    <section class="sec" id="projets" data-route="projets" style="--sec:#ff123d" aria-labelledby="projets-title">
+      <div class="wrap">
+      <header class="sec-head">
+        <h2 class="sec-title" id="projets-title">Projets</h2>
+        <a class="sec-house" href="aventure.html#projets" data-switch-adventure
+           title="Voir cette section dans le mode aventure">
+          <svg class="house-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison GALERIE</span>
+        </a>
+        <p class="sec-lead">Projets rangés par catégorie et par couleur : professionnels (DevPhantom), personnels et scolaires.</p>
+      </header>
+        <div class="filters" role="group" aria-label="Filtrer les projets">
+          <button type="button" class="filter" data-filter="all" aria-pressed="true">Tous <span>13</span></button>
+          <button type="button" class="filter" data-filter="pick" aria-pressed="false">★ À ne pas rater <span>5</span></button>
+          <button type="button" class="filter" data-filter="Professionnel" aria-pressed="false" style="--acc:#19e8ff">Professionnel <span>6</span></button>
+          <button type="button" class="filter" data-filter="Personnel" aria-pressed="false" style="--acc:#ff2bb0">Personnel <span>5</span></button>
+          <button type="button" class="filter" data-filter="Scolaire" aria-pressed="false" style="--acc:#8a3bff">Scolaire <span>2</span></button>
+        </div>
+        <div class="proj-grid">
+          <article class="card proj" id="projets/infinitia" data-route="projets/infinitia"
+                   data-cat="Professionnel" style="--acc:#19e8ff" aria-labelledby="p-infinitia">
+            <p class="proj__meta"><span class="proj__cat">Professionnel</span><span>Plateforme Web</span></p>
+            <h3 class="proj__title" id="p-infinitia">Infinitia</h3>
+            <p class="proj__desc" data-clamp>Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n'a finalement pas été terminée, le client ayant cessé de répondre.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet DevPhantom, en équipe. J'ai participé à la création à partir de zéro après un échange avec le client : conception de la base de données, développement du backend, préparation de l'architecture du projet.</p>
+            <ul class="tags"><li>Symfony</li><li>Node.js</li><li>NestJS</li><li>MySQL</li></ul>
+            <div class="proj__links"><span class="proj__link proj__link--off" aria-disabled="true">Indisponible</span></div>
+          </article>
+          <article class="card proj is-pick" id="projets/allsab-ms" data-route="projets/allsab-ms"
+                   data-cat="Professionnel" data-pick style="--acc:#19e8ff" aria-labelledby="p-allsab-ms">
+            <p class="proj__meta"><span class="proj__cat">Professionnel</span><span>Intranet</span><span class="proj__pick">★ À ne pas rater</span></p>
+            <h3 class="proj__title" id="p-allsab-ms">Allsab-MS</h3>
+            <p class="proj__desc" data-clamp>Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet DevPhantom, en équipe — l'un des premiers projets que j'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.</p>
+            <ul class="tags"><li>PHP</li><li>Symfony</li><li>MySQL</li></ul>
+            <div class="proj__links"><a class="proj__link" href="https://allsab-ms.com/" target="_blank" rel="noopener">Voir le site</a></div>
+          </article>
+          <article class="card proj" id="projets/hexagon" data-route="projets/hexagon"
+                   data-cat="Professionnel" style="--acc:#19e8ff" aria-labelledby="p-hexagon">
+            <p class="proj__meta"><span class="proj__cat">Professionnel</span><span>Plateforme Web</span></p>
+            <h3 class="proj__title" id="p-hexagon">Hexagon</h3>
+            <p class="proj__desc" data-clamp>Plateforme destinée à faciliter le travail opérationnel et la communication interne.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet DevPhantom, en équipe. Développement de plusieurs CRUD, de fonctionnalités liées à la communication interne, et participation à l'évolution de la plateforme.</p>
+            <ul class="tags"><li>PHP</li><li>Symfony</li><li>JavaScript</li><li>MySQL</li></ul>
+            <div class="proj__links"><span class="proj__link proj__link--off" aria-disabled="true">Indisponible</span></div>
+          </article>
+          <article class="card proj" id="projets/gexp" data-route="projets/gexp"
+                   data-cat="Professionnel" style="--acc:#19e8ff" aria-labelledby="p-gexp">
+            <p class="proj__meta"><span class="proj__cat">Professionnel</span><span>Plateforme Web</span></p>
+            <h3 class="proj__title" id="p-gexp">GEXP</h3>
+            <p class="proj__desc" data-clamp>Plateforme destinée à faciliter la génération de rapports et la communication interne.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet DevPhantom, en équipe. Développement de CRUD, génération de rapports, exports PDF, Excel et CSV.</p>
+            <ul class="tags"><li>PHP</li><li>Symfony</li><li>MySQL</li></ul>
+            <div class="proj__links"><span class="proj__link proj__link--off" aria-disabled="true">Indisponible</span></div>
+          </article>
+          <article class="card proj" id="projets/ilamiria" data-route="projets/ilamiria"
+                   data-cat="Professionnel" style="--acc:#19e8ff" aria-labelledby="p-ilamiria">
+            <p class="proj__meta"><span class="proj__cat">Professionnel</span><span>Application Mobile</span></p>
+            <h3 class="proj__title" id="p-ilamiria">Ilamiria</h3>
+            <p class="proj__desc" data-clamp>Application mobile développée chez DevPhantom et publiée sur l'App Store.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet interne DevPhantom, réalisé en équipe.</p>
+            <ul class="tags"><li>React Native</li></ul>
+            <div class="proj__links"><a class="proj__link" href="https://apps.apple.com/fr/app/ilamiria/id6749936753" target="_blank" rel="noopener">App Store</a></div>
+          </article>
+          <article class="card proj is-pick" id="projets/badn" data-route="projets/badn"
+                   data-cat="Professionnel" data-pick style="--acc:#19e8ff" aria-labelledby="p-badn">
+            <p class="proj__meta"><span class="proj__cat">Professionnel</span><span>Application Mobile</span><span class="proj__pick">★ À ne pas rater</span></p>
+            <h3 class="proj__title" id="p-badn">BADN</h3>
+            <p class="proj__desc" data-clamp>Application pour organiser des sorties entre amis : définition d'un budget, choix d'un lieu et d'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d'autres.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet interne DevPhantom, en équipe. J'étais principalement impliqué sur le développement backend.</p>
+            <ul class="tags"><li>React Native</li><li>Node.js</li></ul>
+            <div class="proj__links"><span class="proj__link proj__link--off" aria-disabled="true">Indisponible</span></div>
+          </article>
+          <article class="card proj is-pick" id="projets/wild-kedougou" data-route="projets/wild-kedougou"
+                   data-cat="Personnel" data-pick style="--acc:#ff2bb0" aria-labelledby="p-wild-kedougou">
+            <p class="proj__meta"><span class="proj__cat">Personnel</span><span>Plateforme de réservation</span><span class="proj__pick">★ À ne pas rater</span></p>
+            <h3 class="proj__title" id="p-wild-kedougou">Wild Kédougou Experience</h3>
+            <p class="proj__desc" data-clamp>Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet personnel — conception et développement complets (frontend, backend serverless, intégrations).</p>
+            <ul class="tags"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind CSS</li><li>Framer Motion</li><li>Supabase</li><li>Google Calendar API</li><li>Brevo</li><li>Cloudflare Workers</li><li>PWA</li><li>SEO</li></ul>
+            <div class="proj__links"><a class="proj__link" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Voir le projet</a></div>
+          </article>
+          <article class="card proj" id="projets/pool-party" data-route="projets/pool-party"
+                   data-cat="Personnel" style="--acc:#ff2bb0" aria-labelledby="p-pool-party">
+            <p class="proj__meta"><span class="proj__cat">Personnel</span><span>Site vitrine WordPress</span></p>
+            <h3 class="proj__title" id="p-pool-party">Pool Party Experience</h3>
+            <p class="proj__desc" data-clamp>Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet en cours, réalisé pour un ami — création et intégration d'un site vitrine WordPress.</p>
+            <ul class="tags"><li>WordPress</li><li>PHP</li><li>CSS</li></ul>
+            <div class="proj__links"><a class="proj__link" href="https://poolparty-experience.fr/" target="_blank" rel="noopener">Voir le site</a></div>
+          </article>
+          <article class="card proj is-pick" id="projets/islaah" data-route="projets/islaah"
+                   data-cat="Personnel" data-pick style="--acc:#ff2bb0" aria-labelledby="p-islaah">
+            <p class="proj__meta"><span class="proj__cat">Personnel</span><span>Application Mobile</span><span class="proj__pick">★ À ne pas rater</span></p>
+            <h3 class="proj__title" id="p-islaah">ISLAAH</h3>
+            <p class="proj__desc" data-clamp>Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l'App Store.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet personnel — conception et développement complet : app mobile, API et mise en production.</p>
+            <ul class="tags"><li>React Native</li><li>Symfony</li><li>MySQL</li><li>Cloudflare</li><li>Railway</li><li>Expo</li></ul>
+            <div class="proj__links"><a class="proj__link" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener">Télécharger</a></div>
+          </article>
+          <article class="card proj" id="projets/prospectly" data-route="projets/prospectly"
+                   data-cat="Personnel" style="--acc:#ff2bb0" aria-labelledby="p-prospectly">
+            <p class="proj__meta"><span class="proj__cat">Personnel</span><span>Projet personnel</span></p>
+            <h3 class="proj__title" id="p-prospectly">Plateforme de recherche de prospects</h3>
+            <p class="proj__desc" data-clamp>Plateforme permettant de rechercher une enseigne qui a besoin d'un site web ou d'une mise à jour.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet personnel — idée, conception et développement réalisés seul.</p>
+            <ul class="tags"><li>Node.js</li><li>Railway</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>NoSQL</li></ul>
+            <div class="proj__links"><a class="proj__link" href="https://prospectly.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Accéder</a></div>
+          </article>
+          <article class="card proj" id="projets/oneday" data-route="projets/oneday"
+                   data-cat="Personnel" style="--acc:#ff2bb0" aria-labelledby="p-oneday">
+            <p class="proj__meta"><span class="proj__cat">Personnel</span><span>PWA de planification</span></p>
+            <h3 class="proj__title" id="p-oneday">OneDay</h3>
+            <p class="proj__desc" data-clamp>Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d'avancement, modèles de journée réutilisables (« programmes ») applicables à n'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet personnel — conception et développement complets (frontend, backend serverless, notifications push). PWA que j'ai construite pour organiser mes journées, mieux travailler et m'installer des habitudes.</p>
+            <ul class="tags"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind CSS</li><li>React Router</li><li>Supabase</li><li>PostgreSQL</li><li>PWA</li><li>Web Push</li><li>Cloudflare Pages</li><li>Cloudflare Workers</li></ul>
+            <div class="proj__links"><a class="proj__link" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener">Voir le projet</a></div>
+          </article>
+          <article class="card proj is-pick" id="projets/skywalk" data-route="projets/skywalk"
+                   data-cat="Scolaire" data-pick style="--acc:#8a3bff" aria-labelledby="p-skywalk">
+            <p class="proj__meta"><span class="proj__cat">Scolaire</span><span>Plateforme Web</span><span class="proj__pick">★ À ne pas rater</span></p>
+            <h3 class="proj__title" id="p-skywalk">SkyWalk</h3>
+            <p class="proj__desc" data-clamp>Plateforme web destinée à accompagner les personnes dans leurs projets d'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet réalisé en équipe de 7 (ETNA — Grand Projet d'Étude). J'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l'architecture technique et à la documentation / au diagramme d'architecture.</p>
+            <ul class="tags"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind</li><li>React Query</li><li>NestJS</li><li>PostgreSQL</li><li>TypeORM</li><li>JWT</li><li>Docker</li><li>Nginx</li><li>GitLab CI</li></ul>
+            <div class="proj__links"><a class="proj__link" href="https://skywalk-chi.vercel.app/" target="_blank" rel="noopener">Accéder</a></div>
+          </article>
+          <article class="card proj" id="projets/crowdin" data-route="projets/crowdin"
+                   data-cat="Scolaire" style="--acc:#8a3bff" aria-labelledby="p-crowdin">
+            <p class="proj__meta"><span class="proj__cat">Scolaire</span><span>Plateforme de localisation</span></p>
+            <h3 class="proj__title" id="p-crowdin">Crowdin (clone)</h3>
+            <p class="proj__desc" data-clamp>Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d'accès par rôles.</p>
+            <p class="role"><span class="role__k">Mon rôle</span>Projet scolaire ETNA réalisé en binôme (déc. 2024 – janv. 2025) ; j'ai porté la majeure partie du développement : modélisation Doctrine et migrations, CRUD projets / langues / sources / traductions, import et export CSV, verrouillage des chaînes sources, inscription avec vérification d'e-mail, contrôle d'accès par voter.</p>
+            <ul class="tags"><li>Symfony 7</li><li>PHP 8</li><li>Doctrine ORM</li><li>PostgreSQL</li><li>Twig</li><li>Docker</li><li>Bootstrap</li></ul>
+            <div class="proj__links"><span class="proj__link proj__link--off" aria-disabled="true">Indisponible</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="competences" data-route="profil" style="--sec:#19e8ff" aria-labelledby="competences-title">
+      <div class="wrap">
+      <header class="sec-head">
+        <h2 class="sec-title" id="competences-title">Compétences</h2>
+        <a class="sec-house" href="aventure.html#profil" data-switch-adventure
+           title="Voir cette section dans le mode aventure">
+          <svg class="house-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison PROFIL</span>
+        </a>
+        <p class="sec-lead">Le chiffre indique dans combien de projets de ce portfolio la technologie est utilisée (survolez pour voir lesquels).</p>
+      </header>
+        <div class="skill-grid">
+          <div class="skill-group">
+            <h3 class="mini-title">Frontend</h3>
+            <ul class="skills"><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, OneDay, SkyWalk">React<span class="skills__n" aria-label="3 projets : Wild Kédougou Experience, OneDay, SkyWalk">3</span></li><li class="is-used" title="Utilisé dans : Ilamiria, BADN, ISLAAH">React Native<span class="skills__n" aria-label="3 projets : Ilamiria, BADN, ISLAAH">3</span></li><li>Next.js</li><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, OneDay, SkyWalk">TypeScript<span class="skills__n" aria-label="3 projets : Wild Kédougou Experience, OneDay, SkyWalk">3</span></li><li class="is-used" title="Utilisé dans : Hexagon, Plateforme de recherche de prospects">JavaScript<span class="skills__n" aria-label="2 projets : Hexagon, Plateforme de recherche de prospects">2</span></li><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, OneDay, SkyWalk">Vite<span class="skills__n" aria-label="3 projets : Wild Kédougou Experience, OneDay, SkyWalk">3</span></li><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, OneDay, SkyWalk">Tailwind CSS<span class="skills__n" aria-label="3 projets : Wild Kédougou Experience, OneDay, SkyWalk">3</span></li><li>Redux / Zustand</li></ul>
+          </div>
+          <div class="skill-group">
+            <h3 class="mini-title">Backend</h3>
+            <ul class="skills"><li class="is-used" title="Utilisé dans : Infinitia, BADN, Plateforme de recherche de prospects">Node.js<span class="skills__n" aria-label="3 projets : Infinitia, BADN, Plateforme de recherche de prospects">3</span></li><li>Express</li><li class="is-used" title="Utilisé dans : Infinitia, SkyWalk">NestJS<span class="skills__n" aria-label="2 projets : Infinitia, SkyWalk">2</span></li><li class="is-used" title="Utilisé dans : Infinitia, Allsab-MS, Hexagon, GEXP, ISLAAH, Crowdin (clone)">Symfony<span class="skills__n" aria-label="6 projets : Infinitia, Allsab-MS, Hexagon, GEXP, ISLAAH, Crowdin (clone)">6</span></li><li>Laravel</li><li class="is-used" title="Utilisé dans : Allsab-MS, Hexagon, GEXP, Pool Party Experience, Crowdin (clone)">PHP<span class="skills__n" aria-label="5 projets : Allsab-MS, Hexagon, GEXP, Pool Party Experience, Crowdin (clone)">5</span></li><li>Python</li><li>REST API</li><li>GraphQL</li></ul>
+          </div>
+          <div class="skill-group">
+            <h3 class="mini-title">Bases de données</h3>
+            <ul class="skills"><li class="is-used" title="Utilisé dans : Infinitia, Allsab-MS, Hexagon, GEXP, ISLAAH">MySQL<span class="skills__n" aria-label="5 projets : Infinitia, Allsab-MS, Hexagon, GEXP, ISLAAH">5</span></li><li class="is-used" title="Utilisé dans : OneDay, SkyWalk, Crowdin (clone)">PostgreSQL<span class="skills__n" aria-label="3 projets : OneDay, SkyWalk, Crowdin (clone)">3</span></li><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, OneDay">Supabase<span class="skills__n" aria-label="2 projets : Wild Kédougou Experience, OneDay">2</span></li><li>Prisma</li><li class="is-used" title="Utilisé dans : SkyWalk">TypeORM<span class="skills__n" aria-label="1 projet : SkyWalk">1</span></li></ul>
+          </div>
+          <div class="skill-group">
+            <h3 class="mini-title">DevOps / Infrastructure</h3>
+            <ul class="skills"><li class="is-used" title="Utilisé dans : SkyWalk, Crowdin (clone)">Docker<span class="skills__n" aria-label="2 projets : SkyWalk, Crowdin (clone)">2</span></li><li>Git</li><li>GitHub</li><li class="is-used" title="Utilisé dans : SkyWalk">GitLab<span class="skills__n" aria-label="1 projet : SkyWalk">1</span></li><li>CI/CD</li><li class="is-used" title="Utilisé dans : SkyWalk">Nginx<span class="skills__n" aria-label="1 projet : SkyWalk">1</span></li><li>AWS</li><li>GCP</li><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, ISLAAH, OneDay">Cloudflare<span class="skills__n" aria-label="3 projets : Wild Kédougou Experience, ISLAAH, OneDay">3</span></li></ul>
+          </div>
+          <div class="skill-group">
+            <h3 class="mini-title">Tests</h3>
+            <ul class="skills"><li>Jest</li><li>Cypress</li><li>Vitest</li><li>Playwright</li></ul>
+          </div>
+          <div class="skill-group">
+            <h3 class="mini-title">Outils / conception</h3>
+            <ul class="skills"><li>Figma</li><li>Jira</li><li>Bruno</li><li>API REST</li></ul>
+          </div>
+          <div class="skill-group">
+            <h3 class="mini-title">IA / LLM</h3>
+            <ul class="skills"><li>Intégration IA / LLM</li><li>Modèles locaux &amp; API IA selon les projets</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="formation" data-route="parcours/etna" style="--sec:#8a3bff" aria-labelledby="formation-title">
+      <div class="wrap">
+      <header class="sec-head">
+        <h2 class="sec-title" id="formation-title">Formation</h2>
+        <a class="sec-house" href="aventure.html#parcours" data-switch-adventure
+           title="Voir cette section dans le mode aventure">
+          <svg class="house-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison PARCOURS</span>
+        </a>
+        
+      </header>
+        <ol class="timeline">
+          <li class="card step" id="parcours/bac" data-route="parcours/bac">
+          <p class="step__date">2020</p>
+          <h3 class="step__title">Baccalauréat STI2D</h3>
+          <p class="step__place">Sciences et Technologies de l'Industrie et du Développement Durable</p>
+          
+          <p class="step__desc">Bac technologique à dominante sciences de l'ingénieur : premières bases en électronique, programmation et démarche de projet.</p>
+          
+          
+          </li>
+          <li class="card step" id="parcours/bts" data-route="parcours/bts">
+          <p class="step__date">2021 — début 2022</p>
+          <h3 class="step__title">BTS Systèmes Numériques — option B Électronique et Communication</h3>
+          
+          <p class="step__context">Projet de fin d'études réalisé en équipe : « Jardin connecté » — permettre à un jardinier de surveiller et contrôler à distance l'humidité de son sol depuis une interface sur téléphone.</p>
+          <p class="step__desc">Formation orientée systèmes embarqués, électronique et communication numérique.</p>
+          
+          <p class="role"><span class="role__k">Mon rôle</span>Ma contribution : travail sur le capteur d'humidité, Arduino Uno, programmation en C / C++. Le câblage, le prototype et certains composants ont été réalisés avec l'équipe.</p>
+          </li>
+          <li class="card step" id="parcours/etna" data-route="parcours/etna">
+          <p class="step__date">2023 — 2026</p>
+          <h3 class="step__title">ETNA — Bachelor puis Master</h3>
+          
+          
+          <p class="step__desc">Une formation qui m'a permis de travailler sur des projets techniques en équipe et de développer une approche orientée architecture, développement et résolution de problèmes.</p>
+          <ul class="step__details"><li>Bachelor Concepteur Développeur d'Applications Web (2023 → 2024)</li><li>Master Architecte de Systèmes d'Information (2024 → 2026)</li></ul>
+          
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="sec sec--band" id="services" data-route="portail" style="--sec:#19e8ff" aria-labelledby="services-title">
+      <div class="wrap">
+      <header class="sec-head">
+        <h2 class="sec-title" id="services-title">Vous avez un projet ?</h2>
+        <a class="sec-house" href="aventure.html#portail" data-switch-adventure
+           title="Voir cette section dans le mode aventure">
+          <svg class="house-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison CONSTRUISEZ VOTRE PROJET</span>
+        </a>
+        <p class="sec-lead">Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.</p>
+      </header>
+        <div class="services">
+          <a class="btn btn--primary" href="construire-projet.html">Construisez votre projet</a>
+          <a class="btn btn--ghost" href="tarifs.html">Voir mes tarifs</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="contact" data-route="contact" style="--sec:#ff2bb0" aria-labelledby="contact-title">
+      <div class="wrap">
+      <header class="sec-head">
+        <h2 class="sec-title" id="contact-title">Contact</h2>
+        <a class="sec-house" href="aventure.html#contact" data-switch-adventure
+           title="Voir cette section dans le mode aventure">
+          <svg class="house-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison CONTACT</span>
+        </a>
+        
+      </header>
+        <div class="contact">
+          <div class="contact__direct">
+            <div class="contact__row">
+              <a class="contact__value" href="mailto:arphandrame0@gmail.com">arphandrame0@gmail.com</a>
+              <button type="button" class="copy" data-copy="arphandrame0@gmail.com" aria-label="Copier l'adresse e-mail">Copier</button>
+            </div>
+            <div class="contact__row">
+              <span class="contact__value" data-phone="0767318426">07 67 31 84 26</span>
+              <button type="button" class="copy" data-copy="07 67 31 84 26" aria-label="Copier le numéro de téléphone">Copier</button>
+            </div>
+            <div class="contact__links">
+            <a class="btn btn--small" href="https://github.com/drams18" target="_blank" rel="noopener">GitHub</a>
+            <a class="btn btn--small" href="https://www.linkedin.com/in/arphan-drame/" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="btn btn--small" href="assets/CV.pdf" target="_blank" rel="noopener">Voir mon CV en PDF</a>
+            </div>
+          </div>
+          <form class="card contact__form" id="classic-contact-form">
+            <h3 class="mini-title">Envoyer un message</h3>
+            <label>Votre nom<input type="text" name="from_name" autocomplete="name" required></label>
+            <label>Votre email<input type="email" name="from_email" autocomplete="email" required></label>
+            <label>Votre message<textarea name="message" rows="5" required></textarea></label>
+            <button type="submit" class="btn btn--primary">Envoyer</button>
+            <p class="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- /build:content -->
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <p>Arphan Drame — Développeur Web Full Stack · Île-de-France</p>
+      <a class="switch switch--footer" href="aventure.html#ville" data-switch-adventure>
+        <svg class="house-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-house"/></svg>
+        <span>Explorer la ville en mode aventure</span>
+      </a>
     </div>
-  </div>
+  </footer>
 
-  <div id="modal-backdrop" class="modal-backdrop hidden"></div>
-  <div id="section-modal" class="section-modal hidden">
-    <div class="modal-header">
-      <div id="modal-title" class="modal-title"></div>
-      <button id="modal-close" class="modal-close">FERMER</button>
-    </div>
-    <div id="modal-body" class="modal-body"></div>
-  </div>
-
-  <div class="toast hidden" id="toast"></div>
-
-  <!-- Modal d'information audio — s'affiche une fois par visiteur, juste
-       après « Let's go ! ». Réutilise le système audio existant (AudioManager). -->
-  <div id="audio-hint" class="audio-hint hidden" role="dialog" aria-modal="true"
-       aria-labelledby="audio-hint-title" aria-describedby="audio-hint-text">
-    <div class="audio-hint__card">
-      <span class="audio-hint__eyebrow">Expérience</span>
-      <h2 class="audio-hint__title" id="audio-hint-title">ACTIVEZ LE SON</h2>
-      <p class="audio-hint__text" id="audio-hint-text">
-        Le son (musique et effets) fait partie de l'expérience. Il est recommandé de l'activer.
-      </p>
-      <p class="audio-hint__note">
-        Vous pouvez l'activer ou le couper à tout moment avec le bouton SOUND, en haut de l'écran.
-      </p>
-      <button type="button" id="audio-hint-continue" class="mc-btn mc-btn--primary">
-        <span class="mc-btn__label">CONTINUER</span>
-      </button>
-    </div>
-  </div>
-
-  <script>
-    if(/Mobi|Android/i.test(navigator.userAgent)){
-      document.querySelectorAll('.desktop-only').forEach(el => el.style.display='none');
-    }
-  </script>
-  <!-- EmailJS — https://emailjs.com : remplacer YOUR_PUBLIC_KEY ci-dessous -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>emailjs.init('a8mKuHS56bPD-ydT0');</script>
-
-  <script src="js/audio.js"></script>
-  <script src="js/museum.js"></script>
+  <script src="js/deeplink.js"></script>
   <script src="js/contact.js"></script>
-  <script src="js/controls.js"></script>
-  <script src="js/mobileControls.js"></script>
-  <script src="js/interactions.js"></script>
-  <script src="js/player.js"></script>
-  <script src="js/map.js"></script>
-  <script src="js/game.js"></script>
+  <script src="js/contact-form.js"></script>
+  <script src="js/classic.js"></script>
 </body>
 </html>

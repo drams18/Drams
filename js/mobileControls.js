@@ -17,7 +17,7 @@ class MobileControls {
   }
 
   _detectMobile() {
-    return window.innerWidth <= 900 || 'ontouchstart' in window;
+    return isTouchUI();
   }
 
   _inject() {
@@ -27,10 +27,10 @@ class MobileControls {
     const div = document.createElement('div');
     div.id = 'mobile-btns';
     div.innerHTML = `
-      <button id="mbtn-left"  class="mbtn" aria-label="Aller à gauche">G</button>
+      <button id="mbtn-left"  class="mbtn" aria-label="Aller à gauche">${MobileControls.ARROW_LEFT}</button>
       <button id="mbtn-enter" class="mbtn mbtn-enter" aria-label="Entrer">ENTRER</button>
       <button id="mbtn-close" class="mbtn mbtn-close" aria-label="Fermer">FERMER</button>
-      <button id="mbtn-right" class="mbtn" aria-label="Aller à droite">D</button>
+      <button id="mbtn-right" class="mbtn" aria-label="Aller à droite">${MobileControls.ARROW_RIGHT}</button>
     `;
     document.body.appendChild(div);
   }
@@ -74,3 +74,11 @@ class MobileControls {
 
   get isMobile() { return this._isMobile; }
 }
+
+// Flèches SVG (plus lisibles que « G » / « D ») — couleur = currentColor.
+MobileControls.ARROW_LEFT =
+  '<svg class="mbtn__arrow" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">' +
+  '<path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>';
+MobileControls.ARROW_RIGHT =
+  '<svg class="mbtn__arrow" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">' +
+  '<path d="m9 4 8 8-8 8" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>';

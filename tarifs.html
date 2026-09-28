@@ -3,10 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Tarifs</title>
+  <title>Tarifs — Arphan Drame, Développeur Web Full Stack</title>
+  <link rel="canonical" href="https://drams18.github.io/Drams/tarifs.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Tarifs — Arphan Drame, Développeur Web Full Stack">
+  <meta property="og:description" content="Tarifs particuliers et professionnels, recherche rapide, devis personnalisé.">
+  <meta property="og:url" content="https://drams18.github.io/Drams/tarifs.html">
+  <meta property="og:image" content="https://drams18.github.io/Drams/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="description" content="Grille tarifaire d'Arphan DRAME — Développeur Full Stack. Tarifs particuliers et professionnels, recherche rapide, devis personnalisé.">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="css/tokens.css">
   <style>
     /* ══════════════════════════════════════════════════════
        TARIFS.HTML — Page autonome, univers pixel-art du portfolio.
@@ -43,29 +52,11 @@
       --pro:         #8a3bff;
       --pro-2:       #b98bff;
 
-      --cyan:       #19e8ff;
-      --ink:        #0e1630;
-      --panel:      #182449;
-      --panel-2:    #20305c;
-      --edge:       #3c4c82;
-      --stroke:     #01010a;
-      --red:        #ff123d;
-      --red-deep:   #8f0a24;
-      --urban:      #9fb0d8;
-
-      --mc-text:    #f5f6ff;
-      --pixel-font: 'Press Start 2P', monospace;
-      --body-font:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-
-      --halftone: radial-gradient(rgba(255,255,255,0.10) 0.8px, transparent 1.4px);
-      --halftone-size: 6px 6px;
+      /* Palette, trames et polices partagées : css/tokens.css.
+         Seules les valeurs propres à cette page restent ici. */
+      --mc-text:    var(--paper);
       --speedlines: repeating-linear-gradient(115deg,
           transparent 0 14px, rgba(255,255,255,0.03) 14px 15px, transparent 15px 30px);
-      --weblines: repeating-linear-gradient(58deg,
-          transparent 0 26px, rgba(255,255,255,0.028) 26px 27px, transparent 27px 54px),
-        repeating-linear-gradient(-58deg,
-          transparent 0 26px, rgba(255,255,255,0.028) 26px 27px, transparent 27px 54px);
-      --web-corner: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.1'%3E%3Cpath d='M0 22A22 22 0 0 1 22 0'/%3E%3Cpath d='M0 48A48 48 0 0 1 48 0'/%3E%3Cpath d='M0 78A78 78 0 0 1 78 0'/%3E%3Cpath d='M0 110A110 110 0 0 1 110 0'/%3E%3Cpath d='M0 0 120 20'/%3E%3Cpath d='M0 0 104 60'/%3E%3Cpath d='M0 0 78 78'/%3E%3Cpath d='M0 0 60 104'/%3E%3Cpath d='M0 0 20 120'/%3E%3C/g%3E%3C/svg%3E");
     }
     @keyframes senseRing {
       0%   { transform: scale(1);    opacity: 0.5; }
@@ -682,6 +673,9 @@
   <!-- Composant de contact commun (E-mail / Téléphone) — chargé avant
        le routeur pour que ContactWidget soit prêt à chaque rendu. -->
   <script src="js/contact.js"></script>
+  <!-- « Retour à l'accueil » → dernier mode utilisé (classique ou aventure) -->
+  <script src="js/deeplink.js"></script>
+  <script>Deeplink.rewriteHomeLinks(document, false);</script>
 
   <script>
   /* ══════════════════════════════════════════════════════

@@ -166,7 +166,10 @@
       if (this._music) return;
       const a = new Audio(this.cfg.musicSrc);
       a.loop    = true;
-      a.preload = 'auto';
+      // 'none' : unlock() (1er geste, même un simple clic sur « CV ») crée
+      // l'objet sans télécharger la musique ; le fichier n'est récupéré
+      // qu'au premier play() réel.
+      a.preload = 'none';
       a.volume  = clamp01(this.cfg.musicVolume);
       a.addEventListener('error', () => { /* musique absente : silencieux */ });
 

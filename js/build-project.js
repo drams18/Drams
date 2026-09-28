@@ -57,9 +57,11 @@
   // Adresse de repli affichée si l'envoi échoue (même que le portfolio).
   const CONTACT_EMAIL = 'arphandrame0@gmail.com';
 
-  // Config EmailJS — IDENTIQUE au formulaire de contact (js/interactions.js).
-  const EMAILJS_SERVICE  = 'service_kju3n28';
-  const EMAILJS_TEMPLATE = 'template_pili6gr';
+  // Config EmailJS : js/contact-form.js (source unique, SDK chargé à la demande).
+
+  // Retour au portfolio : dernier mode utilisé (classique ou aventure),
+  // devant le portail « Construisez votre projet ».
+  const homeHref = () => (window.Deeplink ? window.Deeplink.homeHref(true) : 'index.html');
 
   // ── Étapes ────────────────────────────────────────────
   const STEPS = [
@@ -241,9 +243,7 @@
       this.controls = new Controls();
       this.mobile   = new MobileControls(this.controls);
 
-      this._touch = (window.matchMedia &&
-        window.matchMedia('(hover: none) and (pointer: coarse)').matches) ||
-        'ontouchstart' in window || window.innerWidth <= 900;
+      this._touch = isTouchUI();
 
       this.player = new Player(SPAWN_X, 100);
       // Sur cette page, on masque l'étiquette « RECRUTEZ MOI ! » du jeu :
@@ -322,7 +322,7 @@
       document.getElementById('bp-back')?.addEventListener('click', () => this._back());
       document.getElementById('bp-quit')?.addEventListener('click', () => {
         sfx('close');
-        window.location.href = 'index.html';
+        window.location.href = homeHref();
       });
 
       // Bouton « valider l'étape » : équivalent tactile de la touche Entrée.
@@ -387,6 +387,7 @@
 
       const form = document.getElementById('bp-form-el');
       form?.addEventListener('submit', (e) => this._onSubmit(e));
+      window.ContactForm?.warm(form);
     }
 
     _syncUI() {
@@ -609,7 +610,7 @@
       this._hideNextBtn();
       sfx('close');
       this._fade(() => {
-        if (state.step === 0) { window.location.href = 'index.html'; return; }
+        if (state.step === 0) { window.location.href = homeHref(); return; }
         this._buildStep(state.step - 1);
       });
     }
@@ -843,7 +844,7 @@
       status.className = 'bp-form-status';
 
       try {
-        await emailjs.sendForm(EMAILJS_SERVICE, EMAILJS_TEMPLATE, form);
+        await window.ContactForm.sendForm(form);
         sfx('success');
         try { sessionStorage.removeItem(STORAGE_KEY); } catch (err) { /* noop */ }
         state.phase = 'done';
