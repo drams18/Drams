@@ -13,636 +13,65 @@
   <meta property="og:image" content="https://portfolio-3kx.pages.dev/assets/img/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="description" content="Grille tarifaire d'Arphan DRAME — Développeur Full Stack. Tarifs particuliers et professionnels, recherche rapide, devis personnalisé.">
-  <link rel="preload" href="assets/fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <meta name="theme-color" content="#0a0a0d">
+  <script src="js/theme.js"></script>
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="css/tokens.css">
-  <style>
-    /* ══════════════════════════════════════════════════════
-       TARIFS.HTML — Page autonome, univers pixel-art du portfolio.
-       HTML + CSS + JS vanilla. Aucun emoji.
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/classic.css">
+  <link rel="stylesheet" href="css/annexe.css">
+  <!-- ══════════════════════════════════════════════════════
+       TARIFS.HTML — Grille tarifaire, style du site classique
+       (css/site.css + css/classic.css + css/annexe.css).
 
        Parcours (2–3 interactions) :
-         1. Profil       → PARTICULIERS / PROFESSIONNELS
+         1. Profil       → Particuliers / Professionnels
          2. Catégorie    → « Je veux un site », « J'ai un problème »…
          3. Prestations  → liste compacte, nom + prix
 
        En plus, à tout moment :
          • Recherche temps réel (nom + catégorie + mots-clés/synonymes)
          • Aucun résultat → proposition de contact (ContactWidget)
-         • Lien « Construisez votre projet » (construire-projet.html)
+         • Lien « Construisez votre projet » (devis.html, ou le mini-jeu
+           construire-projet.html pour un visiteur du mode aventure)
 
        Routage par hash :
          #choix | #particuliers | #professionnels
          #particuliers/<categorie> | #professionnels/<categorie>
-
-       Accent principal : vert émeraude (jamais le jaune).
-       Accent secondaire : violet pixel, pour la vue Professionnels.
-       Titres = police pixel ; prix & descriptions = police lisible.
-       ══════════════════════════════════════════════════════ */
-
-    :root {
-      /* DA comics néon — rouge/magenta lead, cyan interactif, violet en pro */
-      --accent:      #ff2bb0;
-      --accent-2:    #ff6ec7;
-      --accent-dark: #b0186f;
-      --accent-deep: #7a0f4c;
-      --accent-glow: rgba(255, 43, 176, 0.40);
-      --accent-dim:  rgba(255, 43, 176, 0.12);
-
-      --pro:         #8a3bff;
-      --pro-2:       #b98bff;
-
-      /* Palette, trames et polices partagées : css/tokens.css.
-         Seules les valeurs propres à cette page restent ici. */
-      --mc-text:    var(--paper);
-      --speedlines: repeating-linear-gradient(115deg,
-          transparent 0 14px, rgba(255,255,255,0.03) 14px 15px, transparent 15px 30px);
-    }
-    @keyframes senseRing {
-      0%   { transform: scale(1);    opacity: 0.5; }
-      100% { transform: scale(1.12); opacity: 0;   }
-    }
-
-    /* Vue Professionnels : bascule l'accent courant sur le violet. */
-    .page.is-pro {
-      --accent:      #8a3bff;
-      --accent-2:    #b98bff;
-      --accent-dark: #6f4fc0;
-      --accent-deep: #47309a;
-      --accent-glow: rgba(138, 59, 255, 0.40);
-      --accent-dim:  rgba(138, 59, 255, 0.12);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body { width: 100%; min-height: 100%; }
-
-    body {
-      font-family: var(--body-font);
-      color: var(--mc-text);
-      background:
-        radial-gradient(120% 70% at 15% 0%, rgba(255,43,176,0.24) 0%, transparent 55%),
-        radial-gradient(120% 80% at 90% 8%, rgba(138,59,255,0.24) 0%, transparent 55%),
-        radial-gradient(160% 120% at 50% 120%, rgba(25,232,255,0.14) 0%, transparent 60%),
-        linear-gradient(180deg, #0e1630 0%, #16234a 45%, #1b1c44 75%, #0e1630 100%) fixed;
-      padding: 30px 16px 48px;
-      display: flex;
-      justify-content: center;
-      overflow-x: hidden;
-    }
-
-    /* Éclats de ville + lignes de vitesse + halftone en fond. */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.6;
-      background-image:
-        var(--speedlines),
-        var(--weblines),
-        var(--halftone),
-        radial-gradient(1.5px 1.5px at 10% 15%, rgba(25,232,255,0.9) 0%, transparent 100%),
-        radial-gradient(1px 1px at 25% 8%,  rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(2px 2px at 40% 20%, rgba(255,43,176,0.7) 0%, transparent 100%),
-        radial-gradient(1px 1px at 55% 5%,  rgba(255,255,255,0.7) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 70% 12%, rgba(25,232,255,0.6) 0%, transparent 100%),
-        radial-gradient(2px 2px at 80% 7%,  rgba(255,43,176,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 18%, rgba(255,255,255,0.8) 0%, transparent 100%),
-        radial-gradient(1px 1px at 15% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 85% 30%, rgba(25,232,255,0.5) 0%, transparent 100%);
-      background-size: 600px 100%, auto, auto, var(--halftone-size), auto, auto, auto, auto, auto, auto, auto, auto, auto;
-      background-repeat: repeat, repeat, repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-    }
-
-    .page {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 860px;
-      animation: fadeIn 0.5s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .sr-only {
-      position: absolute !important;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden; clip: rect(0 0 0 0);
-      white-space: nowrap; border: 0;
-    }
-
-    :focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
-
-    /* ── En-tête ─────────────────────────────────────────── */
-    .page-head {
-      text-align: center;
-      margin-bottom: 22px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-    .mc-title {
-      font-family: var(--pixel-font);
-      font-size: clamp(18px, 4.4vw, 30px);
-      color: #fff;
-      letter-spacing: 3px;
-      text-shadow: -0.045em 0 0 var(--red), 0.045em 0 0 var(--cyan), 4px 4px 0 #000, 0 0 22px rgba(255,43,176,0.35);
-    }
-    .mc-subtitle {
-      font-size: 13px;
-      font-weight: 700;
-      color: #cfe6ee;
-      letter-spacing: 0.3px;
-    }
-
-    /* ── Recherche ───────────────────────────────────────── */
-    .search {
-      position: relative;
-      max-width: 620px;
-      margin: 0 auto 26px;
-    }
-    .search__input {
-      width: 100%;
-      font-family: var(--body-font);
-      font-size: 16px;              /* >=16px : pas de zoom auto iOS */
-      font-weight: 500;
-      color: #fff;
-      background: var(--panel);
-      border: 3px solid var(--stroke);
-      border-left: 4px solid var(--cyan);
-      box-shadow: 5px 5px 0 var(--stroke);
-      padding: 15px 92px 15px 16px;
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-    .search__input::placeholder { color: #8f9bb0; }
-    .search__input:focus {
-      border-left-color: var(--cyan);
-      box-shadow: 5px 5px 0 var(--stroke), 0 0 0 3px var(--cyan-dim, rgba(25,232,255,0.14)), 0 0 18px rgba(25,232,255,0.35);
-    }
-    .search__input::-webkit-search-cancel-button { display: none; }
-    .search__clear {
-      position: absolute;
-      top: 50%;
-      right: 8px;
-      transform: translateY(-50%);
-      font-family: var(--pixel-font);
-      font-size: 8px;
-      letter-spacing: 1px;
-      color: #cfc8b8;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 9px 11px;
-      cursor: pointer;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    .search__clear:hover { color: #fff; border-color: #fff; }
-
-    /* ── Boutons pixel ───────────────────────────────────── */
-    .btn {
-      font-family: var(--pixel-font);
-      font-size: 11px;
-      color: #fff;
-      text-decoration: none;
-      letter-spacing: 1px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 13px 22px;
-      cursor: pointer;
-      border: none;
-      position: relative;
-      text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
-      transition: background 0.1s, box-shadow 0.1s, transform 0.1s;
-    }
-    .btn:active { transform: translateY(3px); }
-
-    .btn-back {
-      background: var(--panel-2);
-      color: #eaf7fb;
-      border: 3px solid var(--stroke);
-      box-shadow: 4px 4px 0 var(--stroke), 0 0 14px rgba(25,232,255,0.25);
-    }
-    .btn-back:hover { background: rgba(25,232,255,0.12); box-shadow: 4px 4px 0 var(--stroke), 0 0 20px rgba(25,232,255,0.5); }
-    .btn-back:active { box-shadow: 1px 1px 0 var(--stroke); }
-    .btn-back::before {
-      content: '';
-      width: 0; height: 0;
-      margin-right: 9px;
-      border-style: solid;
-      border-width: 5px 7px 5px 0;
-      border-color: transparent var(--cyan) transparent transparent;
-      flex-shrink: 0;
-    }
-    .btn-back--no-arrow::before { display: none; }
-
-    .btn-cta {
-      background: linear-gradient(135deg, var(--red), var(--accent));
-      color: #fff;
-      border: 3px solid var(--stroke);
-      box-shadow: 4px 4px 0 var(--accent-deep), 0 0 20px var(--accent-glow);
-      text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
-    }
-    .btn-cta:hover { filter: brightness(1.1) saturate(1.1); }
-    .btn-cta:active { box-shadow: 1px 1px 0 var(--accent-deep); }
-
-    .nav-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .page-foot {
-      margin-top: 34px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      text-align: center;
-    }
-
-    /* ── Transition de vue ───────────────────────────────── */
-    .tarifs-main > * { animation: viewIn 0.28s ease; }
-    @keyframes viewIn {
-      from { transform: translateY(8px); opacity: 0; }
-      to   { transform: none; opacity: 1; }
-    }
-
-    /* ── Étape 1 : choix du profil ───────────────────────── */
-    .lead {
-      text-align: center;
-      font-size: 14px;
-      line-height: 1.6;
-      color: #b8c2d0;
-      margin-bottom: 24px;
-    }
-    .choice-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-    .choice-card {
-      font-family: var(--body-font);
-      text-align: left;
-      background: var(--panel);
-      border: 3px solid var(--stroke);
-      border-top: 6px solid var(--accent);
-      box-shadow: 7px 7px 0 var(--stroke);
-      padding: 22px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      cursor: pointer;
-      color: #d0d4dc;
-      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
-    }
-    .choice-card:hover,
-    .choice-card:focus-visible {
-      transform: translateY(-4px);
-      background: var(--panel-2);
-      box-shadow: 10px 10px 0 var(--stroke), 0 0 28px var(--accent-glow);
-      outline: none;
-    }
-    .choice-card--pro {
-      --accent: var(--pro); --accent-2: var(--pro-2); --accent-deep: #47309a;
-      --accent-glow: rgba(180,140,255,0.40);
-    }
-    .choice-tag {
-      font-family: var(--pixel-font);
-      font-size: 7px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-    .choice-name {
-      font-family: var(--pixel-font);
-      font-size: clamp(13px, 2.4vw, 16px);
-      color: #fff;
-      letter-spacing: 1px;
-      line-height: 1.5;
-    }
-    .choice-desc { font-size: 13.5px; line-height: 1.6; color: #aeb9c9; }
-    .choice-cta {
-      margin-top: 4px;
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      font-family: var(--pixel-font);
-      font-size: 8px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-    .choice-cta::after {
-      content: '';
-      width: 0; height: 0;
-      border-style: solid;
-      border-width: 5px 0 5px 7px;
-      border-color: transparent transparent transparent currentColor;
-    }
-
-    /* ── Fil d'ariane ────────────────────────────────────── */
-    .crumbs {
-      font-size: 12px;
-      color: #9aa7bb;
-      margin-bottom: 14px;
-      line-height: 1.6;
-    }
-    .crumbs b { color: var(--accent); font-weight: 700; }
-
-    /* ── Étape 2 : catégories ────────────────────────────── */
-    .cat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
-      gap: 12px;
-    }
-    .cat-btn {
-      font-family: var(--body-font);
-      text-align: left;
-      background: var(--panel-2);
-      border: 2px solid var(--stroke);
-      border-left: 4px solid var(--cyan);
-      box-shadow: 4px 4px 0 var(--stroke);
-      padding: 15px 16px;
-      min-height: 68px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      color: #fff;
-      transition: background 0.15s, border-color 0.15s, transform 0.12s, box-shadow 0.15s;
-    }
-    .cat-btn:hover,
-    .cat-btn:focus-visible {
-      background: rgba(25,232,255,0.1);
-      border-left-color: var(--cyan);
-      transform: translateX(3px);
-      box-shadow: 4px 4px 0 var(--stroke), 0 0 16px rgba(25,232,255,0.35);
-      outline: none;
-    }
-    .cat-btn__label {
-      font-family: var(--pixel-font);
-      font-size: 9.5px;
-      letter-spacing: 1px;
-      line-height: 1.55;
-      color: #fff;
-    }
-    .cat-btn__meta { font-size: 12px; color: #aab6d2; }
-
-    /* ── Références Spider-Man : coins de toile + spider-sense ── */
-    .choice-card, .panel, .noresult { position: relative; }
-    .choice-card::before, .panel::before, .noresult::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 82px; height: 82px;
-      background: var(--web-corner) no-repeat;
-      background-size: 100% 100%;
-      opacity: 0.07;
-      pointer-events: none;
-    }
-    /* Pas de toile côté bas-droite du panneau : rien sous les lignes de prix. */
-    .noresult::after {
-      content: '';
-      position: absolute;
-      bottom: 0; right: 0;
-      width: 82px; height: 82px;
-      background: var(--web-corner) no-repeat;
-      background-size: 100% 100%;
-      opacity: 0.07;
-      pointer-events: none;
-      transform: rotate(180deg);
-    }
-    .choice-card, .cat-btn { position: relative; }
-    .choice-card::after, .cat-btn::after {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border: 2px solid var(--cyan);
-      opacity: 0;
-      pointer-events: none;
-    }
-    .choice-card:hover::after, .choice-card:focus-visible::after,
-    .cat-btn:hover::after, .cat-btn:focus-visible::after {
-      animation: senseRing 0.95s ease-out infinite;
-    }
-
-    /* ── Étape 3 : prestations ───────────────────────────── */
-    .panel {
-      background: var(--panel);
-      border: 3px solid var(--stroke);
-      box-shadow: 8px 8px 0 var(--accent-deep), 0 0 30px rgba(0,0,0,0.5), 0 0 22px var(--accent-glow);
-      padding: 20px 20px 22px;
-    }
-    .cat-head {
-      display: flex;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 8px 12px;
-      font-family: var(--pixel-font);
-      font-size: 11px;
-      letter-spacing: 1px;
-      line-height: 1.6;
-      color: var(--accent);
-      padding-bottom: 12px;
-      margin-bottom: 4px;
-      border-bottom: 2px solid var(--accent);
-    }
-    .cat-head__count {
-      font-family: var(--body-font);
-      font-size: 11px;
-      font-weight: 600;
-      color: #8b97a9;
-      letter-spacing: 0;
-    }
-
-    .svc-list { list-style: none; }
-    .svc {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 14px 2px;
-      border-bottom: 1px solid rgba(255,255,255,0.09);
-    }
-    .svc:last-child { border-bottom: none; }
-    .svc__main { min-width: 0; flex: 1; }
-    .svc__name {
-      font-size: 15px;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.4;
-    }
-    .svc__tag {
-      display: inline-block;
-      font-family: var(--pixel-font);
-      font-size: 6px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid currentColor;
-      padding: 3px 5px;
-      margin-left: 8px;
-      vertical-align: 2px;
-      white-space: nowrap;
-    }
-    .svc--pro .svc__tag,
-    .svc--pro .svc__amount { color: var(--pro); }
-    .svc__desc {
-      font-size: 12.5px;
-      color: #9aa7bb;
-      line-height: 1.55;
-      margin-top: 4px;
-    }
-    .svc__price {
-      flex-shrink: 0;
-      text-align: right;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 1px;
-      line-height: 1.3;
-    }
-    .svc__from {
-      font-size: 10px;
-      color: #8b97a9;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .svc__amount {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--accent);
-      white-space: nowrap;
-    }
-    .svc__unit { font-size: 10px; color: #9aa7bb; }
-
-    /* ── Résultats de recherche ──────────────────────────── */
-    .result-info {
-      font-size: 12.5px;
-      color: #9aa7bb;
-      margin-bottom: 12px;
-    }
-    .result-info b { color: #fff; }
-    .result-group + .result-group { margin-top: 22px; }
-    .result-group__title {
-      font-family: var(--pixel-font);
-      font-size: 9px;
-      letter-spacing: 2px;
-      color: #fff;
-      margin-bottom: 4px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-    }
-
-    /* ── Aucun résultat → contact ────────────────────────── */
-    .noresult {
-      background: var(--panel);
-      border: 3px solid var(--stroke);
-      box-shadow: 6px 6px 0 var(--accent-deep), 0 0 22px var(--accent-glow);
-      padding: 24px 20px;
-      text-align: center;
-    }
-    .noresult__title {
-      font-family: var(--pixel-font);
-      font-size: 10px;
-      line-height: 1.7;
-      color: var(--accent);
-      margin-bottom: 10px;
-      text-shadow: -0.03em 0 0 var(--red), 0.03em 0 0 var(--cyan);
-    }
-    .noresult p { font-size: 13px; line-height: 1.6; color: #b8c2d0; margin: 6px 0 18px; }
-    .noresult__alt {
-      margin-top: 18px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255,255,255,0.10);
-      font-size: 12px;
-      color: #9aa7bb;
-    }
-    .noresult__alt a { color: var(--accent); }
-
-    /* ── Bloc d'aide (Construisez votre projet + devis) ──── */
-    .help-block {
-      margin-top: 28px;
-      padding-top: 22px;
-      border-top: 1px solid rgba(255,255,255,0.10);
-      text-align: center;
-    }
-    .help-block__q {
-      font-family: var(--pixel-font);
-      font-size: 9px;
-      line-height: 1.7;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
-    .help-block p { font-size: 13px; line-height: 1.6; color: #b8c2d0; margin-bottom: 14px; }
-    .help-block__row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .allovoisins {
-      font-size: 11px;
-      color: #8b97a9;
-      line-height: 1.6;
-      max-width: 460px;
-    }
-    .allovoisins a { color: var(--accent); text-decoration: none; }
-    .allovoisins a:hover { text-decoration: underline; }
-
-    .fallback {
-      max-width: 620px;
-      margin: 0 auto;
-      background: var(--panel);
-      border: 3px solid var(--stroke);
-      box-shadow: 6px 6px 0 var(--accent-deep);
-      padding: 20px;
-      font-size: 14px;
-      line-height: 1.7;
-      color: #dce0ec;
-      text-align: center;
-    }
-    .fallback a { color: var(--accent); }
-
-    /* ── Responsive — priorité mobile ────────────────────── */
-    @media (max-width: 640px) {
-      body { padding: 20px 12px 40px; }
-      .choice-grid { grid-template-columns: 1fr; gap: 14px; }
-      .cat-grid { grid-template-columns: 1fr; }
-      .panel { padding: 16px 13px 18px; }
-      .btn { font-size: 10px; padding: 14px 16px; }
-      .nav-row .btn { flex: 1 1 auto; }
-      .help-block__row .btn { flex: 1 1 100%; }
-      .svc { gap: 10px; }
-      .svc__name { font-size: 14.5px; }
-      .cat-head { font-size: 10px; }
-      .cat-btn__label { font-size: 9px; }
-      .choice-card::after, .cat-btn::after { animation: none !important; opacity: 0 !important; }
-      .choice-card::before, .panel::before, .noresult::before,
-      .noresult::after { opacity: 0.05; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-    }
-  </style>
+       ══════════════════════════════════════════════════════ -->
 </head>
 <body>
-  <div class="page" id="page">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="1.8"/></symbol>
+  </svg>
+
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="index.html">A. DRAME</a>
+      <nav class="nav" aria-label="Pages">
+        <a href="classique.html">Portfolio</a>
+        <a href="tarifs.html" aria-current="page">Tarifs</a>
+        <a href="devis.html" data-project-link>Construisez votre projet</a>
+      </nav>
+      <div class="topbar__actions">
+        <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer de thème">
+          <svg class="ico ico--sun" aria-hidden="true"><use href="#i-sun"/></svg>
+          <svg class="ico ico--moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page wrap" id="page">
     <header class="page-head">
-      <h1 class="mc-title" id="pageTitle">MES TARIFS</h1>
-      <p class="mc-subtitle">Arphan DRAME · Développeur Full Stack</p>
+      <h1 class="page-title" id="pageTitle">Mes tarifs</h1>
+      <p class="page-sub">Arphan Drame · Développeur Full Stack</p>
     </header>
 
     <div class="search">
+      <svg class="ico search__ico" aria-hidden="true"><use href="#i-search"/></svg>
       <label class="sr-only" for="tarifSearch">Rechercher une prestation</label>
       <input id="tarifSearch" class="search__input" type="search" inputmode="search"
              enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false"
@@ -656,7 +85,7 @@
           <p>La recherche interactive nécessite JavaScript.</p>
           <p>Pour toute demande de tarif ou de devis :
             <a href="mailto:arphandrame0@gmail.com?subject=Demande%20de%20tarif">arphandrame0@gmail.com</a>
-            — ou <a href="construire-projet.html">construisez votre projet</a> pas à pas.</p>
+            — ou <a href="devis.html">construisez votre projet</a> pas à pas.</p>
         </div>
       </noscript>
     </main>
@@ -675,7 +104,15 @@
   <script src="js/contact.js"></script>
   <!-- « Retour à l'accueil » → dernier mode utilisé (classique ou aventure) -->
   <script src="js/deeplink.js"></script>
-  <script>Deeplink.rewriteHomeLinks(document, false);</script>
+  <script>
+    Deeplink.rewriteHomeLinks(document, false);
+    // « Construisez votre projet » : le mini-jeu pour un visiteur du mode
+    // aventure, le formulaire classique pour tous les autres.
+    window.projectHref = function () {
+      return Deeplink.getMode() === 'aventure' ? 'construire-projet.html' : 'devis.html';
+    };
+    document.querySelectorAll('[data-project-link]').forEach(function (a) { a.href = projectHref(); });
+  </script>
 
   <script>
   /* ══════════════════════════════════════════════════════
@@ -692,27 +129,27 @@
     var clearBtn = doc.getElementById('tarifSearchClear');
 
     var PROFILES = {
-      particuliers:   { label: 'PARTICULIERS',   title: 'TARIFS PARTICULIERS' },
-      professionnels: { label: 'PROFESSIONNELS', title: 'TARIFS PROFESSIONNELS' }
+      particuliers:   { label: 'Particuliers',   title: 'Tarifs particuliers' },
+      professionnels: { label: 'Professionnels', title: 'Tarifs professionnels' }
     };
 
     /* ── Catégories par profil (ordre d'affichage) ──────── */
     var CATEGORIES = {
       particuliers: [
-        { id: 'site',           label: 'JE VEUX UN SITE',        hint: 'Créer un site de zéro' },
-        { id: 'vendre',         label: 'JE VEUX VENDRE EN LIGNE', hint: 'Boutique en ligne' },
-        { id: 'existant',       label: "J'AI DÉJÀ UN SITE",      hint: 'Refonte, mise en ligne, SEO, évolutions' },
-        { id: 'probleme',       label: "J'AI UN PROBLÈME",       hint: 'Bug, dépannage, correction' },
-        { id: 'accompagnement', label: 'JE VEUX ÊTRE ACCOMPAGNÉ', hint: 'Formation, projet étudiant' },
-        { id: 'creation',       label: 'CV, LOGO ET VISUELS',    hint: 'Identité et documents' }
+        { id: 'site',           label: 'Je veux un site',        hint: 'Créer un site de zéro' },
+        { id: 'vendre',         label: 'Je veux vendre en ligne', hint: 'Boutique en ligne' },
+        { id: 'existant',       label: "J'ai déjà un site",      hint: 'Refonte, mise en ligne, SEO, évolutions' },
+        { id: 'probleme',       label: "J'ai un problème",       hint: 'Bug, dépannage, correction' },
+        { id: 'accompagnement', label: 'Je veux être accompagné', hint: 'Formation, projet étudiant' },
+        { id: 'creation',       label: 'CV, logo et visuels',    hint: 'Identité et documents' }
       ],
       professionnels: [
-        { id: 'site-pro',    label: 'SITE INTERNET',            hint: 'Vitrine, WordPress' },
-        { id: 'vendre-pro',  label: 'VENDRE EN LIGNE',          hint: 'E-commerce, Shopify' },
-        { id: 'app-pro',     label: 'APPLICATION ET API',       hint: 'Web, mobile, SaaS, backend' },
-        { id: 'modules-pro', label: 'MODULES & FONCTIONNALITÉS', hint: 'Réservation, espace client, IA' },
-        { id: 'infra-pro',   label: 'INFRA, DEVOPS & QUALITÉ',  hint: 'Déploiement, CI/CD, tests' },
-        { id: 'suivi-pro',   label: 'MAINTENANCE ET RENFORT',   hint: 'Suivi mensuel, régie' }
+        { id: 'site-pro',    label: 'Site internet',            hint: 'Vitrine, WordPress' },
+        { id: 'vendre-pro',  label: 'Vendre en ligne',          hint: 'E-commerce, Shopify' },
+        { id: 'app-pro',     label: 'Application et API',       hint: 'Web, mobile, SaaS, backend' },
+        { id: 'modules-pro', label: 'Modules & fonctionnalités', hint: 'Réservation, espace client, IA' },
+        { id: 'infra-pro',   label: 'Infra, DevOps & qualité',  hint: 'Déploiement, CI/CD, tests' },
+        { id: 'suivi-pro',   label: 'Maintenance et renfort',   hint: 'Suivi mensuel, régie' }
       ]
     };
 
@@ -1113,12 +550,12 @@
     /* Bloc « Construisez votre projet » + « Demander un devis ». */
     function helpBlock(profile) {
       var wrap = el('div', 'help-block');
-      wrap.appendChild(el('p', 'help-block__q', 'VOUS NE SAVEZ PAS QUELLE PRESTATION CHOISIR ?'));
+      wrap.appendChild(el('p', 'help-block__q', 'Vous ne savez pas quelle prestation choisir ?'));
       wrap.appendChild(el('p', null, 'Construisez votre projet en quelques étapes.'));
 
       var row = el('div', 'help-block__row');
       var build = el('a', 'btn btn-cta', 'Construisez votre projet');
-      build.href = 'construire-projet.html';
+      build.href = window.projectHref ? projectHref() : 'devis.html';
       row.appendChild(build);
 
       var devis = el('button', 'btn btn-back btn-back--no-arrow');
@@ -1152,9 +589,9 @@
 
       var grid = el('div', 'choice-grid');
       [
-        { id: 'particuliers', tag: 'Projets personnels', name: 'PARTICULIERS',
+        { id: 'particuliers', tag: 'Projets personnels', name: 'Particuliers',
           desc: 'Tarifs accessibles : sites, dépannage, création de visuels et accompagnement.' },
-        { id: 'professionnels', tag: 'Entreprises', name: 'PROFESSIONNELS',
+        { id: 'professionnels', tag: 'Entreprises', name: 'Professionnels',
           desc: 'Projets complets pour entreprises : sites, e-commerce, applications, maintenance.' }
       ].forEach(function (c) {
         var card = el('button', 'choice-card' + (c.id === 'professionnels' ? ' choice-card--pro' : ''));
@@ -1239,7 +676,7 @@
 
       if (!results || !results.length) {
         var nr = el('div', 'noresult');
-        nr.appendChild(el('p', 'noresult__title', 'AUCUNE PRESTATION NE CORRESPOND'));
+        nr.appendChild(el('p', 'noresult__title', 'Aucune prestation ne correspond'));
         nr.appendChild(el('p', null, 'Aucune prestation ne correspond à « ' + query.trim() +
           ' ». Vous avez peut-être un besoin spécifique ?'));
 
@@ -1255,7 +692,7 @@
 
         var alt = el('p', 'noresult__alt');
         alt.innerHTML = 'Vous ne savez pas par où commencer ? ' +
-          '<a href="construire-projet.html">Construisez votre projet</a> pas à pas.';
+          '<a href="' + (window.projectHref ? projectHref() : 'devis.html') + '">Construisez votre projet</a> pas à pas.';
         nr.appendChild(alt);
 
         frag.appendChild(nr);
@@ -1340,7 +777,7 @@
       if (searchActive()) {
         pageEl.classList.remove('is-pro');
         frag = viewSearch(input.value);
-        heading = 'RECHERCHE';
+        heading = 'Recherche';
         docTitle = 'Recherche';
       } else {
         var r = parseHash();
@@ -1348,7 +785,7 @@
 
         if (!r.profile) {
           frag = viewProfile();
-          heading = 'MES TARIFS';
+          heading = 'Mes tarifs';
           docTitle = 'Tarifs';
         } else if (!r.category) {
           frag = viewCategories(r.profile);
@@ -1362,7 +799,7 @@
       }
 
       titleEl.textContent = heading;
-      document.title = docTitle + ' — Arphan DRAME';
+      document.title = docTitle + ' — Arphan Drame';
 
       mainEl.innerHTML = '';
       mainEl.appendChild(frag);

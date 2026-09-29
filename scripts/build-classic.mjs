@@ -280,7 +280,7 @@ function services() {
     <section class="sec sec--band" id="services" data-route="portail" aria-labelledby="services-title">
       <div class="wrap">${secHead('services', 'Vous avez un projet ?', 'Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.')}
         <div class="services">
-          <a class="btn btn--primary" href="construire-projet.html">Construisez votre projet${icon('arrow')}</a>
+          <a class="btn btn--primary" href="devis.html">Construisez votre projet${icon('arrow')}</a>
           <a class="btn btn--ghost" href="tarifs.html">Voir mes tarifs</a>
         </div>
       </div>

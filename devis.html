@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="night">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Construisez votre projet — Arphan Drame</title>
+  <meta name="description" content="Décrivez votre projet web en quelques étapes (type, besoin, fonctionnalités, budget) : Arphan Drame, Développeur Web Full Stack, revient vers vous rapidement.">
+  <link rel="canonical" href="https://portfolio-3kx.pages.dev/devis">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Construisez votre projet — Arphan Drame">
+  <meta property="og:description" content="Décrivez votre projet en quelques étapes, je reviens vers vous rapidement.">
+  <meta property="og:url" content="https://portfolio-3kx.pages.dev/devis">
+  <meta property="og:image" content="https://portfolio-3kx.pages.dev/assets/img/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0a0a0d">
+  <script src="js/theme.js"></script>
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/classic.css">
+  <link rel="stylesheet" href="css/annexe.css">
+  <!-- ══════════════════════════════════════════════════════
+       DEVIS.HTML — « Construisez votre projet », version site classique :
+       formulaire par étapes (js/devis.js). Mêmes questions, même e-mail
+       et même mémoire de session que le mini-jeu du mode aventure
+       (construire-projet.html + js/build-project.js).
+       ══════════════════════════════════════════════════════ -->
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  </svg>
+
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="index.html">A. DRAME</a>
+      <nav class="nav" aria-label="Pages">
+        <a href="classique.html">Portfolio</a>
+        <a href="tarifs.html">Tarifs</a>
+        <a href="devis.html" aria-current="page">Construisez votre projet</a>
+      </nav>
+      <div class="topbar__actions">
+        <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer de thème">
+          <svg class="ico ico--sun" aria-hidden="true"><use href="#i-sun"/></svg>
+          <svg class="ico ico--moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page wrap wizard">
+    <div class="progress" id="progress">
+      <span class="progress__label" id="progress-label">Étape 1 / 5</span>
+      <span class="progress__track"><span class="progress__fill" id="progress-fill" style="width:20%"></span></span>
+    </div>
+
+    <main id="wizard" aria-live="polite">
+      <noscript>
+        <div class="fallback">
+          <p>Ce formulaire nécessite JavaScript.</p>
+          <p>Décrivez votre projet par e-mail :
+            <a href="mailto:arphandrame0@gmail.com?subject=Demande%20de%20projet">arphandrame0@gmail.com</a></p>
+        </div>
+      </noscript>
+    </main>
+  </div>
+
+  <script src="js/contact-form.js"></script>
+  <script src="js/deeplink.js"></script>
+  <script src="js/devis.js"></script>
+</body>
+</html>

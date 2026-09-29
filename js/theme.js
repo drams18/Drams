@@ -1,13 +1,13 @@
 /* ══════════════════════════════════════════════════════
-   THEME.JS — La ville de jour ou de nuit, selon l'heure locale
+   THEME.JS — Thème clair ou sombre du site classique, selon l'heure locale
    Chargé de façon BLOQUANTE dans le <head> (≈ 1 Ko) : le thème est
    posé avant le premier affichage, sans flash.
 
-     07 h → 20 h  : data-theme="day"   (ville de jour, fond clair)
-     sinon        : data-theme="night" (ville de nuit, fond sombre)
+     07 h → 20 h  : data-theme="day"   (clair)
+     sinon        : data-theme="night" (sombre)
 
    Un interrupteur ([data-theme-toggle]) permet de choisir l'autre
-   ambiance ; ce choix n'est retenu que pour la session en cours
+   thème ; ce choix n'est retenu que pour la session en cours
    (le lendemain, l'heure reprend la main).
    ══════════════════════════════════════════════════════ */
 (function (global) {
@@ -29,12 +29,12 @@
   function apply(theme) {
     root.setAttribute('data-theme', theme);
     var meta = global.document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'day' ? '#f4f6fb' : '#0e1630');
+    if (meta) meta.setAttribute('content', theme === 'day' ? '#ffffff' : '#0a0a0d');
     var btns = global.document.querySelectorAll('[data-theme-toggle]');
     for (var i = 0; i < btns.length; i++) {
       btns[i].setAttribute('aria-pressed', theme === 'night' ? 'true' : 'false');
-      btns[i].setAttribute('aria-label', theme === 'day' ? 'Passer à la ville de nuit' : 'Passer à la ville de jour');
-      btns[i].setAttribute('title', theme === 'day' ? 'Ville de jour (selon votre heure) — passer à la nuit' : 'Ville de nuit — passer au jour');
+      btns[i].setAttribute('aria-label', theme === 'day' ? 'Passer au thème sombre' : 'Passer au thème clair');
+      btns[i].setAttribute('title', theme === 'day' ? 'Thème clair (selon votre heure) — passer au sombre' : 'Thème sombre — passer au clair');
     }
   }
 

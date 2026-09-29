@@ -10,7 +10,9 @@ https://portfolio-3kx.pages.dev/
 | `/` | `index.html` | **Écran de sélection** — « Comment souhaitez-vous me découvrir ? » |
 | `/classique` | `classique.html` | **Mode classique** — portfolio professionnel (jour / nuit selon l'heure locale) |
 | `/aventure` | `aventure.html` | **Mode aventure** — la ville interactive (canvas) |
-| `/tarifs`, `/construire-projet` | | Pages clients, communes aux deux modes |
+| `/tarifs` | `tarifs.html` | Grille tarifaire + recherche (style classique, commune aux deux modes) |
+| `/devis` | `devis.html` | « Construisez votre projet » — formulaire par étapes (site classique) |
+| `/construire-projet` | `construire-projet.html` | « Construisez votre projet » — mini-jeu (mode aventure) |
 | `/cv`, `/contact`, `/projets` | `_redirects` | Liens courts |
 
 - **Contenu : une seule source**, `js/museum.js`. Le mode aventure le lit directement ; le HTML
@@ -27,9 +29,13 @@ https://portfolio-3kx.pages.dev/
   `#projets/<slug>`, `#contact`, `#portail`. Le même fragment ouvre le même contenu dans les
   deux modes (`/classique#projets/skywalk` ⇄ `/aventure#projets/skywalk`).
 - **Ambiance jour / nuit** : `js/theme.js` (07 h → 20 h = jour ; `?theme=day|night` pour forcer).
-- **Deux styles distincts** : l'accueil, le mode classique et la 404 sont un site web sobre et
-  professionnel (`css/site.css` : thèmes clair/sombre, police Inter) ; le mode aventure, les tarifs et
-  « Construisez votre projet » gardent la DA jeu comics / néon / pixel (`css/tokens.css`, `style.css`).
+- **Deux styles distincts** : l'accueil, le mode classique, les tarifs, le devis et la 404 sont un
+  site web sobre et professionnel (`css/site.css` : thèmes clair/sombre, police Inter ;
+  `css/classic.css`, `css/annexe.css`). Le mode aventure et son mini-jeu `construire-projet`
+  gardent la DA jeu comics / néon / pixel (`css/tokens.css`, `style.css`).
+- **Devis ⇄ mini-jeu** : `js/devis.js` et `js/build-project.js` posent les mêmes questions, envoient
+  le même e-mail et partagent la même session. Depuis les tarifs, « Construisez votre projet » mène au
+  mini-jeu pour un visiteur du mode aventure, au formulaire pour les autres.
 - **Formulaires** : `js/contact-form.js` (EmailJS chargé à la demande).
 
 Aucun framework : HTML / CSS / JS vanilla. **Vite** assemble le site dans `dist/` (Cloudflare Pages :

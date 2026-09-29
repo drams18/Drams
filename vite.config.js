@@ -13,7 +13,7 @@ import { defineConfig } from 'vite';
 import { cpSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const PAGES = ['index', 'classique', 'aventure', 'tarifs', 'construire-projet', '404'];
+const PAGES = ['index', 'classique', 'aventure', 'tarifs', 'devis', 'construire-projet', '404'];
 
 // Copiés tels quels : scripts non-modules, médias, config Cloudflare.
 // css/ et style.css aussi, car les préchargements (classic.js, select.js)
