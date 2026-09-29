@@ -15,7 +15,7 @@
    Aucune dépendance.
    ══════════════════════════════════════════════════════ */
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -82,9 +82,40 @@ function secHead(id, title, lead) {
       </header>`;
 }
 
-const linkList = (links, cls) => (links && links.length)
-  ? links.map(l => `<a class="${cls}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external', 'ico ico--xs')}</a>`).join('')
-  : `<span class="${cls} ${cls}--off" aria-disabled="true">Indisponible</span>`;
+// ── Projets : miniature, disponibilité, technos ─────────
+// Miniature : champ `image` du projet, sinon assets/img/projets/<slug>.webp
+// s'il existe (il suffit de déposer le fichier, 16:10 conseillé).
+const projectImage = (p) => p.image
+  || (existsSync(join(ROOT, `assets/img/projets/${p.slug}.webp`)) ? `assets/img/projets/${p.slug}.webp` : null);
+
+// Disponibilité déduite des données, jamais inventée :
+//   `status` (optionnel, museum.js) → affiché tel quel (ex. « En cours »)
+//   au moins un lien                → « En ligne », le badge EST le lien
+//   aucun lien                      → « Indisponible »
+function availability(p) {
+  const links = p.links || [];
+  const tone = p.status ? 'wip' : links.length ? 'on' : 'off';
+  const state = p.status || (links.length ? 'En ligne' : 'Indisponible');
+  const dot = '<span class="avail__dot" aria-hidden="true"></span>';
+  if (!links.length) return `<span class="avail avail--${tone}">${dot}${esc(state)}</span>`;
+  return links.map((l, i) => `<a class="avail avail--${tone} avail--link" href="${esc(l.url)}" target="_blank" rel="noopener">${i === 0 ? `${dot}${esc(state)}<span class="avail__sep" aria-hidden="true">·</span>` : ''}${esc(l.label)}${icon('external', 'ico ico--xs')}</a>`).join('');
+}
+
+// « Mon rôle » replié : s'ouvre à la demande. name="project-role" = accordéon
+// natif, un seul rôle ouvert à la fois sur toute la page (repli JS dans classic.js).
+const roleToggle = (p) => p.role ? `
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle${icon('chevron', 'ico role-toggle__chev')}</summary>
+                <p class="role-toggle__text">${esc(p.role)}</p>
+              </details>` : '';
+
+// Pastilles de technos : les `max` premières, puis « +N » (liste complète au survol).
+function techTags(tech, max = Infinity) {
+  const shown = tech.slice(0, max);
+  const rest = tech.slice(max);
+  return `<ul class="tags" aria-label="Technologies">${shown.map(t => `<li>${esc(t)}</li>`).join('')}${
+    rest.length ? `<li class="tags__more" title="${esc(rest.join(', '))}">+${rest.length}</li>` : ''}</ul>`;
+}
 
 function hero() {
   const stack = mainStack.slice(0, 8).map(s => `<li>${esc(s.item)}</li>`).join('');
@@ -120,12 +151,13 @@ function hero() {
 }
 
 function projectCover(p) {
-  if (p.image) {
-    return `<img class="proj__img" src="${esc(p.image)}" alt="Capture d'écran — ${esc(p.title)}" loading="lazy" width="640" height="360">`;
+  const img = projectImage(p);
+  if (img) {
+    return `<div class="proj__thumb"><img class="proj__img" src="${esc(img)}" alt="Aperçu du projet ${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800"></div>`;
   }
   // Pas de capture (projet client privé ou visuel à venir) : couverture
   // typographique, jamais d'image inventée.
-  return `<div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">${esc(p.type)}</span><span class="proj__cover-name">${esc(p.short || p.title)}</span></div>`;
+  return `<div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">${esc(p.short || p.title)}</span></div>`;
 }
 
 function featuredCard(p) {
@@ -137,9 +169,8 @@ function featuredCard(p) {
               <p class="proj__meta"><span class="chip-cat">${esc(p.category)}</span><span>${esc(p.type)}</span></p>
               <h3 class="proj__title" id="p-${p.slug}">${esc(p.title)}</h3>
               <p class="proj__desc" data-clamp>${esc(p.desc)}</p>
-              ${p.role ? `<p class="role"><span class="role__k">Mon rôle</span>${esc(p.role)}</p>` : ''}
-              <ul class="tags" aria-label="Technologies">${p.tech.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
-              <div class="proj__links">${linkList(p.links, 'proj__link')}</div>
+              ${techTags(p.tech, 4)}${roleToggle(p)}
+              <div class="proj__foot">${availability(p)}</div>
             </div>
           </article>`;
 }
@@ -152,13 +183,11 @@ function projectRow(p) {
               <summary>
                 <span class="row__main"><span class="proj__title">${esc(p.title)}</span><span class="row__type">${esc(p.type)}</span></span>
                 <span class="chip-cat">${esc(p.category)}</span>
-                <span class="row__tech">${p.tech.slice(0, 3).map(esc).join(' · ')}</span>
+                <span class="row__avail">${availability(p)}</span>
               </summary>
               <div class="row__body">
                 <p class="proj__desc">${esc(p.desc)}</p>
-                ${p.role ? `<p class="role"><span class="role__k">Mon rôle</span>${esc(p.role)}</p>` : ''}
-                <ul class="tags" aria-label="Technologies">${p.tech.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
-                <div class="proj__links">${linkList(p.links, 'proj__link')}</div>
+                ${techTags(p.tech)}${roleToggle(p)}
               </div>
             </details>
           </li>`;

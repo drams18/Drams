@@ -135,6 +135,7 @@
     <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z" fill="currentColor"/></symbol>
     <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M4 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 9h3v12H3zM9 9h3v1.7c.5-.9 1.7-1.9 3.5-1.9 3.2 0 3.5 2.1 3.5 4.8V21h-3v-6.5c0-1.5 0-3.3-2-3.3s-2.3 1.6-2.3 3.2V21H9z" fill="currentColor"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>
@@ -212,62 +213,77 @@
         <div class="feat-grid">
           <article class="card proj proj--feat" id="projets/allsab-ms" data-route="projets/allsab-ms"
                    data-cat="Professionnel" data-pick aria-labelledby="p-allsab-ms">
-            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">Intranet</span><span class="proj__cover-name">ALLSAB-MS</span></div>
+            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">ALLSAB-MS</span></div>
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">Professionnel</span><span>Intranet</span></p>
               <h3 class="proj__title" id="p-allsab-ms">Allsab-MS</h3>
               <p class="proj__desc" data-clamp>Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.</p>
-              <p class="role"><span class="role__k">Mon rôle</span>Projet DevPhantom, en équipe — l'un des premiers projets que j'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.</p>
               <ul class="tags" aria-label="Technologies"><li>PHP</li><li>Symfony</li><li>MySQL</li></ul>
-              <div class="proj__links"><a class="proj__link" href="https://allsab-ms.com/" target="_blank" rel="noopener">Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet DevPhantom, en équipe — l'un des premiers projets que j'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.</p>
+              </details>
+              <div class="proj__foot"><a class="avail avail--on avail--link" href="https://allsab-ms.com/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
             </div>
           </article>
           <article class="card proj proj--feat" id="projets/badn" data-route="projets/badn"
                    data-cat="Professionnel" data-pick aria-labelledby="p-badn">
-            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">Application Mobile</span><span class="proj__cover-name">BADN</span></div>
+            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">BADN</span></div>
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">Professionnel</span><span>Application Mobile</span></p>
               <h3 class="proj__title" id="p-badn">BADN</h3>
               <p class="proj__desc" data-clamp>Application pour organiser des sorties entre amis : définition d'un budget, choix d'un lieu et d'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d'autres.</p>
-              <p class="role"><span class="role__k">Mon rôle</span>Projet interne DevPhantom, en équipe. J'étais principalement impliqué sur le développement backend.</p>
               <ul class="tags" aria-label="Technologies"><li>React Native</li><li>Node.js</li></ul>
-              <div class="proj__links"><span class="proj__link proj__link--off" aria-disabled="true">Indisponible</span></div>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet interne DevPhantom, en équipe. J'étais principalement impliqué sur le développement backend.</p>
+              </details>
+              <div class="proj__foot"><span class="avail avail--off"><span class="avail__dot" aria-hidden="true"></span>Indisponible</span></div>
             </div>
           </article>
           <article class="card proj proj--feat" id="projets/wild-kedougou" data-route="projets/wild-kedougou"
                    data-cat="Personnel" data-pick aria-labelledby="p-wild-kedougou">
-            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">Plateforme de réservation</span><span class="proj__cover-name">KÉDOUGOU</span></div>
+            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">KÉDOUGOU</span></div>
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">Personnel</span><span>Plateforme de réservation</span></p>
               <h3 class="proj__title" id="p-wild-kedougou">Wild Kédougou Experience</h3>
               <p class="proj__desc" data-clamp>Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.</p>
-              <p class="role"><span class="role__k">Mon rôle</span>Projet personnel — conception et développement complets (frontend, backend serverless, intégrations).</p>
-              <ul class="tags" aria-label="Technologies"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind CSS</li><li>Framer Motion</li><li>Supabase</li><li>Google Calendar API</li><li>Brevo</li><li>Cloudflare Workers</li><li>PWA</li><li>SEO</li></ul>
-              <div class="proj__links"><a class="proj__link" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              <ul class="tags" aria-label="Technologies"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind CSS</li><li class="tags__more" title="Framer Motion, Supabase, Google Calendar API, Brevo, Cloudflare Workers, PWA, SEO">+7</li></ul>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet personnel — conception et développement complets (frontend, backend serverless, intégrations).</p>
+              </details>
+              <div class="proj__foot"><a class="avail avail--on avail--link" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
             </div>
           </article>
           <article class="card proj proj--feat" id="projets/islaah" data-route="projets/islaah"
                    data-cat="Personnel" data-pick aria-labelledby="p-islaah">
-            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">Application Mobile</span><span class="proj__cover-name">ISLAAH</span></div>
+            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">ISLAAH</span></div>
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">Personnel</span><span>Application Mobile</span></p>
               <h3 class="proj__title" id="p-islaah">ISLAAH</h3>
               <p class="proj__desc" data-clamp>Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l'App Store.</p>
-              <p class="role"><span class="role__k">Mon rôle</span>Projet personnel — conception et développement complet : app mobile, API et mise en production.</p>
-              <ul class="tags" aria-label="Technologies"><li>React Native</li><li>Symfony</li><li>MySQL</li><li>Cloudflare</li><li>Railway</li><li>Expo</li></ul>
-              <div class="proj__links"><a class="proj__link" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener">Télécharger<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              <ul class="tags" aria-label="Technologies"><li>React Native</li><li>Symfony</li><li>MySQL</li><li>Cloudflare</li><li class="tags__more" title="Railway, Expo">+2</li></ul>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet personnel — conception et développement complet : app mobile, API et mise en production.</p>
+              </details>
+              <div class="proj__foot"><a class="avail avail--on avail--link" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Télécharger<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
             </div>
           </article>
           <article class="card proj proj--feat" id="projets/skywalk" data-route="projets/skywalk"
                    data-cat="Scolaire" data-pick aria-labelledby="p-skywalk">
-            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">Plateforme Web</span><span class="proj__cover-name">SKYWALK</span></div>
+            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">SKYWALK</span></div>
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">Scolaire</span><span>Plateforme Web</span></p>
               <h3 class="proj__title" id="p-skywalk">SkyWalk</h3>
               <p class="proj__desc" data-clamp>Plateforme web destinée à accompagner les personnes dans leurs projets d'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.</p>
-              <p class="role"><span class="role__k">Mon rôle</span>Projet réalisé en équipe de 7 (ETNA — Grand Projet d'Étude). J'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l'architecture technique et à la documentation / au diagramme d'architecture.</p>
-              <ul class="tags" aria-label="Technologies"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind</li><li>React Query</li><li>NestJS</li><li>PostgreSQL</li><li>TypeORM</li><li>JWT</li><li>Docker</li><li>Nginx</li><li>GitLab CI</li></ul>
-              <div class="proj__links"><a class="proj__link" href="https://skywalk-chi.vercel.app/" target="_blank" rel="noopener">Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              <ul class="tags" aria-label="Technologies"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind</li><li class="tags__more" title="React Query, NestJS, PostgreSQL, TypeORM, JWT, Docker, Nginx, GitLab CI">+8</li></ul>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet réalisé en équipe de 7 (ETNA — Grand Projet d'Étude). J'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l'architecture technique et à la documentation / au diagramme d'architecture.</p>
+              </details>
+              <div class="proj__foot"><a class="avail avail--on avail--link" href="https://skywalk-chi.vercel.app/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
             </div>
           </article>
         </div>
@@ -279,13 +295,15 @@
               <summary>
                 <span class="row__main"><span class="proj__title">Infinitia</span><span class="row__type">Plateforme Web</span></span>
                 <span class="chip-cat">Professionnel</span>
-                <span class="row__tech">Symfony · Node.js · NestJS</span>
+                <span class="row__avail"><span class="avail avail--off"><span class="avail__dot" aria-hidden="true"></span>Indisponible</span></span>
               </summary>
               <div class="row__body">
                 <p class="proj__desc">Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n'a finalement pas été terminée, le client ayant cessé de répondre.</p>
-                <p class="role"><span class="role__k">Mon rôle</span>Projet DevPhantom, en équipe. J'ai participé à la création à partir de zéro après un échange avec le client : conception de la base de données, développement du backend, préparation de l'architecture du projet.</p>
                 <ul class="tags" aria-label="Technologies"><li>Symfony</li><li>Node.js</li><li>NestJS</li><li>MySQL</li></ul>
-                <div class="proj__links"><span class="proj__link proj__link--off" aria-disabled="true">Indisponible</span></div>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet DevPhantom, en équipe. J'ai participé à la création à partir de zéro après un échange avec le client : conception de la base de données, développement du backend, préparation de l'architecture du projet.</p>
+              </details>
               </div>
             </details>
           </li>
@@ -295,13 +313,15 @@
               <summary>
                 <span class="row__main"><span class="proj__title">Hexagon</span><span class="row__type">Plateforme Web</span></span>
                 <span class="chip-cat">Professionnel</span>
-                <span class="row__tech">PHP · Symfony · JavaScript</span>
+                <span class="row__avail"><span class="avail avail--off"><span class="avail__dot" aria-hidden="true"></span>Indisponible</span></span>
               </summary>
               <div class="row__body">
                 <p class="proj__desc">Plateforme destinée à faciliter le travail opérationnel et la communication interne.</p>
-                <p class="role"><span class="role__k">Mon rôle</span>Projet DevPhantom, en équipe. Développement de plusieurs CRUD, de fonctionnalités liées à la communication interne, et participation à l'évolution de la plateforme.</p>
                 <ul class="tags" aria-label="Technologies"><li>PHP</li><li>Symfony</li><li>JavaScript</li><li>MySQL</li></ul>
-                <div class="proj__links"><span class="proj__link proj__link--off" aria-disabled="true">Indisponible</span></div>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet DevPhantom, en équipe. Développement de plusieurs CRUD, de fonctionnalités liées à la communication interne, et participation à l'évolution de la plateforme.</p>
+              </details>
               </div>
             </details>
           </li>
@@ -311,13 +331,15 @@
               <summary>
                 <span class="row__main"><span class="proj__title">GEXP</span><span class="row__type">Plateforme Web</span></span>
                 <span class="chip-cat">Professionnel</span>
-                <span class="row__tech">PHP · Symfony · MySQL</span>
+                <span class="row__avail"><span class="avail avail--off"><span class="avail__dot" aria-hidden="true"></span>Indisponible</span></span>
               </summary>
               <div class="row__body">
                 <p class="proj__desc">Plateforme destinée à faciliter la génération de rapports et la communication interne.</p>
-                <p class="role"><span class="role__k">Mon rôle</span>Projet DevPhantom, en équipe. Développement de CRUD, génération de rapports, exports PDF, Excel et CSV.</p>
                 <ul class="tags" aria-label="Technologies"><li>PHP</li><li>Symfony</li><li>MySQL</li></ul>
-                <div class="proj__links"><span class="proj__link proj__link--off" aria-disabled="true">Indisponible</span></div>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet DevPhantom, en équipe. Développement de CRUD, génération de rapports, exports PDF, Excel et CSV.</p>
+              </details>
               </div>
             </details>
           </li>
@@ -327,13 +349,15 @@
               <summary>
                 <span class="row__main"><span class="proj__title">Ilamiria</span><span class="row__type">Application Mobile</span></span>
                 <span class="chip-cat">Professionnel</span>
-                <span class="row__tech">React Native</span>
+                <span class="row__avail"><a class="avail avail--on avail--link" href="https://apps.apple.com/fr/app/ilamiria/id6749936753" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>App Store<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></span>
               </summary>
               <div class="row__body">
                 <p class="proj__desc">Application mobile développée chez DevPhantom et publiée sur l'App Store.</p>
-                <p class="role"><span class="role__k">Mon rôle</span>Projet interne DevPhantom, réalisé en équipe.</p>
                 <ul class="tags" aria-label="Technologies"><li>React Native</li></ul>
-                <div class="proj__links"><a class="proj__link" href="https://apps.apple.com/fr/app/ilamiria/id6749936753" target="_blank" rel="noopener">App Store<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet interne DevPhantom, réalisé en équipe.</p>
+              </details>
               </div>
             </details>
           </li>
@@ -343,13 +367,15 @@
               <summary>
                 <span class="row__main"><span class="proj__title">Pool Party Experience</span><span class="row__type">Site vitrine WordPress</span></span>
                 <span class="chip-cat">Personnel</span>
-                <span class="row__tech">WordPress · PHP · CSS</span>
+                <span class="row__avail"><a class="avail avail--wip avail--link" href="https://poolparty-experience.fr/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En cours<span class="avail__sep" aria-hidden="true">·</span>Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></span>
               </summary>
               <div class="row__body">
                 <p class="proj__desc">Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.</p>
-                <p class="role"><span class="role__k">Mon rôle</span>Projet en cours, réalisé pour un ami — création et intégration d'un site vitrine WordPress.</p>
                 <ul class="tags" aria-label="Technologies"><li>WordPress</li><li>PHP</li><li>CSS</li></ul>
-                <div class="proj__links"><a class="proj__link" href="https://poolparty-experience.fr/" target="_blank" rel="noopener">Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet en cours, réalisé pour un ami — création et intégration d'un site vitrine WordPress.</p>
+              </details>
               </div>
             </details>
           </li>
@@ -359,13 +385,15 @@
               <summary>
                 <span class="row__main"><span class="proj__title">Plateforme de recherche de prospects</span><span class="row__type">Projet personnel</span></span>
                 <span class="chip-cat">Personnel</span>
-                <span class="row__tech">Node.js · Railway · HTML</span>
+                <span class="row__avail"><a class="avail avail--on avail--link" href="https://prospectly.hitmind-pro.workers.dev/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></span>
               </summary>
               <div class="row__body">
                 <p class="proj__desc">Plateforme permettant de rechercher une enseigne qui a besoin d'un site web ou d'une mise à jour.</p>
-                <p class="role"><span class="role__k">Mon rôle</span>Projet personnel — idée, conception et développement réalisés seul.</p>
                 <ul class="tags" aria-label="Technologies"><li>Node.js</li><li>Railway</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>NoSQL</li></ul>
-                <div class="proj__links"><a class="proj__link" href="https://prospectly.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet personnel — idée, conception et développement réalisés seul.</p>
+              </details>
               </div>
             </details>
           </li>
@@ -375,13 +403,15 @@
               <summary>
                 <span class="row__main"><span class="proj__title">OneDay</span><span class="row__type">PWA de planification</span></span>
                 <span class="chip-cat">Personnel</span>
-                <span class="row__tech">React · TypeScript · Vite</span>
+                <span class="row__avail"><a class="avail avail--on avail--link" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></span>
               </summary>
               <div class="row__body">
                 <p class="proj__desc">Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d'avancement, modèles de journée réutilisables (« programmes ») applicables à n'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.</p>
-                <p class="role"><span class="role__k">Mon rôle</span>Projet personnel — conception et développement complets (frontend, backend serverless, notifications push). PWA que j'ai construite pour organiser mes journées, mieux travailler et m'installer des habitudes.</p>
                 <ul class="tags" aria-label="Technologies"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind CSS</li><li>React Router</li><li>Supabase</li><li>PostgreSQL</li><li>PWA</li><li>Web Push</li><li>Cloudflare Pages</li><li>Cloudflare Workers</li></ul>
-                <div class="proj__links"><a class="proj__link" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener">Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet personnel — conception et développement complets (frontend, backend serverless, notifications push). PWA que j'ai construite pour organiser mes journées, mieux travailler et m'installer des habitudes.</p>
+              </details>
               </div>
             </details>
           </li>
@@ -391,13 +421,15 @@
               <summary>
                 <span class="row__main"><span class="proj__title">Crowdin (clone)</span><span class="row__type">Plateforme de localisation</span></span>
                 <span class="chip-cat">Scolaire</span>
-                <span class="row__tech">Symfony 7 · PHP 8 · Doctrine ORM</span>
+                <span class="row__avail"><span class="avail avail--off"><span class="avail__dot" aria-hidden="true"></span>Indisponible</span></span>
               </summary>
               <div class="row__body">
                 <p class="proj__desc">Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d'accès par rôles.</p>
-                <p class="role"><span class="role__k">Mon rôle</span>Projet scolaire ETNA réalisé en binôme (déc. 2024 – janv. 2025) ; j'ai porté la majeure partie du développement : modélisation Doctrine et migrations, CRUD projets / langues / sources / traductions, import et export CSV, verrouillage des chaînes sources, inscription avec vérification d'e-mail, contrôle d'accès par voter.</p>
                 <ul class="tags" aria-label="Technologies"><li>Symfony 7</li><li>PHP 8</li><li>Doctrine ORM</li><li>PostgreSQL</li><li>Twig</li><li>Docker</li><li>Bootstrap</li></ul>
-                <div class="proj__links"><span class="proj__link proj__link--off" aria-disabled="true">Indisponible</span></div>
+              <details class="role-toggle" name="project-role">
+                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+                <p class="role-toggle__text">Projet scolaire ETNA réalisé en binôme (déc. 2024 – janv. 2025) ; j'ai porté la majeure partie du développement : modélisation Doctrine et migrations, CRUD projets / langues / sources / traductions, import et export CSV, verrouillage des chaînes sources, inscription avec vérification d'e-mail, contrôle d'accès par voter.</p>
+              </details>
               </div>
             </details>
           </li>

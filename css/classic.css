@@ -202,7 +202,7 @@ main:focus { outline: none; }
 .filter[aria-pressed="true"] { color: var(--bg); background: var(--text); border-color: var(--text); }
 .filter[aria-pressed="true"] span { color: var(--bg); opacity: .7; }
 
-.feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; align-items: start; }
+.feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; align-items: stretch; }
 @media (max-width: 400px) { .feat-grid { grid-template-columns: 1fr; } }
 .proj--feat {
   display: flex; flex-direction: column; overflow: hidden;
@@ -211,7 +211,7 @@ main:focus { outline: none; }
 .proj--feat:hover { transform: translateY(-4px); border-color: var(--line-2); box-shadow: var(--shadow); }
 .proj__cover {
   position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px;
-  aspect-ratio: 16 / 8; padding: 20px 22px; overflow: hidden;
+  aspect-ratio: 16 / 10; padding: 20px 22px; overflow: hidden;
   background:
     radial-gradient(110% 120% at 100% 0%, color-mix(in srgb, var(--cat) 30%, transparent) 0%, transparent 60%),
     var(--surface-2);
@@ -230,7 +230,9 @@ main:focus { outline: none; }
   transition: transform .4s var(--ease);
 }
 .proj--feat:hover .proj__cover-name { transform: translateX(4px); }
-.proj__img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-bottom: 1px solid var(--line); }
+.proj__thumb { aspect-ratio: 16 / 10; overflow: hidden; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+.proj__img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform .6s var(--ease); }
+.proj--feat:hover .proj__img { transform: scale(1.03); }
 .proj__body { display: flex; flex-direction: column; padding: 20px 22px 22px; flex: 1; }
 .proj__meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13.5px; color: var(--muted); }
 .chip-cat {
@@ -244,29 +246,59 @@ main:focus { outline: none; }
 .proj__title { font-size: 20px; font-weight: 650; line-height: 1.3; letter-spacing: -.015em; color: var(--text); }
 .proj--feat .proj__title { margin-top: 12px; }
 .proj__desc { margin-top: 8px; font-size: 15px; color: var(--text-2); }
-.js .proj__desc[data-clamp]:not(.is-open) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.js .proj__desc[data-clamp]:not(.is-open) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .more {
   align-self: flex-start; margin-top: 6px; padding: 2px 0; cursor: pointer;
   font: 500 14px var(--font); color: var(--accent);
   background: none; border: 0;
 }
 .more:hover { text-decoration: underline; text-underline-offset: 3px; }
-.proj__links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; padding-top: 18px; }
-.proj__link {
-  display: inline-flex; align-items: center; gap: 7px; min-height: 38px; padding: 7px 14px;
-  font: 500 14px var(--font); color: var(--text); text-decoration: none;
-  border: 1px solid var(--line-2); border-radius: 999px;
-  transition: border-color .2s, background .2s;
+/* « Mon rôle » : replié, un seul ouvert à la fois (details name=…) */
+.role-toggle { margin-top: 14px; }
+.role-toggle > summary {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; cursor: pointer; list-style: none;
+  font-size: 14px; font-weight: 500; color: var(--accent);
 }
-.proj__link:hover { border-color: var(--text); }
-.proj__link--off { color: var(--muted); border-style: dashed; }
-.proj__link--off:hover { border-color: var(--line-2); }
+.role-toggle > summary::-webkit-details-marker { display: none; }
+.role-toggle > summary:hover { text-decoration: underline; text-underline-offset: 3px; }
+.role-toggle__chev { width: 16px; height: 16px; transition: transform .25s var(--ease); }
+.role-toggle[open] .role-toggle__chev { transform: rotate(180deg); }
+.role-toggle__text {
+  margin-top: 8px; padding: 12px 14px;
+  font-size: 14.5px; color: var(--text-2);
+  background: var(--surface-2); border-radius: var(--radius-sm);
+  border-left: 2px solid var(--cat, var(--accent));
+}
+.role-toggle[open] .role-toggle__text { animation: roleIn .3s var(--ease); }
+@keyframes roleIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+.tags__more { color: var(--muted) !important; cursor: help; }
+.proj__foot { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 18px; }
+
+/* Disponibilité : visible partout sans rien ouvrir ; quand le projet est
+   accessible, le badge EST le lien. */
+.avail {
+  --tone: var(--muted);
+  display: inline-flex; align-items: center; gap: 7px; min-height: 34px; padding: 5px 13px;
+  font: 500 13.5px var(--font); color: var(--text-2); text-decoration: none; white-space: nowrap;
+  background: var(--surface); border: 1px solid var(--line-2); border-radius: 999px;
+  transition: border-color .2s, color .2s, background .2s;
+}
+.avail--on  { --tone: var(--ok); }
+.avail--wip { --tone: #f59e0b; }
+.avail--off { color: var(--muted); background: transparent; border-style: dashed; }
+.avail__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--tone); flex-shrink: 0; }
+.avail--off .avail__dot { background: none; box-shadow: inset 0 0 0 1.5px var(--muted); }
+.avail__sep { color: var(--muted); }
+.avail--link { color: var(--text); }
+.avail--link:hover { border-color: var(--text); }
+.avail--link .ico { color: var(--muted); }
 
 .proj-list { display: flex; flex-direction: column; gap: 10px; }
 .proj--row { overflow: hidden; transition: border-color .2s; }
 .proj--row:hover, .proj--row[open] { border-color: var(--line-2); }
 .proj--row > summary {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, .8fr) 20px; align-items: center; gap: 16px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto auto 20px; align-items: center; gap: 12px 16px;
   padding: 16px 20px; cursor: pointer; list-style: none;
 }
 .proj--row > summary::-webkit-details-marker { display: none; }
@@ -279,14 +311,15 @@ main:focus { outline: none; }
 .row__main { display: flex; flex-direction: column; min-width: 0; }
 .row__main .proj__title { font-size: 16.5px; }
 .row__type { font-size: 13.5px; color: var(--muted); }
-.row__tech { font-size: 13.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row__avail { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
 .row__body { padding: 0 20px 20px; border-top: 1px solid var(--line); }
 .row__body .proj__desc { margin-top: 16px; }
-.row__body .proj__links { padding-top: 16px; }
 @media (max-width: 700px) {
-  .proj--row > summary { grid-template-columns: minmax(0, 1fr) 20px; gap: 8px 12px; }
-  .proj--row .chip-cat { grid-row: 2; justify-self: start; }
-  .row__tech { display: none; }
+  .proj--row > summary { grid-template-columns: auto minmax(0, 1fr) 20px; gap: 10px; }
+  .row__main { grid-column: 1 / 3; }
+  .proj--row .chip-cat { grid-row: 2; grid-column: 1; justify-self: start; }
+  .row__avail { grid-row: 2; grid-column: 2 / 4; justify-content: flex-start; }
+  .proj--row > summary::after { grid-row: 1; grid-column: 3; }
 }
 
 /* ── Parcours : deux pistes en parallèle ────────────── */

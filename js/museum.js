@@ -161,6 +161,10 @@ const SECTIONS = {
     // Triés Professionnel → Personnel → Scolaire.
     // pick: true → projet mis en avant (« à ne pas rater ») : repère discret
     // sur l'onglet + mention sur la carte.
+    // Champs optionnels lus par le mode classique seulement :
+    //   status → disponibilité affichée telle quelle (sinon : « En ligne »
+    //            s'il y a un lien, « Indisponible » sinon)
+    //   image  → miniature (sinon assets/img/projets/<slug>.webp s'il existe)
     items: [
       {
         short: 'INFINITIA',
@@ -264,6 +268,7 @@ const SECTIONS = {
         tech: ['WordPress', 'PHP', 'CSS'],
         role: 'Projet en cours, réalisé pour un ami — création et intégration d\'un site vitrine WordPress.',
         desc: 'Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.',
+        status: 'En cours',
         links: [
           { label: 'Voir le site', url: 'https://poolparty-experience.fr/' },
         ],

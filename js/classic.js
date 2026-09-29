@@ -170,6 +170,17 @@
     });
   });
 
+  // ── « Mon rôle » : un seul ouvert à la fois ─────────────
+  // details[name] fait déjà l'accordéon dans les navigateurs récents ;
+  // ce repli couvre les autres.
+  var roles = Array.prototype.slice.call(doc.querySelectorAll('.role-toggle'));
+  roles.forEach(function (d) {
+    d.addEventListener('toggle', function () {
+      if (!d.open) return;
+      roles.forEach(function (o) { if (o !== d && o.open) o.open = false; });
+    });
+  });
+
   // ── « Lire la suite » sur les descriptions longues ────
   doc.querySelectorAll('[data-clamp]').forEach(function (p) {
     if (p.scrollHeight <= p.clientHeight + 2) { p.removeAttribute('data-clamp'); return; }
