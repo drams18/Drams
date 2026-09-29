@@ -40,7 +40,20 @@ https://portfolio-3kx.pages.dev/
 
 Aucun framework : HTML / CSS / JS vanilla. **Vite** assemble le site dans `dist/` (Cloudflare Pages :
 commande `npm run build`, dossier `dist`) ; les scripts classiques `js/*.js` et les médias y sont
-copiés tels quels. **GSAP + ScrollTrigger** animent le mode classique (`src/classic-motion.js`) :
-entrée du hero, parallaxe du halo, révélations au défilement, tracé du parcours. La page reste
-complète sans ce module, et rien n'est animé si le visiteur préfère réduire les animations.
+copiés tels quels.
+
+**Mode classique immersif** (`src/classic-app.js`, couche ajoutée sur le HTML généré) :
+
+- `src/classic/projects.js` : espace de bulles sans bord (13 nœuds, positions repliées sur un
+  tore, pas de copies), mini-carte, filtres, vue liste, fiche projet immersive (`<dialog>`,
+  `#projets/<slug>`). Miniatures : déposer `assets/img/projets/<slug>.webp` (16:10) puis `npm run build`.
+- `src/classic/skills.js` : écosystème de compétences (taille = nombre de projets), panneau
+  détail, lien projet ↔ technologie dans les deux sens (`#competences/<slug>`).
+- `src/classic/journey.js` : sommaire du profil et frise du parcours ; `src/classic/hero.js` :
+  constellation d'entrée.
+- `src/classic-motion.js` (**GSAP + ScrollTrigger**) : séquence d'entrée, révélations au défilement.
+
+Statut, taille des bulles, liens compétence ↔ projet et chronologie sont **dérivés** de
+`js/museum.js` par `scripts/build-classic.mjs`, jamais saisis à la main. La page reste complète
+sans JavaScript, et rien n'est animé si le visiteur préfère réduire les animations.
 L'adresse du site est définie dans `scripts/build-classic.mjs` (`SITE_URL`) et dans les `<head>`.

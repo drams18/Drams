@@ -1,11 +1,13 @@
 /* ══════════════════════════════════════════════════════
    CLASSIC.JS — Mode classique (classique.html)
    Page lisible SANS JavaScript ; ce script n'ajoute que du confort :
-     • menu mobile, onglet actif
+     • menu mobile ; barre du haut vivante (onglet actif + pastille qui
+       glisse, fond au défilement, progression, section courante)
      • bouton « Mode aventure » contextuel (emporte la section lue)
      • préchargement du mode aventure à l'intention (survol / toucher)
-     • filtres de projets, « Lire la suite », copier, formulaire
-   Aucun code du jeu (canvas, audio) n'est chargé sur cette page.
+     • copier, formulaire
+   Les visualisations (projets, frise, compétences) sont dans
+   src/classic/*.js. Aucun code du jeu (canvas, audio) n'est chargé ici.
    ══════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -37,18 +39,24 @@
   var routed = Array.prototype.slice.call(main.querySelectorAll('[data-route]'));
   var followers = doc.querySelectorAll('[data-follow-route]');
   var navLinks = Array.prototype.slice.call(doc.querySelectorAll('.nav a'));
+  var topbar = doc.querySelector('.topbar');
+  var ink = doc.querySelector('.nav__ink');
+  var where = doc.querySelector('.topbar__where');
   var ticking = false;
 
-  // Carte « regardée » : cible du lien d'arrivée, ou dernière carte survolée /
-  // ciblée au clavier. Prioritaire tant qu'elle est à l'écran (plusieurs
-  // cartes peuvent partager la même ligne en grille).
+  // Élément « regardé » : cible du lien d'arrivée, ou dernier élément
+  // survolé / ciblé au clavier (bulle, étape…). Prioritaire tant qu'il est
+  // à l'écran.
   var pinned = null;
   function pin(e) {
-    var c = e.target.closest && e.target.closest('.card[data-route]');
-    if (c && c !== pinned) { pinned = c; onScroll(); }
+    var c = e.target.closest && e.target.closest('[data-route]');
+    if (c && c.tagName !== 'SECTION' && c !== pinned) { pinned = c; onScroll(); }
   }
   main.addEventListener('pointerover', pin);
   main.addEventListener('focusin', pin);
+  // Fiche projet ouverte (src/classic/projects.js) : c'est elle qu'on emporte.
+  var forced = null;
+  doc.addEventListener('classic:route', function (e) { forced = e.detail || null; onScroll(); });
 
   function visible(el) {
     if (el.hidden || el.closest('[hidden]')) return false;
@@ -59,6 +67,7 @@
   // Élément [data-route] le plus précis qui croise la ligne de lecture
   // (35 % de la hauteur) : carte projet > section.
   function currentRoute() {
+    if (forced) return forced;
     if (pinned && visible(pinned)) return pinned.getAttribute('data-route');
     var y = window.innerHeight * 0.35;
     var best = null, bestH = Infinity;
@@ -88,6 +97,33 @@
       if (a === active) a.setAttribute('aria-current', 'true');
       else a.removeAttribute('aria-current');
     });
+    moveInk(active);
+    if (where) {
+      where.textContent = active ? active.textContent : '';
+      where.classList.toggle('is-on', !!active);
+    }
+
+    // Barre du haut : légère dans le hero, plus présente ensuite.
+    var sy = window.scrollY || doc.documentElement.scrollTop;
+    var max = doc.documentElement.scrollHeight - window.innerHeight;
+    if (topbar) {
+      topbar.classList.toggle('is-scrolled', sy > 24);
+      topbar.style.setProperty('--sp', max > 0 ? Math.min(1, sy / max).toFixed(4) : 0);
+    }
+  }
+
+  // Pastille de l'onglet actif : glisse d'un onglet à l'autre.
+  var inkOn = null;
+  function moveInk(a) {
+    if (!ink) return;
+    var nav = ink.parentNode;
+    if (!a || !a.offsetWidth) { nav.classList.remove('has-ink'); inkOn = null; return; }
+    if (!inkOn) nav.classList.add('no-ink-anim');      // 1re apparition : sur place, sans glisser
+    ink.style.setProperty('--ix', a.offsetLeft + 'px');
+    ink.style.setProperty('--iw', a.offsetWidth + 'px');
+    if (!inkOn) { void ink.offsetWidth; nav.classList.remove('no-ink-anim'); }
+    nav.classList.add('has-ink');
+    inkOn = a;
   }
   function onScroll() {
     if (!ticking) { ticking = true; requestAnimationFrame(update); }
@@ -99,6 +135,8 @@
   // Défilement explicite et instantané : fiable même pour les ancres
   // « projets/skywalk » et pour les alias sans élément (#portail, #ville).
   function applyHash(instant) {
+    // Fermeture d'une fiche projet (retour dans l'historique) : on reste où l'on est.
+    if (window.ClassicApp && window.ClassicApp.skipHash) { window.ClassicApp.skipHash = false; return; }
     var r = D ? D.parse(location.hash) : null;
     if (!r) return;
     var id = location.hash.slice(1);
@@ -107,12 +145,18 @@
                : r.kind === 'ville'   ? doc.getElementById('top')
                : doc.getElementById(id) || doc.getElementById(id.split('/')[0]);
     if (!target) return;
-    if (target.matches('.card[data-route]')) pinned = target;
-    if (target.tagName === 'DETAILS') target.open = true;          // projet de la liste compacte
-    // Carte masquée par un filtre → on revient sur « Tous ».
-    if (target.closest('[hidden]')) { var all = doc.querySelector('.filter[data-filter="all"]'); if (all) all.click(); }
-    target.scrollIntoView({ block: 'start', behavior: instant ? 'instant' : 'smooth' });
-    if (target.classList.contains('card')) {
+    // Projet : la fiche immersive s'en charge (une fois le module prêt ;
+    // au premier chargement, il lit lui-même le fragment).
+    var app = window.ClassicApp;
+    if (target.classList.contains('pj-item') && app && app.openProject) {
+      app.openProject(target.getAttribute('data-slug'), { fromHash: true });
+      return;
+    }
+    if (target.tagName !== 'SECTION' && target.getAttribute('data-route')) pinned = target;
+    // Élément non affiché (liste des projets en vue « espace ») → sa section.
+    var shown = target.getClientRects().length ? target : target.closest('section') || target;
+    shown.scrollIntoView({ block: 'start', behavior: instant ? 'instant' : 'smooth' });
+    if (shown === target && target.tagName !== 'SECTION') {
       target.classList.remove('is-target'); void target.offsetWidth; target.classList.add('is-target');
     }
   }
@@ -144,57 +188,6 @@
     if (a.hasAttribute('data-follow-route')) {
       a.addEventListener('click', function () { a.setAttribute('href', 'aventure.html#' + currentRoute()); });
     }
-  });
-
-  // ── Filtres de projets ────────────────────────────────
-  var filters = Array.prototype.slice.call(doc.querySelectorAll('.filter'));
-  var cards = Array.prototype.slice.call(doc.querySelectorAll('.proj'));
-  var groupTitles = {
-    feat: doc.querySelector('[data-group="feat"]'),
-    rows: doc.querySelector('[data-group="rows"]'),
-  };
-  filters.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var f = btn.getAttribute('data-filter');
-      filters.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
-      var shown = { feat: 0, rows: 0 };
-      cards.forEach(function (c) {
-        var show = f === 'all' || c.getAttribute('data-cat') === f;
-        var holder = c.classList.contains('proj--row') ? c.parentElement : c;   // <li> de la liste
-        holder.hidden = !show;
-        if (show) shown[c.classList.contains('proj--row') ? 'rows' : 'feat']++;
-      });
-      if (groupTitles.feat) { groupTitles.feat.hidden = !shown.feat; groupTitles.feat.nextElementSibling.hidden = !shown.feat; }
-      if (groupTitles.rows) { groupTitles.rows.hidden = !shown.rows; groupTitles.rows.nextElementSibling.hidden = !shown.rows; }
-      onScroll();
-    });
-  });
-
-  // ── « Mon rôle » : un seul ouvert à la fois ─────────────
-  // details[name] fait déjà l'accordéon dans les navigateurs récents ;
-  // ce repli couvre les autres.
-  var roles = Array.prototype.slice.call(doc.querySelectorAll('.role-toggle'));
-  roles.forEach(function (d) {
-    d.addEventListener('toggle', function () {
-      if (!d.open) return;
-      roles.forEach(function (o) { if (o !== d && o.open) o.open = false; });
-    });
-  });
-
-  // ── « Lire la suite » sur les descriptions longues ────
-  doc.querySelectorAll('[data-clamp]').forEach(function (p) {
-    if (p.scrollHeight <= p.clientHeight + 2) { p.removeAttribute('data-clamp'); return; }
-    var more = doc.createElement('button');
-    more.type = 'button';
-    more.className = 'more';
-    more.textContent = 'Lire la suite';
-    more.setAttribute('aria-expanded', 'false');
-    more.addEventListener('click', function () {
-      var open = p.classList.toggle('is-open');
-      more.textContent = open ? 'Réduire' : 'Lire la suite';
-      more.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    p.insertAdjacentElement('afterend', more);
   });
 
   // ── Téléphone : appel direct sur mobile, texte + COPIER sur ordinateur ──
@@ -251,7 +244,10 @@
     });
   }
 
-  // Mise en page finale (« Lire la suite » posés) → on rejoint le fragment.
+  // Mise en page finale → on rejoint le fragment.
   applyHash(true);
   update();
+  // Police chargée / redimensionnement : les onglets changent de largeur.
+  if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(function () { inkOn = null; update(); });
+  window.addEventListener('resize', function () { inkOn = null; });
 })();

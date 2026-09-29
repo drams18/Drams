@@ -19,13 +19,20 @@
   <meta name="theme-color" content="#0a0a0d">
   <script src="js/theme.js"></script>
   <script>
-    // Animations d'entrée (src/classic-motion.js) : hero masqué avant le
-    // premier rendu. Filet de sécurité si le module ne se charge pas.
+    // Couche interactive (src/classic-app.js) : .js posé avant le premier
+    // rendu pour réserver la place des visualisations (pas de saut de mise
+    // en page). Filet de sécurité : si le module ne se charge pas, .no-app
+    // rend la page statique complète (liste des projets, etc.).
+    // Animations d'entrée : hero masqué avant le premier rendu (motion-pending).
     // ?capture (npm run capture) : page figée, sans animation.
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !/[?&]capture\b/.test(location.search)) {
-      document.documentElement.classList.add('motion-pending');
-      setTimeout(function () { document.documentElement.classList.remove('motion-pending'); }, 2500);
-    }
+    (function (r) {
+      r.classList.add('js');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !/[?&]capture\b/.test(location.search)) r.classList.add('motion-pending');
+      setTimeout(function () {
+        r.classList.remove('motion-pending');
+        if (!r.classList.contains('app-ready')) r.classList.add('no-app');
+      }, 2500);
+    })(document.documentElement);
   </script>
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="css/tokens.css">
@@ -138,6 +145,12 @@
     <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-orbit" viewBox="0 0 24 24"><circle cx="8" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16.5" cy="7" r="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-center" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>
 
   <a class="skip" href="#main">Aller au contenu</a>
@@ -145,12 +158,14 @@
   <header class="topbar">
     <div class="wrap topbar__inner">
       <a class="brand" href="index.html" aria-label="Arphan Drame — retour au choix du mode">A. DRAME</a>
+      <span class="topbar__where" aria-hidden="true"></span>
       <nav class="nav" id="site-nav" aria-label="Sections">
-        <a href="#projets">Projets</a>
-        <a href="#parcours">Parcours</a>
-        <a href="#competences">Compétences</a>
-        <a href="#profil">À propos</a>
-        <a href="#contact">Contact</a>
+        <a href="#profil"><span>Profil</span></a>
+        <a href="#projets"><span>Projets</span></a>
+        <a href="#parcours"><span>Parcours</span></a>
+        <a href="#competences"><span>Compétences</span></a>
+        <a href="#contact"><span>Contact</span></a>
+        <span class="nav__ink" aria-hidden="true"></span>
       </nav>
       <div class="topbar__actions">
         <a class="topbar__cv" href="assets/CV.pdf" target="_blank" rel="noopener">CV</a>
@@ -168,488 +183,670 @@
         </button>
       </div>
     </div>
+    <div class="topbar__progress" aria-hidden="true"></div>
   </header>
 
   <main id="main" class="vt-stage" tabindex="-1">
     <!-- build:content -->
     <section class="hero" id="top" data-route="ville" aria-labelledby="hero-name">
-      <div class="hero__bg" aria-hidden="true"><div class="hero__glow"></div></div>
+      <div class="hero__bg" aria-hidden="true"><div class="hero__glow"></div><div class="hero__sky"></div></div>
       <div class="wrap hero__inner">
-        <div class="hero__id">
-          <p class="pill"><span class="pulse" aria-hidden="true"></span>En recherche de CDI (dès sept. 2026)</p>
-          <h1 class="hero__name" id="hero-name">Arphan Drame</h1>
-          <p class="hero__title">Développeur Web Full Stack</p>
-          <p class="hero__pitch">Je peux m'adapter à un environnement technique existant, comprendre rapidement un projet et apprendre les outils nécessaires pour répondre au besoin.</p>
-          <p class="hero__meta">Île-de-France · Alternance chez DevPhantom · Frontend &amp; Backend</p>
+        <div class="hero__seq">
+          <p class="hero__kicker">Développeur Web Full Stack</p>
+          <h1 class="hero__name" id="hero-name"><span class="hero__w"><span>Arphan</span></span> <span class="hero__w"><span>Drame</span></span></h1>
+          <p class="hero__line">Je pars d'un besoin métier, je le comprends, et je le transforme en solution concrète — du frontend au backend.</p>
+          <p class="hero__meta"><span class="pulse" aria-hidden="true"></span><span class="hero__meta-i">Île-de-France</span><span class="hero__meta-i">Recherche CDI</span><span class="hero__meta-i">dès sept. 2026</span></p>
           <div class="hero__cta">
-            <a class="btn btn--primary" href="#projets">Voir mes projets<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--primary" href="#projets">Explorer mes projets<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
             <a class="btn btn--ghost" href="assets/CV.pdf" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-download"/></svg>Télécharger le CV</a>
             <button type="button" class="btn btn--ghost" data-contact-cta data-contact-subject="Prise de contact — Portfolio"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg>Me contacter</button>
           </div>
           <div class="hero__social"><a class="icon-link" href="https://github.com/drams18" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-github"/></svg><span>GitHub</span></a><a class="icon-link" href="https://www.linkedin.com/in/arphan-drame/" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-linkedin"/></svg><span>LinkedIn</span></a></div>
         </div>
-      </div>
-      <div class="wrap">
-        <div class="stack-strip">
-          <span class="stack-strip__k">Stack principale</span>
-          <ul><li>Symfony</li><li>PHP</li><li>MySQL</li><li>React</li><li>React Native</li><li>TypeScript</li><li>Vite</li><li>Tailwind CSS</li></ul>
-        </div>
+        <nav class="hero__doors" aria-label="Explorer le portfolio">
+          <p class="hero__doors-k">À explorer</p>
+          <ol><li><a href="#profil"><span class="door__n">01</span><span class="door__l">Profil</span><span class="door__h">Qui je suis</span></a></li><li><a href="#projets"><span class="door__n">02</span><span class="door__l">Projets</span><span class="door__h">13 réalisations</span></a></li><li><a href="#parcours"><span class="door__n">03</span><span class="door__l">Parcours</span><span class="door__h">2020 → 2026</span></a></li><li><a href="#competences"><span class="door__n">04</span><span class="door__l">Compétences</span><span class="door__h">41 technologies</span></a></li></ol>
+        </nav>
       </div>
     </section>
 
-    <section class="sec" id="projets" data-route="projets" aria-labelledby="projets-title">
+    <section class="sec story" id="profil" data-route="profil" aria-labelledby="profil-title">
       <div class="wrap">
       <header class="sec-head">
-        <h2 class="sec-title" id="projets-title">Projets</h2>
-        <p class="sec-lead">13 projets : 6 professionnels (DevPhantom, en équipe), 5 personnels, 2 scolaires. Pour chacun, mon rôle exact.</p>
+        <p class="sec-kicker"><span>01</span>Profil</p>
+        <h2 class="sec-title" id="profil-title">Qui je suis</h2>
+        
       </header>
-        <div class="filters" role="group" aria-label="Filtrer les projets par catégorie">
-          <button type="button" class="filter" data-filter="all" aria-pressed="true">Tous <span>13</span></button>
-          <button type="button" class="filter" data-filter="Professionnel" aria-pressed="false">Professionnel <span>6</span></button>
-          <button type="button" class="filter" data-filter="Personnel" aria-pressed="false">Personnel <span>5</span></button>
-          <button type="button" class="filter" data-filter="Scolaire" aria-pressed="false">Scolaire <span>2</span></button>
+        <div class="story__grid">
+          <nav class="story__rail" aria-label="Chapitres du profil">
+            <ol><li><a href="#profil-identite"><span>01</span>Identité</a></li><li><a href="#profil-approche"><span>02</span>Approche</a></li><li><a href="#profil-expertise"><span>03</span>Expertise</a></li><li><a href="#profil-experience"><span>04</span>Expérience</a></li></ol>
+          </nav>
+          <div class="story__chapters">
+            <article class="chapter" id="profil-identite" aria-labelledby="profil-identite-t">
+              <p class="chapter__k" id="profil-identite-t"><span>01</span>Identité</p>
+              <p class="chapter__lead">Arphan Drame. Développeur Web Full Stack en Île-de-France.</p>
+              <div class="chapter__more">
+              <dl class="facts">
+                <div><dt>Je recherche</dt><dd>En recherche de CDI (dès sept. 2026)</dd></div>
+                <div><dt>Aujourd'hui</dt><dd>Alternance chez DevPhantom</dd></div>
+                <div><dt>Langues</dt><dd><ul class="inline-list"><li><strong>Français</strong> Natif</li><li><strong>Anglais</strong> B2</li><li><strong>Espagnol</strong> A2</li><li><strong>Arabe</strong> A2</li></ul></dd></div>
+              </dl>
+              </div>
+            </article>
+            <article class="chapter" id="profil-approche" aria-labelledby="profil-approche-t">
+              <p class="chapter__k" id="profil-approche-t"><span>02</span>Approche</p>
+              <p class="chapter__lead">Je peux m'adapter à un environnement technique existant, comprendre rapidement un projet et apprendre les outils nécessaires pour répondre au besoin.</p>
+              <div class="chapter__more">
+              <p class="chapter__text">Je pars d'un besoin métier, je le comprends, et je le transforme en solution concrète — du frontend au backend. Je m'intègre vite à une base de code existante et j'apprends les outils nécessaires au projet.</p>
+              <ul class="inline-list"><li>Adaptabilité</li><li>Apprentissage rapide</li><li>Autonomie</li><li>Résolution de problèmes</li><li>Esprit d'analyse</li><li>Travail d'équipe</li><li>Comprendre un besoin métier</li><li>Frontend &amp; Backend</li></ul>
+              </div>
+            </article>
+            <article class="chapter" id="profil-expertise" aria-labelledby="profil-expertise-t">
+              <p class="chapter__k" id="profil-expertise-t"><span>03</span>Expertise</p>
+              <p class="chapter__lead">Du frontend au backend : 10 projets web et 3 applications mobiles.</p>
+              <div class="chapter__more">
+              <p class="chapter__text">Les technologies les plus présentes dans mes projets :</p>
+              <ul class="top-stack"><li><a href="#competences/symfony" data-skill-link="symfony"><strong>Symfony</strong><span>6 projets</span></a></li><li><a href="#competences/php" data-skill-link="php"><strong>PHP</strong><span>5 projets</span></a></li><li><a href="#competences/mysql" data-skill-link="mysql"><strong>MySQL</strong><span>5 projets</span></a></li><li><a href="#competences/react" data-skill-link="react"><strong>React</strong><span>3 projets</span></a></li><li><a href="#competences/react-native" data-skill-link="react-native"><strong>React Native</strong><span>3 projets</span></a></li><li><a href="#competences/typescript" data-skill-link="typescript"><strong>TypeScript</strong><span>3 projets</span></a></li></ul>
+              </div>
+            </article>
+            <article class="chapter" id="profil-experience" aria-labelledby="profil-experience-t">
+              <p class="chapter__k" id="profil-experience-t"><span>04</span>Expérience</p>
+              <p class="chapter__lead">Développeur Web Full Stack — Alternance chez DevPhantom, 01/2024 — 10/2026.</p>
+              <div class="chapter__more">
+              <p class="chapter__text">Une caractéristique importante de mon profil ici : m'adapter rapidement à un nouveau projet et apprendre les technologies nécessaires au besoin.</p>
+              <ul class="figures">
+                <li><strong>6</strong><span>projets professionnels, en équipe</span></li>
+                <li><strong>DevPhantom</strong><span>en parallèle de l'ETNA · équipe d'environ 4 personnes</span></li>
+                <li><strong>2023 — 2026</strong><span>ETNA — Bachelor puis Master</span></li>
+              </ul>
+              <a class="text-link" href="#parcours/devphantom">Voir le parcours<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+              </div>
+            </article>
+          </div>
         </div>
-        <h3 class="group-title" data-group="feat">À ne pas rater</h3>
-        <div class="feat-grid">
-          <article class="card proj proj--feat" id="projets/allsab-ms" data-route="projets/allsab-ms"
-                   data-cat="Professionnel" data-pick aria-labelledby="p-allsab-ms">
-            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">ALLSAB-MS</span></div>
-            <div class="proj__body">
-              <p class="proj__meta"><span class="chip-cat">Professionnel</span><span>Intranet</span></p>
-              <h3 class="proj__title" id="p-allsab-ms">Allsab-MS</h3>
-              <p class="proj__desc" data-clamp>Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.</p>
-              <ul class="tags" aria-label="Technologies"><li>PHP</li><li>Symfony</li><li>MySQL</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet DevPhantom, en équipe — l'un des premiers projets que j'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.</p>
-              </details>
-              <div class="proj__foot"><a class="avail avail--on avail--link" href="https://allsab-ms.com/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
-            </div>
-          </article>
-          <article class="card proj proj--feat" id="projets/badn" data-route="projets/badn"
-                   data-cat="Professionnel" data-pick aria-labelledby="p-badn">
-            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">BADN</span></div>
-            <div class="proj__body">
-              <p class="proj__meta"><span class="chip-cat">Professionnel</span><span>Application Mobile</span></p>
-              <h3 class="proj__title" id="p-badn">BADN</h3>
-              <p class="proj__desc" data-clamp>Application pour organiser des sorties entre amis : définition d'un budget, choix d'un lieu et d'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d'autres.</p>
-              <ul class="tags" aria-label="Technologies"><li>React Native</li><li>Node.js</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet interne DevPhantom, en équipe. J'étais principalement impliqué sur le développement backend.</p>
-              </details>
-              <div class="proj__foot"><span class="avail avail--off"><span class="avail__dot" aria-hidden="true"></span>Indisponible</span></div>
-            </div>
-          </article>
-          <article class="card proj proj--feat" id="projets/wild-kedougou" data-route="projets/wild-kedougou"
-                   data-cat="Personnel" data-pick aria-labelledby="p-wild-kedougou">
-            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">KÉDOUGOU</span></div>
-            <div class="proj__body">
-              <p class="proj__meta"><span class="chip-cat">Personnel</span><span>Plateforme de réservation</span></p>
-              <h3 class="proj__title" id="p-wild-kedougou">Wild Kédougou Experience</h3>
-              <p class="proj__desc" data-clamp>Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.</p>
-              <ul class="tags" aria-label="Technologies"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind CSS</li><li class="tags__more" title="Framer Motion, Supabase, Google Calendar API, Brevo, Cloudflare Workers, PWA, SEO">+7</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet personnel — conception et développement complets (frontend, backend serverless, intégrations).</p>
-              </details>
-              <div class="proj__foot"><a class="avail avail--on avail--link" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
-            </div>
-          </article>
-          <article class="card proj proj--feat" id="projets/islaah" data-route="projets/islaah"
-                   data-cat="Personnel" data-pick aria-labelledby="p-islaah">
-            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">ISLAAH</span></div>
-            <div class="proj__body">
-              <p class="proj__meta"><span class="chip-cat">Personnel</span><span>Application Mobile</span></p>
-              <h3 class="proj__title" id="p-islaah">ISLAAH</h3>
-              <p class="proj__desc" data-clamp>Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l'App Store.</p>
-              <ul class="tags" aria-label="Technologies"><li>React Native</li><li>Symfony</li><li>MySQL</li><li>Cloudflare</li><li class="tags__more" title="Railway, Expo">+2</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet personnel — conception et développement complet : app mobile, API et mise en production.</p>
-              </details>
-              <div class="proj__foot"><a class="avail avail--on avail--link" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Télécharger<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
-            </div>
-          </article>
-          <article class="card proj proj--feat" id="projets/skywalk" data-route="projets/skywalk"
-                   data-cat="Scolaire" data-pick aria-labelledby="p-skywalk">
-            <div class="proj__cover" aria-hidden="true"><span class="proj__cover-name">SKYWALK</span></div>
-            <div class="proj__body">
-              <p class="proj__meta"><span class="chip-cat">Scolaire</span><span>Plateforme Web</span></p>
-              <h3 class="proj__title" id="p-skywalk">SkyWalk</h3>
-              <p class="proj__desc" data-clamp>Plateforme web destinée à accompagner les personnes dans leurs projets d'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.</p>
-              <ul class="tags" aria-label="Technologies"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind</li><li class="tags__more" title="React Query, NestJS, PostgreSQL, TypeORM, JWT, Docker, Nginx, GitLab CI">+8</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet réalisé en équipe de 7 (ETNA — Grand Projet d'Étude). J'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l'architecture technique et à la documentation / au diagramme d'architecture.</p>
-              </details>
-              <div class="proj__foot"><a class="avail avail--on avail--link" href="https://skywalk-chi.vercel.app/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
-            </div>
-          </article>
-        </div>
-        <h3 class="group-title" data-group="rows">Les autres projets</h3>
-        <ul class="proj-list">
-          <li>
-            <details class="card proj proj--row" id="projets/infinitia" data-route="projets/infinitia"
-                     data-cat="Professionnel">
-              <summary>
-                <span class="row__main"><span class="proj__title">Infinitia</span><span class="row__type">Plateforme Web</span></span>
-                <span class="chip-cat">Professionnel</span>
-                <span class="row__avail"><span class="avail avail--off"><span class="avail__dot" aria-hidden="true"></span>Indisponible</span></span>
-              </summary>
-              <div class="row__body">
-                <p class="proj__desc">Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n'a finalement pas été terminée, le client ayant cessé de répondre.</p>
-                <ul class="tags" aria-label="Technologies"><li>Symfony</li><li>Node.js</li><li>NestJS</li><li>MySQL</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet DevPhantom, en équipe. J'ai participé à la création à partir de zéro après un échange avec le client : conception de la base de données, développement du backend, préparation de l'architecture du projet.</p>
-              </details>
-              </div>
-            </details>
-          </li>
-          <li>
-            <details class="card proj proj--row" id="projets/hexagon" data-route="projets/hexagon"
-                     data-cat="Professionnel">
-              <summary>
-                <span class="row__main"><span class="proj__title">Hexagon</span><span class="row__type">Plateforme Web</span></span>
-                <span class="chip-cat">Professionnel</span>
-                <span class="row__avail"><span class="avail avail--off"><span class="avail__dot" aria-hidden="true"></span>Indisponible</span></span>
-              </summary>
-              <div class="row__body">
-                <p class="proj__desc">Plateforme destinée à faciliter le travail opérationnel et la communication interne.</p>
-                <ul class="tags" aria-label="Technologies"><li>PHP</li><li>Symfony</li><li>JavaScript</li><li>MySQL</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet DevPhantom, en équipe. Développement de plusieurs CRUD, de fonctionnalités liées à la communication interne, et participation à l'évolution de la plateforme.</p>
-              </details>
-              </div>
-            </details>
-          </li>
-          <li>
-            <details class="card proj proj--row" id="projets/gexp" data-route="projets/gexp"
-                     data-cat="Professionnel">
-              <summary>
-                <span class="row__main"><span class="proj__title">GEXP</span><span class="row__type">Plateforme Web</span></span>
-                <span class="chip-cat">Professionnel</span>
-                <span class="row__avail"><span class="avail avail--off"><span class="avail__dot" aria-hidden="true"></span>Indisponible</span></span>
-              </summary>
-              <div class="row__body">
-                <p class="proj__desc">Plateforme destinée à faciliter la génération de rapports et la communication interne.</p>
-                <ul class="tags" aria-label="Technologies"><li>PHP</li><li>Symfony</li><li>MySQL</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet DevPhantom, en équipe. Développement de CRUD, génération de rapports, exports PDF, Excel et CSV.</p>
-              </details>
-              </div>
-            </details>
-          </li>
-          <li>
-            <details class="card proj proj--row" id="projets/ilamiria" data-route="projets/ilamiria"
-                     data-cat="Professionnel">
-              <summary>
-                <span class="row__main"><span class="proj__title">Ilamiria</span><span class="row__type">Application Mobile</span></span>
-                <span class="chip-cat">Professionnel</span>
-                <span class="row__avail"><a class="avail avail--on avail--link" href="https://apps.apple.com/fr/app/ilamiria/id6749936753" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>App Store<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></span>
-              </summary>
-              <div class="row__body">
-                <p class="proj__desc">Application mobile développée chez DevPhantom et publiée sur l'App Store.</p>
-                <ul class="tags" aria-label="Technologies"><li>React Native</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet interne DevPhantom, réalisé en équipe.</p>
-              </details>
-              </div>
-            </details>
-          </li>
-          <li>
-            <details class="card proj proj--row" id="projets/pool-party" data-route="projets/pool-party"
-                     data-cat="Personnel">
-              <summary>
-                <span class="row__main"><span class="proj__title">Pool Party Experience</span><span class="row__type">Site vitrine WordPress</span></span>
-                <span class="chip-cat">Personnel</span>
-                <span class="row__avail"><a class="avail avail--wip avail--link" href="https://poolparty-experience.fr/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En cours<span class="avail__sep" aria-hidden="true">·</span>Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></span>
-              </summary>
-              <div class="row__body">
-                <p class="proj__desc">Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.</p>
-                <ul class="tags" aria-label="Technologies"><li>WordPress</li><li>PHP</li><li>CSS</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet en cours, réalisé pour un ami — création et intégration d'un site vitrine WordPress.</p>
-              </details>
-              </div>
-            </details>
-          </li>
-          <li>
-            <details class="card proj proj--row" id="projets/prospectly" data-route="projets/prospectly"
-                     data-cat="Personnel">
-              <summary>
-                <span class="row__main"><span class="proj__title">Plateforme de recherche de prospects</span><span class="row__type">Projet personnel</span></span>
-                <span class="chip-cat">Personnel</span>
-                <span class="row__avail"><a class="avail avail--on avail--link" href="https://prospectly.hitmind-pro.workers.dev/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></span>
-              </summary>
-              <div class="row__body">
-                <p class="proj__desc">Plateforme permettant de rechercher une enseigne qui a besoin d'un site web ou d'une mise à jour.</p>
-                <ul class="tags" aria-label="Technologies"><li>Node.js</li><li>Railway</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>NoSQL</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet personnel — idée, conception et développement réalisés seul.</p>
-              </details>
-              </div>
-            </details>
-          </li>
-          <li>
-            <details class="card proj proj--row" id="projets/oneday" data-route="projets/oneday"
-                     data-cat="Personnel">
-              <summary>
-                <span class="row__main"><span class="proj__title">OneDay</span><span class="row__type">PWA de planification</span></span>
-                <span class="chip-cat">Personnel</span>
-                <span class="row__avail"><a class="avail avail--on avail--link" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener"><span class="avail__dot" aria-hidden="true"></span>En ligne<span class="avail__sep" aria-hidden="true">·</span>Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></span>
-              </summary>
-              <div class="row__body">
-                <p class="proj__desc">Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d'avancement, modèles de journée réutilisables (« programmes ») applicables à n'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.</p>
-                <ul class="tags" aria-label="Technologies"><li>React</li><li>TypeScript</li><li>Vite</li><li>Tailwind CSS</li><li>React Router</li><li>Supabase</li><li>PostgreSQL</li><li>PWA</li><li>Web Push</li><li>Cloudflare Pages</li><li>Cloudflare Workers</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet personnel — conception et développement complets (frontend, backend serverless, notifications push). PWA que j'ai construite pour organiser mes journées, mieux travailler et m'installer des habitudes.</p>
-              </details>
-              </div>
-            </details>
-          </li>
-          <li>
-            <details class="card proj proj--row" id="projets/crowdin" data-route="projets/crowdin"
-                     data-cat="Scolaire">
-              <summary>
-                <span class="row__main"><span class="proj__title">Crowdin (clone)</span><span class="row__type">Plateforme de localisation</span></span>
-                <span class="chip-cat">Scolaire</span>
-                <span class="row__avail"><span class="avail avail--off"><span class="avail__dot" aria-hidden="true"></span>Indisponible</span></span>
-              </summary>
-              <div class="row__body">
-                <p class="proj__desc">Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d'accès par rôles.</p>
-                <ul class="tags" aria-label="Technologies"><li>Symfony 7</li><li>PHP 8</li><li>Doctrine ORM</li><li>PostgreSQL</li><li>Twig</li><li>Docker</li><li>Bootstrap</li></ul>
-              <details class="role-toggle" name="project-role">
-                <summary>Mon rôle<svg class="ico role-toggle__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-                <p class="role-toggle__text">Projet scolaire ETNA réalisé en binôme (déc. 2024 – janv. 2025) ; j'ai porté la majeure partie du développement : modélisation Doctrine et migrations, CRUD projets / langues / sources / traductions, import et export CSV, verrouillage des chaînes sources, inscription avec vérification d'e-mail, contrôle d'accès par voter.</p>
-              </details>
-              </div>
-            </details>
-          </li>
-        </ul>
       </div>
     </section>
 
-    <section class="sec" id="parcours" data-route="parcours/devphantom" aria-labelledby="parcours-title">
+    <section class="sec pj" id="projets" data-route="projets" aria-labelledby="projets-title">
       <div class="wrap">
       <header class="sec-head">
+        <p class="sec-kicker"><span>02</span>Projets</p>
+        <h2 class="sec-title" id="projets-title">Projets</h2>
+        <p class="sec-lead">13 projets : 6 professionnels (DevPhantom, en équipe), 5 personnels, 2 scolaires. <span class="js-only">Explorez l'espace, ou passez en liste.</span></p>
+      </header>
+        <div class="pj-bar js-only" role="toolbar" aria-label="Affichage des projets">
+          <div class="pj-bar__filters" role="group" aria-label="Filtrer par catégorie">
+            <button type="button" class="seg" data-filter="all" aria-pressed="true">Tous <span>13</span></button>
+            <button type="button" class="seg" data-filter="Professionnel" aria-pressed="false"><i class="cat-dot" data-cat="Professionnel" aria-hidden="true"></i>Professionnel <span>6</span></button>
+            <button type="button" class="seg" data-filter="Personnel" aria-pressed="false"><i class="cat-dot" data-cat="Personnel" aria-hidden="true"></i>Personnel <span>5</span></button>
+            <button type="button" class="seg" data-filter="Scolaire" aria-pressed="false"><i class="cat-dot" data-cat="Scolaire" aria-hidden="true"></i>Scolaire <span>2</span></button>
+          </div>
+          <div class="pj-bar__view" role="group" aria-label="Vue">
+            <button type="button" class="seg" data-view="space" aria-pressed="true"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-orbit"/></svg>Espace</button>
+            <button type="button" class="seg" data-view="list" aria-pressed="false"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-list"/></svg>Liste</button>
+          </div>
+        </div>
+      </div>
+      <div class="pj-space js-only" aria-label="Espace des projets"></div>
+      <div class="wrap">
+        <ol class="pj-index" aria-label="Tous les projets">
+          <li class="pj-item" id="projets/infinitia" data-route="projets/infinitia" data-slug="infinitia"
+              data-cat="Professionnel" data-tier="m" data-status="off"
+              data-name="Infinitia" data-skills="symfony node-js nestjs mysql">
+            <article aria-labelledby="p-infinitia">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-infinitia">Infinitia</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Professionnel</span><span>Plateforme Web</span><span>DevPhantom · équipe</span></p>
+                <p class="pj-item__status"><span class="status status--off"><span class="status__dot" aria-hidden="true"></span>Projet privé</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Infinitia</span></div>
+                <p class="pj-item__desc">Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n'a finalement pas été terminée, le client ayant cessé de répondre.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/symfony" data-skill-link="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="#competences/node-js" data-skill-link="node-js" data-fam="back">Node.js</a></li><li><a class="tag-link" href="#competences/nestjs" data-skill-link="nestjs" data-fam="back">NestJS</a></li><li><a class="tag-link" href="#competences/mysql" data-skill-link="mysql" data-fam="data">MySQL</a></li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet DevPhantom, en équipe. J'ai participé à la création à partir de zéro après un échange avec le client : conception de la base de données, développement du backend, préparation de l'architecture du projet.</p></div>
+                
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/allsab-ms" data-route="projets/allsab-ms" data-slug="allsab-ms"
+              data-cat="Professionnel" data-tier="l" data-status="on"
+              data-name="Allsab-MS" data-skills="php symfony mysql" data-pick>
+            <article aria-labelledby="p-allsab-ms">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-allsab-ms">Allsab-MS</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Professionnel</span><span>Intranet</span><span>DevPhantom · équipe</span></p>
+                <p class="pj-item__status"><span class="status status--on"><span class="status__dot" aria-hidden="true"></span>Disponible</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Allsab-MS</span></div>
+                <p class="pj-item__desc">Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/php" data-skill-link="php" data-fam="back">PHP</a></li><li><a class="tag-link" href="#competences/symfony" data-skill-link="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="#competences/mysql" data-skill-link="mysql" data-fam="data">MySQL</a></li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet DevPhantom, en équipe — l'un des premiers projets que j'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.</p></div>
+                <div class="pj-item__links"><a class="btn btn--sm" href="https://allsab-ms.com/" target="_blank" rel="noopener">Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/hexagon" data-route="projets/hexagon" data-slug="hexagon"
+              data-cat="Professionnel" data-tier="m" data-status="off"
+              data-name="Hexagon" data-skills="php symfony javascript mysql">
+            <article aria-labelledby="p-hexagon">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-hexagon">Hexagon</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Professionnel</span><span>Plateforme Web</span><span>DevPhantom · équipe</span></p>
+                <p class="pj-item__status"><span class="status status--off"><span class="status__dot" aria-hidden="true"></span>Projet privé</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Hexagon</span></div>
+                <p class="pj-item__desc">Plateforme destinée à faciliter le travail opérationnel et la communication interne.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/php" data-skill-link="php" data-fam="back">PHP</a></li><li><a class="tag-link" href="#competences/symfony" data-skill-link="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="#competences/javascript" data-skill-link="javascript" data-fam="front">JavaScript</a></li><li><a class="tag-link" href="#competences/mysql" data-skill-link="mysql" data-fam="data">MySQL</a></li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet DevPhantom, en équipe. Développement de plusieurs CRUD, de fonctionnalités liées à la communication interne, et participation à l'évolution de la plateforme.</p></div>
+                
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/gexp" data-route="projets/gexp" data-slug="gexp"
+              data-cat="Professionnel" data-tier="m" data-status="off"
+              data-name="GEXP" data-skills="php symfony mysql">
+            <article aria-labelledby="p-gexp">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-gexp">GEXP</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Professionnel</span><span>Plateforme Web</span><span>DevPhantom · équipe</span></p>
+                <p class="pj-item__status"><span class="status status--off"><span class="status__dot" aria-hidden="true"></span>Projet privé</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>GEXP</span></div>
+                <p class="pj-item__desc">Plateforme destinée à faciliter la génération de rapports et la communication interne.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/php" data-skill-link="php" data-fam="back">PHP</a></li><li><a class="tag-link" href="#competences/symfony" data-skill-link="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="#competences/mysql" data-skill-link="mysql" data-fam="data">MySQL</a></li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet DevPhantom, en équipe. Développement de CRUD, génération de rapports, exports PDF, Excel et CSV.</p></div>
+                
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/ilamiria" data-route="projets/ilamiria" data-slug="ilamiria"
+              data-cat="Professionnel" data-tier="m" data-status="on"
+              data-name="Ilamiria" data-skills="react-native">
+            <article aria-labelledby="p-ilamiria">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-ilamiria">Ilamiria</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Professionnel</span><span>Application Mobile</span><span>DevPhantom · équipe</span></p>
+                <p class="pj-item__status"><span class="status status--on"><span class="status__dot" aria-hidden="true"></span>Disponible</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Ilamiria</span></div>
+                <p class="pj-item__desc">Application mobile développée chez DevPhantom et publiée sur l'App Store.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/react-native" data-skill-link="react-native" data-fam="front">React Native</a></li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet interne DevPhantom, réalisé en équipe.</p></div>
+                <div class="pj-item__links"><a class="btn btn--sm" href="https://apps.apple.com/fr/app/ilamiria/id6749936753" target="_blank" rel="noopener">App Store<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/badn" data-route="projets/badn" data-slug="badn"
+              data-cat="Professionnel" data-tier="l" data-status="off"
+              data-name="BADN" data-skills="react-native node-js" data-pick>
+            <article aria-labelledby="p-badn">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-badn">BADN</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Professionnel</span><span>Application Mobile</span><span>DevPhantom · équipe</span></p>
+                <p class="pj-item__status"><span class="status status--off"><span class="status__dot" aria-hidden="true"></span>Projet privé</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>BADN</span></div>
+                <p class="pj-item__desc">Application pour organiser des sorties entre amis : définition d'un budget, choix d'un lieu et d'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d'autres.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/react-native" data-skill-link="react-native" data-fam="front">React Native</a></li><li><a class="tag-link" href="#competences/node-js" data-skill-link="node-js" data-fam="back">Node.js</a></li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet interne DevPhantom, en équipe. J'étais principalement impliqué sur le développement backend.</p></div>
+                
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/wild-kedougou" data-route="projets/wild-kedougou" data-slug="wild-kedougou"
+              data-cat="Personnel" data-tier="l" data-status="on"
+              data-name="Wild Kédougou Experience" data-skills="react typescript vite tailwind-css supabase cloudflare" data-pick>
+            <article aria-labelledby="p-wild-kedougou">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-wild-kedougou">Wild Kédougou Experience</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Personnel</span><span>Plateforme de réservation</span><span>Projet personnel</span></p>
+                <p class="pj-item__status"><span class="status status--on"><span class="status__dot" aria-hidden="true"></span>Disponible</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Wild Kédougou Experience</span></div>
+                <p class="pj-item__desc">Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/react" data-skill-link="react" data-fam="front">React</a></li><li><a class="tag-link" href="#competences/typescript" data-skill-link="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="#competences/vite" data-skill-link="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="#competences/tailwind-css" data-skill-link="tailwind-css" data-fam="front">Tailwind CSS</a></li><li>Framer Motion</li><li><a class="tag-link" href="#competences/supabase" data-skill-link="supabase" data-fam="data">Supabase</a></li><li>Google Calendar API</li><li>Brevo</li><li><a class="tag-link" href="#competences/cloudflare" data-skill-link="cloudflare" data-fam="ops">Cloudflare Workers</a></li><li>PWA</li><li>SEO</li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet personnel — conception et développement complets (frontend, backend serverless, intégrations).</p></div>
+                <div class="pj-item__links"><a class="btn btn--sm" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/pool-party" data-route="projets/pool-party" data-slug="pool-party"
+              data-cat="Personnel" data-tier="s" data-status="wip"
+              data-name="Pool Party Experience" data-skills="php">
+            <article aria-labelledby="p-pool-party">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-pool-party">Pool Party Experience</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Personnel</span><span>Site vitrine WordPress</span><span>Projet personnel</span></p>
+                <p class="pj-item__status"><span class="status status--wip"><span class="status__dot" aria-hidden="true"></span>En développement</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Pool Party Experience</span></div>
+                <p class="pj-item__desc">Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.</p>
+                <ul class="tags" aria-label="Technologies"><li>WordPress</li><li><a class="tag-link" href="#competences/php" data-skill-link="php" data-fam="back">PHP</a></li><li>CSS</li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet en cours, réalisé pour un ami — création et intégration d'un site vitrine WordPress.</p></div>
+                <div class="pj-item__links"><a class="btn btn--sm" href="https://poolparty-experience.fr/" target="_blank" rel="noopener">Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/islaah" data-route="projets/islaah" data-slug="islaah"
+              data-cat="Personnel" data-tier="l" data-status="on"
+              data-name="ISLAAH" data-skills="react-native symfony mysql cloudflare" data-pick>
+            <article aria-labelledby="p-islaah">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-islaah">ISLAAH</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Personnel</span><span>Application Mobile</span><span>Projet personnel</span></p>
+                <p class="pj-item__status"><span class="status status--on"><span class="status__dot" aria-hidden="true"></span>Disponible</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>ISLAAH</span></div>
+                <p class="pj-item__desc">Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l'App Store.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/react-native" data-skill-link="react-native" data-fam="front">React Native</a></li><li><a class="tag-link" href="#competences/symfony" data-skill-link="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="#competences/mysql" data-skill-link="mysql" data-fam="data">MySQL</a></li><li><a class="tag-link" href="#competences/cloudflare" data-skill-link="cloudflare" data-fam="ops">Cloudflare</a></li><li>Railway</li><li>Expo</li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet personnel — conception et développement complet : app mobile, API et mise en production.</p></div>
+                <div class="pj-item__links"><a class="btn btn--sm" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener">Télécharger<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/prospectly" data-route="projets/prospectly" data-slug="prospectly"
+              data-cat="Personnel" data-tier="s" data-status="on"
+              data-name="Prospectly" data-skills="node-js javascript">
+            <article aria-labelledby="p-prospectly">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-prospectly">Plateforme de recherche de prospects</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Personnel</span><span>Projet personnel</span><span>Projet personnel</span></p>
+                <p class="pj-item__status"><span class="status status--on"><span class="status__dot" aria-hidden="true"></span>Disponible</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Prospectly</span></div>
+                <p class="pj-item__desc">Plateforme permettant de rechercher une enseigne qui a besoin d'un site web ou d'une mise à jour.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/node-js" data-skill-link="node-js" data-fam="back">Node.js</a></li><li>Railway</li><li>HTML</li><li>CSS</li><li><a class="tag-link" href="#competences/javascript" data-skill-link="javascript" data-fam="front">JavaScript</a></li><li>NoSQL</li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet personnel — idée, conception et développement réalisés seul.</p></div>
+                <div class="pj-item__links"><a class="btn btn--sm" href="https://prospectly.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/oneday" data-route="projets/oneday" data-slug="oneday"
+              data-cat="Personnel" data-tier="s" data-status="on"
+              data-name="OneDay" data-skills="react typescript vite tailwind-css supabase postgresql cloudflare">
+            <article aria-labelledby="p-oneday">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-oneday">OneDay</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Personnel</span><span>PWA de planification</span><span>Projet personnel</span></p>
+                <p class="pj-item__status"><span class="status status--on"><span class="status__dot" aria-hidden="true"></span>Disponible</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>OneDay</span></div>
+                <p class="pj-item__desc">Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d'avancement, modèles de journée réutilisables (« programmes ») applicables à n'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/react" data-skill-link="react" data-fam="front">React</a></li><li><a class="tag-link" href="#competences/typescript" data-skill-link="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="#competences/vite" data-skill-link="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="#competences/tailwind-css" data-skill-link="tailwind-css" data-fam="front">Tailwind CSS</a></li><li>React Router</li><li><a class="tag-link" href="#competences/supabase" data-skill-link="supabase" data-fam="data">Supabase</a></li><li><a class="tag-link" href="#competences/postgresql" data-skill-link="postgresql" data-fam="data">PostgreSQL</a></li><li>PWA</li><li>Web Push</li><li><a class="tag-link" href="#competences/cloudflare" data-skill-link="cloudflare" data-fam="ops">Cloudflare Pages</a></li><li><a class="tag-link" href="#competences/cloudflare" data-skill-link="cloudflare" data-fam="ops">Cloudflare Workers</a></li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet personnel — conception et développement complets (frontend, backend serverless, notifications push). PWA que j'ai construite pour organiser mes journées, mieux travailler et m'installer des habitudes.</p></div>
+                <div class="pj-item__links"><a class="btn btn--sm" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener">Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/skywalk" data-route="projets/skywalk" data-slug="skywalk"
+              data-cat="Scolaire" data-tier="l" data-status="on"
+              data-name="SkyWalk" data-skills="react typescript vite tailwind-css nestjs postgresql typeorm docker nginx gitlab" data-pick>
+            <article aria-labelledby="p-skywalk">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-skywalk">SkyWalk</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Scolaire</span><span>Plateforme Web</span><span>Équipe de 7</span></p>
+                <p class="pj-item__status"><span class="status status--on"><span class="status__dot" aria-hidden="true"></span>Disponible</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>SkyWalk</span></div>
+                <p class="pj-item__desc">Plateforme web destinée à accompagner les personnes dans leurs projets d'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/react" data-skill-link="react" data-fam="front">React</a></li><li><a class="tag-link" href="#competences/typescript" data-skill-link="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="#competences/vite" data-skill-link="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="#competences/tailwind-css" data-skill-link="tailwind-css" data-fam="front">Tailwind</a></li><li>React Query</li><li><a class="tag-link" href="#competences/nestjs" data-skill-link="nestjs" data-fam="back">NestJS</a></li><li><a class="tag-link" href="#competences/postgresql" data-skill-link="postgresql" data-fam="data">PostgreSQL</a></li><li><a class="tag-link" href="#competences/typeorm" data-skill-link="typeorm" data-fam="data">TypeORM</a></li><li>JWT</li><li><a class="tag-link" href="#competences/docker" data-skill-link="docker" data-fam="ops">Docker</a></li><li><a class="tag-link" href="#competences/nginx" data-skill-link="nginx" data-fam="ops">Nginx</a></li><li><a class="tag-link" href="#competences/gitlab" data-skill-link="gitlab" data-fam="ops">GitLab CI</a></li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet réalisé en équipe de 7 (ETNA — Grand Projet d'Étude). J'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l'architecture technique et à la documentation / au diagramme d'architecture.</p></div>
+                <div class="pj-item__links"><a class="btn btn--sm" href="https://skywalk-chi.vercel.app/" target="_blank" rel="noopener">Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
+              </div>
+            </article>
+          </li>
+          <li class="pj-item" id="projets/crowdin" data-route="projets/crowdin" data-slug="crowdin"
+              data-cat="Scolaire" data-tier="s" data-status="off"
+              data-name="Crowdin (clone)" data-skills="symfony php postgresql docker">
+            <article aria-labelledby="p-crowdin">
+              <div class="pj-item__head">
+                <span class="pj-item__orb" aria-hidden="true"></span>
+                <h3 class="pj-item__title" id="p-crowdin">Crowdin (clone)</h3>
+                <p class="pj-item__meta"><span class="chip-cat">Scolaire</span><span>Plateforme de localisation</span><span>En binôme</span></p>
+                <p class="pj-item__status"><span class="status status--off"><span class="status__dot" aria-hidden="true"></span>Projet privé</span></p>
+              </div>
+              <div class="pj-item__body">
+                <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Crowdin (clone)</span></div>
+                <p class="pj-item__desc">Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d'accès par rôles.</p>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="#competences/symfony" data-skill-link="symfony" data-fam="back">Symfony 7</a></li><li><a class="tag-link" href="#competences/php" data-skill-link="php" data-fam="back">PHP 8</a></li><li>Doctrine ORM</li><li><a class="tag-link" href="#competences/postgresql" data-skill-link="postgresql" data-fam="data">PostgreSQL</a></li><li>Twig</li><li><a class="tag-link" href="#competences/docker" data-skill-link="docker" data-fam="ops">Docker</a></li><li>Bootstrap</li></ul>
+                <div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>Projet scolaire ETNA réalisé en binôme (déc. 2024 – janv. 2025) ; j'ai porté la majeure partie du développement : modélisation Doctrine et migrations, CRUD projets / langues / sources / traductions, import et export CSV, verrouillage des chaînes sources, inscription avec vérification d'e-mail, contrôle d'accès par voter.</p></div>
+                
+              </div>
+            </article>
+          </li>
+        </ol>
+        <p class="pj-legend js-only">Taille : <span>grande = à ne pas rater</span><span>moyenne = professionnel</span><span>petite = autre</span></p>
+      </div>
+    </section>
+
+    <section class="sec tl-sec" id="parcours" data-route="parcours/devphantom" aria-labelledby="parcours-title">
+      <div class="wrap">
+      <header class="sec-head">
+        <p class="sec-kicker"><span>03</span>Parcours</p>
         <h2 class="sec-title" id="parcours-title">Parcours</h2>
         <p class="sec-lead">Alternance chez DevPhantom (01/2024 — 10/2026), en parallèle de l'ETNA (2023 — 2026).</p>
       </header>
-        <div class="tracks">
-          <div class="track">
-            <h3 class="track__title"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-briefcase"/></svg>Expérience</h3>
-            <ol class="tl">
-            <li class="tl__item card" id="parcours/devphantom" data-route="parcours/devphantom">
-              <p class="tl__date">01/2024 — 10/2026</p>
-              <h4 class="tl__title">Développeur Web Full Stack — Alternance</h4>
-              <p class="tl__place">DevPhantom · en parallèle de l'ETNA · équipe d'environ 4 personnes</p>
-              <p class="tl__text">Après les rendez-vous clients : compréhension du besoin, récupération des idées et fonctionnalités, définition de la solution, développement ou reprise de projets, création de fonctionnalités et de SaaS. Travail avec Jira, méthodologie Agile, adaptation aux contraintes techniques et métier.</p>
-              <p class="tl__text">Une caractéristique importante de mon profil ici : m'adapter rapidement à un nouveau projet et apprendre les technologies nécessaires au besoin.</p>
+        <figure class="spans" data-from="2020" data-to="2027" aria-label="Vue d'ensemble : formation et expérience de 2020 à 2026">
+          <div class="spans__lane" data-kind="edu"><span class="spans__k">Formation</span><div class="spans__track"><a class="span span--point" href="#parcours/bac" style="--l:0.00%;" title="Baccalauréat STI2D · 2020"><span>BAC</span></a><a class="span span--fuzzy" href="#parcours/bts" style="--l:14.29%; --w:17.86%;" title="BTS Systèmes Numériques — option B Électronique et Communication · 2021 — début 2022"><span>BTS</span></a><a class="span span--fuzzy" href="#parcours/etna" style="--l:42.86%; --w:50.00%;" title="ETNA — Bachelor puis Master · 2023 — 2026"><span>ETNA</span></a></div></div><div class="spans__lane" data-kind="pro"><span class="spans__k">Expérience</span><div class="spans__track"><a class="span span--major" href="#parcours/devphantom" style="--l:57.14%; --w:40.48%;" title="Développeur Web Full Stack — Alternance · 01/2024 — 10/2026"><span>DevPhantom</span></a></div></div>
+          <div class="spans__ruler" aria-hidden="true"><span class="spans__k"></span><div class="spans__track"><span style="--l:0.00%">2020</span><span style="--l:14.29%">2021</span><span style="--l:28.57%">2022</span><span style="--l:42.86%">2023</span><span style="--l:57.14%">2024</span><span style="--l:71.43%">2025</span><span style="--l:85.71%">2026</span></div></div>
+          <div class="spans__now" aria-hidden="true"></div>
+        </figure>
+        <div class="tlx">
+          <div class="tlx__year" aria-hidden="true"><span class="tlx__year-v">2020</span></div>
+          <ol class="tlx__list">
+          <li class="ev ev--normal" id="parcours/bac" data-route="parcours/bac" data-year="2020" data-kind="edu">
+            <span class="ev__dot" aria-hidden="true"></span>
+            <div class="ev__card">
+              <p class="ev__date"><span>Formation</span>2020</p>
+              <h3 class="ev__title">Baccalauréat STI2D</h3>
+              <p class="ev__place">Sciences et Technologies de l'Industrie et du Développement Durable</p>
+              <p class="ev__text">Bac technologique à dominante sciences de l'ingénieur : premières bases en électronique, programmation et démarche de projet.</p>
               
+            </div>
+          </li>
+          <li class="ev ev--normal" id="parcours/bts" data-route="parcours/bts" data-year="2021" data-kind="edu">
+            <span class="ev__dot" aria-hidden="true"></span>
+            <div class="ev__card">
+              <p class="ev__date"><span>Formation</span>2021 — début 2022</p>
+              <h3 class="ev__title">BTS Systèmes Numériques — option B Électronique et Communication</h3>
               
+              <p class="ev__text">Formation orientée systèmes embarqués, électronique et communication numérique.</p>
+              <details class="ev__more"><summary>En savoir plus<svg class="ico ev__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary><div class="ev__more-body"><p class="ev__text">Projet de fin d'études réalisé en équipe : « Jardin connecté » — permettre à un jardinier de surveiller et contrôler à distance l'humidité de son sol depuis une interface sur téléphone.</p><p class="ev__role"><span>Mon rôle</span>Ma contribution : travail sur le capteur d'humidité, Arduino Uno, programmation en C / C++. Le câblage, le prototype et certains composants ont été réalisés avec l'équipe.</p></div></details>
+            </div>
+          </li>
+          <li class="ev ev--normal" id="parcours/etna" data-route="parcours/etna" data-year="2023" data-kind="edu">
+            <span class="ev__dot" aria-hidden="true"></span>
+            <div class="ev__card">
+              <p class="ev__date"><span>Formation</span>2023 — 2026</p>
+              <h3 class="ev__title">ETNA — Bachelor puis Master</h3>
               
-              <p class="tl__sub">Projets réalisés chez DevPhantom (en équipe)</p>
-              <ul class="tl__projects"><li><a href="#projets/infinitia"><strong>Infinitia</strong><span>Plateforme Web</span></a></li><li><a href="#projets/allsab-ms"><strong>Allsab-MS</strong><span>Intranet</span></a></li><li><a href="#projets/hexagon"><strong>Hexagon</strong><span>Plateforme Web</span></a></li><li><a href="#projets/gexp"><strong>GEXP</strong><span>Plateforme Web</span></a></li><li><a href="#projets/ilamiria"><strong>Ilamiria</strong><span>Application Mobile</span></a></li><li><a href="#projets/badn"><strong>BADN</strong><span>Application Mobile</span></a></li></ul>
-            </li>
-            <li class="tl__item card" id="parcours/autres" data-route="parcours/autres">
-              <p class="tl__date">Avant / pendant le parcours informatique</p>
-              <h4 class="tl__title">Autres expériences</h4>
-              
-              
-              <p class="tl__text">Un parcours varié, à l'aise dans la relation avec le public, avant de me consacrer au développement. Ces expériences restent secondaires par rapport au développement informatique.</p>
-              <ul class="tl__details"><li>City One — RATP : accueil et accompagnement des voyageurs dans le métro, vente de titres de transport, assistance aux usagers.</li><li>City One — missions d'accueil : accueil du public, standard téléphonique, orientation des visiteurs, dans différents environnements professionnels (dont La Poste Mobile).</li><li>Super U : expérience de vente pendant environ un mois.</li></ul>
-              
-              
-            </li>
-            </ol>
-          </div>
-          <div class="track">
-            <h3 class="track__title"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-school"/></svg>Formation</h3>
-            <ol class="tl">
-            <li class="tl__item card" id="parcours/etna" data-route="parcours/etna">
-              <p class="tl__date">2023 — 2026</p>
-              <h4 class="tl__title">ETNA — Bachelor puis Master</h4>
-              
-              
-              <p class="tl__text">Une formation qui m'a permis de travailler sur des projets techniques en équipe et de développer une approche orientée architecture, développement et résolution de problèmes.</p>
-              <ul class="tl__details"><li>Bachelor Concepteur Développeur d'Applications Web (2023 → 2024)</li><li>Master Architecte de Systèmes d'Information (2024 → 2026)</li></ul>
-              
-              
-            </li>
-            <li class="tl__item card" id="parcours/bts" data-route="parcours/bts">
-              <p class="tl__date">2021 — début 2022</p>
-              <h4 class="tl__title">BTS Systèmes Numériques — option B Électronique et Communication</h4>
-              
-              <p class="tl__text">Projet de fin d'études réalisé en équipe : « Jardin connecté » — permettre à un jardinier de surveiller et contrôler à distance l'humidité de son sol depuis une interface sur téléphone.</p>
-              <p class="tl__text">Formation orientée systèmes embarqués, électronique et communication numérique.</p>
-              
-              <p class="role"><span class="role__k">Mon rôle</span>Ma contribution : travail sur le capteur d'humidité, Arduino Uno, programmation en C / C++. Le câblage, le prototype et certains composants ont été réalisés avec l'équipe.</p>
-              
-            </li>
-            <li class="tl__item card" id="parcours/bac" data-route="parcours/bac">
-              <p class="tl__date">2020</p>
-              <h4 class="tl__title">Baccalauréat STI2D</h4>
-              <p class="tl__place">Sciences et Technologies de l'Industrie et du Développement Durable</p>
-              
-              <p class="tl__text">Bac technologique à dominante sciences de l'ingénieur : premières bases en électronique, programmation et démarche de projet.</p>
-              
-              
-              
-            </li>
-            </ol>
-          </div>
+              <p class="ev__text">Une formation qui m'a permis de travailler sur des projets techniques en équipe et de développer une approche orientée architecture, développement et résolution de problèmes.</p>
+              <details class="ev__more"><summary>En savoir plus<svg class="ico ev__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary><div class="ev__more-body"><ul class="ev__details"><li>Bachelor Concepteur Développeur d'Applications Web (2023 → 2024)</li><li>Master Architecte de Systèmes d'Information (2024 → 2026)</li></ul></div></details>
+            </div>
+          </li>
+          <li class="ev ev--major" id="parcours/devphantom" data-route="parcours/devphantom" data-year="2024" data-kind="pro">
+            <span class="ev__dot" aria-hidden="true"></span>
+            <div class="ev__card">
+              <p class="ev__date"><span>Expérience</span>01/2024 — 10/2026</p>
+              <h3 class="ev__title">Développeur Web Full Stack — Alternance</h3>
+              <p class="ev__place">DevPhantom · en parallèle de l'ETNA · équipe d'environ 4 personnes</p>
+              <p class="ev__text">Une caractéristique importante de mon profil ici : m'adapter rapidement à un nouveau projet et apprendre les technologies nécessaires au besoin.</p>
+                <p class="ev__sub">Projets DevPhantom (en équipe)</p>
+                <ul class="ev__projects"><li><a href="#projets/infinitia" data-project-link="infinitia"><strong>Infinitia</strong><span>Plateforme Web</span></a></li><li><a href="#projets/allsab-ms" data-project-link="allsab-ms"><strong>Allsab-MS</strong><span>Intranet</span></a></li><li><a href="#projets/hexagon" data-project-link="hexagon"><strong>Hexagon</strong><span>Plateforme Web</span></a></li><li><a href="#projets/gexp" data-project-link="gexp"><strong>GEXP</strong><span>Plateforme Web</span></a></li><li><a href="#projets/ilamiria" data-project-link="ilamiria"><strong>Ilamiria</strong><span>Application Mobile</span></a></li><li><a href="#projets/badn" data-project-link="badn"><strong>BADN</strong><span>Application Mobile</span></a></li></ul>
+              <details class="ev__more" open><summary>Le détail<svg class="ico ev__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary><div class="ev__more-body"><p class="ev__text">Après les rendez-vous clients : compréhension du besoin, récupération des idées et fonctionnalités, définition de la solution, développement ou reprise de projets, création de fonctionnalités et de SaaS. Travail avec Jira, méthodologie Agile, adaptation aux contraintes techniques et métier.</p></div></details>
+            </div>
+          </li>
+          <li class="ev ev--next" data-year="2026">
+            <span class="ev__dot" aria-hidden="true"></span>
+            <div class="ev__card">
+              <p class="ev__date"><span>Et ensuite</span>2026</p>
+              <h3 class="ev__title">En recherche de CDI (dès sept. 2026)</h3>
+              <p class="ev__text">Développeur Web Full Stack · Île-de-France</p>
+              <button type="button" class="text-link" data-contact-cta data-contact-subject="Proposition de CDI — Portfolio">Me contacter<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
+            </div>
+          </li>
+          </ol>
         </div>
+        <aside class="ev ev--aside" id="parcours/autres" data-route="parcours/autres" aria-labelledby="ev-autres">
+          <p class="ev__date"><span>Expérience</span>Avant / pendant le parcours informatique</p>
+          <h3 class="ev__title" id="ev-autres">Autres expériences</h3>
+          <p class="ev__text">Un parcours varié, à l'aise dans la relation avec le public, avant de me consacrer au développement. Ces expériences restent secondaires par rapport au développement informatique.</p>
+          <details class="ev__more"><summary>En savoir plus<svg class="ico ev__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary><ul class="ev__details"><li>City One — RATP : accueil et accompagnement des voyageurs dans le métro, vente de titres de transport, assistance aux usagers.</li><li>City One — missions d'accueil : accueil du public, standard téléphonique, orientation des visiteurs, dans différents environnements professionnels (dont La Poste Mobile).</li><li>Super U : expérience de vente pendant environ un mois.</li></ul></details>
+        </aside>
       </div>
     </section>
 
-    <section class="sec" id="competences" data-route="profil" aria-labelledby="competences-title">
+    <section class="sec sk-sec" id="competences" data-route="profil" aria-labelledby="competences-title">
       <div class="wrap">
       <header class="sec-head">
-        <h2 class="sec-title" id="competences-title">Compétences</h2>
-        
+        <p class="sec-kicker"><span>04</span>Compétences</p>
+        <h2 class="sec-title" id="competences-title">Écosystème technique</h2>
+        <p class="sec-lead">41 compétences, 7 familles. Plus une technologie revient dans mes projets, plus elle est grande.</p>
       </header>
-        <h3 class="group-title">Stack principale <small>utilisée dans plusieurs projets de ce portfolio</small></h3>
-        <ul class="stack-grid">
-            <li class="stack-card">
-              <span class="stack-card__name">Symfony</span>
-              <span class="stack-card__n">6 projets</span>
-              <span class="stack-card__p">Infinitia · Allsab-MS · Hexagon · GEXP · ISLAAH · Crowdin (clone)</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">PHP</span>
-              <span class="stack-card__n">5 projets</span>
-              <span class="stack-card__p">Allsab-MS · Hexagon · GEXP · Pool Party Experience · Crowdin (clone)</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">MySQL</span>
-              <span class="stack-card__n">5 projets</span>
-              <span class="stack-card__p">Infinitia · Allsab-MS · Hexagon · GEXP · ISLAAH</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">React</span>
-              <span class="stack-card__n">3 projets</span>
-              <span class="stack-card__p">Wild Kédougou Experience · OneDay · SkyWalk</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">React Native</span>
-              <span class="stack-card__n">3 projets</span>
-              <span class="stack-card__p">Ilamiria · BADN · ISLAAH</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">TypeScript</span>
-              <span class="stack-card__n">3 projets</span>
-              <span class="stack-card__p">Wild Kédougou Experience · OneDay · SkyWalk</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">Vite</span>
-              <span class="stack-card__n">3 projets</span>
-              <span class="stack-card__p">Wild Kédougou Experience · OneDay · SkyWalk</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">Tailwind CSS</span>
-              <span class="stack-card__n">3 projets</span>
-              <span class="stack-card__p">Wild Kédougou Experience · OneDay · SkyWalk</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">Node.js</span>
-              <span class="stack-card__n">3 projets</span>
-              <span class="stack-card__p">Infinitia · BADN · Plateforme de recherche de prospects</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">PostgreSQL</span>
-              <span class="stack-card__n">3 projets</span>
-              <span class="stack-card__p">OneDay · SkyWalk · Crowdin (clone)</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">Cloudflare</span>
-              <span class="stack-card__n">3 projets</span>
-              <span class="stack-card__p">Wild Kédougou Experience · ISLAAH · OneDay</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">JavaScript</span>
-              <span class="stack-card__n">2 projets</span>
-              <span class="stack-card__p">Hexagon · Plateforme de recherche de prospects</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">NestJS</span>
-              <span class="stack-card__n">2 projets</span>
-              <span class="stack-card__p">Infinitia · SkyWalk</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">Supabase</span>
-              <span class="stack-card__n">2 projets</span>
-              <span class="stack-card__p">Wild Kédougou Experience · OneDay</span>
-            </li>
-            <li class="stack-card">
-              <span class="stack-card__name">Docker</span>
-              <span class="stack-card__n">2 projets</span>
-              <span class="stack-card__p">SkyWalk · Crowdin (clone)</span>
-            </li>
-        </ul>
-        <h3 class="group-title">Toutes les compétences <small><span class="dot" aria-hidden="true"></span> = utilisée dans au moins un projet présenté</small></h3>
-        <div class="skill-grid">
-          <div class="skill-group">
-            <h4 class="skill-group__t">Frontend</h4>
-            <ul class="skills"><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, OneDay, SkyWalk">React</li><li class="is-used" title="Utilisé dans : Ilamiria, BADN, ISLAAH">React Native</li><li>Next.js</li><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, OneDay, SkyWalk">TypeScript</li><li class="is-used" title="Utilisé dans : Hexagon, Plateforme de recherche de prospects">JavaScript</li><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, OneDay, SkyWalk">Vite</li><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, OneDay, SkyWalk">Tailwind CSS</li><li>Redux / Zustand</li></ul>
+        <p class="sk-legend"><span class="sk-legend__i"><i class="sk-legend__s">Aa</i><i class="sk-legend__l">Aa</i> taille = nombre de projets</span><span class="sk-legend__i"><span class="sk__dots"><i></i><i></i><i></i></span> un point par projet</span><span class="sk-legend__i"><span class="sk-legend__decl">Aa</span> hors des projets présentés</span></p>
+        <div class="sk-layout">
+          <div class="sk-map">
+          <div class="fam" data-fam="front">
+            <h3 class="fam__t"><span class="fam__dot" aria-hidden="true"></span>Frontend<span class="fam__n">6/8 dans les projets</span></h3>
+            <ul class="fam__list">
+              <li class="sk" id="competences/react" data-skill="react" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" style="--w:0.500">
+                <button type="button" class="sk__btn"><span class="sk__name">React</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
+                <span class="sk__used">3 projets : Wild Kédougou Experience, OneDay, SkyWalk</span>
+              </li>
+              <li class="sk" id="competences/react-native" data-skill="react-native" data-fam="front" data-count="3" data-projects="ilamiria badn islaah" style="--w:0.500">
+                <button type="button" class="sk__btn"><span class="sk__name">React Native</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
+                <span class="sk__used">3 projets : Ilamiria, BADN, ISLAAH</span>
+              </li>
+              <li class="sk" id="competences/typescript" data-skill="typescript" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" style="--w:0.500">
+                <button type="button" class="sk__btn"><span class="sk__name">TypeScript</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
+                <span class="sk__used">3 projets : Wild Kédougou Experience, OneDay, SkyWalk</span>
+              </li>
+              <li class="sk" id="competences/vite" data-skill="vite" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" style="--w:0.500">
+                <button type="button" class="sk__btn"><span class="sk__name">Vite</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
+                <span class="sk__used">3 projets : Wild Kédougou Experience, OneDay, SkyWalk</span>
+              </li>
+              <li class="sk" id="competences/tailwind-css" data-skill="tailwind-css" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" style="--w:0.500">
+                <button type="button" class="sk__btn"><span class="sk__name">Tailwind CSS</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
+                <span class="sk__used">3 projets : Wild Kédougou Experience, OneDay, SkyWalk</span>
+              </li>
+              <li class="sk" id="competences/javascript" data-skill="javascript" data-fam="front" data-count="2" data-projects="hexagon prospectly" style="--w:0.333">
+                <button type="button" class="sk__btn"><span class="sk__name">JavaScript</span><span class="sk__dots" aria-hidden="true"><i></i><i></i></span></button>
+                <span class="sk__used">2 projets : Hexagon, Plateforme de recherche de prospects</span>
+              </li>
+              <li class="sk sk--decl" id="competences/next-js" data-skill="next-js" data-fam="front" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Next.js</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/redux-zustand" data-skill="redux-zustand" data-fam="front" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Redux / Zustand</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+            </ul>
           </div>
-          <div class="skill-group">
-            <h4 class="skill-group__t">Backend</h4>
-            <ul class="skills"><li class="is-used" title="Utilisé dans : Infinitia, BADN, Plateforme de recherche de prospects">Node.js</li><li>Express</li><li class="is-used" title="Utilisé dans : Infinitia, SkyWalk">NestJS</li><li class="is-used" title="Utilisé dans : Infinitia, Allsab-MS, Hexagon, GEXP, ISLAAH, Crowdin (clone)">Symfony</li><li>Laravel</li><li class="is-used" title="Utilisé dans : Allsab-MS, Hexagon, GEXP, Pool Party Experience, Crowdin (clone)">PHP</li><li>Python</li><li>REST API</li><li>GraphQL</li></ul>
+          <div class="fam" data-fam="back">
+            <h3 class="fam__t"><span class="fam__dot" aria-hidden="true"></span>Backend<span class="fam__n">4/9 dans les projets</span></h3>
+            <ul class="fam__list">
+              <li class="sk" id="competences/symfony" data-skill="symfony" data-fam="back" data-count="6" data-projects="infinitia allsab-ms hexagon gexp islaah crowdin" style="--w:1.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Symfony</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></button>
+                <span class="sk__used">6 projets : Infinitia, Allsab-MS, Hexagon, GEXP, ISLAAH, Crowdin (clone)</span>
+              </li>
+              <li class="sk" id="competences/php" data-skill="php" data-fam="back" data-count="5" data-projects="allsab-ms hexagon gexp pool-party crowdin" style="--w:0.833">
+                <button type="button" class="sk__btn"><span class="sk__name">PHP</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>
+                <span class="sk__used">5 projets : Allsab-MS, Hexagon, GEXP, Pool Party Experience, Crowdin (clone)</span>
+              </li>
+              <li class="sk" id="competences/node-js" data-skill="node-js" data-fam="back" data-count="3" data-projects="infinitia badn prospectly" style="--w:0.500">
+                <button type="button" class="sk__btn"><span class="sk__name">Node.js</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
+                <span class="sk__used">3 projets : Infinitia, BADN, Plateforme de recherche de prospects</span>
+              </li>
+              <li class="sk" id="competences/nestjs" data-skill="nestjs" data-fam="back" data-count="2" data-projects="infinitia skywalk" style="--w:0.333">
+                <button type="button" class="sk__btn"><span class="sk__name">NestJS</span><span class="sk__dots" aria-hidden="true"><i></i><i></i></span></button>
+                <span class="sk__used">2 projets : Infinitia, SkyWalk</span>
+              </li>
+              <li class="sk sk--decl" id="competences/express" data-skill="express" data-fam="back" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Express</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/laravel" data-skill="laravel" data-fam="back" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Laravel</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/python" data-skill="python" data-fam="back" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Python</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/rest-api" data-skill="rest-api" data-fam="back" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">REST API</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/graphql" data-skill="graphql" data-fam="back" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">GraphQL</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+            </ul>
           </div>
-          <div class="skill-group">
-            <h4 class="skill-group__t">Bases de données</h4>
-            <ul class="skills"><li class="is-used" title="Utilisé dans : Infinitia, Allsab-MS, Hexagon, GEXP, ISLAAH">MySQL</li><li class="is-used" title="Utilisé dans : OneDay, SkyWalk, Crowdin (clone)">PostgreSQL</li><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, OneDay">Supabase</li><li>Prisma</li><li class="is-used" title="Utilisé dans : SkyWalk">TypeORM</li></ul>
+          <div class="fam" data-fam="data">
+            <h3 class="fam__t"><span class="fam__dot" aria-hidden="true"></span>Bases de données<span class="fam__n">4/5 dans les projets</span></h3>
+            <ul class="fam__list">
+              <li class="sk" id="competences/mysql" data-skill="mysql" data-fam="data" data-count="5" data-projects="infinitia allsab-ms hexagon gexp islaah" style="--w:0.833">
+                <button type="button" class="sk__btn"><span class="sk__name">MySQL</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>
+                <span class="sk__used">5 projets : Infinitia, Allsab-MS, Hexagon, GEXP, ISLAAH</span>
+              </li>
+              <li class="sk" id="competences/postgresql" data-skill="postgresql" data-fam="data" data-count="3" data-projects="oneday skywalk crowdin" style="--w:0.500">
+                <button type="button" class="sk__btn"><span class="sk__name">PostgreSQL</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
+                <span class="sk__used">3 projets : OneDay, SkyWalk, Crowdin (clone)</span>
+              </li>
+              <li class="sk" id="competences/supabase" data-skill="supabase" data-fam="data" data-count="2" data-projects="wild-kedougou oneday" style="--w:0.333">
+                <button type="button" class="sk__btn"><span class="sk__name">Supabase</span><span class="sk__dots" aria-hidden="true"><i></i><i></i></span></button>
+                <span class="sk__used">2 projets : Wild Kédougou Experience, OneDay</span>
+              </li>
+              <li class="sk" id="competences/typeorm" data-skill="typeorm" data-fam="data" data-count="1" data-projects="skywalk" style="--w:0.167">
+                <button type="button" class="sk__btn"><span class="sk__name">TypeORM</span><span class="sk__dots" aria-hidden="true"><i></i></span></button>
+                <span class="sk__used">1 projet : SkyWalk</span>
+              </li>
+              <li class="sk sk--decl" id="competences/prisma" data-skill="prisma" data-fam="data" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Prisma</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+            </ul>
           </div>
-          <div class="skill-group">
-            <h4 class="skill-group__t">DevOps / Infrastructure</h4>
-            <ul class="skills"><li class="is-used" title="Utilisé dans : SkyWalk, Crowdin (clone)">Docker</li><li>Git</li><li>GitHub</li><li class="is-used" title="Utilisé dans : SkyWalk">GitLab</li><li>CI/CD</li><li class="is-used" title="Utilisé dans : SkyWalk">Nginx</li><li>AWS</li><li>GCP</li><li class="is-used" title="Utilisé dans : Wild Kédougou Experience, ISLAAH, OneDay">Cloudflare</li></ul>
+          <div class="fam" data-fam="ops">
+            <h3 class="fam__t"><span class="fam__dot" aria-hidden="true"></span>DevOps / Infrastructure<span class="fam__n">4/9 dans les projets</span></h3>
+            <ul class="fam__list">
+              <li class="sk" id="competences/cloudflare" data-skill="cloudflare" data-fam="ops" data-count="3" data-projects="wild-kedougou islaah oneday" style="--w:0.500">
+                <button type="button" class="sk__btn"><span class="sk__name">Cloudflare</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
+                <span class="sk__used">3 projets : Wild Kédougou Experience, ISLAAH, OneDay</span>
+              </li>
+              <li class="sk" id="competences/docker" data-skill="docker" data-fam="ops" data-count="2" data-projects="skywalk crowdin" style="--w:0.333">
+                <button type="button" class="sk__btn"><span class="sk__name">Docker</span><span class="sk__dots" aria-hidden="true"><i></i><i></i></span></button>
+                <span class="sk__used">2 projets : SkyWalk, Crowdin (clone)</span>
+              </li>
+              <li class="sk" id="competences/gitlab" data-skill="gitlab" data-fam="ops" data-count="1" data-projects="skywalk" style="--w:0.167">
+                <button type="button" class="sk__btn"><span class="sk__name">GitLab</span><span class="sk__dots" aria-hidden="true"><i></i></span></button>
+                <span class="sk__used">1 projet : SkyWalk</span>
+              </li>
+              <li class="sk" id="competences/nginx" data-skill="nginx" data-fam="ops" data-count="1" data-projects="skywalk" style="--w:0.167">
+                <button type="button" class="sk__btn"><span class="sk__name">Nginx</span><span class="sk__dots" aria-hidden="true"><i></i></span></button>
+                <span class="sk__used">1 projet : SkyWalk</span>
+              </li>
+              <li class="sk sk--decl" id="competences/git" data-skill="git" data-fam="ops" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Git</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/github" data-skill="github" data-fam="ops" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">GitHub</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/ci-cd" data-skill="ci-cd" data-fam="ops" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">CI/CD</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/aws" data-skill="aws" data-fam="ops" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">AWS</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/gcp" data-skill="gcp" data-fam="ops" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">GCP</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+            </ul>
           </div>
-          <div class="skill-group">
-            <h4 class="skill-group__t">Tests</h4>
-            <ul class="skills"><li>Jest</li><li>Cypress</li><li>Vitest</li><li>Playwright</li></ul>
+          <div class="fam" data-fam="test">
+            <h3 class="fam__t"><span class="fam__dot" aria-hidden="true"></span>Tests<span class="fam__n">0/4 dans les projets</span></h3>
+            <ul class="fam__list">
+              <li class="sk sk--decl" id="competences/jest" data-skill="jest" data-fam="test" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Jest</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/cypress" data-skill="cypress" data-fam="test" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Cypress</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/vitest" data-skill="vitest" data-fam="test" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Vitest</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/playwright" data-skill="playwright" data-fam="test" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Playwright</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+            </ul>
           </div>
-          <div class="skill-group">
-            <h4 class="skill-group__t">Outils / conception</h4>
-            <ul class="skills"><li>Figma</li><li>Jira</li><li>Bruno</li><li>API REST</li></ul>
+          <div class="fam" data-fam="tools">
+            <h3 class="fam__t"><span class="fam__dot" aria-hidden="true"></span>Outils / conception<span class="fam__n">0/4 dans les projets</span></h3>
+            <ul class="fam__list">
+              <li class="sk sk--decl" id="competences/figma" data-skill="figma" data-fam="tools" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Figma</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/jira" data-skill="jira" data-fam="tools" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Jira</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/bruno" data-skill="bruno" data-fam="tools" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Bruno</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/api-rest" data-skill="api-rest" data-fam="tools" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">API REST</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+            </ul>
           </div>
-          <div class="skill-group">
-            <h4 class="skill-group__t">IA / LLM</h4>
-            <ul class="skills"><li>Intégration IA / LLM</li><li>Modèles locaux &amp; API IA selon les projets</li></ul>
+          <div class="fam" data-fam="ai">
+            <h3 class="fam__t"><span class="fam__dot" aria-hidden="true"></span>IA / LLM<span class="fam__n">0/2 dans les projets</span></h3>
+            <ul class="fam__list">
+              <li class="sk sk--decl" id="competences/integration-ia-llm" data-skill="integration-ia-llm" data-fam="ai" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Intégration IA / LLM</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+              <li class="sk sk--decl" id="competences/modeles-locaux-api-ia-selon-les-projets" data-skill="modeles-locaux-api-ia-selon-les-projets" data-fam="ai" data-count="0" data-projects="" style="--w:0.000">
+                <button type="button" class="sk__btn"><span class="sk__name">Modèles locaux &amp; API IA selon les projets</span><span class="sk__dots" aria-hidden="true"></span></button>
+                <span class="sk__used">Hors des projets présentés ici</span>
+              </li>
+            </ul>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="sec" id="profil" data-route="profil" aria-labelledby="profil-title">
-      <div class="wrap">
-      <header class="sec-head">
-        <h2 class="sec-title" id="profil-title">À propos</h2>
-        
-      </header>
-        <div class="about">
-          <p class="about__bio">Développeur Web Full Stack. Je pars d'un besoin métier, je le comprends, et je le transforme en solution concrète — du frontend au backend. Je m'intègre vite à une base de code existante et j'apprends les outils nécessaires au projet.</p>
-          <div class="about__meta">
-            <div><h3 class="mini-title">Qualités</h3><ul class="inline-list"><li>Adaptabilité</li><li>Apprentissage rapide</li><li>Autonomie</li><li>Résolution de problèmes</li><li>Esprit d'analyse</li><li>Travail d'équipe</li><li>Comprendre un besoin métier</li><li>Frontend &amp; Backend</li></ul></div>
-            <div><h3 class="mini-title">Langues</h3><ul class="inline-list"><li><strong>Français</strong> Natif</li><li><strong>Anglais</strong> B2</li><li><strong>Espagnol</strong> A2</li><li><strong>Arabe</strong> A2</li></ul></div>
           </div>
+          <aside class="sk-panel" aria-label="Détail de la compétence">
+            <div class="sk-panel__overview">
+              <p class="mini-title">Les plus présentes</p>
+              <ol class="bars"><li><a href="#competences/symfony" data-skill-link="symfony" data-fam="back" style="--w:1.000"><span class="bar__l">Symfony</span><span class="bar__v">6</span></a></li><li><a href="#competences/php" data-skill-link="php" data-fam="back" style="--w:0.833"><span class="bar__l">PHP</span><span class="bar__v">5</span></a></li><li><a href="#competences/mysql" data-skill-link="mysql" data-fam="data" style="--w:0.833"><span class="bar__l">MySQL</span><span class="bar__v">5</span></a></li><li><a href="#competences/react" data-skill-link="react" data-fam="front" style="--w:0.500"><span class="bar__l">React</span><span class="bar__v">3</span></a></li><li><a href="#competences/react-native" data-skill-link="react-native" data-fam="front" style="--w:0.500"><span class="bar__l">React Native</span><span class="bar__v">3</span></a></li><li><a href="#competences/typescript" data-skill-link="typescript" data-fam="front" style="--w:0.500"><span class="bar__l">TypeScript</span><span class="bar__v">3</span></a></li></ol>
+              <p class="sk-panel__note">18 compétences sur 41 apparaissent dans au moins un projet présenté. <span class="js-only">Sélectionnez une technologie pour voir ses projets.</span></p>
+            </div>
+            <div class="sk-panel__detail" aria-live="polite"></div>
+          </aside>
         </div>
       </div>
     </section>
 
     <section class="sec sec--band" id="services" data-route="portail" aria-labelledby="services-title">
       <div class="wrap">
-      <header class="sec-head">
-        <h2 class="sec-title" id="services-title">Vous avez un projet ?</h2>
-        <p class="sec-lead">Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.</p>
-      </header>
+        <header class="sec-head">
+          <h2 class="sec-title" id="services-title">Vous avez un projet ?</h2>
+          <p class="sec-lead">Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.</p>
+        </header>
         <div class="services">
           <a class="btn btn--primary" href="devis.html">Construisez votre projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
           <a class="btn btn--ghost" href="tarifs.html">Voir mes tarifs</a>
@@ -657,9 +854,10 @@
       </div>
     </section>
 
-    <section class="sec" id="contact" data-route="contact" aria-labelledby="contact-title">
+    <section class="sec contact-sec" id="contact" data-route="contact" aria-labelledby="contact-title">
       <div class="wrap">
       <header class="sec-head">
+        <p class="sec-kicker"><span>05</span>Contact</p>
         <h2 class="sec-title" id="contact-title">Contact</h2>
         <p class="sec-lead">En recherche de CDI (dès sept. 2026). Écrivez-moi ou appelez-moi directement.</p>
       </header>
@@ -670,7 +868,7 @@
               <button type="button" class="copy" data-copy="arphandrame0@gmail.com" aria-label="Copier l'adresse e-mail">Copier</button>
             </div>
             <div class="contact__row">
-              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>
               <span class="contact__value" data-phone="0767318426">07 67 31 84 26</span>
               <button type="button" class="copy" data-copy="07 67 31 84 26" aria-label="Copier le numéro de téléphone">Copier</button>
             </div>
@@ -710,6 +908,6 @@
   <script src="js/contact.js"></script>
   <script src="js/contact-form.js"></script>
   <script src="js/classic.js"></script>
-  <script type="module" src="src/classic-motion.js"></script>
+  <script type="module" src="src/classic-app.js"></script>
 </body>
 </html>
