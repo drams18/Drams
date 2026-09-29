@@ -17,7 +17,9 @@ https://portfolio-3kx.pages.dev/
   du mode classique (et l'identité de l'écran de sélection) en est **généré** :
 
   ```sh
-  npm run build     # après toute modification de js/museum.js
+  npm run dev       # serveur local (Vite), rechargement à chaud
+  npm run content   # régénère seulement le HTML depuis js/museum.js
+  npm run build     # content + build Vite → dist/ (ce que sert Cloudflare Pages)
   npm run capture   # régénère les miniatures de l'écran de sélection + og.jpg
   ```
 
@@ -28,5 +30,9 @@ https://portfolio-3kx.pages.dev/
 - **DA partagée** : `css/tokens.css` (palette, police pixel auto-hébergée).
 - **Formulaires** : `js/contact-form.js` (EmailJS chargé à la demande).
 
-Aucune dépendance, aucun framework : HTML / CSS / JS vanilla, servi tel quel par Cloudflare Pages.
+Aucun framework : HTML / CSS / JS vanilla. **Vite** assemble le site dans `dist/` (Cloudflare Pages :
+commande `npm run build`, dossier `dist`) ; les scripts classiques `js/*.js` et les médias y sont
+copiés tels quels. **GSAP + ScrollTrigger** animent le mode classique (`src/classic-motion.js`) :
+entrée du hero, parallaxe de la ville, révélations au défilement, tracé du parcours. La page reste
+complète sans ce module, et rien n'est animé si le visiteur préfère réduire les animations.
 L'adresse du site est définie dans `scripts/build-classic.mjs` (`SITE_URL`) et dans les `<head>`.

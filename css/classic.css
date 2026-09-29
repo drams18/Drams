@@ -533,6 +533,13 @@ a.contact__value:hover { color: var(--link); }
 /* ── Transition entre modes (View Transitions) ──────── */
 .vt-stage { view-transition-name: stage; }
 
+/* ── Animations GSAP (src/classic-motion.js) ────────── */
+/* Masque anti-flash posé dans le <head>, levé par le module. */
+.motion-pending .hero__id > *,
+.motion-pending .hero__city,
+.motion-pending .stack-strip { visibility: hidden; }
+.tl::before { transform-origin: top; transform: scaleY(var(--tl-draw, 1)); }
+
 /* ── Mouvement réduit ───────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

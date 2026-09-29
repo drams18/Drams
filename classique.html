@@ -18,6 +18,14 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#0e1630">
   <script src="js/theme.js"></script>
+  <script>
+    // Animations d'entrée (src/classic-motion.js) : hero masqué avant le
+    // premier rendu. Filet de sécurité si le module ne se charge pas.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion-pending');
+      setTimeout(function () { document.documentElement.classList.remove('motion-pending'); }, 2500);
+    }
+  </script>
   <link rel="preload" href="assets/fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="css/tokens.css">
@@ -715,5 +723,6 @@
   <script src="js/contact.js"></script>
   <script src="js/contact-form.js"></script>
   <script src="js/classic.js"></script>
+  <script type="module" src="src/classic-motion.js"></script>
 </body>
 </html>
