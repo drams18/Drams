@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://drams18.github.io/Drams/sitemap.xml
+Sitemap: https://portfolio-3kx.pages.dev/sitemap.xml

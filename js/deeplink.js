@@ -1,23 +1,30 @@
 /* ══════════════════════════════════════════════════════
    DEEPLINK.JS — Grammaire de liens COMMUNE aux deux modes
    Le même fragment désigne le même contenu en mode classique
-   (index.html) et en mode aventure (aventure.html) :
+   (classique.html → /classique) et en mode aventure
+   (aventure.html → /aventure) :
 
      #profil                 profil & compétences
      #parcours[/<slug>]      une étape du parcours (bac, bts, etna…)
-     #projets[/<slug>]       un projet de la galerie (skywalk…)
+     #projets[/<slug>]       un projet (skywalk…)
      #contact                coordonnées + formulaire
      #portail                « Construisez votre projet » (+ tarifs)
      #ville                  la ville, sans section particulière
 
    Passer d'un mode à l'autre = garder le fragment, changer de page.
    Le mode courant n'est PAS un état global : c'est la page elle-même.
-   localStorage ne retient que la préférence (jamais de redirection).
+   localStorage ne retient que la préférence (présélection sur l'écran
+   de sélection, liens « retour ») — jamais de redirection automatique.
    ══════════════════════════════════════════════════════ */
 (function (global) {
   'use strict';
 
   var MODE_KEY = 'drame.portfolio.mode';
+
+  // Pages des modes. Cloudflare Pages les sert aussi sans « .html »
+  // (/classique, /aventure) ; les liens gardent l'extension pour que le
+  // site fonctionne tel quel en local.
+  var PAGES = { classique: 'classique.html', aventure: 'aventure.html', selection: 'index.html' };
 
   // route (URL) ⇄ id de section (SECTIONS / BUILDINGS_DATA)
   var SECTION_OF = { profil: 'profile', parcours: 'parcours', projets: 'projets', contact: 'contact' };
@@ -50,11 +57,13 @@
     try { return global.localStorage.getItem(MODE_KEY); } catch (e) { return null; }
   }
 
-  // Page « portfolio » vers laquelle revenir depuis tarifs / construire-projet :
-  // celle du dernier mode utilisé. Depuis le portail, on revient DEVANT le portail.
+  // Page vers laquelle revenir depuis tarifs / construire-projet : celle du
+  // dernier mode utilisé (sinon l'écran de sélection). Depuis le portail,
+  // on revient DEVANT le portail (aventure) ou sur « Vous avez un projet ? ».
   function homeHref(fromPortal) {
-    if (getMode() === 'aventure') return 'aventure.html' + (fromPortal ? '#portail' : '');
-    return 'index.html' + (fromPortal ? '#portail' : '');
+    var mode = getMode();
+    var page = PAGES[mode] || PAGES.selection;
+    return page + (fromPortal && PAGES[mode] ? '#portail' : '');
   }
 
   // Réécrit les liens « retour au portfolio » (href="index.html") d'une page annexe.
@@ -66,6 +75,7 @@
   }
 
   global.Deeplink = {
+    PAGES: PAGES,
     parse: parse,
     build: build,
     setMode: setMode,

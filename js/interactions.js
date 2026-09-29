@@ -33,6 +33,17 @@ class InteractionManager {
     });
     // Échap ferme la fenêtre (comme le clic sur le fond), y compris Contact
     document.addEventListener('keydown', (e) => {
+      // Tab reste dans la fenêtre ouverte (boîte de dialogue modale).
+      if (e.key === 'Tab' && this.isOpen()) {
+        const f = Array.prototype.filter.call(
+          this._modal.querySelectorAll('a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])'),
+          el => el.offsetParent !== null && !el.closest('[inert]'));
+        if (!f.length) { e.preventDefault(); return; }
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && (document.activeElement === first || document.activeElement === this._modal)) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        return;
+      }
       if ((e.key === 'Escape' || e.keyCode === 27) && this.isOpen()) {
         e.preventDefault();
         this.close();
@@ -82,9 +93,13 @@ class InteractionManager {
     this._teardownCarousels();
     this._body.innerHTML = this._renderSection(section);
 
+    // Accessibilité : on retient l'élément actif, la fenêtre (role=dialog)
+    // prend le focus — le lecteur d'écran annonce son titre.
+    if (!this._returnFocus) this._returnFocus = document.activeElement;
     this._modal.classList.remove('hidden');
     this._backdrop.classList.remove('hidden');
     document.body.classList.add('modal-open');
+    try { this._modal.focus({ preventScroll: true }); } catch (e) { this._modal.focus(); }
 
     // Carrousels (Parcours / Galerie) — initialisés une fois la modale visible
     this._initCarousels();
@@ -105,6 +120,14 @@ class InteractionManager {
     this._modal.classList.add('hidden');
     this._backdrop.classList.add('hidden');
     document.body.classList.remove('modal-open');
+    // Focus rendu là où il était avant l'ouverture.
+    const back = this._returnFocus;
+    this._returnFocus = null;
+    if (back && back !== document.body && document.contains(back)) {
+      try { back.focus({ preventScroll: true }); } catch (e) { /* noop */ }
+    } else if (document.activeElement && this._modal.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
     if (window.AudioManager) window.AudioManager.play('close');
     // Music keeps playing — only game exit stops it
     this._syncRoute();

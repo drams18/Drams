@@ -3,6 +3,7 @@
   "private": true,
   "description": "Portfolio d'Arphan Drame — mode classique + mode aventure (HTML/CSS/JS vanilla, aucune dépendance)",
   "scripts": {
-    "build": "node scripts/build-classic.mjs"
+    "build": "node scripts/build-classic.mjs",
+    "capture": "node scripts/capture.mjs"
   }
 }

@@ -6,6 +6,10 @@
 
 'use strict';
 
+// Commandes virtuelles de la marche automatique (déplacement rapide).
+const STEER_LEFT  = { left: true,  right: false };
+const STEER_RIGHT = { left: false, right: true  };
+
 class Game {
   constructor() {
     this.canvas = document.getElementById('gameCanvas');
@@ -48,6 +52,9 @@ class Game {
       document.fonts.ready.then(() => { this._hud = null; this._prompt = null; });
     }
 
+    this._walkTo = null;
+    this.canvas.addEventListener('pointerup', (e) => this._onTap(e));
+
     this._running = false;
     this._rafId   = 0;
     this.start();
@@ -73,6 +80,39 @@ class Game {
   stop() {
     this._running = false;
     if (this._rafId) { cancelAnimationFrame(this._rafId); this._rafId = 0; }
+  }
+
+  // ── Déplacement rapide : clic / toucher sur une maison ──
+  // Le personnage marche jusqu'à la porte puis entre. Toute commande
+  // manuelle (← →, boutons tactiles) reprend immédiatement la main.
+  _onTap(e) {
+    if (this.interactions.isOpen() || this._leaving) return;
+    const zoom = this.zoom;
+    const wx = this.cameraX + e.clientX / zoom;
+    const wy = e.clientY / zoom;
+    const groundY = Math.round((this.canvas.height / zoom) * GROUND_RATIO);
+    const hit = BUILDINGS_DATA.concat([SPECIAL_DOOR]).find(b =>
+      wx >= b.x && wx <= b.x + b.w && wy >= groundY - b.h - 48 && wy <= groundY + 12);
+    if (!hit) return;
+    this._walkTo = { x: hit.doorX, target: hit };
+    if (typeof this.onPlayerInput === 'function') this.onPlayerInput();
+  }
+
+  // Commandes effectives de la frame : clavier / boutons, ou marche auto.
+  _steer() {
+    const c = this.controls;
+    if (!this._walkTo) return c;
+    if (c.left || c.right) { this._walkTo = null; return c; }
+    const dx = this._walkTo.x - this.player.x;
+    if (Math.abs(dx) <= 10) {
+      const t = this._walkTo.target;
+      this._walkTo = null;
+      this.player.vx = 0;
+      if (t.isPortal) this._enterPortal(t);
+      else this.interactions.open(t.id);
+      return c;
+    }
+    return dx < 0 ? STEER_LEFT : STEER_RIGHT;
   }
 
   // Téléporte le joueur (lien profond) et cale la caméra sur lui sans
@@ -137,7 +177,7 @@ class Game {
 
     // Move player only if modal closed
     if (!modalOpen) {
-      this.player.move(this.controls, WORLD_WIDTH);
+      this.player.move(this._steer(), WORLD_WIDTH);
     }
 
     // Interact with nearby building
@@ -400,18 +440,17 @@ function stopMusic() {
 }
 
 // ── Boot ─────────────────────────────────────────────
+// Plus d'écran d'accueil : le choix du mode a lieu sur l'écran de
+// sélection (index.html). /aventure démarre directement dans la ville.
 
-let _game = null;         // instance unique (créée à la 1re partie)
+let _game = null;         // instance unique
 
 function _setMobileBtns(display) {
   const mb = document.getElementById('mobile-btns');
   if (mb) mb.style.display = display;
 }
 
-// ── Écran d'entrée unique ─────────────────────────────
-// Accueil + information son + commandes réunis sur un seul écran (plus de
-// modale audio ni d'intro du village enchaînées après « Let's go ! »).
-// L'aide est dépliée à la 1re visite, repliée ensuite.
+// ── Aide de 1re visite (non bloquante) ────────────────
 const FIRST_VISIT_KEY = 'drame.portfolio.audioHint';   // clé historique conservée
 
 function firstVisit() {
@@ -423,16 +462,42 @@ function markVisited() {
   try { localStorage.setItem(FIRST_VISIT_KEY, 'seen'); } catch (e) { /* noop */ }
 }
 
-function renderWelcomeHelp() {
-  const list = document.getElementById('welcome-controls');
+function showHint() {
+  const hint = document.getElementById('game-hint');
+  if (!hint || !firstVisit()) return;
+  if (/[?&]capture\b/.test(location.search)) return;   // miniatures (scripts/capture.mjs)
+
+  const list = document.getElementById('hint-controls');
   if (list && isTouchUI()) {
     list.innerHTML =
       `<li><b>◀ &nbsp;▶</b><span>Se déplacer dans le village</span></li>
        <li><b>ENTRER</b><span>Entrer dans une maison quand vous êtes devant la porte</span></li>
-       <li><b>FERMER</b><span>Fermer une fenêtre ouverte</span></li>`;
+       <li><b>FERMER</b><span>Fermer une fenêtre ouverte</span></li>
+       <li><b>TOUCHER</b><span>Une maison : y aller directement</span></li>`;
   }
-  const help = document.getElementById('welcome-help');
-  if (help && firstVisit()) help.open = true;
+
+  hint.hidden = false;
+  requestAnimationFrame(() => hint.classList.add('is-in'));
+
+  let done = false;
+  const dismiss = () => {
+    if (done) return;
+    done = true;
+    markVisited();
+    hint.classList.remove('is-in');
+    setTimeout(() => { hint.hidden = true; }, 220);
+    window.removeEventListener('keydown', onKey);
+  };
+  const onKey = (e) => {
+    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'KeyA', 'KeyD', 'KeyW', 'KeyQ', 'KeyZ', 'Escape'].includes(e.code)) dismiss();
+  };
+  window.addEventListener('keydown', onKey);
+  document.getElementById('hint-close')?.addEventListener('click', () => {
+    if (window.AudioManager) window.AudioManager.play('click');
+    dismiss();
+  });
+  document.getElementById('mobile-btns')?.addEventListener('touchstart', dismiss, { once: true, passive: true });
+  if (_game) _game.onPlayerInput = dismiss;
 }
 
 // ── Liens profonds (grammaire commune : js/deeplink.js) ──
@@ -452,50 +517,28 @@ function applyRoute(route, delay) {
   }, delay);
 }
 
-// instant : arrivée directe dans la ville (lien profond / depuis le mode
-// classique) — pas d'animation de sortie de l'accueil.
-function startGame(route, instant) {
-  const welcome = document.getElementById('screen-welcome');
-  const game    = document.getElementById('screen-game');
+function startGame(route) {
+  const game = document.getElementById('screen-game');
 
-  // Init + play audio synchronously inside the user gesture (required on iOS/WebView).
-  // Arrivée directe sans geste : la musique démarre au 1er geste (audio.js).
-  if (window.AudioManager) window.AudioManager.unlock();
+  // Pas d'unlock() ici : la page s'ouvre sans geste utilisateur. La musique
+  // est « voulue » tout de suite et démarre au 1er geste (audio.js, kick()).
   startMusic();
-  markVisited();
 
-  const enter = () => {
-    welcome.classList.add('hidden');
-    welcome.classList.remove('screen-exit');
+  game.classList.add('screen-enter');
+  _game = new Game();
+  _setMobileBtns('flex');
 
-    game.classList.remove('hidden', 'screen-enter');
-    void game.offsetWidth;              // reflow → rejoue l'animation d'entrée
-    game.classList.add('screen-enter');
-
-    // Entrée dans le village = arrivée dans une nouvelle pièce
-    if (window.AudioManager) window.AudioManager.play('transition');
-
-    if (!_game) _game = new Game();     // créé une seule fois
-    else _game.start();                 // relance la boucle de rendu
-    _setMobileBtns('flex');
-
-    applyRoute(route, instant ? 380 : 260);
-  };
-
-  if (instant) { enter(); return; }
-  welcome.classList.remove('screen-enter');
-  welcome.classList.add('screen-exit');
-  setTimeout(enter, 500);
+  applyRoute(route, 380);
+  // Lien profond vers une section : on ouvre le contenu, sans aide par-dessus.
+  if (!route || route.kind !== 'section') showHint();
 }
 
 // ── Passage en mode classique ─────────────────────────
 // Emporte le contexte : fenêtre ouverte (et slide) ou maison devant laquelle
-// se tient le joueur → même fragment côté classique (index.html#projets/skywalk).
+// se tient le joueur → même fragment côté classique (classique.html#projets/skywalk).
 function switchToClassic(e) {
   const a = e.currentTarget;
-  const route = _game && !document.getElementById('screen-game').classList.contains('hidden')
-    ? _game.currentRoute()
-    : '';
+  const route = _game ? _game.currentRoute() : '';
   e.preventDefault();
   if (window.AudioManager) {
     window.AudioManager.play('close');
@@ -504,39 +547,39 @@ function switchToClassic(e) {
   window.location.href = a.getAttribute('href').split('#')[0] + route;
 }
 
+// ── Menu (CV, tarifs, contact, changer de mode) ───────
+function initMenu() {
+  const btn = document.getElementById('btn-menu');
+  const panel = document.getElementById('game-menu-panel');
+  if (!btn || !panel) return;
+  const set = (open) => {
+    panel.hidden = !open;
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (window.AudioManager) window.AudioManager.play(open ? 'open' : 'close');
+  };
+  btn.addEventListener('click', () => set(panel.hidden));
+  document.addEventListener('click', (e) => {
+    if (!panel.hidden && !e.target.closest('.game-menu')) set(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.hidden) { set(false); btn.focus(); }
+  });
+  panel.addEventListener('click', (e) => { if (e.target.closest('a, button')) panel.hidden = true; });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   if (window.Deeplink) window.Deeplink.setMode('aventure');
-  renderWelcomeHelp();
-
-  const btn = document.getElementById('btn-start');
-  if (btn) {
-    // Pré-déverrouille l'audio au moindre contact avant le clic (iOS WebView).
-    const unlock = () => {
-      if (window.AudioManager) window.AudioManager.unlock();
-      btn.removeEventListener('touchstart', unlock);
-      btn.removeEventListener('mousedown',  unlock);
-    };
-    btn.addEventListener('touchstart', unlock, { passive: true });
-    btn.addEventListener('mousedown',  unlock);
-    btn.addEventListener('click', () => startGame(null, false));
-  }
+  initMenu();
 
   document.querySelectorAll('[data-switch-classic]').forEach(a => {
     a.addEventListener('click', switchToClassic);
   });
 
-  // Lien profond à l'arrivée : on entre directement dans la ville.
-  const route = window.Deeplink ? window.Deeplink.parse(location.hash) : null;
-  if (route) startGame(route, true);
+  startGame(window.Deeplink ? window.Deeplink.parse(location.hash) : null);
 
   // Fragment modifié à la main pendant la partie → on y va.
   window.addEventListener('hashchange', () => {
     const r = window.Deeplink ? window.Deeplink.parse(location.hash) : null;
-    if (!r) return;
-    if (!_game || document.getElementById('screen-game').classList.contains('hidden')) {
-      startGame(r, true);
-    } else {
-      applyRoute(r, 0);
-    }
+    if (r) applyRoute(r, 0);
   });
 });

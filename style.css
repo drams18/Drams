@@ -186,368 +186,10 @@ body::after {
   height: 100%;
   transition: opacity 0.5s ease;
 }
-/* `!important` : #screen-welcome porte `display:flex` via son id (spécificité
-   supérieure) — sans ça la classe .hidden ne pourrait jamais le masquer. */
 .screen.hidden   { display: none !important; }
 .screen.active   { opacity: 1; }
 .screen-exit     { animation: screenExit 0.5s cubic-bezier(.5,0,.75,0) forwards; }
 .screen-enter    { animation: screenEnter 0.5s cubic-bezier(.2,.7,.3,1) forwards; }
-
-/* ══════════════════════════════════════════════════════
-   ÉCRAN D'ACCUEIL
-   ══════════════════════════════════════════════════════ */
-#screen-welcome {
-  display: flex;               /* centrage par margin:auto sur .welcome-content :
-                                  reste défilable si le contenu dépasse */
-  background:
-    radial-gradient(120% 80% at 18% 12%, rgba(255,43,176,0.30) 0%, transparent 55%),
-    radial-gradient(120% 90% at 88% 20%, rgba(138,59,255,0.30) 0%, transparent 55%),
-    radial-gradient(140% 120% at 50% 120%, rgba(25,232,255,0.18) 0%, transparent 60%),
-    linear-gradient(180deg, #0e1630 0%, #16234a 44%, #1b1c44 72%, #0e1630 100%);
-  position: relative;
-  overflow: hidden;
-  overflow-y: auto;          /* aide dépliée sur petit écran : on peut défiler */
-}
-
-/* Éclats / lumières de la ville — décor discret */
-#screen-welcome::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.7;
-  background-image:
-    radial-gradient(1.5px 1.5px at 10% 15%, rgba(25,232,255,0.9) 0%, transparent 100%),
-    radial-gradient(1px 1px at 25% 8%,  rgba(255,255,255,0.6) 0%, transparent 100%),
-    radial-gradient(2px 2px at 40% 20%, rgba(255,43,176,0.7) 0%, transparent 100%),
-    radial-gradient(1px 1px at 55% 5%,  rgba(255,255,255,0.7) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 70% 12%, rgba(25,232,255,0.7) 0%, transparent 100%),
-    radial-gradient(2px 2px at 80% 7%,  rgba(255,43,176,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 90% 18%, rgba(255,255,255,0.8) 0%, transparent 100%),
-    radial-gradient(1px 1px at 15% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 85% 30%, rgba(25,232,255,0.5) 0%, transparent 100%);
-  pointer-events: none;
-}
-
-/* Skyline urbaine dense façon New York + rim néon (remplace le sol pixel) */
-#screen-welcome::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 150px;
-  background: linear-gradient(180deg, #060a18 0%, #04040a 55%);
-  clip-path: polygon(
-    0 92px, 2% 92px, 2% 66px, 4% 66px, 4% 84px, 6% 84px, 6% 44px, 7% 44px, 7% 42px, 9% 42px,
-    9% 78px, 11% 78px, 11% 30px, 13% 30px, 13% 26px, 14% 26px, 14% 30px, 15% 30px, 15% 72px,
-    18% 72px, 18% 52px, 21% 52px, 21% 88px, 24% 88px, 24% 20px, 25% 20px, 25% 16px, 26% 16px,
-    26% 20px, 27% 20px, 27% 60px, 30% 60px, 30% 40px, 33% 40px, 33% 82px, 36% 82px, 36% 34px,
-    39% 34px, 39% 66px, 42% 66px, 42% 24px, 43% 24px, 43% 22px, 45% 22px, 45% 58px, 48% 58px,
-    48% 44px, 51% 44px, 51% 90px, 54% 90px, 54% 30px, 56% 30px, 56% 62px, 59% 62px, 59% 18px,
-    60% 18px, 60% 14px, 61% 14px, 61% 18px, 62% 18px, 62% 54px, 65% 54px, 65% 38px, 68% 38px,
-    68% 80px, 71% 80px, 71% 32px, 74% 32px, 74% 64px, 77% 64px, 77% 24px, 79% 24px, 79% 56px,
-    82% 56px, 82% 46px, 85% 46px, 85% 86px, 88% 86px, 88% 28px, 90% 28px, 90% 60px, 93% 60px,
-    93% 40px, 96% 40px, 96% 76px, 98% 76px, 98% 52px, 100% 52px, 100% 150px, 0 150px);
-  filter: drop-shadow(0 -2px 4px rgba(25,232,255,0.55)) drop-shadow(0 -6px 14px rgba(255,43,176,0.3));
-  pointer-events: none;
-}
-
-/* Couche « lignes de vitesse » + fils de toile + halftone (div .welcome-sky) */
-.welcome-sky {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.55;
-  overflow: hidden;
-  /* Fond statique (rasterisé une seule fois). Motifs blancs → screen ≡ alpha
-     normal, donc pas de mix-blend-mode (coûteux en plein écran). */
-  background-image: var(--weblines), var(--halftone);
-  background-size: auto, auto, var(--halftone-size);
-}
-/* Lignes de vitesse sur leur propre calque, déplacé par transform */
-.welcome-sky::before {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  left: -600px; right: 0;
-  background-image: var(--speedlines);
-  background-size: 600px 100%;
-  will-change: transform;
-  animation: speedSweep 6s linear infinite;
-}
-/* Grande toile d'angle discrète, haut-droite de l'accueil */
-.welcome-sky::after {
-  content: '';
-  position: absolute;
-  top: 0; right: 0;
-  width: 240px; height: 240px;
-  background: var(--web-corner) no-repeat;
-  background-size: 100% 100%;
-  transform: rotate(90deg);
-  transform-origin: top right;
-  opacity: 0.10;
-}
-
-.welcome-content {
-  margin: auto;
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  padding: 28px 22px;
-  max-width: 460px;
-  width: 100%;
-  min-width: 0;
-}
-
-/* Sur-titre — tag néon, glitch subtil */
-.mc-eyebrow {
-  font-family: var(--pixel-font);
-  font-size: 7px;
-  letter-spacing: 4px;
-  color: var(--cyan);
-  border: 2px solid var(--cyan);
-  padding: 7px 13px;
-  background: rgba(25,232,255,0.06);
-  box-shadow: 3px 3px 0 var(--stroke), 0 0 14px rgba(25,232,255,0.4);
-  animation: glitchSkew 5.5s infinite;
-}
-
-/* Nom — identité, police pixel + décalage RGB */
-.mc-title {
-  font-family: var(--pixel-font);
-  font-size: clamp(16px, 4.6vw, 30px);
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  color: var(--paper);
-  letter-spacing: 2px;
-  line-height: 1.4;
-  text-shadow: -0.045em 0 0 var(--red), 0.045em 0 0 var(--cyan), 0 0 16px rgba(255,43,176,0.35);
-  animation: rgbShift 3.6s ease-in-out infinite;
-}
-
-/* Métier — INFORMATION : police classique, lisible */
-.mc-subtitle {
-  font-family: var(--body-font);
-  font-size: clamp(15px, 2.6vw, 18px);
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.3px;
-  line-height: 1.5;
-}
-.mc-location {
-  font-family: var(--body-font);
-  font-size: 13px;
-  color: #9fd9e6;
-  letter-spacing: 0.2px;
-  line-height: 1.5;
-  margin-top: -4px;
-}
-
-/* ── Zone d'actions ─────────────────────────────────── */
-.welcome-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  max-width: 340px;
-  margin-top: 10px;
-}
-.welcome-secondary {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-@media (min-width: 540px) {
-  .welcome-secondary { flex-direction: row; }
-  .welcome-secondary .mc-btn { flex: 1 1 0; }
-}
-
-/* Bouton — label (pixel) + aide (classique) */
-.mc-btn {
-  font-family: var(--pixel-font);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  width: 100%;
-  min-width: 0;
-  padding: 15px 16px;
-  border: 3px solid var(--stroke);
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-  overflow: hidden;
-  transition: transform 0.12s, box-shadow 0.15s, background 0.18s, border-color 0.15s, filter 0.15s;
-}
-.mc-btn__label {
-  position: relative;
-  z-index: 1;
-  font-family: var(--pixel-font);
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  color: #fff;
-  text-shadow: 2px 2px 0 rgba(0,0,0,0.6);
-}
-.mc-btn__hint {
-  position: relative;
-  z-index: 1;
-  font-family: var(--body-font);
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.2px;
-  text-shadow: none;
-  overflow-wrap: anywhere;
-}
-
-/* Action principale — LET'S GO : spectaculaire, « entrer dans l'expérience » */
-.mc-btn--primary {
-  background: linear-gradient(135deg, var(--red) 0%, var(--magenta) 60%, var(--violet) 120%);
-  box-shadow: 0 0 0 3px var(--stroke), 6px 6px 0 0 var(--red-deep), 0 0 22px rgba(255,18,61,0.45);
-  animation: spiderSensePulse 2.6s ease-in-out infinite;
-}
-.mc-btn--primary .mc-btn__label { font-size: 15px; letter-spacing: 2px; }
-.mc-btn--primary .mc-btn__hint  { color: #ffe6f2; }
-/* Iris de toile au survol — « on entre dans un monde » */
-.mc-btn--primary::before {
-  content: '';
-  position: absolute;
-  left: 50%; top: 50%;
-  width: 260px; height: 260px;
-  margin: -130px 0 0 -130px;
-  background: var(--web-corner) no-repeat center / contain;
-  opacity: 0;
-  transform: scale(0.4) rotate(-8deg);
-  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(.2,.7,.3,1);
-  pointer-events: none;
-}
-.mc-btn--primary:hover::before { opacity: 0.22; transform: scale(1) rotate(0); }
-/* balayage lignes de vitesse au survol */
-.mc-btn--primary::after {
-  content: '';
-  position: absolute;
-  inset: -40% -60%;
-  background: linear-gradient(100deg, transparent 40%, rgba(255,255,255,0.55) 50%, transparent 60%);
-  transform: translateX(-120%);
-  transition: transform 0.55s ease;
-  pointer-events: none;
-}
-.mc-btn--primary:hover {
-  filter: brightness(1.08) saturate(1.15);
-  transform: translateY(-2px) scale(1.02);
-}
-.mc-btn--primary:hover::after { transform: translateX(120%); }
-.mc-btn--primary:active {
-  transform: translateY(3px) scale(0.99);
-  box-shadow: 0 0 0 3px var(--stroke), 2px 2px 0 0 var(--red-deep);
-  animation: none;
-}
-
-/* Actions secondaires — sobres, rôle professionnel préservé */
-.mc-btn--ghost {
-  background: rgba(255,255,255,0.03);
-  border: 2px solid rgba(25,232,255,0.4);
-  box-shadow: 3px 3px 0 var(--stroke);
-}
-.mc-btn--ghost .mc-btn__label { font-size: 11px; color: #eaf7fb; }
-.mc-btn--ghost .mc-btn__hint  { color: #9db4c6; }
-.mc-btn--ghost:hover {
-  background: rgba(25,232,255,0.09);
-  border-color: var(--cyan);
-  box-shadow: 3px 3px 0 var(--stroke), 0 0 14px rgba(25,232,255,0.35);
-}
-.mc-btn--ghost:active {
-  transform: translateY(2px);
-  box-shadow: 1px 1px 0 var(--stroke);
-}
-
-/* ── Aide « Comment ça marche » (repliable, desktop) ── */
-.mc-help {
-  width: 100%;
-  max-width: 360px;
-  margin-top: 6px;
-  font-family: var(--body-font);
-  color: #c6d2e0;
-  border: 2px solid var(--stroke);
-  background: var(--panel);
-  box-shadow: 4px 4px 0 var(--stroke);
-}
-.mc-help > summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 11px 14px;
-  font-family: var(--pixel-font);
-  font-size: 8px;
-  letter-spacing: 1.5px;
-  color: var(--cyan);
-  text-align: center;
-  background: rgba(25,232,255,0.06);
-  border-bottom: 2px solid var(--stroke);
-}
-.mc-help > summary::-webkit-details-marker { display: none; }
-.mc-help > summary::after { content: '  \25B8'; }
-.mc-help[open] > summary::after { content: '  \25BE'; }
-.mc-help__body {
-  padding: 12px 16px 16px;
-  font-size: 13px;
-  line-height: 1.65;
-  text-align: left;
-  background-image: var(--halftone);
-  background-size: var(--halftone-size);
-}
-.mc-help__body p { margin-bottom: 10px; color: #aeb9c7; }
-.mc-help__body ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
-.mc-help__body li { display: flex; gap: 10px; align-items: center; }
-.mc-help__body li span { color: #c6d2e0; }
-.mc-help__sound {
-  margin: 12px 0 0 !important;
-  padding-top: 10px;
-  border-top: 1px dashed rgba(255,43,176,0.35);
-  font-size: 12px;
-  color: #9fb0c4 !important;
-}
-.mc-help__body b {
-  font-family: var(--pixel-font);
-  font-size: 9px;
-  color: var(--cyan);
-  background: rgba(25,232,255,0.08);
-  border: 1px solid var(--cyan);
-  padding: 4px 7px;
-  min-width: 70px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-/* ── Lien « Mode classique » (accueil aventure) ────── */
-.welcome-switch {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  margin-top: 4px;
-  padding: 8px 12px;
-  text-decoration: none;
-  border-bottom: 2px dashed rgba(25,232,255,0.35);
-  transition: border-color 0.15s, color 0.15s;
-}
-.welcome-switch__k {
-  font-family: var(--pixel-font);
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  color: var(--cyan);
-}
-.welcome-switch__v {
-  font-family: var(--body-font);
-  font-size: 12px;
-  color: #9fb0c4;
-}
-.welcome-switch:hover { border-color: var(--cyan); }
-.welcome-switch:hover .welcome-switch__v { color: #d7e3f0; }
 
 /* ══════════════════════════════════════════════════════
    ÉCRAN DE JEU
@@ -595,6 +237,81 @@ body::after {
   box-shadow: 3px 3px 0 var(--stroke), 0 0 18px rgba(25,232,255,0.5);
 }
 .game-home-btn:active { transform: translateY(2px); box-shadow: 1px 1px 0 var(--stroke); }
+
+/* Barre du jeu : Mode classique + Menu (haut gauche) */
+.game-bar {
+  position: fixed; top: 12px; left: 12px; z-index: 60;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.game-bar .game-home-btn { position: static; }
+.game-menu { position: relative; }
+.game-menu__btn::before { display: none; }
+.game-menu__btn[aria-expanded="true"] { background: var(--panel-2); border-color: var(--cyan); }
+.game-menu__panel {
+  position: absolute; top: calc(100% + 8px); left: 0; min-width: 230px;
+  display: flex; flex-direction: column;
+  background: var(--panel); border: 2px solid var(--stroke);
+  box-shadow: 5px 5px 0 var(--stroke), 0 0 22px rgba(25,232,255,0.25);
+  animation: fadeIn .15s ease;
+}
+.game-menu__panel[hidden] { display: none; }
+.game-menu__panel a, .game-menu__panel button {
+  display: flex; flex-direction: column; gap: 3px; padding: 12px 14px;
+  font-family: var(--pixel-font); font-size: 9px; letter-spacing: 1px; text-align: left;
+  color: #fff; text-decoration: none; cursor: pointer;
+  background: transparent; border: 0; border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.game-menu__panel a:last-child { border-bottom: 0; }
+.game-menu__panel span { font-family: var(--body-font); font-size: 13px; letter-spacing: 0; color: var(--urban); }
+.game-menu__panel a:hover, .game-menu__panel button:hover,
+.game-menu__panel a:focus-visible, .game-menu__panel button:focus-visible { background: rgba(25,232,255,.1); }
+
+/* Aide de 1re visite — non bloquante (la ville reste jouable derrière) */
+.game-hint {
+  position: fixed; z-index: 55; top: 64px; left: 50%;
+  width: min(92vw, 440px); transform: translate(-50%, -8px); opacity: 0;
+  padding: 18px 18px 16px;
+  background: rgba(24,36,73,.96); border: 3px solid var(--stroke);
+  box-shadow: 6px 6px 0 var(--red-deep), 0 0 32px rgba(255,18,61,.25);
+  transition: opacity .2s ease, transform .2s ease;
+}
+.game-hint[hidden] { display: none; }
+.game-hint.is-in { opacity: 1; transform: translate(-50%, 0); }
+.game-hint__title {
+  font-family: var(--pixel-font); font-size: 11px; letter-spacing: 1px; color: var(--magenta);
+  text-shadow: -0.03em 0 0 var(--red), 0.03em 0 0 var(--cyan); margin-bottom: 10px;
+}
+.game-hint__text { font-family: var(--body-font); font-size: 14px; line-height: 1.55; color: #d5dbe6; margin-bottom: 10px; }
+.game-hint__list { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; font-family: var(--body-font); font-size: 13.5px; color: #c6d2e0; }
+.game-hint__list li { display: flex; gap: 10px; align-items: center; }
+.game-hint__list b {
+  font-family: var(--pixel-font); font-size: 9px; color: var(--cyan); background: rgba(25,232,255,.08);
+  border: 1px solid var(--cyan); padding: 4px 7px; min-width: 76px; text-align: center; flex-shrink: 0;
+}
+.game-hint__sound { font-family: var(--body-font); font-size: 12.5px; line-height: 1.5; color: #9fb0c4; padding-top: 10px; border-top: 1px dashed rgba(255,43,176,.35); margin-bottom: 12px; }
+.game-hint__close {
+  font-family: var(--pixel-font); font-size: 10px; letter-spacing: 1px; color: #fff; cursor: pointer;
+  padding: 11px 16px; border: 2px solid var(--stroke);
+  background: linear-gradient(135deg, var(--red), var(--magenta)); box-shadow: 4px 4px 0 var(--red-deep);
+}
+.game-hint__close:active { transform: translateY(2px); box-shadow: 1px 1px 0 var(--red-deep); }
+@media (max-width: 600px) {
+  .game-hint { top: 58px; padding: 14px 14px 12px; }
+  .game-hint__text { font-size: 13px; }
+  .game-bar { gap: 6px; }
+  .game-menu__panel { min-width: 210px; }
+}
+
+/* Texte réservé aux lecteurs d'écran */
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; padding: 0; margin: -1px;
+}
+.section-modal:focus { outline: none; }
+.section-modal:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+
+/* Transition entre modes : même nom que la page de départ (View Transitions) */
+.vt-stage { view-transition-name: stage; }
 
 /* Bouton SOUND ON / OFF — même niveau que le bouton Accueil */
 .sound-toggle {
@@ -1569,10 +1286,6 @@ body::after {
 
 /* ── Responsive ─────────────────────────────────────── */
 @media (max-width: 600px) {
-  .welcome-content { gap: 12px; padding: 24px 18px; }
-  .welcome-sky { opacity: 0.4; }
-  .welcome-sky::before { animation-duration: 9s; }
-  .welcome-sky::after { opacity: 0.06; }
   /* Effets lourds allégés sur mobile : anneaux spider-sense en continu coupés */
   .proj-card:hover::after, .social-link:hover::after,
   .contact-link:hover::after { animation: none; opacity: 0; }
@@ -1596,12 +1309,9 @@ body::after {
 
 /* Respect des préférences de mouvement réduit */
 @media (prefers-reduced-motion: reduce) {
-  .mc-title { animation: none; text-shadow: -0.03em 0 0 var(--red), 0.03em 0 0 var(--cyan); }
-  .mc-eyebrow, .welcome-sky::before, .mc-btn--primary { animation: none !important; }
-  .mc-btn--primary::after, .mc-btn--primary::before { display: none; }
   .proj-card::after, .social-link::after, .contact-link::after,
   .mbtn-enter::after { animation: none !important; opacity: 0 !important; }
-  .screen, .screen-exit, .screen-enter,
+  .screen, .screen-exit, .screen-enter, .game-hint,
   .section-modal { animation: none !important; }
   * { transition-duration: 0.01ms !important; }
 }
