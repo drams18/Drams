@@ -32,31 +32,17 @@ function intro() {
   const hero = doc.querySelector('.hero');
   if (!hero) return;
 
-  // Le décalage RGB du nom (CSS nameIn) se joue pendant que le hero est
-  // masqué : on le relance quand le nom apparaît.
-  const name = hero.querySelector('.hero__name');
-  if (name) name.style.animation = 'none';
-
-  gsap.timeline({ defaults: { ease: EASE, duration: 0.8 } })
-    .from('.hero__id > *', { y: 28, autoAlpha: 0, stagger: 0.07, clearProps: CLEAR }, 0)
-    .call(() => { if (name) name.style.animation = ''; }, null, 0.08)
-    .from('.hero__city', {
-      clipPath: 'inset(100% 0 0 0)', y: 24, duration: 1.1, ease: 'power4.out',
-      clearProps: 'clipPath,transform',
-    }, 0.15)
-    .from('.hero__city .c-win', {
-      opacity: 0, duration: 0.3, stagger: { each: 0.018, from: 'random' }, clearProps: 'opacity',
-    }, 0.6)
-    .from('.hero__city .c-hero', { x: -60, duration: 1.2, ease: 'power2.out', clearProps: 'transform' }, 0.5)
-    .from('.stack-strip__k, .stack-strip li', { y: 12, autoAlpha: 0, stagger: 0.035, duration: 0.5, clearProps: CLEAR }, 0.45);
+  gsap.timeline({ defaults: { ease: EASE, duration: 0.9 } })
+    .from('.hero__glow', { autoAlpha: 0, scale: 0.6, duration: 1.6, ease: 'power2.out', clearProps: 'opacity,visibility' }, 0)
+    .from('.hero__id > *', { y: 30, autoAlpha: 0, stagger: 0.08, clearProps: CLEAR }, 0.05)
+    .from('.stack-strip__k, .stack-strip li', { y: 12, autoAlpha: 0, stagger: 0.035, duration: 0.5, clearProps: CLEAR }, 0.5);
 }
 
-// ── Hero : parallaxe de la skyline quand on la quitte ───
+// ── Hero : le halo et le texte glissent à des vitesses différentes ──
 function parallax() {
   const st = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.5 };
-  gsap.to('.hero__city .c-stars', { y: 6,  ease: 'none', scrollTrigger: st });
-  gsap.to('.hero__city .c-orb',   { y: 26, ease: 'none', scrollTrigger: st });
-  gsap.to('.hero__city .c-far',   { y: 14, ease: 'none', scrollTrigger: st });
+  gsap.to('.hero__glow',  { yPercent: 30, ease: 'none', scrollTrigger: st });
+  gsap.to('.hero__inner', { y: -40, autoAlpha: 0.3, ease: 'none', scrollTrigger: st });
 }
 
 // ── Sections : titres puis contenus, au défilement ──────
@@ -97,7 +83,10 @@ function timelines() {
   });
 }
 
-gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+// ?capture (npm run capture) : page figée pour les miniatures.
+const still = /[?&]capture\b/.test(location.search);
+
+if (!still) gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
   intro();
   parallax();
   reveals();

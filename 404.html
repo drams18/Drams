@@ -8,23 +8,22 @@
   <!-- Cloudflare Pages sert cette page pour toute URL inconnue (même
        /a/b/c) : chemins ABSOLUS depuis la racine du site. -->
   <script src="/js/theme.js"></script>
-  <link rel="preload" href="/assets/fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="/assets/img/favicon.png">
   <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/site.css">
   <link rel="stylesheet" href="/css/classic.css">
   <style>
-    .lost { min-height: 100vh; display: grid; place-items: center; text-align: center; padding: 32px 16px; position: relative; overflow: hidden; }
-    .lost .hero__bg { position: absolute; }
-    .lost__card { position: relative; max-width: 460px; padding: 28px 22px; }
-    .lost__code { font-family: var(--pixel-font); font-weight: 400; font-size: clamp(34px, 9vw, 56px); color: var(--text); text-shadow: -0.06em 0 0 var(--red), 0.06em 0 0 var(--cyan); }
-    .lost__text { margin: 18px 0 24px; color: var(--text-2); }
-    .lost__actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .lost { min-height: 100vh; display: grid; place-items: center; text-align: center; padding: 32px 16px; }
+    .lost__card { max-width: 480px; }
+    .lost__code { font-size: clamp(64px, 14vw, 112px); font-weight: 700; line-height: 1; letter-spacing: -.05em; color: var(--text); }
+    .lost__text { margin: 18px 0 28px; color: var(--muted); }
+    .lost__actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
   </style>
 </head>
 <body>
   <main class="lost">
     
-    <div class="card lost__card">
+    <div class="lost__card">
       <h1 class="lost__code">404</h1>
       <p class="lost__text">Cette rue n'existe pas dans la ville. Reprenez depuis le portfolio, ou retournez explorer.</p>
       <div class="lost__actions">

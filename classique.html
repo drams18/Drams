@@ -16,19 +16,20 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#0e1630">
+  <meta name="theme-color" content="#0a0a0d">
   <script src="js/theme.js"></script>
   <script>
     // Animations d'entrée (src/classic-motion.js) : hero masqué avant le
     // premier rendu. Filet de sécurité si le module ne se charge pas.
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // ?capture (npm run capture) : page figée, sans animation.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !/[?&]capture\b/.test(location.search)) {
       document.documentElement.classList.add('motion-pending');
       setTimeout(function () { document.documentElement.classList.remove('motion-pending'); }, 2500);
     }
   </script>
-  <link rel="preload" href="assets/fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/site.css">
   <link rel="stylesheet" href="css/classic.css">
   <!-- build:jsonld -->
   <script type="application/ld+json">
@@ -119,23 +120,23 @@
 </head>
 <body>
   <!-- ══════════════════════════════════════════════════════
-       MODE CLASSIQUE — la ville vue en plan : claire, directe.
+       MODE CLASSIQUE — portfolio web sobre et professionnel.
        Le contenu entre les marqueurs build:content est GÉNÉRÉ depuis
        js/museum.js : ne pas l'éditer ici, lancer `npm run build`.
        ══════════════════════════════════════════════════════ -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <symbol id="i-house" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
-    <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M8 7V5h8v2M3 8h18v11H3zM3 13h18" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
-    <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></symbol>
-    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2.2"/></symbol>
-    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
-    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
-    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+    <symbol id="i-school" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5zM6 11v5c3 2.5 9 2.5 12 0v-5M22 9v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M8 7V5h8v2M3 8h18v11H3zM3 13h18" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z" fill="currentColor"/></symbol>
     <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M4 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 9h3v12H3zM9 9h3v1.7c.5-.9 1.7-1.9 3.5-1.9 3.2 0 3.5 2.1 3.5 4.8V21h-3v-6.5c0-1.5 0-3.3-2-3.3s-2.3 1.6-2.3 3.2V21H9z" fill="currentColor"/></symbol>
-    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.4"/></symbol>
-    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4"/></symbol>
-    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>
 
   <a class="skip" href="#main">Aller au contenu</a>
@@ -171,10 +172,11 @@
   <main id="main" class="vt-stage" tabindex="-1">
     <!-- build:content -->
     <section class="hero" id="top" data-route="ville" aria-labelledby="hero-name">
+      <div class="hero__bg" aria-hidden="true"><div class="hero__glow"></div></div>
       <div class="wrap hero__inner">
         <div class="hero__id">
-          <p class="status"><span class="pulse" aria-hidden="true"></span>En recherche de CDI (dès sept. 2026)</p>
-          <h1 class="hero__name" id="hero-name">ARPHAN DRAME</h1>
+          <p class="pill"><span class="pulse" aria-hidden="true"></span>En recherche de CDI (dès sept. 2026)</p>
+          <h1 class="hero__name" id="hero-name">Arphan Drame</h1>
           <p class="hero__title">Développeur Web Full Stack</p>
           <p class="hero__pitch">Je peux m'adapter à un environnement technique existant, comprendre rapidement un projet et apprendre les outils nécessaires pour répondre au besoin.</p>
           <p class="hero__meta">Île-de-France · Alternance chez DevPhantom · Frontend &amp; Backend</p>
@@ -185,41 +187,6 @@
           </div>
           <div class="hero__social"><a class="icon-link" href="https://github.com/drams18" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-github"/></svg><span>GitHub</span></a><a class="icon-link" href="https://www.linkedin.com/in/arphan-drame/" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-linkedin"/></svg><span>LinkedIn</span></a></div>
         </div>
-        <figure class="hero__city">
-          <svg class="city " viewBox="0 0 400 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-      <rect class="c-sky" width="400" height="200"/>
-      <circle class="c-orb" cx="330" cy="46" r="18"/>
-      <g class="c-stars"><circle cx="30" cy="22" r="1"/><circle cx="110" cy="40" r="1.2"/><circle cx="190" cy="18" r="1"/><circle cx="250" cy="34" r="1"/><circle cx="380" cy="80" r="1"/></g>
-      <path class="c-far" d="M0 104h20V76h14v20h16V60h12v34h18V70h16v24h22V54h10v40h20V66h16v30h18V50h12v44h22V72h16v26h20V62h14v34h22V76h18v28h24v96H0z"/>
-      <g>
-        <rect class="c-facade" x="24" y="96" width="58" height="70"/>
-        <rect class="c-roof" x="21" y="88" width="64" height="9" style="stroke:#19e8ff"/>
-        <rect x="33" y="108" width="8" height="8" fill="#19e8ff" class="c-win" style="--o:0.35"/><rect x="49" y="108" width="8" height="8" fill="#19e8ff" class="c-win" style="--o:0.8"/><rect x="65" y="108" width="8" height="8" fill="#19e8ff" class="c-win" style="--o:0.35"/><rect x="33" y="123" width="8" height="8" fill="#19e8ff" class="c-win" style="--o:0.8"/><rect x="49" y="123" width="8" height="8" fill="#19e8ff" class="c-win" style="--o:0.35"/><rect x="65" y="123" width="8" height="8" fill="#19e8ff" class="c-win" style="--o:0.8"/><rect x="33" y="138" width="8" height="8" fill="#19e8ff" class="c-win" style="--o:0.35"/><rect x="49" y="138" width="8" height="8" fill="#19e8ff" class="c-win" style="--o:0.8"/><rect x="65" y="138" width="8" height="8" fill="#19e8ff" class="c-win" style="--o:0.35"/>
-        <rect class="c-door" x="46" y="146" width="14" height="20" style="stroke:#19e8ff"/>
-      </g><g>
-        <rect class="c-facade" x="92" y="96" width="58" height="70"/>
-        <rect class="c-roof" x="89" y="88" width="64" height="9" style="stroke:#8a3bff"/>
-        <rect x="101" y="108" width="8" height="8" fill="#8a3bff" class="c-win" style="--o:0.35"/><rect x="117" y="108" width="8" height="8" fill="#8a3bff" class="c-win" style="--o:0.8"/><rect x="133" y="108" width="8" height="8" fill="#8a3bff" class="c-win" style="--o:0.35"/><rect x="101" y="123" width="8" height="8" fill="#8a3bff" class="c-win" style="--o:0.8"/><rect x="117" y="123" width="8" height="8" fill="#8a3bff" class="c-win" style="--o:0.35"/><rect x="133" y="123" width="8" height="8" fill="#8a3bff" class="c-win" style="--o:0.8"/><rect x="101" y="138" width="8" height="8" fill="#8a3bff" class="c-win" style="--o:0.35"/><rect x="117" y="138" width="8" height="8" fill="#8a3bff" class="c-win" style="--o:0.8"/><rect x="133" y="138" width="8" height="8" fill="#8a3bff" class="c-win" style="--o:0.35"/>
-        <rect class="c-door" x="114" y="146" width="14" height="20" style="stroke:#8a3bff"/>
-      </g><g>
-        <rect class="c-facade" x="214" y="96" width="58" height="70"/>
-        <rect class="c-roof" x="211" y="88" width="64" height="9" style="stroke:#ff2bb0"/>
-        <rect x="223" y="108" width="8" height="8" fill="#ff2bb0" class="c-win" style="--o:0.35"/><rect x="239" y="108" width="8" height="8" fill="#ff2bb0" class="c-win" style="--o:0.8"/><rect x="255" y="108" width="8" height="8" fill="#ff2bb0" class="c-win" style="--o:0.35"/><rect x="223" y="123" width="8" height="8" fill="#ff2bb0" class="c-win" style="--o:0.8"/><rect x="239" y="123" width="8" height="8" fill="#ff2bb0" class="c-win" style="--o:0.35"/><rect x="255" y="123" width="8" height="8" fill="#ff2bb0" class="c-win" style="--o:0.8"/><rect x="223" y="138" width="8" height="8" fill="#ff2bb0" class="c-win" style="--o:0.35"/><rect x="239" y="138" width="8" height="8" fill="#ff2bb0" class="c-win" style="--o:0.8"/><rect x="255" y="138" width="8" height="8" fill="#ff2bb0" class="c-win" style="--o:0.35"/>
-        <rect class="c-door" x="236" y="146" width="14" height="20" style="stroke:#ff2bb0"/>
-      </g><g>
-        <rect class="c-facade" x="282" y="96" width="92" height="70"/>
-        <rect class="c-roof" x="279" y="88" width="98" height="9" style="stroke:#ff123d"/>
-        <rect x="291" y="108" width="8" height="8" fill="#ff123d" class="c-win" style="--o:0.35"/><rect x="324" y="108" width="8" height="8" fill="#ff123d" class="c-win" style="--o:0.8"/><rect x="357" y="108" width="8" height="8" fill="#ff123d" class="c-win" style="--o:0.35"/><rect x="291" y="123" width="8" height="8" fill="#ff123d" class="c-win" style="--o:0.8"/><rect x="324" y="123" width="8" height="8" fill="#ff123d" class="c-win" style="--o:0.35"/><rect x="357" y="123" width="8" height="8" fill="#ff123d" class="c-win" style="--o:0.8"/><rect x="291" y="138" width="8" height="8" fill="#ff123d" class="c-win" style="--o:0.35"/><rect x="324" y="138" width="8" height="8" fill="#ff123d" class="c-win" style="--o:0.8"/><rect x="357" y="138" width="8" height="8" fill="#ff123d" class="c-win" style="--o:0.35"/>
-        <rect class="c-door" x="321" y="146" width="14" height="20" style="stroke:#ff123d"/>
-      </g>
-      <ellipse class="c-portal-glow" cx="182" cy="138" rx="20" ry="30"/>
-      <ellipse class="c-portal" cx="182" cy="138" rx="12" ry="22"/>
-      <rect class="c-ground" y="166" width="400" height="34"/>
-      <rect class="c-rim" y="166" width="400" height="2"/>
-      <g class="c-hero"><rect x="152" y="147" width="9" height="13" fill="#ff123d" stroke="#01010a"/><rect x="152" y="139" width="9" height="8" fill="#f5f6ff" stroke="#01010a"/><rect x="152" y="160" width="3.5" height="6" fill="#01010a"/><rect x="157.5" y="160" width="3.5" height="6" fill="#01010a"/></g>
-    </svg>
-          <figcaption><a href="aventure.html#ville" data-switch-adventure><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-gamepad"/></svg>Explorer cette ville en mode aventure</a></figcaption>
-        </figure>
       </div>
       <div class="wrap">
         <div class="stack-strip">
@@ -229,24 +196,22 @@
       </div>
     </section>
 
-    <section class="sec" id="projets" data-route="projets" style="--sec:#ff123d" aria-labelledby="projets-title">
+    <section class="sec" id="projets" data-route="projets" aria-labelledby="projets-title">
       <div class="wrap">
       <header class="sec-head">
         <h2 class="sec-title" id="projets-title">Projets</h2>
-        <a class="sec-house" href="aventure.html#projets" data-switch-adventure
-           title="Voir cette section dans le mode aventure"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison GALERIE</span></a>
         <p class="sec-lead">13 projets : 6 professionnels (DevPhantom, en équipe), 5 personnels, 2 scolaires. Pour chacun, mon rôle exact.</p>
       </header>
         <div class="filters" role="group" aria-label="Filtrer les projets par catégorie">
           <button type="button" class="filter" data-filter="all" aria-pressed="true">Tous <span>13</span></button>
-          <button type="button" class="filter" data-filter="Professionnel" aria-pressed="false" style="--acc:#19e8ff">Professionnel <span>6</span></button>
-          <button type="button" class="filter" data-filter="Personnel" aria-pressed="false" style="--acc:#ff2bb0">Personnel <span>5</span></button>
-          <button type="button" class="filter" data-filter="Scolaire" aria-pressed="false" style="--acc:#8a3bff">Scolaire <span>2</span></button>
+          <button type="button" class="filter" data-filter="Professionnel" aria-pressed="false">Professionnel <span>6</span></button>
+          <button type="button" class="filter" data-filter="Personnel" aria-pressed="false">Personnel <span>5</span></button>
+          <button type="button" class="filter" data-filter="Scolaire" aria-pressed="false">Scolaire <span>2</span></button>
         </div>
         <h3 class="group-title" data-group="feat">À ne pas rater</h3>
         <div class="feat-grid">
           <article class="card proj proj--feat" id="projets/allsab-ms" data-route="projets/allsab-ms"
-                   data-cat="Professionnel" data-pick style="--acc:#19e8ff" aria-labelledby="p-allsab-ms">
+                   data-cat="Professionnel" data-pick aria-labelledby="p-allsab-ms">
             <div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">Intranet</span><span class="proj__cover-name">ALLSAB-MS</span></div>
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">Professionnel</span><span>Intranet</span></p>
@@ -258,7 +223,7 @@
             </div>
           </article>
           <article class="card proj proj--feat" id="projets/badn" data-route="projets/badn"
-                   data-cat="Professionnel" data-pick style="--acc:#19e8ff" aria-labelledby="p-badn">
+                   data-cat="Professionnel" data-pick aria-labelledby="p-badn">
             <div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">Application Mobile</span><span class="proj__cover-name">BADN</span></div>
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">Professionnel</span><span>Application Mobile</span></p>
@@ -270,7 +235,7 @@
             </div>
           </article>
           <article class="card proj proj--feat" id="projets/wild-kedougou" data-route="projets/wild-kedougou"
-                   data-cat="Personnel" data-pick style="--acc:#ff2bb0" aria-labelledby="p-wild-kedougou">
+                   data-cat="Personnel" data-pick aria-labelledby="p-wild-kedougou">
             <div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">Plateforme de réservation</span><span class="proj__cover-name">KÉDOUGOU</span></div>
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">Personnel</span><span>Plateforme de réservation</span></p>
@@ -282,7 +247,7 @@
             </div>
           </article>
           <article class="card proj proj--feat" id="projets/islaah" data-route="projets/islaah"
-                   data-cat="Personnel" data-pick style="--acc:#ff2bb0" aria-labelledby="p-islaah">
+                   data-cat="Personnel" data-pick aria-labelledby="p-islaah">
             <div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">Application Mobile</span><span class="proj__cover-name">ISLAAH</span></div>
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">Personnel</span><span>Application Mobile</span></p>
@@ -294,7 +259,7 @@
             </div>
           </article>
           <article class="card proj proj--feat" id="projets/skywalk" data-route="projets/skywalk"
-                   data-cat="Scolaire" data-pick style="--acc:#8a3bff" aria-labelledby="p-skywalk">
+                   data-cat="Scolaire" data-pick aria-labelledby="p-skywalk">
             <div class="proj__cover" aria-hidden="true"><span class="proj__cover-type">Plateforme Web</span><span class="proj__cover-name">SKYWALK</span></div>
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">Scolaire</span><span>Plateforme Web</span></p>
@@ -310,7 +275,7 @@
         <ul class="proj-list">
           <li>
             <details class="card proj proj--row" id="projets/infinitia" data-route="projets/infinitia"
-                     data-cat="Professionnel" style="--acc:#19e8ff">
+                     data-cat="Professionnel">
               <summary>
                 <span class="row__main"><span class="proj__title">Infinitia</span><span class="row__type">Plateforme Web</span></span>
                 <span class="chip-cat">Professionnel</span>
@@ -326,7 +291,7 @@
           </li>
           <li>
             <details class="card proj proj--row" id="projets/hexagon" data-route="projets/hexagon"
-                     data-cat="Professionnel" style="--acc:#19e8ff">
+                     data-cat="Professionnel">
               <summary>
                 <span class="row__main"><span class="proj__title">Hexagon</span><span class="row__type">Plateforme Web</span></span>
                 <span class="chip-cat">Professionnel</span>
@@ -342,7 +307,7 @@
           </li>
           <li>
             <details class="card proj proj--row" id="projets/gexp" data-route="projets/gexp"
-                     data-cat="Professionnel" style="--acc:#19e8ff">
+                     data-cat="Professionnel">
               <summary>
                 <span class="row__main"><span class="proj__title">GEXP</span><span class="row__type">Plateforme Web</span></span>
                 <span class="chip-cat">Professionnel</span>
@@ -358,7 +323,7 @@
           </li>
           <li>
             <details class="card proj proj--row" id="projets/ilamiria" data-route="projets/ilamiria"
-                     data-cat="Professionnel" style="--acc:#19e8ff">
+                     data-cat="Professionnel">
               <summary>
                 <span class="row__main"><span class="proj__title">Ilamiria</span><span class="row__type">Application Mobile</span></span>
                 <span class="chip-cat">Professionnel</span>
@@ -374,7 +339,7 @@
           </li>
           <li>
             <details class="card proj proj--row" id="projets/pool-party" data-route="projets/pool-party"
-                     data-cat="Personnel" style="--acc:#ff2bb0">
+                     data-cat="Personnel">
               <summary>
                 <span class="row__main"><span class="proj__title">Pool Party Experience</span><span class="row__type">Site vitrine WordPress</span></span>
                 <span class="chip-cat">Personnel</span>
@@ -390,7 +355,7 @@
           </li>
           <li>
             <details class="card proj proj--row" id="projets/prospectly" data-route="projets/prospectly"
-                     data-cat="Personnel" style="--acc:#ff2bb0">
+                     data-cat="Personnel">
               <summary>
                 <span class="row__main"><span class="proj__title">Plateforme de recherche de prospects</span><span class="row__type">Projet personnel</span></span>
                 <span class="chip-cat">Personnel</span>
@@ -406,7 +371,7 @@
           </li>
           <li>
             <details class="card proj proj--row" id="projets/oneday" data-route="projets/oneday"
-                     data-cat="Personnel" style="--acc:#ff2bb0">
+                     data-cat="Personnel">
               <summary>
                 <span class="row__main"><span class="proj__title">OneDay</span><span class="row__type">PWA de planification</span></span>
                 <span class="chip-cat">Personnel</span>
@@ -422,7 +387,7 @@
           </li>
           <li>
             <details class="card proj proj--row" id="projets/crowdin" data-route="projets/crowdin"
-                     data-cat="Scolaire" style="--acc:#8a3bff">
+                     data-cat="Scolaire">
               <summary>
                 <span class="row__main"><span class="proj__title">Crowdin (clone)</span><span class="row__type">Plateforme de localisation</span></span>
                 <span class="chip-cat">Scolaire</span>
@@ -440,12 +405,10 @@
       </div>
     </section>
 
-    <section class="sec" id="parcours" data-route="parcours/devphantom" style="--sec:#8a3bff" aria-labelledby="parcours-title">
+    <section class="sec" id="parcours" data-route="parcours/devphantom" aria-labelledby="parcours-title">
       <div class="wrap">
       <header class="sec-head">
         <h2 class="sec-title" id="parcours-title">Parcours</h2>
-        <a class="sec-house" href="aventure.html#parcours" data-switch-adventure
-           title="Voir cette section dans le mode aventure"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison PARCOURS</span></a>
         <p class="sec-lead">Alternance chez DevPhantom (01/2024 — 10/2026), en parallèle de l'ETNA (2023 — 2026).</p>
       </header>
         <div class="tracks">
@@ -477,7 +440,7 @@
             </ol>
           </div>
           <div class="track">
-            <h3 class="track__title"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-house"/></svg>Formation</h3>
+            <h3 class="track__title"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-school"/></svg>Formation</h3>
             <ol class="tl">
             <li class="tl__item card" id="parcours/etna" data-route="parcours/etna">
               <p class="tl__date">2023 — 2026</p>
@@ -515,12 +478,10 @@
       </div>
     </section>
 
-    <section class="sec" id="competences" data-route="profil" style="--sec:#19e8ff" aria-labelledby="competences-title">
+    <section class="sec" id="competences" data-route="profil" aria-labelledby="competences-title">
       <div class="wrap">
       <header class="sec-head">
         <h2 class="sec-title" id="competences-title">Compétences</h2>
-        <a class="sec-house" href="aventure.html#profil" data-switch-adventure
-           title="Voir cette section dans le mode aventure"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison PROFIL</span></a>
         
       </header>
         <h3 class="group-title">Stack principale <small>utilisée dans plusieurs projets de ce portfolio</small></h3>
@@ -635,12 +596,10 @@
       </div>
     </section>
 
-    <section class="sec" id="profil" data-route="profil" style="--sec:#19e8ff" aria-labelledby="profil-title">
+    <section class="sec" id="profil" data-route="profil" aria-labelledby="profil-title">
       <div class="wrap">
       <header class="sec-head">
         <h2 class="sec-title" id="profil-title">À propos</h2>
-        <a class="sec-house" href="aventure.html#profil" data-switch-adventure
-           title="Voir cette section dans le mode aventure"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison PROFIL</span></a>
         
       </header>
         <div class="about">
@@ -653,12 +612,10 @@
       </div>
     </section>
 
-    <section class="sec sec--band" id="services" data-route="portail" style="--sec:#19e8ff" aria-labelledby="services-title">
+    <section class="sec sec--band" id="services" data-route="portail" aria-labelledby="services-title">
       <div class="wrap">
       <header class="sec-head">
         <h2 class="sec-title" id="services-title">Vous avez un projet ?</h2>
-        <a class="sec-house" href="aventure.html#portail" data-switch-adventure
-           title="Voir cette section dans le mode aventure"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison CONSTRUISEZ VOTRE PROJET</span></a>
         <p class="sec-lead">Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.</p>
       </header>
         <div class="services">
@@ -668,12 +625,10 @@
       </div>
     </section>
 
-    <section class="sec" id="contact" data-route="contact" style="--sec:#ff2bb0" aria-labelledby="contact-title">
+    <section class="sec" id="contact" data-route="contact" aria-labelledby="contact-title">
       <div class="wrap">
       <header class="sec-head">
         <h2 class="sec-title" id="contact-title">Contact</h2>
-        <a class="sec-house" href="aventure.html#contact" data-switch-adventure
-           title="Voir cette section dans le mode aventure"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-house"/></svg><span>Maison CONTACT</span></a>
         <p class="sec-lead">En recherche de CDI (dès sept. 2026). Écrivez-moi ou appelez-moi directement.</p>
       </header>
         <div class="contact">

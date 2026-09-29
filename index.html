@@ -16,7 +16,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#0e1630">
+  <meta name="theme-color" content="#0a0a0d">
   <script>
     // Anciens liens (l'ancienne page d'accueil était le mode classique) :
     // /#projets/skywalk → /classique#projets/skywalk, avant tout affichage.
@@ -25,9 +25,9 @@
     }
   </script>
   <script src="js/theme.js"></script>
-  <link rel="preload" href="assets/fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/site.css">
   <link rel="stylesheet" href="css/select.css">
   <!-- build:jsonld -->
   <script type="application/ld+json">
@@ -133,22 +133,22 @@
        seulement quand le visiteur montre son intention (survol / focus).
        ══════════════════════════════════════════════════════ -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M8 7V5h8v2M3 8h18v11H3zM3 13h18" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
-    <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></symbol>
-    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4"/></symbol>
-    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2.2"/></symbol>
-    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
-    <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M8 7V5h8v2M3 8h18v11H3zM3 13h18" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>
 
-  <div class="sel-bg" aria-hidden="true"><div class="sel-bg__sky"></div><div class="sel-bg__city"></div></div>
+  <div class="sel-bg" aria-hidden="true"><div class="sel-bg__glow"></div></div>
 
   <header class="sel-top">
     <span class="sel-brand">A. DRAME</span>
     <nav class="sel-quick" aria-label="Accès direct">
       <a href="assets/CV.pdf" target="_blank" rel="noopener">CV</a>
       <button type="button" data-contact-cta data-contact-subject="Prise de contact — Portfolio">Contact</button>
-      <button type="button" class="sel-theme" data-theme-toggle aria-pressed="false" aria-label="Changer d'ambiance">
+      <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer d'ambiance">
         <svg class="ico ico--sun" aria-hidden="true"><use href="#i-sun"/></svg>
         <svg class="ico ico--moon" aria-hidden="true"><use href="#i-moon"/></svg>
       </button>
@@ -157,8 +157,8 @@
 
   <main class="sel" id="main">
     <div class="sel-id"><!-- build:identity -->
-        <p class="sel-status"><span class="pulse" aria-hidden="true"></span>En recherche de CDI (dès sept. 2026)</p>
-        <h1 class="sel-name">ARPHAN DRAME</h1>
+        <p class="pill sel-status"><span class="pulse" aria-hidden="true"></span>En recherche de CDI (dès sept. 2026)</p>
+        <h1 class="sel-name">Arphan Drame</h1>
         <p class="sel-title">Développeur Web Full Stack <span>· Île-de-France</span></p>
         <!-- /build:identity --></div>
 

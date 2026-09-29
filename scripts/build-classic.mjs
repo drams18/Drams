@@ -22,7 +22,7 @@ import { dirname, join } from 'node:path';
 
 const require = createRequire(import.meta.url);
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const { SECTIONS, CATEGORY_ACCENT } = require('../js/museum.js');
+const { SECTIONS } = require('../js/museum.js');
 
 // Adresse publique du site (Cloudflare Pages). À changer ici — et dans les
 // <head> des pages — le jour où un nom de domaine est acheté.
@@ -34,22 +34,15 @@ const esc = (v) => String(v ?? '')
 const plural = (n, one, many) => `${n} ${n > 1 ? many : one}`;
 const icon = (id, cls = 'ico') => `<svg class="${cls}" aria-hidden="true" focusable="false"><use href="#i-${id}"/></svg>`;
 
-// Maison de la ville correspondant à chaque section (mêmes couleurs que
-// dans le mode aventure — js/map.js BUILDINGS_DATA / SPECIAL_DOOR).
-const HOUSES = {
-  profil:   { label: 'PROFIL',   color: '#19e8ff' },
-  parcours: { label: 'PARCOURS', color: '#8a3bff' },
-  projets:  { label: 'GALERIE',  color: '#ff123d' },
-  contact:  { label: 'CONTACT',  color: '#ff2bb0' },
-  portail:  { label: 'CONSTRUISEZ VOTRE PROJET', color: '#19e8ff' },
-};
-
 // ── Données ────────────────────────────────────────────
 const profile  = SECTIONS.profile;
 const bio      = profile.bio;
 const steps    = SECTIONS.parcours.steps;
 const projects = SECTIONS.projets.items;
 const contact  = SECTIONS.contact;
+
+// « Arphan DRAME » → « Arphan Drame » (le mode classique n'écrit pas en capitales).
+const displayName = bio.name.replace(/\b(\p{Lu})(\p{Lu}+)\b/gu, (m, a, b) => a + b.toLowerCase());
 
 const step = (slug) => steps.find(s => s.slug === slug);
 const devphantom = step('devphantom');
@@ -81,13 +74,10 @@ const allSkills = profile.skillGroups.flatMap(g => g.items.map(item => ({ item, 
 const mainStack = allSkills.filter(s => s.used.length >= 2).sort((a, b) => b.used.length - a.used.length);
 
 // ── Fragments ──────────────────────────────────────────
-function secHead(route, id, title, lead) {
-  const h = HOUSES[route];
+function secHead(id, title, lead) {
   return `
       <header class="sec-head">
         <h2 class="sec-title" id="${id}-title">${esc(title)}</h2>
-        <a class="sec-house" href="aventure.html#${route}" data-switch-adventure
-           title="Voir cette section dans le mode aventure">${icon('house')}<span>Maison ${esc(h.label)}</span></a>
         ${lead ? `<p class="sec-lead">${esc(lead)}</p>` : ''}
       </header>`;
 }
@@ -95,36 +85,6 @@ function secHead(route, id, title, lead) {
 const linkList = (links, cls) => (links && links.length)
   ? links.map(l => `<a class="${cls}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external', 'ico ico--xs')}</a>`).join('')
   : `<span class="${cls} ${cls}--off" aria-disabled="true">Indisponible</span>`;
-
-// Ville (même maisons, mêmes couleurs que le jeu) — s'adapte au thème
-// jour / nuit par variables CSS. Réutilisée par l'écran de sélection.
-function citySVG(extraClass = '') {
-  const houses = [
-    { x: 24,  w: 58, c: '#19e8ff', label: 'PROFIL' },
-    { x: 92,  w: 58, c: '#8a3bff', label: 'PARCOURS' },
-    { x: 214, w: 58, c: '#ff2bb0', label: 'CONTACT' },
-    { x: 282, w: 92, c: '#ff123d', label: 'GALERIE' },
-  ];
-  const win = (h) => [0, 1, 2].map(r => [0, 1, 2].map(col =>
-    `<rect x="${h.x + 9 + col * ((h.w - 26) / 2)}" y="${108 + r * 15}" width="8" height="8" fill="${h.c}" class="c-win" style="--o:${0.35 + ((r + col) % 2) * 0.45}"/>`).join('')).join('');
-  return `<svg class="city ${extraClass}" viewBox="0 0 400 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-      <rect class="c-sky" width="400" height="200"/>
-      <circle class="c-orb" cx="330" cy="46" r="18"/>
-      <g class="c-stars"><circle cx="30" cy="22" r="1"/><circle cx="110" cy="40" r="1.2"/><circle cx="190" cy="18" r="1"/><circle cx="250" cy="34" r="1"/><circle cx="380" cy="80" r="1"/></g>
-      <path class="c-far" d="M0 104h20V76h14v20h16V60h12v34h18V70h16v24h22V54h10v40h20V66h16v30h18V50h12v44h22V72h16v26h20V62h14v34h22V76h18v28h24v96H0z"/>
-      ${houses.map(h => `<g>
-        <rect class="c-facade" x="${h.x}" y="96" width="${h.w}" height="70"/>
-        <rect class="c-roof" x="${h.x - 3}" y="88" width="${h.w + 6}" height="9" style="stroke:${h.c}"/>
-        ${win(h)}
-        <rect class="c-door" x="${h.x + h.w / 2 - 7}" y="146" width="14" height="20" style="stroke:${h.c}"/>
-      </g>`).join('')}
-      <ellipse class="c-portal-glow" cx="182" cy="138" rx="20" ry="30"/>
-      <ellipse class="c-portal" cx="182" cy="138" rx="12" ry="22"/>
-      <rect class="c-ground" y="166" width="400" height="34"/>
-      <rect class="c-rim" y="166" width="400" height="2"/>
-      <g class="c-hero"><rect x="152" y="147" width="9" height="13" fill="#ff123d" stroke="#01010a"/><rect x="152" y="139" width="9" height="8" fill="#f5f6ff" stroke="#01010a"/><rect x="152" y="160" width="3.5" height="6" fill="#01010a"/><rect x="157.5" y="160" width="3.5" height="6" fill="#01010a"/></g>
-    </svg>`;
-}
 
 function hero() {
   const stack = mainStack.slice(0, 8).map(s => `<li>${esc(s.item)}</li>`).join('');
@@ -134,10 +94,11 @@ function hero() {
   }).join('');
   return `
     <section class="hero" id="top" data-route="ville" aria-labelledby="hero-name">
+      <div class="hero__bg" aria-hidden="true"><div class="hero__glow"></div></div>
       <div class="wrap hero__inner">
         <div class="hero__id">
-          ${bio.seeking ? `<p class="status"><span class="pulse" aria-hidden="true"></span>${esc(bio.seeking)}</p>` : ''}
-          <h1 class="hero__name" id="hero-name">${esc(bio.name.toUpperCase())}</h1>
+          ${bio.seeking ? `<p class="pill"><span class="pulse" aria-hidden="true"></span>${esc(bio.seeking)}</p>` : ''}
+          <h1 class="hero__name" id="hero-name">${esc(displayName)}</h1>
           <p class="hero__title">${esc(bio.title)}</p>
           <p class="hero__pitch">${esc(profile.positioning)}</p>
           <p class="hero__meta">${esc(bio.location)} · ${esc(bio.availability)} · Frontend &amp; Backend</p>
@@ -148,10 +109,6 @@ function hero() {
           </div>
           <div class="hero__social">${social}</div>
         </div>
-        <figure class="hero__city">
-          ${citySVG()}
-          <figcaption><a href="aventure.html#ville" data-switch-adventure>${icon('gamepad')}Explorer cette ville en mode aventure</a></figcaption>
-        </figure>
       </div>
       <div class="wrap">
         <div class="stack-strip">
@@ -172,10 +129,9 @@ function projectCover(p) {
 }
 
 function featuredCard(p) {
-  const accent = CATEGORY_ACCENT[p.category] || p.accent;
   return `
           <article class="card proj proj--feat" id="projets/${p.slug}" data-route="projets/${p.slug}"
-                   data-cat="${esc(p.category)}" data-pick style="--acc:${accent}" aria-labelledby="p-${p.slug}">
+                   data-cat="${esc(p.category)}" data-pick aria-labelledby="p-${p.slug}">
             ${projectCover(p)}
             <div class="proj__body">
               <p class="proj__meta"><span class="chip-cat">${esc(p.category)}</span><span>${esc(p.type)}</span></p>
@@ -189,11 +145,10 @@ function featuredCard(p) {
 }
 
 function projectRow(p) {
-  const accent = CATEGORY_ACCENT[p.category] || p.accent;
   return `
           <li>
             <details class="card proj proj--row" id="projets/${p.slug}" data-route="projets/${p.slug}"
-                     data-cat="${esc(p.category)}" style="--acc:${accent}">
+                     data-cat="${esc(p.category)}">
               <summary>
                 <span class="row__main"><span class="proj__title">${esc(p.title)}</span><span class="row__type">${esc(p.type)}</span></span>
                 <span class="chip-cat">${esc(p.category)}</span>
@@ -212,14 +167,14 @@ function projectRow(p) {
 function projectsSection() {
   const filters = [
     { f: 'all', label: 'Tous', n: projects.length },
-    ...CATEGORIES.map(c => ({ f: c, label: c, n: byCat[c].length, acc: CATEGORY_ACCENT[c] })),
+    ...CATEGORIES.map(c => ({ f: c, label: c, n: byCat[c].length })),
   ];
   const counts = `${byCat.Professionnel.length} professionnels (DevPhantom, en équipe), ${byCat.Personnel.length} personnels, ${plural(byCat.Scolaire.length, 'scolaire', 'scolaires')}.`;
   return `
-    <section class="sec" id="projets" data-route="projets" style="--sec:${HOUSES.projets.color}" aria-labelledby="projets-title">
-      <div class="wrap">${secHead('projets', 'projets', 'Projets', `${plural(projects.length, 'projet', 'projets')} : ${counts} Pour chacun, mon rôle exact.`)}
+    <section class="sec" id="projets" data-route="projets" aria-labelledby="projets-title">
+      <div class="wrap">${secHead('projets', 'Projets', `${plural(projects.length, 'projet', 'projets')} : ${counts} Pour chacun, mon rôle exact.`)}
         <div class="filters" role="group" aria-label="Filtrer les projets par catégorie">
-          ${filters.map((x, i) => `<button type="button" class="filter" data-filter="${esc(x.f)}" aria-pressed="${i === 0}"${x.acc ? ` style="--acc:${x.acc}"` : ''}>${esc(x.label)} <span>${x.n}</span></button>`).join('\n          ')}
+          ${filters.map((x, i) => `<button type="button" class="filter" data-filter="${esc(x.f)}" aria-pressed="${i === 0}">${esc(x.label)} <span>${x.n}</span></button>`).join('\n          ')}
         </div>
         <h3 class="group-title" data-group="feat">À ne pas rater</h3>
         <div class="feat-grid">${featured.map(featuredCard).join('')}
@@ -255,8 +210,8 @@ function parcours() {
               <ul class="tl__projects">${pro}</ul>`;
   const expItems = experience.map(s => s.slug === 'devphantom' ? tlItem(s, devExtra) : tlItem(s)).join('');
   return `
-    <section class="sec" id="parcours" data-route="parcours/devphantom" style="--sec:${HOUSES.parcours.color}" aria-labelledby="parcours-title">
-      <div class="wrap">${secHead('parcours', 'parcours', 'Parcours', `Alternance chez DevPhantom (${devphantom.date}), en parallèle de l'ETNA (${etna.date}).`)}
+    <section class="sec" id="parcours" data-route="parcours/devphantom" aria-labelledby="parcours-title">
+      <div class="wrap">${secHead('parcours', 'Parcours', `Alternance chez DevPhantom (${devphantom.date}), en parallèle de l'ETNA (${etna.date}).`)}
         <div class="tracks">
           <div class="track">
             <h3 class="track__title">${icon('briefcase')}Expérience</h3>
@@ -264,7 +219,7 @@ function parcours() {
             </ol>
           </div>
           <div class="track">
-            <h3 class="track__title">${icon('house')}Formation</h3>
+            <h3 class="track__title">${icon('school')}Formation</h3>
             <ol class="tl">${academic.map(s => tlItem(s)).join('')}
             </ol>
           </div>
@@ -291,8 +246,8 @@ function skills() {
             }).join('')}</ul>
           </div>`).join('');
   return `
-    <section class="sec" id="competences" data-route="profil" style="--sec:${HOUSES.profil.color}" aria-labelledby="competences-title">
-      <div class="wrap">${secHead('profil', 'competences', 'Compétences')}
+    <section class="sec" id="competences" data-route="profil" aria-labelledby="competences-title">
+      <div class="wrap">${secHead('competences', 'Compétences')}
         <h3 class="group-title">Stack principale <small>utilisée dans plusieurs projets de ce portfolio</small></h3>
         <ul class="stack-grid">${main}
         </ul>
@@ -307,8 +262,8 @@ function about() {
   const langs = bio.languages.map(l => `<li><strong>${esc(l.label)}</strong> ${esc(l.level)}</li>`).join('');
   const quals = profile.qualities.map(q => `<li>${esc(q)}</li>`).join('');
   return `
-    <section class="sec" id="profil" data-route="profil" style="--sec:${HOUSES.profil.color}" aria-labelledby="profil-title">
-      <div class="wrap">${secHead('profil', 'profil', 'À propos')}
+    <section class="sec" id="profil" data-route="profil" aria-labelledby="profil-title">
+      <div class="wrap">${secHead('profil', 'À propos')}
         <div class="about">
           <p class="about__bio">${esc(bio.description)}</p>
           <div class="about__meta">
@@ -322,8 +277,8 @@ function about() {
 
 function services() {
   return `
-    <section class="sec sec--band" id="services" data-route="portail" style="--sec:${HOUSES.portail.color}" aria-labelledby="services-title">
-      <div class="wrap">${secHead('portail', 'services', 'Vous avez un projet ?', 'Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.')}
+    <section class="sec sec--band" id="services" data-route="portail" aria-labelledby="services-title">
+      <div class="wrap">${secHead('services', 'Vous avez un projet ?', 'Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.')}
         <div class="services">
           <a class="btn btn--primary" href="construire-projet.html">Construisez votre projet${icon('arrow')}</a>
           <a class="btn btn--ghost" href="tarifs.html">Voir mes tarifs</a>
@@ -339,8 +294,8 @@ function contactSection() {
   }).join('\n            ');
   const tel = contact.phone.replace(/[^\d+]/g, '');
   return `
-    <section class="sec" id="contact" data-route="contact" style="--sec:${HOUSES.contact.color}" aria-labelledby="contact-title">
-      <div class="wrap">${secHead('contact', 'contact', 'Contact', bio.seeking ? `${bio.seeking}. Écrivez-moi ou appelez-moi directement.` : '')}
+    <section class="sec" id="contact" data-route="contact" aria-labelledby="contact-title">
+      <div class="wrap">${secHead('contact', 'Contact', bio.seeking ? `${bio.seeking}. Écrivez-moi ou appelez-moi directement.` : '')}
         <div class="contact">
           <div class="contact__direct">
             <div class="contact__row">
@@ -372,8 +327,8 @@ function contactSection() {
 // ── Écran de sélection : bloc identité ──────────────────
 function identity() {
   return `
-        <p class="sel-status">${bio.seeking ? `<span class="pulse" aria-hidden="true"></span>${esc(bio.seeking)}` : ''}</p>
-        <h1 class="sel-name">${esc(bio.name.toUpperCase())}</h1>
+        ${bio.seeking ? `<p class="pill sel-status"><span class="pulse" aria-hidden="true"></span>${esc(bio.seeking)}</p>` : ''}
+        <h1 class="sel-name">${esc(displayName)}</h1>
         <p class="sel-title">${esc(bio.title)} <span>· ${esc(bio.location)}</span></p>
         `;
 }
@@ -383,7 +338,7 @@ function person() {
   return {
     '@type': 'Person',
     '@id': `${SITE_URL}#person`,
-    name: bio.name.replace(/DRAME/, 'Drame'),
+    name: displayName,
     jobTitle: bio.title,
     description: `${bio.title} en ${bio.location}. ${bio.seeking || ''}`.trim(),
     url: SITE_URL,

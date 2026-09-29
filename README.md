@@ -20,19 +20,21 @@ https://portfolio-3kx.pages.dev/
   npm run dev       # serveur local (Vite), rechargement à chaud
   npm run content   # régénère seulement le HTML depuis js/museum.js
   npm run build     # content + build Vite → dist/ (ce que sert Cloudflare Pages)
-  npm run capture   # régénère les miniatures de l'écran de sélection + og.jpg
+  npm run capture   # (après build) régénère les miniatures de l'accueil + og.jpg
   ```
 
 - **Liens profonds communs** (`js/deeplink.js`) : `#profil`, `#parcours/<slug>`,
   `#projets/<slug>`, `#contact`, `#portail`. Le même fragment ouvre le même contenu dans les
   deux modes (`/classique#projets/skywalk` ⇄ `/aventure#projets/skywalk`).
 - **Ambiance jour / nuit** : `js/theme.js` (07 h → 20 h = jour ; `?theme=day|night` pour forcer).
-- **DA partagée** : `css/tokens.css` (palette, police pixel auto-hébergée).
+- **Deux styles distincts** : l'accueil, le mode classique et la 404 sont un site web sobre et
+  professionnel (`css/site.css` : thèmes clair/sombre, police Inter) ; le mode aventure, les tarifs et
+  « Construisez votre projet » gardent la DA jeu comics / néon / pixel (`css/tokens.css`, `style.css`).
 - **Formulaires** : `js/contact-form.js` (EmailJS chargé à la demande).
 
 Aucun framework : HTML / CSS / JS vanilla. **Vite** assemble le site dans `dist/` (Cloudflare Pages :
 commande `npm run build`, dossier `dist`) ; les scripts classiques `js/*.js` et les médias y sont
 copiés tels quels. **GSAP + ScrollTrigger** animent le mode classique (`src/classic-motion.js`) :
-entrée du hero, parallaxe de la ville, révélations au défilement, tracé du parcours. La page reste
+entrée du hero, parallaxe du halo, révélations au défilement, tracé du parcours. La page reste
 complète sans ce module, et rien n'est animé si le visiteur préfère réduire les animations.
 L'adresse du site est définie dans `scripts/build-classic.mjs` (`SITE_URL`) et dans les `<head>`.

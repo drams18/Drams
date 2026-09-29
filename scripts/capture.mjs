@@ -4,6 +4,8 @@
 
      npm run capture
 
+   Photographie le site BUILDÉ (dist/) : lancer `npm run build` avant.
+
    Prérequis (outils locaux, pas des dépendances du site) :
      • Google Chrome   (ou variable d'environnement CHROME=/chemin/chrome)
      • ffmpeg avec libwebp
@@ -18,6 +20,7 @@
 
 import { createServer } from 'node:http';
 import { readFile, mkdtemp, rm } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
@@ -25,16 +28,20 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, normalize } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const DIST = join(ROOT, 'dist');
 const OUT = join(ROOT, 'assets/img');
+if (!existsSync(DIST)) { console.error('dist/ introuvable : lancez d\'abord npm run build.'); process.exit(1); }
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
 const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.png': 'image/png',
   '.webp': 'image/webp', '.jpg': 'image/jpeg', '.woff2': 'font/woff2', '.mp3': 'audio/mpeg', '.pdf': 'application/pdf', '.svg': 'image/svg+xml' };
 
-// Mini serveur statique (le site n'a pas besoin de build pour être servi).
+// Mini serveur statique : les pages depuis dist/, le reste (scripts/og.html,
+// node_modules/ pour sa police) depuis la racine du projet.
 const server = createServer(async (req, res) => {
   const path = normalize(decodeURIComponent(req.url.split('?')[0])).replace(/^(\.\.[/\\])+/, '');
-  const file = join(ROOT, path.endsWith('/') ? path + 'index.html' : path);
+  const rel = path.endsWith('/') ? path + 'index.html' : path;
+  const file = existsSync(join(DIST, rel)) ? join(DIST, rel) : join(ROOT, rel);
   try {
     const body = await readFile(file);
     res.writeHead(200, { 'Content-Type': TYPES[extname(file)] || 'application/octet-stream' });
@@ -61,8 +68,9 @@ async function webp(png, name) {
 
 try {
   const jobs = [
-    { name: 'preview-classique-day',   url: 'classique.html?theme=day' },
-    { name: 'preview-classique-night', url: 'classique.html?theme=night' },
+    // ?capture : page classique figée (animations GSAP désactivées).
+    { name: 'preview-classique-day',   url: 'classique.html?theme=day&capture' },
+    { name: 'preview-classique-night', url: 'classique.html?theme=night&capture' },
     // ?capture : la ville sans l'aide de 1re visite par-dessus.
     { name: 'preview-aventure',        url: 'aventure.html?capture#ville', wait: 4000 },
   ];
