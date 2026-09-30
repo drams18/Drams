@@ -1,5 +1,7 @@
 # Cloudflare Pages — liens courts (à mettre sur un CV, une signature…)
 /cv          /assets/CV.pdf           302
-/contact     /classique#contact       302
-/projets     /classique#projets       302
+/contact     /classique/contact       302
+/projets     /classique/projets       302
+/parcours    /classique/parcours      302
+/competences /classique/competences   302
 /tarif       /tarifs                  301

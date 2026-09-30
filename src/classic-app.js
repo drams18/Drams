@@ -1,36 +1,48 @@
 /* ══════════════════════════════════════════════════════
    CLASSIC-APP.JS — Couche interactive du mode classique
-   Module ES regroupé par Vite (npm run build) ; chargé après classic.js.
+   Module ES regroupé par Vite (npm run build) ; chargé après classic.js
+   sur chacune des cinq pages.
 
-   La page est complète sans lui (HTML généré depuis js/museum.js).
-   Il ajoute, sur ce même HTML :
-     • la constellation du hero           src/classic/hero.js
-     • le récit du profil + la frise      src/classic/journey.js
-     • l'espace des projets + la fiche    src/classic/projects.js
-     • l'écosystème de compétences        src/classic/skills.js
-     • les animations (GSAP)              src/classic-motion.js
-   window.ClassicApp relie les vues entre elles (projet ↔ technologie)
-   et avec classic.js (liens profonds).
+   Chaque page est complète sans lui (HTML généré depuis js/museum.js).
+   Il charge SEULEMENT l'expérience de la page courante (import
+   dynamique → un fichier par page, GSAP uniquement sur le Profil) :
+     profil       src/classic/profile.js    entrée cinématique, profondeur
+     projets      src/classic/projects.js   espace de bulles + fiche
+     parcours     src/classic/timeline.js   frise horizontale
+     competences  src/classic/skills.js     écosystème (globe)
+     contact      —                         (CSS seul)
    ══════════════════════════════════════════════════════ */
-import { initHero } from './classic/hero.js';
-import { initStory, initTimeline } from './classic/journey.js';
-import { initProjects } from './classic/projects.js';
-import { initSkills } from './classic/skills.js';
-import { initMotion } from './classic-motion.js';
-
 const root = document.documentElement;
 const app = (window.ClassicApp = window.ClassicApp || {});
+const page = document.body.dataset.page;
 
-// Une vue en échec ne doit pas emporter les autres.
-function safely(fn) {
-  try { fn(app); } catch (err) { console.error(err); }
+const VIEWS = {
+  profil: () => import('./classic/profile.js').then((m) => m.initProfile(app)),
+  projets: () => import('./classic/projects.js').then((m) => m.initProjects(app)),
+  parcours: () => import('./classic/timeline.js').then((m) => m.initTimeline(app)),
+  competences: () => import('./classic/skills.js').then((m) => m.initSkills(app)),
+};
+
+function ready() {
+  root.classList.add('app-ready');
+  root.classList.remove('no-app');
 }
 
-safely(initProjects);
-safely(initSkills);
-safely(initHero);
-safely(initStory);
-safely(initTimeline);
-root.classList.add('app-ready');
-root.classList.remove('no-app');
-safely(initMotion);
+function start() {
+  const view = VIEWS[page];
+  // Le masque anti-flash ne concerne que l'entrée du Profil (levé par profile.js).
+  if (page !== 'profil') root.classList.remove('motion-pending');
+  if (!view) { ready(); return; }
+  view()
+    .then(ready)
+    .catch((err) => {
+      console.error(err);
+      root.classList.remove('motion-pending');
+      root.classList.add('no-app');
+    });
+}
+
+// Page préchargée en arrière-plan (speculation rules) : les vues se
+// construisent tout de suite (affichage instantané au clic) ; seule
+// l'entrée du Profil attend que la page soit réellement affichée.
+start();

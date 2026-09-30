@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://portfolio-3kx.pages.dev/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
   <url><loc>https://portfolio-3kx.pages.dev/classique</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://portfolio-3kx.pages.dev/classique/projets</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://portfolio-3kx.pages.dev/classique/parcours</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://portfolio-3kx.pages.dev/classique/competences</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://portfolio-3kx.pages.dev/classique/contact</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://portfolio-3kx.pages.dev/aventure</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://portfolio-3kx.pages.dev/tarifs</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://portfolio-3kx.pages.dev/devis</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>

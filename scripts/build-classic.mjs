@@ -1,18 +1,22 @@
 /* ══════════════════════════════════════════════════════
-   BUILD-CLASSIC.MJS — Génère le HTML statique à partir de
+   BUILD-CLASSIC.MJS — Génère le mode classique à partir de
    js/museum.js (source unique, partagée avec le mode aventure).
 
-     npm run build        (ou : node scripts/build-classic.mjs)
+     npm run content      (ou : node scripts/build-classic.mjs)
+     npm run build        (content + vite build)
 
-   Réécrit uniquement ce qui se trouve entre des marqueurs :
-     classique.html  <!-- build:content -->   le mode classique
-                     <!-- build:jsonld -->    ProfilePage + Person
-     index.html      <!-- build:identity -->  identité (écran de sélection)
-                     <!-- build:jsonld -->    WebSite + Person
-   Le reste des pages (head, header, footer) s'édite à la main.
+   Mode classique = cinq pages autonomes, ÉCRITES EN ENTIER ici
+   (ne pas les éditer à la main) :
+     classique.html               /classique              Profil
+     classique/projets.html       /classique/projets      Projets
+     classique/parcours.html      /classique/parcours     Parcours
+     classique/competences.html   /classique/competences  Compétences
+     classique/contact.html       /classique/contact      Contact
+   index.html : seuls les blocs entre marqueurs sont réécrits
+     <!-- build:identity -->  <!-- build:jsonld -->
 
-   Résultat : HTML complet, lisible sans JavaScript et indexable. Les
-   visualisations (espace de projets, frise, écosystème de compétences)
+   Chaque page est un document complet, lisible sans JavaScript et
+   indexable. Les expériences (espace de projets, frise, écosystème)
    sont une couche ajoutée par src/classic/*.js sur ce même HTML.
 
    Tout ce qui n'est pas écrit tel quel dans museum.js est DÉRIVÉ ici
@@ -20,7 +24,7 @@
    jamais inventé. Aucune dépendance.
    ══════════════════════════════════════════════════════ */
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -30,7 +34,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { SECTIONS } = require('../js/museum.js');
 
 // Adresse publique du site (Cloudflare Pages). À changer ici — et dans les
-// <head> des pages — le jour où un nom de domaine est acheté.
+// <head> des autres pages — le jour où un nom de domaine est acheté.
 const SITE_URL = 'https://portfolio-3kx.pages.dev/';
 
 // ── Helpers ────────────────────────────────────────────
@@ -40,6 +44,7 @@ const plural = (n, one, many) => `${n} ${n > 1 ? many : one}`;
 const icon = (id, cls = 'ico') => `<svg class="${cls}" aria-hidden="true" focusable="false"><use href="#i-${id}"/></svg>`;
 const slugify = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
   .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const lower1 = (s) => s.charAt(0).toLowerCase() + s.slice(1);
 
 // ── Données ────────────────────────────────────────────
 const profile  = SECTIONS.profile;
@@ -70,7 +75,15 @@ function seekingBits(s) {
   const when = (s.match(/\(([^)]+)\)/) || [])[1];
   return contract ? [`Recherche ${contract}`, when].filter(Boolean) : [s];
 }
-const seekingYear = (bio.seeking || '').match(/(?:19|20)\d{2}/)?.[0] || null;
+// « dès sept. 2026 » → 2026 + 8/12 (mois lu dans le texte, sinon l'année seule).
+const MONTHS = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
+function seekingDate(s) {
+  const y = +((s || '').match(/(?:19|20)\d{2}/) || [])[0];
+  if (!y) return null;
+  const m = MONTHS.findIndex(k => new RegExp(`\\b${k}`, 'i').test(s));
+  return { year: y, at: y + (m >= 0 ? m / 12 : 0) };
+}
+const seeking = seekingDate(bio.seeking);
 
 // ── Compétences ↔ projets ──────────────────────────────
 // Une compétence est « utilisée » si elle figure dans la stack d'au moins
@@ -147,9 +160,6 @@ const bubbleName = (p) => p.title.length > 26 && p.short ? titleCase(p.short) : 
 const projectImage = (p) => p.image
   || (existsSync(join(ROOT, `assets/img/projets/${p.slug}.webp`)) ? `assets/img/projets/${p.slug}.webp` : null);
 
-// Web / mobile, déduit du type.
-const isMobile = (p) => /mobile/i.test(p.type || '');
-
 // ── Chronologie ────────────────────────────────────────
 // « 01/2024 — 10/2026 », « 2021 — début 2022 », « 2020 »… → années décimales.
 // Une fin sans mois est « floue » : dessinée jusqu'au milieu de l'année,
@@ -169,377 +179,688 @@ const KIND = { 'ACADÉMIQUE': 'Formation', 'PROFESSIONNEL': 'Expérience' };
 const timeline = steps.map(s => ({ s, span: spanOf(s.date) }));
 const dated   = timeline.filter(t => t.span).sort((a, b) => a.span.start - b.span.start);
 const undated = timeline.filter(t => !t.span);
-// Poids visuel : l'expérience professionnelle liée aux projets domine.
-const weightOf = (s) => s.kind === 'PROFESSIONNEL' && s.role ? 'major' : 'normal';
+// Poids visuel : l'expérience professionnelle liée aux projets domine ;
+// une formation longue compte plus qu'un point ; « autres » reste discret.
+function weightOf({ s, span }) {
+  if (s.kind === 'PROFESSIONNEL' && s.role) return 'major';
+  if (!span) return 'minor';
+  return span.end && span.end - span.start >= 2 ? 'mid' : 'normal';
+}
 // Libellé court : le mot du titre / lieu qui correspond au `short` (« DevPhantom »).
 function stepLabel(s) {
   const words = `${s.title} ${s.place || ''}`.split(/[\s·—,()]+/);
-  return words.find(w => w.toUpperCase() === s.short) || s.short;
+  return words.find(w => w.toUpperCase() === s.short) || titleCase(s.short);
 }
 const firstYear = Math.floor(Math.min(...dated.map(t => t.span.start)));
-const lastYear  = Math.max(...dated.map(t => Math.ceil(t.span.end ?? t.span.start + 1)));
+const lastYear  = Math.max(...dated.map(t => Math.ceil(t.span.end ?? t.span.start + 1)), seeking ? seeking.year + 1 : 0);
 
-// ── Fragments ──────────────────────────────────────────
-function secHead(id, n, kicker, title, lead) {
+// ── Pages ──────────────────────────────────────────────
+const PAGES = [
+  { key: 'profil',      file: 'classique.html',             path: 'classique',             label: 'Profil',      route: 'profil' },
+  { key: 'projets',     file: 'classique/projets.html',     path: 'classique/projets',     label: 'Projets',     route: 'projets' },
+  { key: 'parcours',    file: 'classique/parcours.html',    path: 'classique/parcours',    label: 'Parcours',    route: `parcours/${devphantom.slug}` },
+  { key: 'competences', file: 'classique/competences.html', path: 'classique/competences', label: 'Compétences', route: 'profil' },
+  { key: 'contact',     file: 'classique/contact.html',     path: 'classique/contact',     label: 'Contact',     route: 'contact' },
+];
+PAGES.forEach((p, i) => { p.n = String(i + 1).padStart(2, '0'); p.i = i; });
+const PAGE = Object.fromEntries(PAGES.map(p => [p.key, p]));
+
+// Liens relatifs : la page Profil est à la racine, les autres dans classique/.
+function linker(from) {
+  const up = from.key === 'profil' ? '' : '../';
+  return {
+    up,
+    page: (key, hash = '') => {
+      const to = PAGE[key];
+      const href = from.key === 'profil' ? to.file : key === 'profil' ? '../classique.html' : to.file.replace('classique/', '');
+      return href + (hash ? `#${hash}` : '');
+    },
+  };
+}
+
+// ── Fragments communs ──────────────────────────────────
+const SPRITE = `
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z" fill="currentColor"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M4 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 9h3v12H3zM9 9h3v1.7c.5-.9 1.7-1.9 3.5-1.9 3.2 0 3.5 2.1 3.5 4.8V21h-3v-6.5c0-1.5 0-3.3-2-3.3s-2.3 1.6-2.3 3.2V21H9z" fill="currentColor"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-orbit" viewBox="0 0 24 24"><circle cx="8" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16.5" cy="7" r="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-center" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.8"/></symbol>
+  </svg>`;
+
+function topbar(page, L) {
+  const nav = PAGES.map(p => {
+    const cur = p === page;
+    return `<a href="${L.page(p.key)}"${cur ? ' aria-current="page"' : ''} data-page-link="${p.key}"><span>${p.label}</span>${cur ? '<i class="nav__ink" aria-hidden="true"></i>' : ''}</a>`;
+  }).join('\n        ');
   return `
-      <header class="sec-head">
-        <p class="sec-kicker"><span>${n}</span>${esc(kicker)}</p>
-        <h2 class="sec-title" id="${id}-title">${esc(title)}</h2>
-        ${lead ? `<p class="sec-lead">${lead}</p>` : ''}
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="${L.page('profil')}" aria-label="${esc(displayName)} — Profil"><span>A. DRAME</span></a>
+      <span class="topbar__where" aria-hidden="true"><b>${page.n}</b>${page.label}</span>
+      <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
+        ${nav}
+      </nav>
+      <div class="topbar__actions">
+        <a class="topbar__cv" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">CV</a>
+        <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer d'ambiance">
+          ${icon('sun', 'ico ico--sun')}
+          ${icon('moon', 'ico ico--moon')}
+        </button>
+        <a class="switch" href="${L.up}aventure.html#${page.route}" data-switch-adventure data-follow-route
+           title="Passer en mode aventure, à l'endroit que vous lisez">
+          ${icon('gamepad')}<span>Mode aventure</span>
+        </a>
+        <button type="button" class="icon-btn nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Ouvrir le menu">
+          ${icon('menu')}
+        </button>
+      </div>
+    </div>
+  </header>`;
+}
+
+// Portes latérales : page précédente / suivante. Leurs liens (rel=prev|next)
+// servent aussi aux flèches du clavier (js/classic.js).
+function worlds(page, L) {
+  const prev = PAGES[page.i - 1], next = PAGES[page.i + 1];
+  const door = (p, dir) => p ? `
+    <a class="worlds__door worlds__door--${dir}" href="${L.page(p.key)}" rel="${dir}" aria-keyshortcuts="${dir === 'prev' ? 'ArrowLeft' : 'ArrowRight'}">
+      ${icon(dir === 'prev' ? 'back' : 'arrow')}<span class="worlds__l"><small>${p.n}</small>${p.label}</span>
+    </a>` : '';
+  return `
+  <nav class="worlds" aria-label="Page précédente et suivante">${door(prev, 'prev')}${door(next, 'next')}
+  </nav>`;
+}
+
+function footer(L) {
+  return `
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <p>${esc(displayName)} — ${esc(bio.title)} · ${esc(bio.location)}</p>
+      <nav class="footer__links" aria-label="Autres pages">
+        <a href="${L.up}index.html">Choisir un mode</a>
+        <a href="${L.up}aventure.html#ville" data-switch-adventure>Mode aventure</a>
+        <a href="${L.up}tarifs.html">Tarifs</a>
+        <a href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">CV</a>
+      </nav>
+    </div>
+  </footer>`;
+}
+
+// Script du <head> (bloquant, minuscule) :
+//   • .js avant le premier rendu (place réservée aux expériences) ;
+//   • sens de la transition entre pages (types de View Transition) ;
+//   • filet .no-app si le module ne démarre pas.
+const HEAD_SCRIPT = `
+  <script>
+    (function (r, w) {
+      r.classList.add('js');
+      var still = /[?&]capture\\b/.test(location.search);
+      if (still) r.classList.add('is-still');
+      if (!still && !matchMedia('(prefers-reduced-motion: reduce)').matches) r.classList.add('motion-pending');
+      // Ordre des pages : le sens de navigation donne le sens de la transition.
+      var ORDER = ['classique', 'projets', 'parcours', 'competences', 'contact'];
+      function idx(u) {
+        try { var p = new URL(u, location.href).pathname.replace(/\\.html$/, '').replace(/\\/$/, ''); } catch (e) { return -1; }
+        var k = p.slice(p.lastIndexOf('/') + 1);
+        return /\\/classique\\//.test(p + '/') || k === 'classique' ? ORDER.indexOf(k) : -1;
+      }
+      function from() {
+        var a = w.navigation && navigation.activation;
+        if (a && a.from && a.from.url) return idx(a.from.url);
+        try { var v = sessionStorage.getItem('drame.classic.from'); sessionStorage.removeItem('drame.classic.from'); return v === null ? -1 : +v; } catch (e) { return -1; }
+      }
+      var here = idx(location.href);
+      w.ClassicNav = { order: ORDER, idx: idx, here: here };
+      if ('onpagereveal' in w) {
+        w.addEventListener('pagereveal', function (e) {
+          var f = from();
+          if (f < 0 || f === here) return;
+          var dir = f < here ? 'fwd' : 'back';
+          r.classList.add('vt-arrival');
+          if (e.viewTransition && e.viewTransition.types) {
+            e.viewTransition.types.add(dir);
+            e.viewTransition.types.add('from-' + ORDER[f]);
+          } else if (!e.viewTransition) r.classList.add('arrive-' + dir);
+        });
+      } else {
+        var f = from();
+        if (f >= 0 && f !== here) r.classList.add('arrive-' + (f < here ? 'fwd' : 'back'));
+      }
+      // Filet : module absent après 2,5 s d'affichage réel → document statique.
+      function arm() {
+        setTimeout(function () {
+          r.classList.remove('motion-pending');
+          if (!r.classList.contains('app-ready')) r.classList.add('no-app');
+        }, 2500);
+      }
+      if (document.prerendering) document.addEventListener('prerenderingchange', arm, { once: true }); else arm();
+    })(document.documentElement, window);
+  </script>`;
+
+function shell(page, { title, description, ogDescription, jsonld, body, scripts = '', scrolls = false }) {
+  const L = linker(page);
+  const others = PAGES.filter(p => p !== page).map(p => L.page(p.key));
+  const url = SITE_URL + page.path;
+  return `<!DOCTYPE html>
+<!-- GÉNÉRÉ par scripts/build-classic.mjs depuis js/museum.js — ne pas éditer : npm run content -->
+<html lang="fr" data-theme="night">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>${esc(title)}</title>
+  <meta name="description" content="${esc(description)}">
+  <link rel="canonical" href="${url}">
+  <meta property="og:type" content="${page.key === 'profil' ? 'profile' : 'website'}">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="${esc(displayName)} — Portfolio">
+  <meta property="og:title" content="${esc(title)}">
+  <meta property="og:description" content="${esc(ogDescription || description)}">
+  <meta property="og:url" content="${url}">
+  <meta property="og:image" content="${SITE_URL}assets/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0a0a0d">
+  <script src="${L.up}js/theme.js"></script>${HEAD_SCRIPT}
+  <link rel="icon" href="${L.up}assets/img/favicon.png">
+  <link rel="stylesheet" href="${L.up}css/tokens.css">
+  <link rel="stylesheet" href="${L.up}css/site.css">
+  <link rel="stylesheet" href="${L.up}css/classic.css">
+  <script type="speculationrules">
+  {"prerender": [{"source": "list", "urls": ${JSON.stringify(others)}, "eagerness": "moderate"}]}
+  </script>${ld(jsonld)}</head>
+<body class="page page--${page.key}${scrolls ? ' page--doc' : ' page--world'}" data-page="${page.key}" data-route="${page.route}">${SPRITE}
+
+  <a class="skip" href="#main">Aller au contenu</a>
+${topbar(page, L)}
+
+  <main id="main" class="world world--${page.key} vt-stage" tabindex="-1">
+    <div class="world__bg" aria-hidden="true"><i></i></div>${body(L)}
+  </main>
+${worlds(page, L)}${scrolls ? footer(L) : ''}
+
+  <script src="${L.up}js/deeplink.js"></script>${scripts ? `\n  ${scripts.replaceAll('{up}', L.up)}` : ''}
+  <script src="${L.up}js/classic.js"></script>
+  <script type="module" src="${L.up}src/classic-app.js"></script>
+</body>
+</html>
+`;
+}
+
+function worldHead(page, title, lead, extra = '') {
+  return `
+      <header class="world-head">
+        <p class="world-head__k"><span>${page.n}</span>${esc(page.label)}</p>
+        <h1 class="world-head__t" id="${page.key}-title">${esc(title)}</h1>
+        ${lead ? `<p class="world-head__lead">${lead}</p>` : ''}${extra}
       </header>`;
 }
 
-// ── Hero : séquence d'entrée ────────────────────────────
-function hero() {
-  const meta = [bio.location, ...seekingBits(bio.seeking)].map(m => `<span class="hero__meta-i">${esc(m)}</span>`).join('');
-  const social = bio.socials.map(s => {
-    const id = /github/i.test(s.label) ? 'github' : /linkedin/i.test(s.label) ? 'linkedin' : 'external';
-    return `<a class="icon-link" href="${esc(s.url)}" target="_blank" rel="noopener">${icon(id)}<span>${esc(s.label)}</span></a>`;
-  }).join('');
-  // « Ce que vous pouvez explorer » : les portes de la page, chiffrées.
-  const doors = [
-    { href: '#profil', n: '01', label: 'Profil', hint: 'Qui je suis' },
-    { href: '#projets', n: '02', label: 'Projets', hint: plural(projects.length, 'réalisation', 'réalisations') },
-    { href: '#parcours', n: '03', label: 'Parcours', hint: `${firstYear} → ${lastYear - 1}` },
-    { href: '#competences', n: '04', label: 'Compétences', hint: plural(allSkills.length, 'technologie', 'technologies') },
-  ].map(d => `<li><a href="${d.href}"><span class="door__n">${d.n}</span><span class="door__l">${d.label}</span><span class="door__h">${esc(d.hint)}</span></a></li>`).join('');
+// ══════════════════════════════════════════════════════
+// 01 · PROFIL
+// ══════════════════════════════════════════════════════
+function profilPage() {
+  const page = PAGE.profil;
+  const ctx = [bio.location, ...seekingBits(bio.seeking)].map(m => `<span class="pf-ctx__i">${esc(m)}</span>`).join('');
   const [first, ...rest] = displayName.split(' ');
-  return `
-    <section class="hero" id="top" data-route="ville" aria-labelledby="hero-name">
-      <div class="hero__bg" aria-hidden="true"><div class="hero__glow"></div><div class="hero__sky"></div></div>
-      <div class="wrap hero__inner">
-        <div class="hero__seq">
-          <p class="hero__kicker">${esc(bio.title)}</p>
-          <h1 class="hero__name" id="hero-name"><span class="hero__w"><span>${esc(first)}</span></span> <span class="hero__w"><span>${esc(rest.join(' '))}</span></span></h1>
-          <p class="hero__line">${esc(bioSentences[1] || profile.positioning)}</p>
-          <p class="hero__meta"><span class="pulse" aria-hidden="true"></span>${meta}</p>
-          <div class="hero__cta">
-            <a class="btn btn--primary" href="#projets">Explorer mes projets${icon('arrow')}</a>
-            <a class="btn btn--ghost" href="assets/CV.pdf" target="_blank" rel="noopener">${icon('download')}Télécharger le CV</a>
-            <button type="button" class="btn btn--ghost" data-contact-cta data-contact-subject="Prise de contact — Portfolio">${icon('mail')}Me contacter</button>
-          </div>
-          <div class="hero__social">${social}</div>
-        </div>
-        <nav class="hero__doors" aria-label="Explorer le portfolio">
-          <p class="hero__doors-k">À explorer</p>
-          <ol>${doors}</ol>
-        </nav>
-      </div>
-    </section>`;
-}
-
-// ── Profil : un récit en quatre chapitres ───────────────
-function story() {
-  const web = projects.filter(p => !isMobile(p)).length;
-  const mobile = projects.length - web;
+  // Les projets, en orbes flottantes autour du nom (couleur = catégorie,
+  // taille = rang) : un avant-goût de l'espace des projets. Positions fixes,
+  // calculées ici pour laisser le centre (le nom) dégagé.
+  const orbs = projects.map((p, i) => {
+    // De part et d'autre du nom (bandes gauche / droite), jamais dessus.
+    const side = i % 2 ? 1 : -1;
+    const band = ((i * 37) % 100) / 100;               // répartition sans motif
+    const x = 50 + side * (31 + band * 17);
+    const y = 12 + ((i * 53) % 76);
+    const z = [0.35, 0.6, 1, 0.8, 0.5][i % 5];         // profondeur (parallaxe, taille)
+    return `<i data-cat="${esc(p.category)}" data-tier="${tierOf(p)}" style="--x:${x.toFixed(1)}%;--y:${y.toFixed(1)}%;--z:${z};--d:${(i * 0.7) % 6}s"></i>`;
+  }).join('');
   const langs = bio.languages.map(l => `<li><strong>${esc(l.label)}</strong> ${esc(l.level)}</li>`).join('');
   const quals = profile.qualities.map(q => `<li>${esc(q)}</li>`).join('');
-  const top = mainStack.slice(0, 6).map(s =>
-    `<li><a href="#competences/${s.slug}" data-skill-link="${s.slug}"><strong>${esc(s.item)}</strong><span>${plural(s.used.length, 'projet', 'projets')}</span></a></li>`).join('');
-  const team = (devphantom.place || '').split(' · ').slice(1).join(' · ');
+  const top = mainStack.slice(0, 6);
 
-  const chapters = [
-    {
-      id: 'identite', k: 'Identité', lead: `${displayName}. ${bio.title} en ${bio.location}.`,
-      body: `
-              <dl class="facts">
-                ${bio.seeking ? `<div><dt>Je recherche</dt><dd>${esc(bio.seeking)}</dd></div>` : ''}
-                <div><dt>Aujourd'hui</dt><dd>${esc(bio.availability)}</dd></div>
-                <div><dt>Langues</dt><dd><ul class="inline-list">${langs}</ul></dd></div>
-              </dl>`,
-    },
-    {
-      id: 'approche', k: 'Approche', lead: profile.positioning,
-      body: `
-              <p class="chapter__text">${esc(bioSentences.slice(1).join(' '))}</p>
-              <ul class="inline-list">${quals}</ul>`,
-    },
-    {
-      id: 'expertise', k: 'Expertise', lead: `Du frontend au backend : ${plural(web, 'projet web', 'projets web')} et ${plural(mobile, 'application mobile', 'applications mobiles')}.`,
-      body: `
-              <p class="chapter__text">Les technologies les plus présentes dans mes projets :</p>
-              <ul class="top-stack">${top}</ul>`,
-    },
-    {
-      id: 'experience', k: 'Expérience', lead: `${devphantom.title} chez ${company}, ${devphantom.date}.`,
-      body: `
-              <p class="chapter__text">${esc(devphantom.desc)}</p>
-              <ul class="figures">
-                <li><strong>${byCat.Professionnel.length}</strong><span>projets professionnels, en équipe</span></li>
-                ${team ? `<li><strong>${esc(company)}</strong><span>${esc(team)}</span></li>` : ''}
-                <li><strong>${esc(etna.date)}</strong><span>${esc(etna.title)}</span></li>
-              </ul>
-              <a class="text-link" href="#parcours/devphantom">Voir le parcours${icon('arrow')}</a>`,
-    },
+  const doors = [
+    { key: 'projets', q: 'Qu’est-ce qu’il a construit\u202f?', hint: `${plural(projects.length, 'projet', 'projets')} · ${byCat.Professionnel.length} professionnels, ${byCat.Personnel.length} personnels, ${byCat.Scolaire.length} scolaires` },
+    { key: 'parcours', q: 'Quel a été son parcours\u202f?', hint: `${firstYear} → ${lastYear - 1} · ${plural(steps.length, 'étape', 'étapes')}` },
+    { key: 'competences', q: 'Quel est son univers technique\u202f?', hint: `${plural(allSkills.length, 'compétence', 'compétences')} · ${families.length} familles` },
+    { key: 'contact', q: 'Comment le contacter\u202f?', hint: bio.seeking || 'E-mail, téléphone, formulaire' },
   ];
-  return `
-    <section class="sec story" id="profil" data-route="profil" aria-labelledby="profil-title">
-      <div class="wrap">${secHead('profil', '01', 'Profil', 'Qui je suis')}
-        <div class="story__grid">
-          <nav class="story__rail" aria-label="Chapitres du profil">
-            <ol>${chapters.map((c, i) => `<li><a href="#profil-${c.id}"><span>0${i + 1}</span>${esc(c.k)}</a></li>`).join('')}</ol>
-          </nav>
-          <div class="story__chapters">${chapters.map((c, i) => `
-            <article class="chapter" id="profil-${c.id}" aria-labelledby="profil-${c.id}-t">
-              <p class="chapter__k" id="profil-${c.id}-t"><span>0${i + 1}</span>${esc(c.k)}</p>
-              <p class="chapter__lead">${esc(c.lead)}</p>
-              <div class="chapter__more">${c.body}
-              </div>
-            </article>`).join('')}
-          </div>
+
+  const body = (L) => `
+    <section class="pf-hero" aria-labelledby="profil-title">
+      <div class="pf-orbs" aria-hidden="true">${orbs}</div>
+      <div class="pf-hero__inner">
+        <h1 class="pf-name" id="profil-title"><span class="pf-name__w"><span>${esc(first)}</span></span> <span class="pf-name__w"><span>${esc(rest.join(' '))}</span></span></h1>
+        <p class="pf-role">${esc(bio.title)}</p>
+        <p class="pf-ctx"><span class="pulse" aria-hidden="true"></span>${ctx}</p>
+        <div class="pf-cta">
+          <a class="btn btn--primary" href="${L.page('projets')}">Voir mes projets${icon('arrow')}</a>
+          <a class="btn btn--ghost" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">${icon('download')}Télécharger mon CV</a>
         </div>
       </div>
+      <a class="pf-scroll" href="#presentation"><span>Découvrir le profil</span>${icon('chevron')}</a>
+    </section>
+
+    <section class="pf-about" id="presentation" aria-labelledby="presentation-title">
+      <div class="wrap">
+        <h2 class="kicker" id="presentation-title">Qui je suis</h2>
+        <p class="pf-statement">${esc(profile.positioning)}</p>
+        <div class="pf-about__grid">
+          <div class="pf-about__text">
+            <p>${esc(bioSentences.slice(1).join(' '))}</p>
+            <ul class="chips" aria-label="Qualités">${quals}</ul>
+          </div>
+          <dl class="facts">
+            ${bio.seeking ? `<div><dt>Je recherche</dt><dd>${esc(bio.seeking)}</dd></div>` : ''}
+            <div><dt>Aujourd'hui</dt><dd>${esc(bio.availability)} <a class="inline-link" href="${L.page('parcours', devphantom.slug)}">${esc(devphantom.date)}</a></dd></div>
+            <div><dt>Basé en</dt><dd>${esc(bio.location)}</dd></div>
+            <div><dt>Formation</dt><dd>${esc(etna.title)} <span class="facts__m">${esc(etna.date)}</span></dd></div>
+            <div><dt>Langues</dt><dd><ul class="inline-list">${langs}</ul></dd></div>
+          </dl>
+        </div>
+        <div class="pf-stack">
+          <p class="mini-title">Les technologies les plus présentes dans mes projets</p>
+          <ul class="pf-stack__list">${top.map(s => `<li><a href="${L.page('competences', s.slug)}" data-fam="${s.fam.key}"><strong>${esc(s.item)}</strong><span>${plural(s.used.length, 'projet', 'projets')}</span></a></li>`).join('')}</ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="pf-next" aria-labelledby="explorer-title">
+      <div class="wrap">
+        <h2 class="kicker" id="explorer-title">Continuer l'exploration</h2>
+        <ol class="doors">${doors.map(d => `
+          <li><a class="door door--${d.key}" href="${L.page(d.key)}">
+            <span class="door__n">${PAGE[d.key].n}</span>
+            <span class="door__l">${PAGE[d.key].label}</span>
+            <span class="door__q">${esc(d.q)}</span>
+            <span class="door__h">${esc(d.hint)}</span>
+            ${icon('arrow', 'ico door__go')}
+          </a></li>`).join('')}
+        </ol>
+      </div>
     </section>`;
+
+  return shell(page, {
+    title: `${displayName} — ${bio.title} · Portfolio`,
+    description: `Portfolio d'${displayName}, ${bio.title} en ${bio.location}. ${bio.seeking}. Projets professionnels (${company}), personnels et scolaires, parcours, compétences et contact.`,
+    ogDescription: `${bio.seeking}. ${profile.positioning}`,
+    jsonld: {
+      '@context': 'https://schema.org',
+      '@type': 'ProfilePage',
+      url: SITE_URL + page.path,
+      inLanguage: 'fr',
+      mainEntity: person(),
+    },
+    body,
+    scrolls: true,
+  });
 }
 
-// ── Projets : index sémantique complet ──────────────────
-// Sans JS (et pour les moteurs) : la liste complète, fiches dépliées.
-// Avec JS : src/classic/projects.js en tire l'espace de bulles et la fiche.
-function projectCover(p) {
+// ══════════════════════════════════════════════════════
+// 02 · PROJETS
+// ══════════════════════════════════════════════════════
+function projectCover(p, L) {
   const img = projectImage(p);
   if (img) {
-    return `<div class="pj-cover"><img class="pj-cover__img" src="${esc(img)}" alt="Aperçu du projet ${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800"></div>`;
+    return `<div class="pj-cover"><img class="pj-cover__img" src="${L.up}${esc(img)}" alt="Aperçu du projet ${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800"></div>`;
   }
   // Pas de capture (projet privé ou visuel à venir) : couverture
   // typographique, jamais d'image inventée.
   return `<div class="pj-cover pj-cover--type" aria-hidden="true"><span>${esc(bubbleName(p))}</span></div>`;
 }
 
-function techList(p) {
+function techList(p, L) {
   return `<ul class="tags" aria-label="Technologies">${(p.tech || []).map(t => {
     const s = skillOfTech(t);
     return s
-      ? `<li><a class="tag-link" href="#competences/${s.slug}" data-skill-link="${s.slug}" data-fam="${s.fam.key}">${esc(t)}</a></li>`
+      ? `<li><a class="tag-link" href="${L.page('competences', s.slug)}" data-skill="${s.slug}" data-fam="${s.fam.key}">${esc(t)}</a></li>`
       : `<li>${esc(t)}</li>`;
   }).join('')}</ul>`;
 }
 
-function projectItem(p) {
+function projectItem(p, L) {
   const ctx = contextOf(p);
   const img = projectImage(p);
+  const st = statusOf(p);
   const links = (p.links || []).map(l =>
     `<a class="btn btn--sm" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external', 'ico ico--xs')}</a>`).join('');
   return `
-          <li class="pj-item" id="projets/${p.slug}" data-route="projets/${p.slug}" data-slug="${p.slug}"
-              data-cat="${esc(p.category)}" data-tier="${tierOf(p)}" data-status="${statusOf(p).tone}"
-              data-name="${esc(bubbleName(p))}" data-skills="${projectSkills(p).join(' ')}"${img ? ` data-img="${esc(img)}"` : ''}${p.pick ? ' data-pick' : ''}>
+          <li class="pj-item" id="${p.slug}" data-slug="${p.slug}"
+              data-cat="${esc(p.category)}" data-tier="${tierOf(p)}" data-status="${st.tone}"
+              data-name="${esc(bubbleName(p))}" data-skills="${projectSkills(p).join(' ')}"${img ? ` data-img="${L.up}${esc(img)}"` : ''}${p.pick ? ' data-pick' : ''}>
             <article aria-labelledby="p-${p.slug}">
               <div class="pj-item__head">
                 <span class="pj-item__orb" aria-hidden="true"></span>
-                <h3 class="pj-item__title" id="p-${p.slug}">${esc(p.title)}</h3>
+                <h2 class="pj-item__title" id="p-${p.slug}">${esc(p.title)}</h2>
                 <p class="pj-item__meta"><span class="chip-cat">${esc(p.category)}</span><span>${esc(p.type)}</span>${ctx ? `<span>${esc(ctx)}</span>` : ''}</p>
                 <p class="pj-item__status">${statusBadge(p)}</p>
               </div>
               <div class="pj-item__body">
-                ${projectCover(p)}
+                ${projectCover(p, L)}
                 <p class="pj-item__desc">${esc(p.desc)}</p>
-                ${techList(p)}
-                ${p.role ? `<div class="pj-item__role"><h4 class="mini-title">Mon rôle</h4><p>${esc(p.role)}</p></div>` : ''}
+                ${techList(p, L)}
+                ${p.role ? `<div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>${esc(p.role)}</p></div>` : ''}
                 ${links ? `<div class="pj-item__links">${links}</div>` : ''}
               </div>
             </article>
           </li>`;
 }
 
-function projectsSection() {
-  const counts = `${byCat.Professionnel.length} professionnels (${esc(company)}, en équipe), ${byCat.Personnel.length} personnels, ${plural(byCat.Scolaire.length, 'scolaire', 'scolaires')}.`;
-  return `
-    <section class="sec pj" id="projets" data-route="projets" aria-labelledby="projets-title">
-      <div class="wrap">${secHead('projets', '02', 'Projets', 'Projets', `${plural(projects.length, 'projet', 'projets')} : ${counts} <span class="js-only">Explorez l'espace, ou passez en liste.</span>`)}
+function projetsPage() {
+  const page = PAGE.projets;
+  const counts = `${byCat.Professionnel.length} professionnels (${esc(company)}, en équipe), ${byCat.Personnel.length} personnels, ${plural(byCat.Scolaire.length, 'scolaire', 'scolaires')}`;
+  const body = (L) => `
+    <section class="pj" aria-labelledby="projets-title">
+      <div class="world-ui">${worldHead(page, 'Ce que j’ai construit', `${plural(projects.length, 'projet', 'projets')} : ${counts}.`)}
         <div class="pj-bar js-only" role="toolbar" aria-label="Affichage des projets">
-          <div class="pj-bar__filters" role="group" aria-label="Filtrer par catégorie">
+          <div class="seg-group" role="group" aria-label="Filtrer par catégorie">
             <button type="button" class="seg" data-filter="all" aria-pressed="true">Tous <span>${projects.length}</span></button>
             ${CATEGORIES.map(c => `<button type="button" class="seg" data-filter="${c}" aria-pressed="false"><i class="cat-dot" data-cat="${c}" aria-hidden="true"></i>${c} <span>${byCat[c].length}</span></button>`).join('\n            ')}
           </div>
-          <div class="pj-bar__view" role="group" aria-label="Vue">
+          <div class="seg-group" role="group" aria-label="Vue">
             <button type="button" class="seg" data-view="space" aria-pressed="true">${icon('orbit')}Espace</button>
             <button type="button" class="seg" data-view="list" aria-pressed="false">${icon('list')}Liste</button>
           </div>
         </div>
       </div>
-      <div class="pj-space js-only" aria-label="Espace des projets"></div>
-      <div class="wrap">
-        <ol class="pj-index" aria-label="Tous les projets">${projects.map(projectItem).join('')}
+      <div class="pj-space js-only" data-keys></div>
+      <div class="pj-list">
+        <ol class="pj-index" aria-label="Tous les projets" data-keys>${projects.map(p => projectItem(p, L)).join('')}
         </ol>
-        <p class="pj-legend js-only">Taille : <span>grande = à ne pas rater</span><span>moyenne = professionnel</span><span>petite = autre</span></p>
+      </div>
+      <div class="pj-legend js-only" aria-hidden="true">
+        <span><i class="lg-dot lg-dot--on"></i>Disponible</span><span><i class="lg-dot lg-dot--wip"></i>En développement</span><span><i class="lg-dot lg-dot--off"></i>Projet privé</span>
+        <span class="pj-legend__sep"></span><span><i class="lg-size lg-size--l"></i>à ne pas rater</span><span><i class="lg-size lg-size--m"></i>professionnel</span><span><i class="lg-size lg-size--s"></i>autre</span>
       </div>
     </section>`;
+  return shell(page, {
+    title: `Projets — ${displayName}, ${bio.title}`,
+    description: `${plural(projects.length, 'projet', 'projets')} d'${displayName} : ${byCat.Professionnel.length} professionnels réalisés en équipe chez ${company}, ${byCat.Personnel.length} personnels et ${byCat.Scolaire.length} scolaires. Technologies, rôle et disponibilité de chaque projet.`,
+    jsonld: {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      url: SITE_URL + page.path,
+      name: `Projets — ${displayName}`,
+      inLanguage: 'fr',
+      about: { '@id': `${SITE_URL}#person` },
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: projects.map((p, i) => ({
+          '@type': 'ListItem', position: i + 1,
+          item: {
+            '@type': 'CreativeWork', name: p.title, description: p.desc, genre: p.type,
+            url: `${SITE_URL}${page.path}#${p.slug}`, keywords: (p.tech || []).join(', '),
+            ...(p.links && p.links[0] ? { sameAs: p.links[0].url } : {}),
+          },
+        })),
+      },
+    },
+    body,
+  });
 }
 
-// ── Parcours : frise chronologique ──────────────────────
-function spanChart() {
-  const range = lastYear - firstYear;
-  const pct = (v) => ((v - firstYear) / range * 100).toFixed(2);
-  const lanes = ['ACADÉMIQUE', 'PROFESSIONNEL'].map(kind => {
-    const items = dated.filter(t => t.s.kind === kind).map(({ s, span }) => {
-      const left = pct(span.start);
-      const width = span.end ? (((span.end - span.start) / range) * 100).toFixed(2) : null;
-      return `<a class="span${width ? '' : ' span--point'}${span.fuzzy ? ' span--fuzzy' : ''}${weightOf(s) === 'major' ? ' span--major' : ''}" href="#parcours/${s.slug}" style="--l:${left}%;${width ? ` --w:${width}%;` : ''}" title="${esc(s.title)} · ${esc(s.date)}"><span>${esc(stepLabel(s))}</span></a>`;
-    }).join('');
-    return `<div class="spans__lane" data-kind="${kind === 'ACADÉMIQUE' ? 'edu' : 'pro'}"><span class="spans__k">${KIND[kind]}</span><div class="spans__track">${items}</div></div>`;
-  }).join('');
-  const ticks = Array.from({ length: range }, (_, i) => `<span style="--l:${pct(firstYear + i)}%">${firstYear + i}</span>`).join('');
-  return `
-        <figure class="spans" data-from="${firstYear}" data-to="${lastYear}" aria-label="Vue d'ensemble : formation et expérience de ${firstYear} à ${lastYear - 1}">
-          ${lanes}
-          <div class="spans__ruler" aria-hidden="true"><span class="spans__k"></span><div class="spans__track">${ticks}</div></div>
-          <div class="spans__now" aria-hidden="true"></div>
-        </figure>`;
-}
+// ══════════════════════════════════════════════════════
+// 03 · PARCOURS
+// ══════════════════════════════════════════════════════
+// Frise : une échelle en années ; chaque étape a un nœud (son début) et,
+// si elle dure, une barre sur sa ligne (formation / expérience).
+// « Autres expériences » n'a pas de date : nœud hors échelle, au début.
+function parcoursPage() {
+  const page = PAGE.parcours;
+  const years = lastYear - firstYear;
+  const at = (v) => ((v - firstYear) / years).toFixed(4);           // position 0 → 1
+  const kindKey = (s) => s.kind === 'ACADÉMIQUE' ? 'edu' : 'pro';
 
-function eventItem({ s, span }) {
-  const weight = weightOf(s);
-  const details = (s.details && s.details.length)
-    ? `<ul class="ev__details">${s.details.map(d => `<li>${esc(d)}</li>`).join('')}</ul>` : '';
-  const projectsOf = s.slug === 'devphantom' ? byCat.Professionnel : [];
-  const chips = projectsOf.length ? `
-                <p class="ev__sub">Projets ${esc(company)} (en équipe)</p>
-                <ul class="ev__projects">${projectsOf.map(p =>
-                  `<li><a href="#projets/${p.slug}" data-project-link="${p.slug}"><strong>${esc(p.title)}</strong><span>${esc(p.type)}</span></a></li>`).join('')}</ul>` : '';
-  // Le secondaire (contexte, rôle, détails) se déplie à la demande.
-  const more = [
-    s.context ? `<p class="ev__text">${esc(s.context)}</p>` : '',
-    details,
-    s.role && !projectsOf.length ? `<p class="ev__role"><span>Mon rôle</span>${esc(s.role)}</p>` : '',
-  ].join('');
-  return `
-          <li class="ev ev--${weight}" id="parcours/${s.slug}" data-route="parcours/${s.slug}" data-year="${span ? span.year : ''}" data-kind="${s.kind === 'ACADÉMIQUE' ? 'edu' : 'pro'}">
-            <span class="ev__dot" aria-hidden="true"></span>
-            <div class="ev__card">
-              <p class="ev__date"><span>${esc(KIND[s.kind] || s.kind)}</span>${esc(s.date)}</p>
-              <h3 class="ev__title">${esc(s.title)}</h3>
-              ${s.place ? `<p class="ev__place">${esc(s.place)}</p>` : ''}
-              ${s.desc ? `<p class="ev__text">${esc(s.desc)}</p>` : ''}${chips}
-              ${more ? `<details class="ev__more"${weight === 'major' ? ' open' : ''}><summary>${weight === 'major' ? 'Le détail' : 'En savoir plus'}${icon('chevron', 'ico ev__chev')}</summary><div class="ev__more-body">${more}</div></details>` : ''}
-            </div>
-          </li>`;
-}
+  // Étapes affichées, dans l'ordre de la frise.
+  const events = [
+    ...undated.map(t => ({ ...t, w: weightOf(t) })),
+    ...dated.map(t => ({ ...t, w: weightOf(t) })),
+  ];
+  const next = bio.seeking && seeking ? { slug: 'et-ensuite', at: seeking.at, year: seeking.year } : null;
+  const initial = devphantom.slug;
 
-function parcours() {
-  const next = bio.seeking ? `
-          <li class="ev ev--next" data-year="${seekingYear || ''}">
-            <span class="ev__dot" aria-hidden="true"></span>
-            <div class="ev__card">
-              <p class="ev__date"><span>Et ensuite</span>${seekingYear || ''}</p>
-              <h3 class="ev__title">${esc(bio.seeking)}</h3>
-              <p class="ev__text">${esc(bio.title)} · ${esc(bio.location)}</p>
-              <button type="button" class="text-link" data-contact-cta data-contact-subject="Proposition de CDI — Portfolio">Me contacter${icon('arrow')}</button>
-            </div>
-          </li>` : '';
-  const aside = undated.map(({ s }) => `
-        <aside class="ev ev--aside" id="parcours/${s.slug}" data-route="parcours/${s.slug}" aria-labelledby="ev-${s.slug}">
-          <p class="ev__date"><span>${esc(KIND[s.kind] || s.kind)}</span>${esc(s.date)}</p>
-          <h3 class="ev__title" id="ev-${s.slug}">${esc(s.title)}</h3>
-          ${s.desc ? `<p class="ev__text">${esc(s.desc)}</p>` : ''}
-          ${s.details && s.details.length ? `<details class="ev__more"><summary>En savoir plus${icon('chevron', 'ico ev__chev')}</summary><ul class="ev__details">${s.details.map(d => `<li>${esc(d)}</li>`).join('')}</ul></details>` : ''}
-        </aside>`).join('');
-  return `
-    <section class="sec tl-sec" id="parcours" data-route="parcours/devphantom" aria-labelledby="parcours-title">
-      <div class="wrap">${secHead('parcours', '03', 'Parcours', 'Parcours', `Alternance chez ${esc(company)} (${esc(devphantom.date)}), en parallèle de l'ETNA (${esc(etna.date)}).`)}${spanChart()}
-        <div class="tlx">
-          <div class="tlx__year" aria-hidden="true"><span class="tlx__year-v">${firstYear}</span></div>
-          <ol class="tlx__list">${dated.map(eventItem).join('')}${next}
-          </ol>
-        </div>${aside}
-      </div>
-    </section>`;
-}
-
-// ── Compétences : écosystème pondéré par les projets ────
-function skills() {
-  const rows = families.map(f => {
-    const sorted = [...f.skills].sort((a, b) => b.used.length - a.used.length || a.i - b.i);
-    const used = f.skills.filter(s => s.used.length).length;
+  const panel = ({ s, span, w }, L) => {
+    const projectsOf = s.slug === devphantom.slug ? byCat.Professionnel : [];
+    const details = (s.details && s.details.length) ? `<ul class="tl-panel__details">${s.details.map(d => `<li>${esc(d)}</li>`).join('')}</ul>` : '';
     return `
-          <div class="fam" data-fam="${f.key}">
-            <h3 class="fam__t"><span class="fam__dot" aria-hidden="true"></span>${esc(f.label)}<span class="fam__n">${used}/${f.skills.length} dans les projets</span></h3>
+          <article class="tl-panel tl-panel--${w}" id="${s.slug}" data-step="${s.slug}" data-kind="${kindKey(s)}" data-year="${span ? span.year : ''}" aria-labelledby="tl-${s.slug}-t">
+            <header class="tl-panel__head">
+              <p class="tl-panel__k"><span>${esc(KIND[s.kind] || s.kind)}</span>${esc(s.date)}</p>
+              <h2 class="tl-panel__t" id="tl-${s.slug}-t">${esc(s.title)}</h2>
+              ${s.place ? `<p class="tl-panel__place">${esc(s.place)}</p>` : ''}
+              ${s.desc ? `<p class="tl-panel__lead">${esc(s.desc)}</p>` : ''}
+            </header>
+            <div class="tl-panel__body">
+              ${s.context ? `<p>${esc(s.context)}</p>` : ''}
+              ${details}
+              ${s.role && !projectsOf.length ? `<p class="tl-panel__role"><span>Mon rôle</span>${esc(s.role)}</p>` : ''}
+              ${projectsOf.length ? `
+              <div class="tl-panel__projects">
+                <p class="mini-title">Projets ${esc(company)} · en équipe</p>
+                <ul>${projectsOf.map(p => `<li><a href="${L.page('projets', p.slug)}" data-cat="${esc(p.category)}"><strong>${esc(p.title)}</strong><span>${esc(p.type)}</span></a></li>`).join('')}</ul>
+              </div>` : ''}
+            </div>
+          </article>`;
+  };
+  const nextPanel = (L) => next ? `
+          <article class="tl-panel tl-panel--next" id="${next.slug}" data-step="${next.slug}" data-kind="next" data-year="${next.year}" aria-labelledby="tl-next-t">
+            <header class="tl-panel__head">
+              <p class="tl-panel__k"><span>Et ensuite</span>${next.year}</p>
+              <h2 class="tl-panel__t" id="tl-next-t">${esc(bio.seeking)}</h2>
+              <p class="tl-panel__place">${esc(bio.title)} · ${esc(bio.location)}</p>
+            </header>
+            <div class="tl-panel__body">
+              <p class="tl-panel__lead">${esc(profile.positioning)}</p>
+              <p><a class="btn btn--primary btn--sm" href="${L.page('contact')}">Me contacter${icon('arrow')}</a></p>
+            </div>
+          </article>` : '';
+
+  // Nœuds + barres.
+  const node = ({ s, span, w }) => {
+    const pos = span ? at(span.start) : null;
+    return `<a class="tl-node tl-node--${w}${span ? '' : ' tl-node--off'}" href="#${s.slug}" data-step="${s.slug}" data-kind="${kindKey(s)}"${pos !== null ? ` style="--at:${pos}"` : ''}>
+              <span class="tl-node__dot" aria-hidden="true"></span>
+              <span class="tl-node__l">${esc(stepLabel(s))}</span>
+              <span class="tl-node__d">${esc(span ? (s.date.length > 12 ? String(span.year) : s.date) : 'Hors frise')}</span>
+            </a>`;
+  };
+  const bars = dated.filter(t => t.span.end).map(({ s, span }) =>
+    `<i class="tl-bar${span.fuzzy ? ' tl-bar--fuzzy' : ''}" data-step="${s.slug}" data-kind="${kindKey(s)}" style="--at:${at(span.start)};--len:${((span.end - span.start) / years).toFixed(4)}"></i>`).join('');
+  const ticks = Array.from({ length: years + 1 }, (_, i) => `<span style="--at:${at(firstYear + i)}">${firstYear + i}</span>`).join('');
+
+  const body = (L) => `
+    <section class="tl" aria-labelledby="parcours-title">
+      <div class="world-ui">${worldHead(page, 'Mon parcours', `Alternance chez ${esc(company)} (${esc(devphantom.date)}), en parallèle de l'ETNA (${esc(etna.date)}).`)}
+      </div>
+      <p class="tl-stage__year" aria-hidden="true"></p>
+      <div class="tl-stage" data-initial="${initial}">
+        <div class="tl-panels">${events.map(e => panel(e, L)).join('')}${nextPanel(L)}
+        </div>
+      </div>
+      <nav class="tl-track" aria-label="Frise chronologique ${firstYear} – ${lastYear - 1}" data-from="${firstYear}" data-to="${lastYear}">
+        <div class="tl-rail">
+          <div class="tl-scale" aria-hidden="true">${ticks}<b class="tl-now"></b></div>
+          <div class="tl-lanes" aria-hidden="true">${bars}</div>
+          <div class="tl-line" aria-hidden="true"></div>
+          <div class="tl-nodes">
+            ${events.map(node).join('\n            ')}${next ? `
+            <a class="tl-node tl-node--next" href="#${next.slug}" data-step="${next.slug}" data-kind="next" style="--at:${at(next.at)}">
+              <span class="tl-node__dot" aria-hidden="true"></span>
+              <span class="tl-node__l">${esc(seekingBits(bio.seeking)[0] || 'Et ensuite')}</span>
+              <span class="tl-node__d">${esc(seekingBits(bio.seeking)[1] || next.year)}</span>
+            </a>` : ''}
+          </div>
+        </div>
+      </nav>
+    </section>`;
+  return shell(page, {
+    title: `Parcours — ${displayName}, ${bio.title}`,
+    description: `Parcours d'${displayName} : ${steps.map(s => stepLabel(s)).join(', ')}. ${devphantom.title} chez ${company} (${devphantom.date}), ${etna.title} (${etna.date}).`,
+    jsonld: {
+      '@context': 'https://schema.org',
+      '@type': 'ProfilePage',
+      url: SITE_URL + page.path,
+      name: `Parcours — ${displayName}`,
+      inLanguage: 'fr',
+      mainEntity: { '@id': `${SITE_URL}#person` },
+    },
+    body,
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// 04 · COMPÉTENCES
+// ══════════════════════════════════════════════════════
+function competencesPage() {
+  const page = PAGE.competences;
+  const usedCount = allSkills.filter(s => s.used.length).length;
+  const body = (L) => {
+    const rows = families.map(f => {
+      const sorted = [...f.skills].sort((a, b) => b.used.length - a.used.length || a.i - b.i);
+      const used = f.skills.filter(s => s.used.length).length;
+      return `
+          <section class="fam" data-fam="${f.key}" aria-labelledby="fam-${f.key}">
+            <h2 class="fam__t" id="fam-${f.key}"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">${esc(f.label)}</span><span class="fam__n">${used}/${f.skills.length} dans les projets</span></h2>
             <ul class="fam__list">${sorted.map(s => {
               const n = s.used.length;
-              const w = (n / maxUse).toFixed(3);
-              const usedText = n ? `${plural(n, 'projet', 'projets')} : ${s.used.map(p => p.title).join(', ')}` : 'Hors des projets présentés ici';
               return `
-              <li class="sk${n ? '' : ' sk--decl'}" id="competences/${s.slug}" data-skill="${s.slug}" data-fam="${f.key}" data-count="${n}" data-projects="${s.used.map(p => p.slug).join(' ')}" style="--w:${w}">
+              <li class="sk${n ? '' : ' sk--decl'}" id="${s.slug}" data-skill="${s.slug}" data-fam="${f.key}" data-count="${n}" data-projects="${s.used.map(p => p.slug).join(' ')}" style="--w:${(n / maxUse).toFixed(3)}">
                 <button type="button" class="sk__btn"><span class="sk__name">${esc(s.item)}</span><span class="sk__dots" aria-hidden="true">${'<i></i>'.repeat(n)}</span></button>
-                <span class="sk__used">${esc(usedText)}</span>
+                <p class="sk__used">${n ? `Utilisée dans ${plural(n, 'projet', 'projets')} : ` : 'Hors des projets présentés ici'}</p>${n ? `
+                <ul class="sk__projects">${s.used.map(p => `<li><a href="${L.page('projets', p.slug)}" data-project="${p.slug}" data-cat="${esc(p.category)}">${esc(p.title)}</a></li>`).join('')}</ul>` : ''}
               </li>`;
             }).join('')}
             </ul>
-          </div>`;
-  }).join('');
-  const bars = mainStack.slice(0, 6).map(s =>
-    `<li><a href="#competences/${s.slug}" data-skill-link="${s.slug}" data-fam="${s.fam.key}" style="--w:${(s.used.length / maxUse).toFixed(3)}"><span class="bar__l">${esc(s.item)}</span><span class="bar__v">${s.used.length}</span></a></li>`).join('');
-  const usedCount = allSkills.filter(s => s.used.length).length;
-  return `
-    <section class="sec sk-sec" id="competences" data-route="profil" aria-labelledby="competences-title">
-      <div class="wrap">${secHead('competences', '04', 'Compétences', 'Écosystème technique', `${plural(allSkills.length, 'compétence', 'compétences')}, ${families.length} familles. Plus une technologie revient dans mes projets, plus elle est grande.`)}
-        <p class="sk-legend"><span class="sk-legend__i"><i class="sk-legend__s">Aa</i><i class="sk-legend__l">Aa</i> taille = nombre de projets</span><span class="sk-legend__i"><span class="sk__dots"><i></i><i></i><i></i></span> un point par projet</span><span class="sk-legend__i"><span class="sk-legend__decl">Aa</span> hors des projets présentés</span></p>
-        <div class="sk-layout">
-          <div class="sk-map">${rows}
+          </section>`;
+    }).join('');
+    // Projets (slug, titre, catégorie, compétences) : de quoi relier une
+    // compétence à ses projets et l'inverse, sans quitter la page.
+    const data = JSON.stringify(projects.map(p => ({ slug: p.slug, title: p.title, cat: p.category, type: p.type, skills: projectSkills(p) }))).replace(/</g, '\\u003c');
+    return `
+    <section class="eco" aria-labelledby="competences-title">
+      <div class="world-ui">${worldHead(page, 'Écosystème technique', `${plural(allSkills.length, 'compétence', 'compétences')}, ${families.length} familles. Plus une technologie revient dans mes projets, plus sa bulle est grande.`, `
+        <div class="eco-bar js-only" role="toolbar" aria-label="Affichage des compétences">
+          <div class="seg-group eco-fams" role="group" aria-label="Aller à une famille">${families.map(f => `<button type="button" class="seg seg--fam" data-go-fam="${f.key}" data-fam="${f.key}"><i class="fam-dot" aria-hidden="true"></i>${esc(f.label.split(' / ')[0])}</button>`).join('')}</div>
+          <div class="seg-group" role="group" aria-label="Vue">
+            <button type="button" class="seg" data-view="space" aria-pressed="true">${icon('orbit')}Écosystème</button>
+            <button type="button" class="seg" data-view="list" aria-pressed="false">${icon('list')}Liste</button>
           </div>
-          <aside class="sk-panel" aria-label="Détail de la compétence">
-            <div class="sk-panel__overview">
-              <p class="mini-title">Les plus présentes</p>
-              <ol class="bars">${bars}</ol>
-              <p class="sk-panel__note">${usedCount} compétences sur ${allSkills.length} apparaissent dans au moins un projet présenté. <span class="js-only">Sélectionnez une technologie pour voir ses projets.</span></p>
-            </div>
-            <div class="sk-panel__detail" aria-live="polite"></div>
-          </aside>
+        </div>`)}
+      </div>
+      <div class="eco-space js-only" data-keys></div>
+      <div class="eco-list">
+        <p class="eco-list__note">${usedCount} compétences sur ${allSkills.length} apparaissent dans au moins un projet présenté.</p>
+        <div class="eco-fam-list" data-keys>${rows}
         </div>
       </div>
+      <aside class="eco-panel" aria-label="Détail" hidden>
+        <div class="eco-panel__in" aria-live="polite"></div>
+      </aside>
+      <script type="application/json" id="eco-projects">${data}</script>
     </section>`;
+  };
+  return shell(page, {
+    title: `Compétences — ${displayName}, ${bio.title}`,
+    description: `Écosystème technique d'${displayName} : ${families.map(f => f.label).join(', ')}. ${mainStack.slice(0, 6).map(s => s.item).join(', ')}… reliés aux projets qui les utilisent.`,
+    jsonld: {
+      '@context': 'https://schema.org',
+      '@type': 'ProfilePage',
+      url: SITE_URL + page.path,
+      name: `Compétences — ${displayName}`,
+      inLanguage: 'fr',
+      mainEntity: { '@id': `${SITE_URL}#person`, '@type': 'Person', name: displayName, knowsAbout: allSkills.map(s => s.item) },
+    },
+    body,
+  });
 }
 
-function services() {
-  return `
-    <section class="sec sec--band" id="services" data-route="portail" aria-labelledby="services-title">
-      <div class="wrap">
-        <header class="sec-head">
-          <h2 class="sec-title" id="services-title">Vous avez un projet ?</h2>
-          <p class="sec-lead">Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.</p>
-        </header>
-        <div class="services">
-          <a class="btn btn--primary" href="devis.html">Construisez votre projet${icon('arrow')}</a>
-          <a class="btn btn--ghost" href="tarifs.html">Voir mes tarifs</a>
-        </div>
-      </div>
-    </section>`;
-}
-
-function contactSection() {
-  const links = contact.links.map(l => {
-    const id = /github/i.test(l.label) ? 'github' : /linkedin/i.test(l.label) ? 'linkedin' : /cv/i.test(l.label) ? 'download' : 'external';
-    return `<a class="icon-link" href="${esc(l.url)}" target="_blank" rel="noopener">${icon(id)}<span>${esc(l.label)}</span></a>`;
-  }).join('\n            ');
+// ══════════════════════════════════════════════════════
+// 05 · CONTACT
+// ══════════════════════════════════════════════════════
+function contactPage() {
+  const page = PAGE.contact;
   const tel = contact.phone.replace(/[^\d+]/g, '');
-  return `
-    <section class="sec contact-sec" id="contact" data-route="contact" aria-labelledby="contact-title">
-      <div class="wrap">${secHead('contact', '05', 'Contact', 'Contact', bio.seeking ? `${esc(bio.seeking)}. Écrivez-moi ou appelez-moi directement.` : '')}
-        <div class="contact">
-          <div class="contact__direct">
-            <div class="contact__row">
-              ${icon('mail')}<a class="contact__value" href="mailto:${esc(contact.email)}">${esc(contact.email)}</a>
+  const body = (L) => {
+    const links = contact.links.map(l => {
+      const id = /github/i.test(l.label) ? 'github' : /linkedin/i.test(l.label) ? 'linkedin' : /cv/i.test(l.label) ? 'download' : 'external';
+      const href = /^https?:/.test(l.url) ? l.url : L.up + l.url;
+      return `<li><a class="ct-link" href="${esc(href)}" target="_blank" rel="noopener">${icon(id)}<span>${esc(l.label)}</span>${icon('external', 'ico ico--xs ct-link__go')}</a></li>`;
+    }).join('\n              ');
+    return `
+    <section class="ct" aria-labelledby="contact-title">
+      <div class="wrap ct__grid">
+        <div class="ct__intro">
+          <p class="world-head__k"><span>${page.n}</span>${esc(page.label)}</p>
+          <h1 class="ct__title" id="contact-title">Travaillons ensemble.</h1>
+          ${bio.seeking ? `<p class="ct__status"><span class="pulse" aria-hidden="true"></span>${esc(bio.seeking)} · ${esc(bio.location)}</p>` : ''}
+          <p class="ct__lead">Écrivez-moi ou appelez-moi directement : je réponds personnellement.</p>
+          <div class="ct__direct">
+            <div class="ct-row ct-row--mail">
+              <span class="ct-row__k">${icon('mail')}E-mail</span>
+              <a class="ct-row__v" href="mailto:${esc(contact.email)}">${esc(contact.email)}</a>
               <button type="button" class="copy" data-copy="${esc(contact.email)}" aria-label="Copier l'adresse e-mail">Copier</button>
             </div>
-            <div class="contact__row">
-              ${icon('phone')}
-              <span class="contact__value" data-phone="${esc(tel)}">${esc(contact.phone)}</span>
+            <div class="ct-row">
+              <span class="ct-row__k">${icon('phone')}Téléphone</span>
+              <span class="ct-row__v" data-phone="${esc(tel)}">${esc(contact.phone)}</span>
               <button type="button" class="copy" data-copy="${esc(contact.phone)}" aria-label="Copier le numéro de téléphone">Copier</button>
             </div>
-            <div class="contact__links">
-            ${links}
-            </div>
+            <ul class="ct-links">
+              ${links}
+            </ul>
           </div>
-          <form class="card contact__form" id="classic-contact-form">
-            <h3 class="mini-title">Envoyer un message</h3>
-            <label>Votre nom<input type="text" name="from_name" autocomplete="name" required></label>
-            <label>Votre email<input type="email" name="from_email" autocomplete="email" required></label>
-            <label>Votre message<textarea name="message" rows="5" required></textarea></label>
-            <button type="submit" class="btn btn--primary">Envoyer</button>
-            <p class="form-status" role="status" aria-live="polite"></p>
-          </form>
+        </div>
+        <form class="card ct__form" id="classic-contact-form" aria-labelledby="form-title">
+          <h2 class="ct__form-t" id="form-title">Envoyer un message</h2>
+          <label>Votre nom<input type="text" name="from_name" autocomplete="name" required></label>
+          <label>Votre e-mail<input type="email" name="from_email" autocomplete="email" required></label>
+          <label>Votre message<textarea name="message" rows="5" required></textarea></label>
+          <button type="submit" class="btn btn--primary">Envoyer${icon('arrow')}</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+      <div class="wrap">
+        <div class="ct-band" id="projet">
+          <div>
+            <h2 class="ct-band__t">Vous avez un projet ?</h2>
+            <p>Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.</p>
+          </div>
+          <div class="ct-band__cta">
+            <a class="btn btn--primary" href="${L.up}devis.html">Construisez votre projet${icon('arrow')}</a>
+            <a class="btn btn--ghost" href="${L.up}tarifs.html">Voir mes tarifs</a>
+          </div>
         </div>
       </div>
     </section>`;
+  };
+  return shell(page, {
+    title: `Contact — ${displayName}, ${bio.title}`,
+    description: `Contacter ${displayName}, ${bio.title} en ${bio.location}. ${bio.seeking}. E-mail, téléphone, LinkedIn, GitHub, CV et formulaire de contact.`,
+    jsonld: {
+      '@context': 'https://schema.org',
+      '@type': 'ContactPage',
+      url: SITE_URL + page.path,
+      name: `Contact — ${displayName}`,
+      inLanguage: 'fr',
+      mainEntity: { '@id': `${SITE_URL}#person`, '@type': 'Person', name: displayName, email: `mailto:${contact.email}`, telephone: `+33${tel.replace(/^0/, '')}` },
+    },
+    body,
+    scripts: '<script src="{up}js/contact-form.js"></script>',
+    scrolls: true,
+  });
 }
 
 // ── Écran de sélection : bloc identité ──────────────────
@@ -567,13 +888,18 @@ function person() {
     knowsLanguage: bio.languages.map(l => l.label),
     knowsAbout: [...new Set(profile.skillGroups.flatMap(g => g.items))],
     alumniOf: { '@type': 'CollegeOrUniversity', name: 'ETNA' },
-    worksFor: { '@type': 'Organization', name: 'DevPhantom' },
+    worksFor: { '@type': 'Organization', name: company },
   };
 }
 const ld = (data) => `\n  <script type="application/ld+json">\n${JSON.stringify(data, null, 2).replace(/</g, '\\u003c')}\n  </script>\n  `;
 
 // ── Écriture ───────────────────────────────────────────
-function write(fileName, parts) {
+function writePage(file, html) {
+  const out = join(ROOT, file);
+  mkdirSync(dirname(out), { recursive: true });
+  writeFileSync(out, html);
+}
+function writeMarked(fileName, parts) {
   const file = join(ROOT, fileName);
   let html = readFileSync(file, 'utf8');
   for (const [name, body] of Object.entries(parts)) {
@@ -584,27 +910,36 @@ function write(fileName, parts) {
   writeFileSync(file, html);
 }
 
-write('classique.html', {
-  content: [hero(), story(), projectsSection(), parcours(), skills(), services(), contactSection()].join('\n') + '\n    ',
-  jsonld: ld({
-    '@context': 'https://schema.org',
-    '@type': 'ProfilePage',
-    url: `${SITE_URL}classique`,
-    inLanguage: 'fr',
-    mainEntity: person(),
-  }),
-});
+// La page Profil reçoit aussi les anciens liens (#projets/skywalk… du mode
+// aventure et des versions précédentes) : ils sont renvoyés vers la bonne
+// page avant tout affichage.
+const LEGACY = `
+  <script>
+    (function (h) {
+      var m = /^#(projets|parcours|competences|contact|portail|services)(?:\\/(.+))?$/.exec(h);
+      if (!m) return;
+      var page = { projets: 'projets', parcours: 'parcours', competences: 'competences', contact: 'contact', portail: 'contact', services: 'contact' }[m[1]];
+      var frag = m[2] ? '#' + m[2] : (m[1] === 'portail' || m[1] === 'services') ? '#projet' : '';
+      location.replace('classique/' + page + '.html' + location.search + frag);
+    })(location.hash);
+  </script>`;
 
-write('index.html', {
+writePage(PAGE.profil.file, profilPage().replace('<script src="js/theme.js">', `${LEGACY.trim()}\n  <script src="js/theme.js">`));
+writePage(PAGE.projets.file, projetsPage());
+writePage(PAGE.parcours.file, parcoursPage());
+writePage(PAGE.competences.file, competencesPage());
+writePage(PAGE.contact.file, contactPage());
+
+writeMarked('index.html', {
   identity: identity(),
   jsonld: ld({
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'WebSite', '@id': `${SITE_URL}#site`, name: 'Arphan Drame — Portfolio', url: SITE_URL, inLanguage: 'fr', author: { '@id': `${SITE_URL}#person` } },
+      { '@type': 'WebSite', '@id': `${SITE_URL}#site`, name: `${displayName} — Portfolio`, url: SITE_URL, inLanguage: 'fr', author: { '@id': `${SITE_URL}#person` } },
       person(),
     ],
   }),
 });
 
 const withImg = projects.filter(projectImage).length;
-console.log(`classique.html + index.html régénérés — ${projects.length} projets (${withImg} miniature${withImg > 1 ? 's' : ''}), ${steps.length} étapes, ${allSkills.length} compétences (${mainStack.length} dans 2 projets ou plus).`);
+console.log(`Mode classique régénéré (${PAGES.length} pages) + index.html — ${projects.length} projets (${withImg} miniature${withImg > 1 ? 's' : ''}), ${steps.length} étapes, ${allSkills.length} compétences (${mainStack.length} dans 2 projets ou plus).`);

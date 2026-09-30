@@ -8,15 +8,20 @@ https://portfolio-3kx.pages.dev/
 | URL | Fichier | Rôle |
 |---|---|---|
 | `/` | `index.html` | **Écran de sélection** — « Comment souhaitez-vous me découvrir ? » |
-| `/classique` | `classique.html` | **Mode classique** — portfolio professionnel (jour / nuit selon l'heure locale) |
+| `/classique` | `classique.html` | **Mode classique** — page d'entrée : Profil (jour / nuit selon l'heure locale) |
+| `/classique/projets` | `classique/projets.html` | Mode classique — Projets (espace de bulles) |
+| `/classique/parcours` | `classique/parcours.html` | Mode classique — Parcours (frise horizontale) |
+| `/classique/competences` | `classique/competences.html` | Mode classique — Compétences (écosystème) |
+| `/classique/contact` | `classique/contact.html` | Mode classique — Contact |
 | `/aventure` | `aventure.html` | **Mode aventure** — la ville interactive (canvas) |
 | `/tarifs` | `tarifs.html` | Grille tarifaire + recherche (style classique, commune aux deux modes) |
 | `/devis` | `devis.html` | « Construisez votre projet » — formulaire par étapes (site classique) |
 | `/construire-projet` | `construire-projet.html` | « Construisez votre projet » — mini-jeu (mode aventure) |
-| `/cv`, `/contact`, `/projets` | `_redirects` | Liens courts |
+| `/cv`, `/contact`, `/projets`, `/parcours`, `/competences` | `_redirects` | Liens courts |
 
-- **Contenu : une seule source**, `js/museum.js`. Le mode aventure le lit directement ; le HTML
-  du mode classique (et l'identité de l'écran de sélection) en est **généré** :
+- **Contenu : une seule source**, `js/museum.js`. Le mode aventure le lit directement ; les cinq
+  pages du mode classique (et l'identité de l'écran de sélection) en sont **générées en entier**
+  par `scripts/build-classic.mjs` (ne pas éditer `classique.html` ni `classique/*.html` à la main) :
 
   ```sh
   npm run dev       # serveur local (Vite), rechargement à chaud
@@ -27,7 +32,8 @@ https://portfolio-3kx.pages.dev/
 
 - **Liens profonds communs** (`js/deeplink.js`) : `#profil`, `#parcours/<slug>`,
   `#projets/<slug>`, `#contact`, `#portail`. Le même fragment ouvre le même contenu dans les
-  deux modes (`/classique#projets/skywalk` ⇄ `/aventure#projets/skywalk`).
+  deux modes : `/classique#projets/skywalk` (ancien format, redirigé vers
+  `/classique/projets#skywalk`) ⇄ `/aventure#projets/skywalk`.
 - **Ambiance jour / nuit** : `js/theme.js` (07 h → 20 h = jour ; `?theme=day|night` pour forcer).
 - **Deux styles distincts** : l'accueil, le mode classique, les tarifs, le devis et la 404 sont un
   site web sobre et professionnel (`css/site.css` : thèmes clair/sombre, police Inter ;
@@ -42,18 +48,22 @@ Aucun framework : HTML / CSS / JS vanilla. **Vite** assemble le site dans `dist/
 commande `npm run build`, dossier `dist`) ; les scripts classiques `js/*.js` et les médias y sont
 copiés tels quels.
 
-**Mode classique immersif** (`src/classic-app.js`, couche ajoutée sur le HTML généré) :
+**Mode classique : cinq pages, cinq environnements** (`src/classic-app.js` charge seulement
+l'expérience de la page courante) :
 
-- `src/classic/projects.js` : espace de bulles sans bord (13 nœuds, positions repliées sur un
-  tore, pas de copies), mini-carte, filtres, vue liste, fiche projet immersive (`<dialog>`,
-  `#projets/<slug>`). Miniatures : déposer `assets/img/projets/<slug>.webp` (16:10) puis `npm run build`.
-- `src/classic/skills.js` : écosystème de compétences (taille = nombre de projets), panneau
-  détail, lien projet ↔ technologie dans les deux sens (`#competences/<slug>`).
-- `src/classic/journey.js` : sommaire du profil et frise du parcours ; `src/classic/hero.js` :
-  constellation d'entrée.
-- `src/classic-motion.js` (**GSAP + ScrollTrigger**) : séquence d'entrée, révélations au défilement.
+- Profil — `src/classic/profile.js` (**GSAP**) : le nom au centre, puis métier → contexte → accès.
+- Projets — `src/classic/projects.js` : espace sans bord couvrant l'écran (deux couches en
+  parallaxe, répétition virtuelle), filtres, vue liste, fiche immersive (`#<projet>`,
+  `#tech/<compétence>`). Miniatures : déposer `assets/img/projets/<slug>.webp` (16:10) puis `npm run build`.
+- Parcours — `src/classic/timeline.js` : frise horizontale en bas (glisser, molette, clavier),
+  l'étape choisie au-dessus (`#<étape>`).
+- Compétences — `src/classic/skills.js` : écosystème « globe » (glisser + inertie), panneau détail,
+  lien projet ↔ technologie dans les deux sens (`#<compétence>`, `#projet/<slug>`).
+- `src/classic/space.js` : moteur commun aux espaces (caméra, gestes, répétition par copies réutilisées).
+- Navigation : barre du haut, portes latérales, flèches ← → du clavier ; transitions entre pages
+  par View Transitions (sens avant / arrière), pages voisines préchargées au survol.
 
 Statut, taille des bulles, liens compétence ↔ projet et chronologie sont **dérivés** de
-`js/museum.js` par `scripts/build-classic.mjs`, jamais saisis à la main. La page reste complète
+`js/museum.js` par `scripts/build-classic.mjs`, jamais saisis à la main. Chaque page reste complète
 sans JavaScript, et rien n'est animé si le visiteur préfère réduire les animations.
 L'adresse du site est définie dans `scripts/build-classic.mjs` (`SITE_URL`) et dans les `<head>`.

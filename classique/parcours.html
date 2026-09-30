@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!-- GÉNÉRÉ par scripts/build-classic.mjs depuis js/museum.js — ne pas éditer : npm run content -->
+<html lang="fr" data-theme="night">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Parcours — Arphan Drame, Développeur Web Full Stack</title>
+  <meta name="description" content="Parcours d'Arphan Drame : Bac, BTS, ETNA, DevPhantom, Autres. Développeur Web Full Stack — Alternance chez DevPhantom (01/2024 — 10/2026), ETNA — Bachelor puis Master (2023 — 2026).">
+  <link rel="canonical" href="https://portfolio-3kx.pages.dev/classique/parcours">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Arphan Drame — Portfolio">
+  <meta property="og:title" content="Parcours — Arphan Drame, Développeur Web Full Stack">
+  <meta property="og:description" content="Parcours d'Arphan Drame : Bac, BTS, ETNA, DevPhantom, Autres. Développeur Web Full Stack — Alternance chez DevPhantom (01/2024 — 10/2026), ETNA — Bachelor puis Master (2023 — 2026).">
+  <meta property="og:url" content="https://portfolio-3kx.pages.dev/classique/parcours">
+  <meta property="og:image" content="https://portfolio-3kx.pages.dev/assets/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0a0a0d">
+  <script src="../js/theme.js"></script>
+  <script>
+    (function (r, w) {
+      r.classList.add('js');
+      var still = /[?&]capture\b/.test(location.search);
+      if (still) r.classList.add('is-still');
+      if (!still && !matchMedia('(prefers-reduced-motion: reduce)').matches) r.classList.add('motion-pending');
+      // Ordre des pages : le sens de navigation donne le sens de la transition.
+      var ORDER = ['classique', 'projets', 'parcours', 'competences', 'contact'];
+      function idx(u) {
+        try { var p = new URL(u, location.href).pathname.replace(/\.html$/, '').replace(/\/$/, ''); } catch (e) { return -1; }
+        var k = p.slice(p.lastIndexOf('/') + 1);
+        return /\/classique\//.test(p + '/') || k === 'classique' ? ORDER.indexOf(k) : -1;
+      }
+      function from() {
+        var a = w.navigation && navigation.activation;
+        if (a && a.from && a.from.url) return idx(a.from.url);
+        try { var v = sessionStorage.getItem('drame.classic.from'); sessionStorage.removeItem('drame.classic.from'); return v === null ? -1 : +v; } catch (e) { return -1; }
+      }
+      var here = idx(location.href);
+      w.ClassicNav = { order: ORDER, idx: idx, here: here };
+      if ('onpagereveal' in w) {
+        w.addEventListener('pagereveal', function (e) {
+          var f = from();
+          if (f < 0 || f === here) return;
+          var dir = f < here ? 'fwd' : 'back';
+          r.classList.add('vt-arrival');
+          if (e.viewTransition && e.viewTransition.types) {
+            e.viewTransition.types.add(dir);
+            e.viewTransition.types.add('from-' + ORDER[f]);
+          } else if (!e.viewTransition) r.classList.add('arrive-' + dir);
+        });
+      } else {
+        var f = from();
+        if (f >= 0 && f !== here) r.classList.add('arrive-' + (f < here ? 'fwd' : 'back'));
+      }
+      // Filet : module absent après 2,5 s d'affichage réel → document statique.
+      function arm() {
+        setTimeout(function () {
+          r.classList.remove('motion-pending');
+          if (!r.classList.contains('app-ready')) r.classList.add('no-app');
+        }, 2500);
+      }
+      if (document.prerendering) document.addEventListener('prerenderingchange', arm, { once: true }); else arm();
+    })(document.documentElement, window);
+  </script>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/site.css">
+  <link rel="stylesheet" href="../css/classic.css">
+  <script type="speculationrules">
+  {"prerender": [{"source": "list", "urls": ["../classique.html","projets.html","competences.html","contact.html"], "eagerness": "moderate"}]}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "url": "https://portfolio-3kx.pages.dev/classique/parcours",
+  "name": "Parcours — Arphan Drame",
+  "inLanguage": "fr",
+  "mainEntity": {
+    "@id": "https://portfolio-3kx.pages.dev/#person"
+  }
+}
+  </script>
+  </head>
+<body class="page page--parcours page--world" data-page="parcours" data-route="parcours/devphantom">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z" fill="currentColor"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M4 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 9h3v12H3zM9 9h3v1.7c.5-.9 1.7-1.9 3.5-1.9 3.2 0 3.5 2.1 3.5 4.8V21h-3v-6.5c0-1.5 0-3.3-2-3.3s-2.3 1.6-2.3 3.2V21H9z" fill="currentColor"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-orbit" viewBox="0 0 24 24"><circle cx="8" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16.5" cy="7" r="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-center" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.8"/></symbol>
+  </svg>
+
+  <a class="skip" href="#main">Aller au contenu</a>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="../classique.html" aria-label="Arphan Drame — Profil"><span>A. DRAME</span></a>
+      <span class="topbar__where" aria-hidden="true"><b>03</b>Parcours</span>
+      <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
+        <a href="../classique.html" data-page-link="profil"><span>Profil</span></a>
+        <a href="projets.html" data-page-link="projets"><span>Projets</span></a>
+        <a href="parcours.html" aria-current="page" data-page-link="parcours"><span>Parcours</span><i class="nav__ink" aria-hidden="true"></i></a>
+        <a href="competences.html" data-page-link="competences"><span>Compétences</span></a>
+        <a href="contact.html" data-page-link="contact"><span>Contact</span></a>
+      </nav>
+      <div class="topbar__actions">
+        <a class="topbar__cv" href="../assets/CV.pdf" target="_blank" rel="noopener">CV</a>
+        <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer d'ambiance">
+          <svg class="ico ico--sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>
+          <svg class="ico ico--moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>
+        </button>
+        <a class="switch" href="../aventure.html#parcours/devphantom" data-switch-adventure data-follow-route
+           title="Passer en mode aventure, à l'endroit que vous lisez">
+          <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-gamepad"/></svg><span>Mode aventure</span>
+        </a>
+        <button type="button" class="icon-btn nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Ouvrir le menu">
+          <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="world world--parcours vt-stage" tabindex="-1">
+    <div class="world__bg" aria-hidden="true"><i></i></div>
+    <section class="tl" aria-labelledby="parcours-title">
+      <div class="world-ui">
+      <header class="world-head">
+        <p class="world-head__k"><span>03</span>Parcours</p>
+        <h1 class="world-head__t" id="parcours-title">Mon parcours</h1>
+        <p class="world-head__lead">Alternance chez DevPhantom (01/2024 — 10/2026), en parallèle de l'ETNA (2023 — 2026).</p>
+      </header>
+      </div>
+      <p class="tl-stage__year" aria-hidden="true"></p>
+      <div class="tl-stage" data-initial="devphantom">
+        <div class="tl-panels">
+          <article class="tl-panel tl-panel--minor" id="autres" data-step="autres" data-kind="pro" data-year="" aria-labelledby="tl-autres-t">
+            <header class="tl-panel__head">
+              <p class="tl-panel__k"><span>Expérience</span>Avant / pendant le parcours informatique</p>
+              <h2 class="tl-panel__t" id="tl-autres-t">Autres expériences</h2>
+              
+              <p class="tl-panel__lead">Un parcours varié, à l'aise dans la relation avec le public, avant de me consacrer au développement. Ces expériences restent secondaires par rapport au développement informatique.</p>
+            </header>
+            <div class="tl-panel__body">
+              
+              <ul class="tl-panel__details"><li>City One — RATP : accueil et accompagnement des voyageurs dans le métro, vente de titres de transport, assistance aux usagers.</li><li>City One — missions d'accueil : accueil du public, standard téléphonique, orientation des visiteurs, dans différents environnements professionnels (dont La Poste Mobile).</li><li>Super U : expérience de vente pendant environ un mois.</li></ul>
+              
+              
+            </div>
+          </article>
+          <article class="tl-panel tl-panel--normal" id="bac" data-step="bac" data-kind="edu" data-year="2020" aria-labelledby="tl-bac-t">
+            <header class="tl-panel__head">
+              <p class="tl-panel__k"><span>Formation</span>2020</p>
+              <h2 class="tl-panel__t" id="tl-bac-t">Baccalauréat STI2D</h2>
+              <p class="tl-panel__place">Sciences et Technologies de l'Industrie et du Développement Durable</p>
+              <p class="tl-panel__lead">Bac technologique à dominante sciences de l'ingénieur : premières bases en électronique, programmation et démarche de projet.</p>
+            </header>
+            <div class="tl-panel__body">
+              
+              
+              
+              
+            </div>
+          </article>
+          <article class="tl-panel tl-panel--normal" id="bts" data-step="bts" data-kind="edu" data-year="2021" aria-labelledby="tl-bts-t">
+            <header class="tl-panel__head">
+              <p class="tl-panel__k"><span>Formation</span>2021 — début 2022</p>
+              <h2 class="tl-panel__t" id="tl-bts-t">BTS Systèmes Numériques — option B Électronique et Communication</h2>
+              
+              <p class="tl-panel__lead">Formation orientée systèmes embarqués, électronique et communication numérique.</p>
+            </header>
+            <div class="tl-panel__body">
+              <p>Projet de fin d'études réalisé en équipe : « Jardin connecté » — permettre à un jardinier de surveiller et contrôler à distance l'humidité de son sol depuis une interface sur téléphone.</p>
+              
+              <p class="tl-panel__role"><span>Mon rôle</span>Ma contribution : travail sur le capteur d'humidité, Arduino Uno, programmation en C / C++. Le câblage, le prototype et certains composants ont été réalisés avec l'équipe.</p>
+              
+            </div>
+          </article>
+          <article class="tl-panel tl-panel--mid" id="etna" data-step="etna" data-kind="edu" data-year="2023" aria-labelledby="tl-etna-t">
+            <header class="tl-panel__head">
+              <p class="tl-panel__k"><span>Formation</span>2023 — 2026</p>
+              <h2 class="tl-panel__t" id="tl-etna-t">ETNA — Bachelor puis Master</h2>
+              
+              <p class="tl-panel__lead">Une formation qui m'a permis de travailler sur des projets techniques en équipe et de développer une approche orientée architecture, développement et résolution de problèmes.</p>
+            </header>
+            <div class="tl-panel__body">
+              
+              <ul class="tl-panel__details"><li>Bachelor Concepteur Développeur d'Applications Web (2023 → 2024)</li><li>Master Architecte de Systèmes d'Information (2024 → 2026)</li></ul>
+              
+              
+            </div>
+          </article>
+          <article class="tl-panel tl-panel--major" id="devphantom" data-step="devphantom" data-kind="pro" data-year="2024" aria-labelledby="tl-devphantom-t">
+            <header class="tl-panel__head">
+              <p class="tl-panel__k"><span>Expérience</span>01/2024 — 10/2026</p>
+              <h2 class="tl-panel__t" id="tl-devphantom-t">Développeur Web Full Stack — Alternance</h2>
+              <p class="tl-panel__place">DevPhantom · en parallèle de l'ETNA · équipe d'environ 4 personnes</p>
+              <p class="tl-panel__lead">Une caractéristique importante de mon profil ici : m'adapter rapidement à un nouveau projet et apprendre les technologies nécessaires au besoin.</p>
+            </header>
+            <div class="tl-panel__body">
+              <p>Après les rendez-vous clients : compréhension du besoin, récupération des idées et fonctionnalités, définition de la solution, développement ou reprise de projets, création de fonctionnalités et de SaaS. Travail avec Jira, méthodologie Agile, adaptation aux contraintes techniques et métier.</p>
+              
+              
+              
+              <div class="tl-panel__projects">
+                <p class="mini-title">Projets DevPhantom · en équipe</p>
+                <ul><li><a href="projets.html#infinitia" data-cat="Professionnel"><strong>Infinitia</strong><span>Plateforme Web</span></a></li><li><a href="projets.html#allsab-ms" data-cat="Professionnel"><strong>Allsab-MS</strong><span>Intranet</span></a></li><li><a href="projets.html#hexagon" data-cat="Professionnel"><strong>Hexagon</strong><span>Plateforme Web</span></a></li><li><a href="projets.html#gexp" data-cat="Professionnel"><strong>GEXP</strong><span>Plateforme Web</span></a></li><li><a href="projets.html#ilamiria" data-cat="Professionnel"><strong>Ilamiria</strong><span>Application Mobile</span></a></li><li><a href="projets.html#badn" data-cat="Professionnel"><strong>BADN</strong><span>Application Mobile</span></a></li></ul>
+              </div>
+            </div>
+          </article>
+          <article class="tl-panel tl-panel--next" id="et-ensuite" data-step="et-ensuite" data-kind="next" data-year="2026" aria-labelledby="tl-next-t">
+            <header class="tl-panel__head">
+              <p class="tl-panel__k"><span>Et ensuite</span>2026</p>
+              <h2 class="tl-panel__t" id="tl-next-t">En recherche de CDI (dès sept. 2026)</h2>
+              <p class="tl-panel__place">Développeur Web Full Stack · Île-de-France</p>
+            </header>
+            <div class="tl-panel__body">
+              <p class="tl-panel__lead">Je peux m'adapter à un environnement technique existant, comprendre rapidement un projet et apprendre les outils nécessaires pour répondre au besoin.</p>
+              <p><a class="btn btn--primary btn--sm" href="contact.html">Me contacter<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
+            </div>
+          </article>
+        </div>
+      </div>
+      <nav class="tl-track" aria-label="Frise chronologique 2020 – 2026" data-from="2020" data-to="2027">
+        <div class="tl-rail">
+          <div class="tl-scale" aria-hidden="true"><span style="--at:0.0000">2020</span><span style="--at:0.1429">2021</span><span style="--at:0.2857">2022</span><span style="--at:0.4286">2023</span><span style="--at:0.5714">2024</span><span style="--at:0.7143">2025</span><span style="--at:0.8571">2026</span><span style="--at:1.0000">2027</span><b class="tl-now"></b></div>
+          <div class="tl-lanes" aria-hidden="true"><i class="tl-bar tl-bar--fuzzy" data-step="bts" data-kind="edu" style="--at:0.1429;--len:0.1786"></i><i class="tl-bar tl-bar--fuzzy" data-step="etna" data-kind="edu" style="--at:0.4286;--len:0.5000"></i><i class="tl-bar" data-step="devphantom" data-kind="pro" style="--at:0.5714;--len:0.4048"></i></div>
+          <div class="tl-line" aria-hidden="true"></div>
+          <div class="tl-nodes">
+            <a class="tl-node tl-node--minor tl-node--off" href="#autres" data-step="autres" data-kind="pro">
+              <span class="tl-node__dot" aria-hidden="true"></span>
+              <span class="tl-node__l">Autres</span>
+              <span class="tl-node__d">Hors frise</span>
+            </a>
+            <a class="tl-node tl-node--normal" href="#bac" data-step="bac" data-kind="edu" style="--at:0.0000">
+              <span class="tl-node__dot" aria-hidden="true"></span>
+              <span class="tl-node__l">Bac</span>
+              <span class="tl-node__d">2020</span>
+            </a>
+            <a class="tl-node tl-node--normal" href="#bts" data-step="bts" data-kind="edu" style="--at:0.1429">
+              <span class="tl-node__dot" aria-hidden="true"></span>
+              <span class="tl-node__l">BTS</span>
+              <span class="tl-node__d">2021</span>
+            </a>
+            <a class="tl-node tl-node--mid" href="#etna" data-step="etna" data-kind="edu" style="--at:0.4286">
+              <span class="tl-node__dot" aria-hidden="true"></span>
+              <span class="tl-node__l">ETNA</span>
+              <span class="tl-node__d">2023 — 2026</span>
+            </a>
+            <a class="tl-node tl-node--major" href="#devphantom" data-step="devphantom" data-kind="pro" style="--at:0.5714">
+              <span class="tl-node__dot" aria-hidden="true"></span>
+              <span class="tl-node__l">DevPhantom</span>
+              <span class="tl-node__d">2024</span>
+            </a>
+            <a class="tl-node tl-node--next" href="#et-ensuite" data-step="et-ensuite" data-kind="next" style="--at:0.9524">
+              <span class="tl-node__dot" aria-hidden="true"></span>
+              <span class="tl-node__l">Recherche CDI</span>
+              <span class="tl-node__d">dès sept. 2026</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+    </section>
+  </main>
+
+  <nav class="worlds" aria-label="Page précédente et suivante">
+    <a class="worlds__door worlds__door--prev" href="projets.html" rel="prev" aria-keyshortcuts="ArrowLeft">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span class="worlds__l"><small>02</small>Projets</span>
+    </a>
+    <a class="worlds__door worlds__door--next" href="competences.html" rel="next" aria-keyshortcuts="ArrowRight">
+      <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg><span class="worlds__l"><small>04</small>Compétences</span>
+    </a>
+  </nav>
+
+  <script src="../js/deeplink.js"></script>
+  <script src="../js/classic.js"></script>
+  <script type="module" src="../src/classic-app.js"></script>
+</body>
+</html>
