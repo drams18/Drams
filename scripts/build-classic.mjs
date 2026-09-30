@@ -244,7 +244,7 @@ function topbar(page, L) {
   const nav = PAGES.map(p => {
     const cur = p === page;
     return `<a href="${L.page(p.key)}"${cur ? ' aria-current="page"' : ''} data-page-link="${p.key}"><span>${p.label}</span>${cur ? '<i class="nav__ink" aria-hidden="true"></i>' : ''}</a>`;
-  }).join('\n        ');
+  }).concat(`<a href="${L.up}tarifs.html"><span>Tarifs</span></a>`).join('\n        ');
   return `
   <header class="topbar">
     <div class="topbar__inner">
