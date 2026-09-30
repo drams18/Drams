@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   DEEPLINK.JS — Grammaire de liens COMMUNE aux deux modes
+   DEEPLINK.JS : Grammaire de liens COMMUNE aux deux modes
    Le même fragment désigne le même contenu en mode classique
    (classique.html → /classique) et en mode aventure
    (aventure.html → /aventure) :
@@ -14,7 +14,7 @@
    Passer d'un mode à l'autre = garder le fragment, changer de page.
    Le mode courant n'est PAS un état global : c'est la page elle-même.
    localStorage ne retient que la préférence (présélection sur l'écran
-   de sélection, liens « retour ») — jamais de redirection automatique.
+   de sélection, liens « retour »), jamais de redirection automatique.
    ══════════════════════════════════════════════════════ */
 (function (global) {
   'use strict';

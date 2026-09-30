@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   SPACE.JS — Espace infini explorable (projets, compétences)
+   SPACE.JS : Espace infini explorable (projets, compétences)
 
    Un monde « torique » : chaque couche est une tuile (W × H) répétée à
    l'infini dans les deux sens. Répétition VIRTUELLE : seules les copies

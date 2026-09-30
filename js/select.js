@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   SELECT.JS — Écran de sélection du mode (index.html)
+   SELECT.JS : Écran de sélection du mode (index.html)
      • dernier mode utilisé : présélectionné + badge (jamais de redirection)
      • clavier : ← / → pour choisir, Entrée pour valider
      • préchargement du mode visé (survol / focus / présélection au repos)

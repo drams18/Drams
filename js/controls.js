@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   CONTROLS.JS — Keyboard input (side-scroller)
+   CONTROLS.JS : Keyboard input (side-scroller)
    ← / Q / A move left | → / D move right
    ↑ / W / Z interact  | ↓ / S close
    ══════════════════════════════════════════════════════ */

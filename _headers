@@ -1,4 +1,4 @@
-# Cloudflare Pages — cache. Les fichiers ne sont pas versionnés (pas de
+# Cloudflare Pages, cache. Les fichiers ne sont pas versionnés (pas de
 # hash dans les noms) : cache long uniquement pour les médias lourds,
 # court pour HTML / CSS / JS afin qu'une mise en ligne soit vue tout de suite.
 /_vite/*

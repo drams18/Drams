@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   MOBILECONTROLS.JS — Touch buttons for side-scroller
+   MOBILECONTROLS.JS : Touch buttons for side-scroller
    Buttons: ← left | → right | ENTRER | FERMER
    ══════════════════════════════════════════════════════ */
 
@@ -75,7 +75,7 @@ class MobileControls {
   get isMobile() { return this._isMobile; }
 }
 
-// Flèches SVG (plus lisibles que « G » / « D ») — couleur = currentColor.
+// Flèches SVG (plus lisibles que « G » / « D »), couleur = currentColor.
 MobileControls.ARROW_LEFT =
   '<svg class="mbtn__arrow" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">' +
   '<path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>';

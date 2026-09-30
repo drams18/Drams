@@ -1,10 +1,10 @@
 /* ══════════════════════════════════════════════════════
-   CLASSIC.CSS — Mode classique : cinq pages, cinq environnements
+   CLASSIC.CSS : Mode classique : cinq pages, cinq environnements
      Profil (classique.html) · Projets · Parcours · Compétences · Contact
      (classique/*.html, générées par scripts/build-classic.mjs)
 
    Sobre, lisible, rapide. Aucun code visuel du mode aventure ici (pas de
-   pixel, de néon ni de BD) — le socle (thèmes, police, boutons) est dans
+   pixel, de néon ni de BD), le socle (thèmes, police, boutons) est dans
    css/site.css.
 
    Couches :
@@ -164,7 +164,6 @@ html:not(.js) .js-only, .no-app .js-only { display: none !important; }
 .seg:hover { border-color: var(--muted); color: var(--text); }
 .seg[aria-pressed="true"] { color: var(--bg); background: var(--text); border-color: var(--text); }
 .seg[aria-pressed="true"] > span { color: var(--bg); opacity: .7; }
-.seg--fam[aria-pressed="true"] { color: var(--text); background: color-mix(in srgb, var(--fam) 22%, var(--surface)); border-color: var(--fam); }
 
 /* ── Barre du haut ──────────────────────────────────── */
 .topbar {
@@ -212,7 +211,7 @@ html:not(.js) .topbar, .no-app .topbar, .topbar.is-scrolled {
 .topbar__cv:hover { color: var(--text); }
 .nav-toggle { display: none; }
 
-/* Passage en mode aventure — discret, c'est une option */
+/* Passage en mode aventure, discret, c'est une option */
 .switch {
   display: inline-flex; align-items: center; gap: 8px;
   min-height: 40px; padding: 7px 14px;
@@ -479,7 +478,7 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 @media (max-width: 520px) { .doors { grid-template-columns: 1fr; } .door { min-height: 0; } }
 
 /* ══════════════════════════════════════════════════════
-   02 · PROJETS — espace de bulles
+   02 · PROJETS : espace de bulles
    ══════════════════════════════════════════════════════ */
 .pj-space { position: absolute; inset: 0; z-index: 1; transition: transform .6s var(--ease-out), opacity .5s var(--ease); }
 .pj[data-view="list"] .space-field, .eco[data-view="list"] .space-field { opacity: .1; pointer-events: none; transition: opacity .4s var(--ease); }
@@ -611,22 +610,38 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 .space-lens button:hover { color: var(--text); }
 .space-lens .ico { width: 14px; height: 14px; }
 
-.pj-legend {
-  position: absolute; left: var(--gut); bottom: calc(26px + env(safe-area-inset-bottom, 0px)); z-index: 6; pointer-events: none;
-  display: flex; flex-direction: column; gap: 5px; font-size: 12.5px; color: var(--muted);
+/* Légende repliable (projets, compétences) */
+.legend { position: relative; align-self: flex-start; margin-top: 6px; pointer-events: auto; }
+.legend > summary {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 6px 12px 6px 14px; cursor: pointer; list-style: none;
+  font: 500 13.5px var(--font); color: var(--text-2);
+  background: color-mix(in srgb, var(--surface) 86%, transparent); border: 1px solid var(--line-2); border-radius: 999px;
+  transition: color .2s, border-color .2s;
 }
-.pj-legend::before {
-  content: ''; position: absolute; z-index: -1; inset: -60px -90px -40px -80px;
-  background: radial-gradient(ellipse 60% 60% at 40% 55%, var(--bg) 40%, transparent 80%);
+.legend > summary::-webkit-details-marker { display: none; }
+.legend > summary:hover, .legend[open] > summary { color: var(--text); border-color: var(--muted); }
+.legend__chev { width: 15px; height: 15px; transition: transform .35s var(--ease-out); }
+.legend[open] .legend__chev { transform: rotate(180deg); }
+.legend__in {
+  position: absolute; left: 0; top: calc(100% + 8px); z-index: 8; width: max-content; max-width: min(320px, calc(100vw - var(--gut) * 2));
+  display: grid; gap: 14px; padding: 16px 18px; border-radius: 16px;
+  background: color-mix(in srgb, var(--surface) 95%, transparent); border: 1px solid var(--line-2); box-shadow: var(--shadow);
+  transform-origin: top left;
 }
-.pj-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.pj-legend__sep { height: 6px; }
+@supports (backdrop-filter: blur(8px)) { .legend > summary, .legend__in { backdrop-filter: blur(12px); } }
+.legend[open] .legend__in { animation: legendIn .32s var(--ease-out); }
+@keyframes legendIn { from { opacity: 0; transform: translateY(-6px) scale(.97); } }
+.legend__t { margin-bottom: 7px; font-size: 11.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.legend__g ul { display: grid; gap: 6px; }
+.legend__g li { display: grid; grid-template-columns: 14px auto; align-items: center; gap: 9px; font-size: 13.5px; color: var(--text-2); }
+.legend__g li > i { justify-self: center; }
 .lg-dot { width: 8px; height: 8px; border-radius: 50%; }
 .lg-dot--on { background: var(--ok); } .lg-dot--wip { background: var(--wip); } .lg-dot--off { box-shadow: inset 0 0 0 1.5px var(--muted); }
 .lg-size { display: inline-block; border-radius: 50%; border: 1px solid var(--muted); }
 .lg-size--l { width: 14px; height: 14px; border-style: dashed; } .lg-size--m { width: 11px; height: 11px; } .lg-size--s { width: 8px; height: 8px; }
-.pj[data-view="list"] .pj-legend { display: none; }
-@media (max-width: 1100px) { .pj-legend { display: none; } }
+.eco .lg-size--l { border-style: solid; }
+.lg-size--decl { width: 10px; height: 10px; border-style: dashed; }
+@media (prefers-reduced-motion: reduce) { .legend[open] .legend__in { animation: none; } }
 
 /* ── Projets : index (liste accessible, vue « liste », document sans JS) ── */
 .pj-list { position: relative; z-index: 2; padding: 32px var(--gut) 64px; }
@@ -752,7 +767,7 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 }
 
 /* ══════════════════════════════════════════════════════
-   03 · PARCOURS — frise horizontale
+   03 · PARCOURS : frise horizontale
    ══════════════════════════════════════════════════════ */
 [data-kind="edu"]  { --k: var(--c-school); }
 [data-kind="pro"]  { --k: var(--c-pro); }
@@ -877,7 +892,7 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 }
 
 /* ══════════════════════════════════════════════════════
-   04 · COMPÉTENCES — écosystème (globe)
+   04 · COMPÉTENCES : écosystème (globe)
    ══════════════════════════════════════════════════════ */
 .eco-space { position: absolute; inset: 0; z-index: 1; transition: opacity .4s var(--ease); }
 .eco-space .space-vignette {
@@ -920,14 +935,6 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 .eco-space.has-sel .skb.is-sel { opacity: 1 !important; }
 .skb.is-sel .skb__c { border: 1px solid var(--fam); background: color-mix(in srgb, var(--fam) 40%, var(--surface)); box-shadow: 0 0 0 3px var(--fam), 0 0 0 12px color-mix(in srgb, var(--fam) 18%, transparent); }
 .skb.is-rel .skb__c { border-color: var(--fam); }
-.eco-fl {                       /* nom de la famille, en filigrane derrière sa grappe */
-  position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none; white-space: nowrap; will-change: transform, opacity;
-  font-size: clamp(22px, 3vw, 38px); font-weight: 750; letter-spacing: -.03em; text-transform: uppercase;
-  color: color-mix(in srgb, var(--fam) 16%, transparent);
-  translate: -50% -50%;
-}
-[data-theme="day"] .eco-fl { color: color-mix(in srgb, var(--fam) 20%, transparent); }
-.eco-space.has-sel .eco-fl { opacity: .3 !important; }
 
 /* Panneau de détail */
 .eco-panel {

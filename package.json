@@ -1,7 +1,7 @@
 {
   "name": "drams-portfolio",
   "private": true,
-  "description": "Portfolio d'Arphan Drame — mode classique + mode aventure (HTML/CSS/JS vanilla, build Vite, animations GSAP)",
+  "description": "Portfolio d'Arphan Drame, mode classique + mode aventure (HTML/CSS/JS vanilla, build Vite, animations GSAP)",
   "scripts": {
     "dev": "vite",
     "content": "node scripts/build-classic.mjs",

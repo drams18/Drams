@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   AUDIO.JS — Gestionnaire audio centralisé
+   AUDIO.JS : Gestionnaire audio centralisé
    Un seul endroit pour : musique de fond + effets (SFX).
 
    Points clés
@@ -31,7 +31,7 @@
   // l'app veut de la musique : la navigation ne coupe donc plus le fond sonore.
   const MUSIC_KEY = 'drame.portfolio.music';
 
-  // ── Configuration — tout se règle ici ────────────────
+  // ── Configuration, tout se règle ici ────────────────
   const CONFIG = {
     musicSrc: 'assets/audio/bg-music.mp3',   // NE PAS déplacer : musique existante
     musicVolume: 0.25,

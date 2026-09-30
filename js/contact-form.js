@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   CONTACT-FORM.JS — Envoi des formulaires via EmailJS (partagé)
+   CONTACT-FORM.JS : Envoi des formulaires via EmailJS (partagé)
    Source UNIQUE de la configuration EmailJS pour tout le portfolio :
    mode classique, mode aventure (maison CONTACT) et construire-projet.
 
@@ -9,7 +9,7 @@
 
    API (window.ContactForm) :
      warm(form)      précharge le SDK au 1er focus dans le formulaire
-     sendForm(form)  Promise — envoie le formulaire (champs from_name,
+     sendForm(form)  Promise, envoie le formulaire (champs from_name,
                      from_email, message attendus par le template)
    ══════════════════════════════════════════════════════ */
 (function (global) {

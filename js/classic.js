@@ -1,9 +1,9 @@
 /* ══════════════════════════════════════════════════════
-   CLASSIC.JS — Socle commun aux cinq pages du mode classique
+   CLASSIC.JS : Socle commun aux cinq pages du mode classique
    (classique.html + classique/*.html). Chaque page est lisible SANS
    JavaScript ; ce script n'ajoute que du confort :
      • menu mobile ; barre du haut (fond au défilement)
-     • navigation entre pages au clavier (← →) — jamais dans un champ
+     • navigation entre pages au clavier (← →), jamais dans un champ
        ni dans un composant qui utilise déjà les flèches ([data-keys])
      • transitions entre pages : sens mémorisé (navigateurs sans
        View Transitions), nom ↔ logo quand le nom est hors écran
@@ -40,6 +40,18 @@
       if (nav.classList.contains('is-open') && !e.target.closest('#site-nav, .nav-toggle')) setNav(false);
     });
   }
+
+  // ── Légende repliable : se referme en cliquant ailleurs ou avec Échap ──
+  doc.addEventListener('pointerdown', function (e) {
+    doc.querySelectorAll('.legend[open]').forEach(function (d) { if (!d.contains(e.target)) d.open = false; });
+  });
+  doc.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    doc.querySelectorAll('.legend[open]').forEach(function (d) {
+      d.open = false;
+      if (d.contains(doc.activeElement)) d.querySelector('summary').focus();
+    });
+  });
 
   // ── Barre du haut : légère en haut de page, plus présente ensuite ──
   var topbar = doc.querySelector('.topbar');
@@ -85,7 +97,7 @@
   });
 
   // Départ vers une autre page du classique : le nom (Profil) se change
-  // en logo… sauf s'il n'est plus à l'écran — c'est alors le logo qui part.
+  // en logo… sauf s'il n'est plus à l'écran, c'est alors le logo qui part.
   window.addEventListener('pageswap', function (e) {
     if (!e.viewTransition) return;
     var name = doc.querySelector('.pf-name');

@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   BUILD-CLASSIC.MJS — Génère le mode classique à partir de
+   BUILD-CLASSIC.MJS : Génère le mode classique à partir de
    js/museum.js (source unique, partagée avec le mode aventure).
 
      npm run content      (ou : node scripts/build-classic.mjs)
@@ -33,8 +33,8 @@ const require = createRequire(import.meta.url);
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { SECTIONS } = require('../js/museum.js');
 
-// Adresse publique du site (Cloudflare Pages). À changer ici — et dans les
-// <head> des autres pages — le jour où un nom de domaine est acheté.
+// Adresse publique du site (Cloudflare Pages). À changer ici, et dans les
+// <head> des autres pages, le jour où un nom de domaine est acheté.
 const SITE_URL = 'https://portfolio-3kx.pages.dev/';
 
 // ── Helpers ────────────────────────────────────────────
@@ -161,7 +161,7 @@ const projectImage = (p) => p.image
   || (existsSync(join(ROOT, `assets/img/projets/${p.slug}.webp`)) ? `assets/img/projets/${p.slug}.webp` : null);
 
 // ── Chronologie ────────────────────────────────────────
-// « 01/2024 — 10/2026 », « 2021 — début 2022 », « 2020 »… → années décimales.
+// « 01/2024 - 10/2026 », « 2021 - début 2022 », « 2020 »… → années décimales.
 // Une fin sans mois est « floue » : dessinée jusqu'au milieu de l'année,
 // en fondu (on n'invente pas de mois).
 function spanOf(date) {
@@ -188,7 +188,7 @@ function weightOf({ s, span }) {
 }
 // Libellé court : le mot du titre / lieu qui correspond au `short` (« DevPhantom »).
 function stepLabel(s) {
-  const words = `${s.title} ${s.place || ''}`.split(/[\s·—,()]+/);
+  const words = `${s.title} ${s.place || ''}`.split(/[\s·,()]+/);
   return words.find(w => w.toUpperCase() === s.short) || titleCase(s.short);
 }
 const firstYear = Math.floor(Math.min(...dated.map(t => t.span.start)));
@@ -250,7 +250,7 @@ function topbar(page, L) {
   return `
   <header class="topbar">
     <div class="topbar__inner">
-      <a class="brand" href="${L.page('profil')}" aria-label="${esc(displayName)} — Profil"><span>A. DRAME</span></a>
+      <a class="brand" href="${L.page('profil')}" aria-label="${esc(displayName)}, Profil"><span>A. DRAME</span></a>
       <span class="topbar__where" aria-hidden="true"><b>${page.n}</b>${page.label}</span>
       <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
         ${nav}
@@ -290,7 +290,7 @@ function footer(L) {
   return `
   <footer class="footer">
     <div class="wrap footer__inner">
-      <p>${esc(displayName)} — ${esc(bio.title)} · ${esc(bio.location)}</p>
+      <p>${esc(displayName)} · ${esc(bio.title)} · ${esc(bio.location)}</p>
       <nav class="footer__links" aria-label="Autres pages">
         <a href="${L.up}index.html">Choisir un mode</a>
         <a href="${L.up}aventure.html#ville" data-switch-adventure>Mode aventure</a>
@@ -357,7 +357,7 @@ function shell(page, { title, description, ogDescription, jsonld, body, scripts 
   const others = PAGES.filter(p => p !== page).map(p => L.page(p.key));
   const url = SITE_URL + page.path;
   return `<!DOCTYPE html>
-<!-- GÉNÉRÉ par scripts/build-classic.mjs depuis js/museum.js — ne pas éditer : npm run content -->
+<!-- GÉNÉRÉ par scripts/build-classic.mjs depuis js/museum.js, ne pas éditer : npm run content -->
 <html lang="fr" data-theme="night">
 <head>
   <meta charset="UTF-8">
@@ -367,7 +367,7 @@ function shell(page, { title, description, ogDescription, jsonld, body, scripts 
   <link rel="canonical" href="${url}">
   <meta property="og:type" content="${page.key === 'profil' ? 'profile' : 'website'}">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:site_name" content="${esc(displayName)} — Portfolio">
+  <meta property="og:site_name" content="${esc(displayName)} · Portfolio">
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(ogDescription || description)}">
   <meta property="og:url" content="${url}">
@@ -402,13 +402,24 @@ ${worlds(page, L)}${scrolls ? footer(L) : ''}
 `;
 }
 
-function worldHead(page, title, lead, extra = '') {
+function worldHead(page, title, lead, extra = '', { quiet = false } = {}) {
   return `
       <header class="world-head">
         <p class="world-head__k"><span>${page.n}</span>${esc(page.label)}</p>
-        <h1 class="world-head__t" id="${page.key}-title">${esc(title)}</h1>
+        <h1 class="${quiet ? 'sr-only' : 'world-head__t'}" id="${page.key}-title">${esc(title)}</h1>
         ${lead ? `<p class="world-head__lead">${lead}</p>` : ''}${extra}
       </header>`;
+}
+
+// Légende repliable d'un espace : [{ title, items: [html] }].
+function legend(groups) {
+  return `
+        <details class="legend js-only">
+          <summary>Légende${icon('chevron', 'ico legend__chev')}</summary>
+          <div class="legend__in">${groups.map(g => `
+            <div class="legend__g"><p class="legend__t">${esc(g.title)}</p><ul>${g.items.map(i => `<li>${i}</li>`).join('')}</ul></div>`).join('')}
+          </div>
+        </details>`;
 }
 
 // ══════════════════════════════════════════════════════
@@ -496,7 +507,7 @@ function profilPage() {
     </section>`;
 
   return shell(page, {
-    title: `${displayName} — ${bio.title} · Portfolio`,
+    title: `${displayName}, ${bio.title} · Portfolio`,
     description: `Portfolio d'${displayName}, ${bio.title} en ${bio.location}. ${bio.seeking}. Projets professionnels (${company}), personnels et scolaires, parcours, compétences et contact.`,
     ogDescription: `${bio.seeking}. ${profile.positioning}`,
     jsonld: {
@@ -563,15 +574,14 @@ function projectItem(p, L) {
 
 function projetsPage() {
   const page = PAGE.projets;
-  const counts = `${byCat.Professionnel.length} professionnels (${esc(company)}, en équipe), ${byCat.Personnel.length} personnels, ${plural(byCat.Scolaire.length, 'scolaire', 'scolaires')}`;
   const body = (L) => `
     <section class="pj" aria-labelledby="projets-title">
-      <div class="world-ui">${worldHead(page, 'Ce que j’ai construit', `${plural(projects.length, 'projet', 'projets')} : ${counts}.`)}
+      <div class="world-ui">${worldHead(page, 'Ce que j’ai construit', '', legend([
+        { title: 'Catégorie', items: CATEGORIES.map(c => `<i class="cat-dot" data-cat="${c}"></i>${c}`) },
+        { title: 'État', items: ['<i class="lg-dot lg-dot--on"></i>Disponible', '<i class="lg-dot lg-dot--wip"></i>En développement', '<i class="lg-dot lg-dot--off"></i>Projet privé'] },
+        { title: 'Taille', items: ['<i class="lg-size lg-size--l"></i>À ne pas rater', '<i class="lg-size lg-size--m"></i>Professionnel', '<i class="lg-size lg-size--s"></i>Autre'] },
+      ]), { quiet: true })}
         <div class="pj-bar js-only" role="toolbar" aria-label="Affichage des projets">
-          <div class="seg-group" role="group" aria-label="Filtrer par catégorie">
-            <button type="button" class="seg" data-filter="all" aria-pressed="true">Tous <span>${projects.length}</span></button>
-            ${CATEGORIES.map(c => `<button type="button" class="seg" data-filter="${c}" aria-pressed="false"><i class="cat-dot" data-cat="${c}" aria-hidden="true"></i>${c} <span>${byCat[c].length}</span></button>`).join('\n            ')}
-          </div>
           <div class="seg-group" role="group" aria-label="Vue">
             <button type="button" class="seg" data-view="space" aria-pressed="true">${icon('orbit')}Espace</button>
             <button type="button" class="seg" data-view="list" aria-pressed="false">${icon('list')}Liste</button>
@@ -583,19 +593,15 @@ function projetsPage() {
         <ol class="pj-index" aria-label="Tous les projets" data-keys>${projects.map(p => projectItem(p, L)).join('')}
         </ol>
       </div>
-      <div class="pj-legend js-only" aria-hidden="true">
-        <span><i class="lg-dot lg-dot--on"></i>Disponible</span><span><i class="lg-dot lg-dot--wip"></i>En développement</span><span><i class="lg-dot lg-dot--off"></i>Projet privé</span>
-        <span class="pj-legend__sep"></span><span><i class="lg-size lg-size--l"></i>à ne pas rater</span><span><i class="lg-size lg-size--m"></i>professionnel</span><span><i class="lg-size lg-size--s"></i>autre</span>
-      </div>
     </section>`;
   return shell(page, {
-    title: `Projets — ${displayName}, ${bio.title}`,
+    title: `Projets · ${displayName}, ${bio.title}`,
     description: `${plural(projects.length, 'projet', 'projets')} d'${displayName} : ${byCat.Professionnel.length} professionnels réalisés en équipe chez ${company}, ${byCat.Personnel.length} personnels et ${byCat.Scolaire.length} scolaires. Technologies, rôle et disponibilité de chaque projet.`,
     jsonld: {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
       url: SITE_URL + page.path,
-      name: `Projets — ${displayName}`,
+      name: `Projets · ${displayName}`,
       inLanguage: 'fr',
       about: { '@id': `${SITE_URL}#person` },
       mainEntity: {
@@ -709,13 +715,13 @@ function parcoursPage() {
       </nav>
     </section>`;
   return shell(page, {
-    title: `Parcours — ${displayName}, ${bio.title}`,
+    title: `Parcours · ${displayName}, ${bio.title}`,
     description: `Parcours d'${displayName} : ${steps.map(s => stepLabel(s)).join(', ')}. ${devphantom.title} chez ${company} (${devphantom.date}), ${etna.title} (${etna.date}).`,
     jsonld: {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',
       url: SITE_URL + page.path,
-      name: `Parcours — ${displayName}`,
+      name: `Parcours · ${displayName}`,
       inLanguage: 'fr',
       mainEntity: { '@id': `${SITE_URL}#person` },
     },
@@ -753,14 +759,16 @@ function competencesPage() {
     const data = JSON.stringify(projects.map(p => ({ slug: p.slug, title: p.title, cat: p.category, type: p.type, skills: projectSkills(p) }))).replace(/</g, '\\u003c');
     return `
     <section class="eco" aria-labelledby="competences-title">
-      <div class="world-ui">${worldHead(page, 'Écosystème technique', `${plural(allSkills.length, 'compétence', 'compétences')}, ${families.length} familles. Plus une technologie revient dans mes projets, plus sa bulle est grande.`, `
+      <div class="world-ui">${worldHead(page, 'Écosystème technique', '', legend([
+        { title: 'Famille', items: families.map(f => `<i class="fam-dot" data-fam="${f.key}"></i>${esc(f.label)}`) },
+        { title: 'Taille', items: ['<i class="lg-size lg-size--l"></i>Utilisée dans beaucoup de projets', '<i class="lg-size lg-size--s"></i>Utilisée dans peu de projets', '<i class="lg-size lg-size--decl"></i>Hors des projets présentés'] },
+      ]) + `
         <div class="eco-bar js-only" role="toolbar" aria-label="Affichage des compétences">
-          <div class="seg-group eco-fams" role="group" aria-label="Aller à une famille">${families.map(f => `<button type="button" class="seg seg--fam" data-go-fam="${f.key}" data-fam="${f.key}"><i class="fam-dot" aria-hidden="true"></i>${esc(f.label.split(' / ')[0])}</button>`).join('')}</div>
           <div class="seg-group" role="group" aria-label="Vue">
             <button type="button" class="seg" data-view="space" aria-pressed="true">${icon('orbit')}Écosystème</button>
             <button type="button" class="seg" data-view="list" aria-pressed="false">${icon('list')}Liste</button>
           </div>
-        </div>`)}
+        </div>`, { quiet: true })}
       </div>
       <div class="eco-space js-only" data-keys></div>
       <div class="eco-list">
@@ -775,13 +783,13 @@ function competencesPage() {
     </section>`;
   };
   return shell(page, {
-    title: `Compétences — ${displayName}, ${bio.title}`,
+    title: `Compétences · ${displayName}, ${bio.title}`,
     description: `Écosystème technique d'${displayName} : ${families.map(f => f.label).join(', ')}. ${mainStack.slice(0, 6).map(s => s.item).join(', ')}… reliés aux projets qui les utilisent.`,
     jsonld: {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',
       url: SITE_URL + page.path,
-      name: `Compétences — ${displayName}`,
+      name: `Compétences · ${displayName}`,
       inLanguage: 'fr',
       mainEntity: { '@id': `${SITE_URL}#person`, '@type': 'Person', name: displayName, knowsAbout: allSkills.map(s => s.item) },
     },
@@ -861,13 +869,13 @@ function contactPage() {
     </section>`;
   };
   return shell(page, {
-    title: `Contact — ${displayName}, ${bio.title}`,
+    title: `Contact · ${displayName}, ${bio.title}`,
     description: `Contacter ${displayName}, ${bio.title} en ${bio.location}. ${bio.seeking}. E-mail, téléphone, LinkedIn, GitHub, CV et formulaire de contact.`,
     jsonld: {
       '@context': 'https://schema.org',
       '@type': 'ContactPage',
       url: SITE_URL + page.path,
-      name: `Contact — ${displayName}`,
+      name: `Contact · ${displayName}`,
       inLanguage: 'fr',
       mainEntity: { '@id': `${SITE_URL}#person`, '@type': 'Person', name: displayName, email: `mailto:${contact.email}`, telephone: `+33${tel.replace(/^0/, '')}` },
     },
@@ -949,11 +957,11 @@ writeMarked('index.html', {
   jsonld: ld({
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'WebSite', '@id': `${SITE_URL}#site`, name: `${displayName} — Portfolio`, url: SITE_URL, inLanguage: 'fr', author: { '@id': `${SITE_URL}#person` } },
+      { '@type': 'WebSite', '@id': `${SITE_URL}#site`, name: `${displayName} · Portfolio`, url: SITE_URL, inLanguage: 'fr', author: { '@id': `${SITE_URL}#person` } },
       person(),
     ],
   }),
 });
 
 const withImg = projects.filter(projectImage).length;
-console.log(`Mode classique régénéré (${PAGES.length} pages) + index.html — ${projects.length} projets (${withImg} miniature${withImg > 1 ? 's' : ''}), ${steps.length} étapes, ${allSkills.length} compétences (${mainStack.length} dans 2 projets ou plus).`);
+console.log(`Mode classique régénéré (${PAGES.length} pages) + index.html, ${projects.length} projets (${withImg} miniature${withImg > 1 ? 's' : ''}), ${steps.length} étapes, ${allSkills.length} compétences (${mainStack.length} dans 2 projets ou plus).`);

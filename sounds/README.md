@@ -1,4 +1,4 @@
-# sounds/ — Effets sonores (SFX) du portfolio
+# sounds/, Effets sonores (SFX) du portfolio
 
 Dossier dédié aux petits effets sonores du mini-jeu. La musique de fond
 reste, elle, dans `assets/audio/bg-music.mp3` (inchangée).
@@ -18,7 +18,7 @@ reste, elle, dans `assets/audio/bg-music.mp3` (inchangée).
 - Format : `.mp3` (compatibilité Chrome / Safari / Firefox, desktop + mobile).
 - Durée : très court, 80–400 ms. Style pixel-art / 8-bit, discret.
 - Poids : quelques Ko chacun. Éviter les fichiers lourds : ils sont préchargés.
-- Volume déjà géré côté code (SFX ~40–60 %, sous la musique) — pas besoin de
+- Volume déjà géré côté code (SFX ~40–60 %, sous la musique), pas besoin de
   normaliser fort à la production.
 
 ## Ajouter / retirer un son

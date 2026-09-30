@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   CLASSIC-APP.JS — Couche interactive du mode classique
+   CLASSIC-APP.JS : Couche interactive du mode classique
    Module ES regroupé par Vite (npm run build) ; chargé après classic.js
    sur chacune des cinq pages.
 
@@ -10,7 +10,7 @@
      projets      src/classic/projects.js   espace de bulles + fiche
      parcours     src/classic/timeline.js   frise horizontale
      competences  src/classic/skills.js     écosystème (globe)
-     contact      —                         (CSS seul)
+     contact      (aucune)                      (CSS seul)
    ══════════════════════════════════════════════════════ */
 const root = document.documentElement;
 const app = (window.ClassicApp = window.ClassicApp || {});

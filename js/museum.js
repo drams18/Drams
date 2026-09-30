@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════
-   MUSEUM.JS — Portfolio data (sections content)
-   Arphan DRAME — Développeur Web Full Stack
+   MUSEUM.JS : Portfolio data (sections content)
+   Arphan DRAME : Développeur Web Full Stack
 
    Source UNIQUE du contenu, lue par les deux modes :
      • mode aventure  → modales des maisons (js/interactions.js)
@@ -35,9 +35,9 @@ const SECTIONS = {
       title: 'Développeur Web Full Stack',
       location: 'Île-de-France',
       availability: 'Alternance chez DevPhantom',
-      // Ce que je recherche — information n°1 pour un recruteur (mode classique : hero).
+      // Ce que je recherche, information n°1 pour un recruteur (mode classique : hero).
       seeking: 'En recherche de CDI (dès sept. 2026)',
-      description: 'Développeur Web Full Stack. Je pars d\'un besoin métier, je le comprends, et je le transforme en solution concrète — du frontend au backend. Je m\'intègre vite à une base de code existante et j\'apprends les outils nécessaires au projet.',
+      description: 'Développeur Web Full Stack. Je pars d\'un besoin métier, je le comprends, et je le transforme en solution concrète, du frontend au backend. Je m\'intègre vite à une base de code existante et j\'apprends les outils nécessaires au projet.',
       photo: 'assets/img/profile.jpg',
       languages: [
         { label: 'Français', level: 'Natif' },
@@ -96,9 +96,9 @@ const SECTIONS = {
         short: 'BTS',
         slug: 'bts',
         kind: 'ACADÉMIQUE',
-        date: '2021 — début 2022',
-        title: 'BTS Systèmes Numériques — option B Électronique et Communication',
-        context: 'Projet de fin d\'études réalisé en équipe : « Jardin connecté » — permettre à un jardinier de surveiller et contrôler à distance l\'humidité de son sol depuis une interface sur téléphone.',
+        date: '2021 - début 2022',
+        title: 'BTS Systèmes Numériques, option B Électronique et Communication',
+        context: 'Projet de fin d\'études réalisé en équipe : « Jardin connecté », pour permettre à un jardinier de surveiller et contrôler à distance l\'humidité de son sol depuis une interface sur téléphone.',
         desc: 'Formation orientée systèmes embarqués, électronique et communication numérique.',
         role: 'Ma contribution : travail sur le capteur d\'humidité, Arduino Uno, programmation en C / C++. Le câblage, le prototype et certains composants ont été réalisés avec l\'équipe.',
       },
@@ -106,8 +106,8 @@ const SECTIONS = {
         short: 'ETNA',
         slug: 'etna',
         kind: 'ACADÉMIQUE',
-        date: '2023 — 2026',
-        title: 'ETNA — Bachelor puis Master',
+        date: '2023 - 2026',
+        title: 'ETNA, Bachelor puis Master',
         details: [
           'Bachelor Concepteur Développeur d\'Applications Web (2023 → 2024)',
           'Master Architecte de Systèmes d\'Information (2024 → 2026)',
@@ -118,8 +118,8 @@ const SECTIONS = {
         short: 'DEVPHANTOM',
         slug: 'devphantom',
         kind: 'PROFESSIONNEL',
-        date: '01/2024 — 10/2026',
-        title: 'Développeur Web Full Stack — Alternance',
+        date: '01/2024 - 10/2026',
+        title: 'Développeur Web Full Stack en alternance',
         place: 'DevPhantom · en parallèle de l\'ETNA · équipe d\'environ 4 personnes',
         context: 'Après les rendez-vous clients : compréhension du besoin, récupération des idées et fonctionnalités, définition de la solution, développement ou reprise de projets, création de fonctionnalités et de SaaS. Travail avec Jira, méthodologie Agile, adaptation aux contraintes techniques et métier.',
         desc: 'Une caractéristique importante de mon profil ici : m\'adapter rapidement à un nouveau projet et apprendre les technologies nécessaires au besoin.',
@@ -133,8 +133,8 @@ const SECTIONS = {
         title: 'Autres expériences',
         desc: 'Un parcours varié, à l\'aise dans la relation avec le public, avant de me consacrer au développement. Ces expériences restent secondaires par rapport au développement informatique.',
         details: [
-          'City One — RATP : accueil et accompagnement des voyageurs dans le métro, vente de titres de transport, assistance aux usagers.',
-          'City One — missions d\'accueil : accueil du public, standard téléphonique, orientation des visiteurs, dans différents environnements professionnels (dont La Poste Mobile).',
+          'City One, RATP : accueil et accompagnement des voyageurs dans le métro, vente de titres de transport, assistance aux usagers.',
+          'City One, missions d\'accueil : accueil du public, standard téléphonique, orientation des visiteurs, dans différents environnements professionnels (dont La Poste Mobile).',
           'Super U : expérience de vente pendant environ un mois.',
         ],
       },
@@ -186,7 +186,7 @@ const SECTIONS = {
         category: 'Professionnel',
         pick: true,
         tech: ['PHP', 'Symfony', 'MySQL'],
-        role: 'Projet DevPhantom, en équipe — l\'un des premiers projets que j\'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.',
+        role: 'Projet DevPhantom, en équipe : l\'un des premiers projets que j\'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.',
         desc: 'Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.',
         links: [
           { label: 'Voir le site', url: 'https://allsab-ms.com/' },
@@ -252,7 +252,7 @@ const SECTIONS = {
         category: 'Personnel',
         pick: true,
         tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Supabase', 'Google Calendar API', 'Brevo', 'Cloudflare Workers', 'PWA', 'SEO'],
-        role: 'Projet personnel — conception et développement complets (frontend, backend serverless, intégrations).',
+        role: 'Projet personnel : conception et développement complets (frontend, backend serverless, intégrations).',
         desc: 'Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l\'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.',
         links: [
           { label: 'Voir le projet', url: 'https://wild-kedougou-experience.hitmind-pro.workers.dev/' },
@@ -266,7 +266,7 @@ const SECTIONS = {
         type: 'Site vitrine WordPress',
         category: 'Personnel',
         tech: ['WordPress', 'PHP', 'CSS'],
-        role: 'Projet en cours, réalisé pour un ami — création et intégration d\'un site vitrine WordPress.',
+        role: 'Projet en cours, réalisé pour un ami : création et intégration d\'un site vitrine WordPress.',
         desc: 'Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.',
         status: 'En cours',
         links: [
@@ -282,7 +282,7 @@ const SECTIONS = {
         category: 'Personnel',
         pick: true,
         tech: ['React Native', 'Symfony', 'MySQL', 'Cloudflare', 'Railway', 'Expo'],
-        role: 'Projet personnel — conception et développement complet : app mobile, API et mise en production.',
+        role: 'Projet personnel, conception et développement complet : app mobile, API et mise en production.',
         desc: 'Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l\'App Store.',
         links: [
           { label: 'Télécharger', url: 'https://apps.apple.com/us/app/islaah/id6758726142' },
@@ -296,7 +296,7 @@ const SECTIONS = {
         type: 'Projet personnel',
         category: 'Personnel',
         tech: ['Node.js', 'Railway', 'HTML', 'CSS', 'JavaScript', 'NoSQL'],
-        role: 'Projet personnel — idée, conception et développement réalisés seul.',
+        role: 'Projet personnel : idée, conception et développement réalisés seul.',
         desc: 'Plateforme permettant de rechercher une enseigne qui a besoin d\'un site web ou d\'une mise à jour.',
         links: [
           { label: 'Accéder', url: 'https://prospectly.hitmind-pro.workers.dev/' },
@@ -310,7 +310,7 @@ const SECTIONS = {
         type: 'PWA de planification',
         category: 'Personnel',
         tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'React Router', 'Supabase', 'PostgreSQL', 'PWA', 'Web Push', 'Cloudflare Pages', 'Cloudflare Workers'],
-        role: 'Projet personnel — conception et développement complets (frontend, backend serverless, notifications push). PWA que j\'ai construite pour organiser mes journées, mieux travailler et m\'installer des habitudes.',
+        role: 'Projet personnel : conception et développement complets (frontend, backend serverless, notifications push). PWA que j\'ai construite pour organiser mes journées, mieux travailler et m\'installer des habitudes.',
         desc: 'Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d\'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d\'avancement, modèles de journée réutilisables (« programmes ») applicables à n\'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.',
         links: [
           { label: 'Voir le projet', url: 'https://oneday-5s9.pages.dev/' },
@@ -325,7 +325,7 @@ const SECTIONS = {
         category: 'Scolaire',
         pick: true,
         tech: ['React', 'TypeScript', 'Vite', 'Tailwind', 'React Query', 'NestJS', 'PostgreSQL', 'TypeORM', 'JWT', 'Docker', 'Nginx', 'GitLab CI'],
-        role: 'Projet réalisé en équipe de 7 (ETNA — Grand Projet d\'Étude). J\'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d\'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l\'architecture technique et à la documentation / au diagramme d\'architecture.',
+        role: 'Projet réalisé en équipe de 7 (ETNA, Grand Projet d\'Étude). J\'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d\'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l\'architecture technique et à la documentation / au diagramme d\'architecture.',
         desc: 'Plateforme web destinée à accompagner les personnes dans leurs projets d\'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d\'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.',
         links: [
           { label: 'Accéder', url: 'https://skywalk-chi.vercel.app/' },
@@ -348,7 +348,7 @@ const SECTIONS = {
   },
 };
 
-// Lecture côté Node (scripts/build-classic.mjs) — sans effet dans le navigateur.
+// Lecture côté Node (scripts/build-classic.mjs), sans effet dans le navigateur.
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { SECTIONS, CATEGORY_ACCENT };
 }

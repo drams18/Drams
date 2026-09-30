@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   DEVIS.JS — « Construisez votre projet », version site classique
+   DEVIS.JS : « Construisez votre projet », version site classique
    (devis.html). Formulaire par étapes :
 
      #etape-1 … #etape-5   une question (choix unique ou multiple)
@@ -132,7 +132,7 @@
     return data[step.key] || NO_CHOICE;
   }
 
-  // Résumé texte de l'e-mail — même format que le mini-jeu.
+  // Résumé texte de l'e-mail, même format que le mini-jeu.
   function buildSummary() {
     var d = data;
     return [

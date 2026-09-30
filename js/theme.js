@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   THEME.JS — Thème clair ou sombre du site classique, selon l'heure locale
+   THEME.JS : Thème clair ou sombre du site classique, selon l'heure locale
    Chargé de façon BLOQUANTE dans le <head> (≈ 1 Ko) : le thème est
    posé avant le premier affichage, sans flash.
 
@@ -34,7 +34,7 @@
     for (var i = 0; i < btns.length; i++) {
       btns[i].setAttribute('aria-pressed', theme === 'night' ? 'true' : 'false');
       btns[i].setAttribute('aria-label', theme === 'day' ? 'Passer au thème sombre' : 'Passer au thème clair');
-      btns[i].setAttribute('title', theme === 'day' ? 'Thème clair (selon votre heure) — passer au sombre' : 'Thème sombre — passer au clair');
+      btns[i].setAttribute('title', theme === 'day' ? 'Thème clair (selon votre heure), passer au sombre' : 'Thème sombre, passer au clair');
     }
   }
 

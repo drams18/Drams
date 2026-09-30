@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   PROJECTS.JS — Page Projets : l'espace des projets
+   PROJECTS.JS : Page Projets : l'espace des projets
 
    Lit l'index sémantique généré (.pj-item, scripts/build-classic.mjs)
    et en tire un espace sans bord qui couvre tout l'écran :
@@ -91,19 +91,17 @@ export function initProjects(app) {
       return { W, H: area / W };
     };
 
-    // Avant : un exemplaire par projet ; ancres par catégorie (des
-    // quartiers lâches, pas des blocs).
-    const ANCHOR = { Professionnel: [0.24, 0.3], Personnel: [0.74, 0.42], Scolaire: [0.44, 0.8] };
+    // Avant : un exemplaire par projet, semés au hasard (catégories
+    // mêlées) : points de départ en « tournesol », puis écartés.
     const fItems = data.map((d) => ({ d, r: RADIUS[d.tier] * k }));
     const F = tile(fItems, 0.34);
     const r1 = rng(20260930);
-    fItems.forEach((it, n) => {
-      const a = ANCHOR[it.d.cat];
-      it.ax = a[0] * F.W; it.ay = a[1] * F.H;
-      it.x = it.ax + Math.cos(n * 2.4) * 60 * k + r1() * 20;
-      it.y = it.ay + Math.sin(n * 2.4) * 60 * k + r1() * 20;
+    const order = fItems.map((it) => ({ it, key: r1() })).sort((a, b) => a.key - b.key).map((o) => o.it);
+    order.forEach((it, n) => {
+      it.x = mod((n * 0.618034 + r1() * 0.08) * F.W, F.W);
+      it.y = mod(((n + 0.5) / order.length + (r1() - 0.5) * 0.06) * F.H, F.H);
     });
-    relax(fItems, F.W, F.H, { gap: 34 * k, pull: 0.006, late: 0.002 });
+    relax(fItems, F.W, F.H, { gap: 34 * k, pull: 0 });
 
     // Arrière : plus petits, plus loin, tuile d'une autre période.
     const bItems = data.map((d) => ({ d, r: RADIUS[d.tier] * k * 0.52 }));
@@ -170,7 +168,7 @@ export function initProjects(app) {
     btn.type = 'button';
     btn.className = 'pj-item__open';
     btn.setAttribute('aria-haspopup', 'dialog');
-    btn.setAttribute('aria-label', `${d.title} — ${d.cat}${d.ctx ? `, ${d.ctx}` : ''}, ${d.type}. ${d.statusLabel}. Ouvrir la fiche`);
+    btn.setAttribute('aria-label', `${d.title}, ${d.cat}${d.ctx ? `, ${d.ctx}` : ''}, ${d.type}. ${d.statusLabel}. Ouvrir la fiche`);
     btn.textContent = h.textContent;
     h.textContent = '';
     h.appendChild(btn);
@@ -203,9 +201,8 @@ export function initProjects(app) {
     if (sec.dataset.view === 'list') {
       if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
       e.preventDefault();
-      const list = data.filter((d) => !d.li.hidden);
-      const i = list.indexOf(from) + (e.key === 'ArrowDown' ? 1 : -1);
-      if (list[i]) list[i].btn.focus();
+      const next = data[from.i + (e.key === 'ArrowDown' ? 1 : -1)];
+      if (next) next.btn.focus();
       return;
     }
     const dir = DIRS[e.key];
@@ -226,19 +223,11 @@ export function initProjects(app) {
     if (best) best.btn.focus();
   });
 
-  // ── Filtres + « lentille » technologie ────────────────
-  let filter = 'all';
+  // ── « Lentille » technologie ──────────────────────────
   let lens = null;                 // { slug, label, fam, set }
-  const filterBtns = [...sec.querySelectorAll('[data-filter]')];
-  filterBtns.forEach((btn) => btn.addEventListener('click', () => {
-    filter = btn.dataset.filter;
-    filterBtns.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-    applyDim();
-  }));
-
   function applyDim() {
     data.forEach((d) => {
-      const out = (filter !== 'all' && d.cat !== filter) || (lens && !lens.set.has(d.slug));
+      const out = !!lens && !lens.set.has(d.slug);
       d.out = out;
       space.layers.forEach((L) => {
         const it = L.items[d.i];
@@ -246,8 +235,7 @@ export function initProjects(app) {
         space.setItemClass(it, 'is-dim', out);
         space.setItemClass(it, 'is-lit', !!lens && !out);
       });
-      d.li.hidden = filter !== 'all' && d.cat !== filter;
-      d.li.classList.toggle('is-dim', !!lens && !lens.set.has(d.slug));
+      d.li.classList.toggle('is-dim', out);
     });
   }
 

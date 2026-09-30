@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   PROFILE.JS — Page Profil : la porte d'entrée
+   PROFILE.JS : Page Profil : la porte d'entrée
 
    Séquence d'entrée, dans l'ordre de lecture :
      identité (le nom) → métier → contexte → exploration.

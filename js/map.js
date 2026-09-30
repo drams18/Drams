@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   MAP.JS — Side-scroller world (ville nocturne néon / comics)
+   MAP.JS : Side-scroller world (ville nocturne néon / comics)
    Spawn left, all buildings to the right, close together.
    Réécriture visuelle uniquement : structure de données, API
    (nearBuilding / draw) et positions INCHANGÉES.
@@ -14,7 +14,7 @@ const INTERACT_RADIUS = 85;
 // ── Player spawn position (left side) ────────────────
 const SPAWN_X = 80;
 
-// ── Palette monde — BLEU NUIT urbain (Spider-Verse) ──
+// ── Palette monde, BLEU NUIT urbain (Spider-Verse) ──
 const CITY = {
   ink:      '#01010a',
   facade:   '#16223f',
@@ -117,8 +117,8 @@ class GameMap {
     this._grad       = Object.create(null);  // dégradés dépendant de la taille (invalidés au resize)
     this._cloudGrads = null;                 // dégradés nuages (constants)
     this._labels     = Object.create(null);  // sprites de texte néon pré-rendus
-    this._sky        = null;                  // { under, over } — ciel statique bufferisé
-    this._skyline    = null;                  // { far, near }   — skyline statique bufferisée
+    this._sky        = null;                  // { under, over }, ciel statique bufferisé
+    this._skyline    = null;                  // { far, near }  , skyline statique bufferisée
     this._sizeKey    = '';
 
     // Les sprites de texte néon sont pré-rendus : si la police pixel n'est pas
@@ -179,7 +179,7 @@ class GameMap {
 
     ctx.drawImage(sky.under, 0, 0);
 
-    // Éclats / étoiles — seul élément animé du ciel (scintillement).
+    // Éclats / étoiles, seul élément animé du ciel (scintillement).
     ctx.fillStyle = 'rgba(255,255,255,0.75)';
     for (let i = 0; i < 60; i++) {
       const sx = (i * 137.5) % w;
@@ -259,7 +259,7 @@ class GameMap {
     return this._sky;
   }
 
-  // Skyline dense façon New York — 2 couches de parallaxe, 100 % statiques :
+  // Skyline dense façon New York, 2 couches de parallaxe, 100 % statiques :
   // pré-rendues une fois dans des buffers, puis blittées avec décalage
   // parallaxe (2 drawImage/frame au lieu de ~2500 fillRect).
   _drawSkyline(ctx, cameraX, groundY) {
@@ -429,7 +429,7 @@ class GameMap {
     }
   }
 
-  // Faille d'énergie « Construisez votre projet » — pièce maîtresse.
+  // Faille d'énergie « Construisez votre projet », pièce maîtresse.
   // Volontairement SANS toit ni murs pour ne pas ressembler à une maison.
   _drawPortal(ctx, cameraX, groundY, tick) {
     const d  = SPECIAL_DOOR;
@@ -574,7 +574,7 @@ class GameMap {
     ctx.fillStyle = 'rgba(0,0,0,0.45)';
     ctx.fillRect(sx - 6, groundY, b.w + 12, 6);
 
-    // Facade — dégradé sombre (vertical, indépendant de la caméra → mis en cache)
+    // Facade, dégradé sombre (vertical, indépendant de la caméra → mis en cache)
     let fac = this._grad['fac_' + b.id];
     if (!fac) {
       fac = ctx.createLinearGradient(0, by, 0, groundY);
@@ -680,7 +680,7 @@ class GameMap {
     ctx.fillStyle = CITY.paper;
     ctx.fillRect(doorX + doorW - 9, doorY + doorH / 2 - 2, 4, 4);
 
-    // Tampon « visité » — pastille néon frappée d'une petite araignée
+    // Tampon « visité », pastille néon frappée d'une petite araignée
     if (b.visited) {
       ctx.save();
       const cx = sx + b.w - 16;
@@ -754,7 +754,7 @@ class GameMap {
     return rec;
   }
 
-  // Filament de toile ancré à un coin — dirX/dirY = sens vers l'intérieur (+1/-1).
+  // Filament de toile ancré à un coin, dirX/dirY = sens vers l'intérieur (+1/-1).
   _webFilament(ctx, ox, oy, size, color, alpha, dirX, dirY) {
     ctx.save();
     ctx.strokeStyle = color;
@@ -777,7 +777,7 @@ class GameMap {
     ctx.restore();
   }
 
-  // Petite araignée stylisée (corps + 8 pattes) — motif récurrent.
+  // Petite araignée stylisée (corps + 8 pattes), motif récurrent.
   _drawSpider(ctx, cx, cy, s, color) {
     ctx.save();
     ctx.strokeStyle = color;

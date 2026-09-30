@@ -1,16 +1,16 @@
 /* ══════════════════════════════════════════════════════
-   SKILLS.JS — Page Compétences : l'écosystème technique
+   SKILLS.JS : Page Compétences : l'écosystème technique
 
    Chaque compétence du HTML généré porte ses projets (data-projects).
    On en tire un globe qu'on fait tourner à la main :
      • une bulle par compétence, taille = nombre de projets qui
        l'utilisent (toutes restent visibles, même à zéro) ;
-     • regroupées par famille (couleur + nom en filigrane) ;
+     • familles mêlées au hasard (la couleur dit la famille) ;
      • la tuile se répète : glisser fait « tourner » le monde, avec
        inertie ; les bulles rapetissent et s'estompent vers les bords
        (courbure du globe) ;
      • survol : nom, famille, nombre de projets ;
-       clic : panneau — les projets concernés (liens vers leur fiche),
+       clic : panneau, les projets concernés (liens vers leur fiche),
        les technologies souvent associées, « voir dans l'espace projets ».
    Projet ↔ technologie : #projet/<slug> éclaire les technologies d'un
    projet (lien « Voir ces technologies » d'une fiche).
@@ -19,7 +19,7 @@
    famille reste dans la page, atteignable au clavier (le focus amène la
    bulle au centre).
    ══════════════════════════════════════════════════════ */
-import { createSpace, relax, rng, wrapD, REDUCE } from './space.js';
+import { createSpace, relax, rng, mod, REDUCE } from './space.js';
 
 const doc = document;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -82,12 +82,6 @@ export function initSkills() {
     project: curve,
     make(it, L) {
       const el = doc.createElement('div');
-      if (L.name === 'labels') {
-        el.className = 'eco-fl';
-        el.dataset.fam = it.fam.key;
-        el.textContent = it.fam.label.split(' / ')[0];
-        return el;
-      }
       const s = it.s;
       el.className = `skb${s.n ? '' : ' skb--decl'}${it.below ? ' skb--below' : ''}`;
       el.dataset.i = s.i;
@@ -97,14 +91,14 @@ export function initSkills() {
       return el;
     },
     onPick(it) { hideTip(); select(it.s.slug, { glide: true }); },
-    onHover(it, el) { if (it && it.s) showTip(it.s, el); else hideTip(); },
+    onHover(it, el) { if (it) showTip(it.s, el); else hideTip(); },
     onDragStart() { hideTip(); hint.classList.add('is-gone'); },
     onMove() { if (tipEl) positionTip(tipEl); },
     onResize: layout,
   });
 
-  // ── Disposition : grappes par famille sur un tore ─────
-  let bubbles = null, labels = null;
+  // ── Disposition : bulles semées sur un tore ───────────
+  let bubbles = null;
   function layout() {
     if (!space.measure()) return;
     const { w: SW, h: SH } = space.size;
@@ -121,44 +115,31 @@ export function initSkills() {
     const aspect = Math.min(1.9, Math.max(0.7, SW / SH));
     const W = Math.sqrt(area * aspect), H = area / W;
 
-    // Ancres des familles : un réseau régulier sur le tore (k·(1/7, 3/7)),
-    // réparti sans alignement visible.
-    const order = fams.map((f) => f.key);
+    // Départs en « tournesol » dans un ordre tiré au hasard : les
+    // familles se mêlent, la surface est couverte sans trou.
     const rand = rng(424242);
-    items.forEach((it, n) => {
-      const j = order.indexOf(it.s.fam);
-      const fx = (j / order.length + 0.07) % 1, fy = ((j * 3) / order.length + 0.12) % 1;
-      it.ax = fx * W; it.ay = fy * H;
-      it.x = it.ax + (rand() - 0.5) * 80 * k; it.y = it.ay + (rand() - 0.5) * 80 * k;
+    const order = items.map((it) => ({ it, key: rand() })).sort((a, b) => a.key - b.key).map((o) => o.it);
+    order.forEach((it, n) => {
+      it.x = mod((n * 0.618034 + rand() * 0.05) * W, W);
+      it.y = mod(((n + 0.5) / order.length + (rand() - 0.5) * 0.04) * H, H);
     });
-    relax(items, W, H, { gap: 12 * k, iterations: 360, pull: 0.03, late: 0.012 });
+    relax(items, W, H, { gap: 12 * k, iterations: 360, pull: 0 });
     items.forEach((it) => { it.r = it.rr; });
 
-    // Filigrane : le nom de chaque famille au centre de sa grappe.
-    const famItems = fams.map((f) => {
-      const g = items.filter((it) => it.s.fam === f.key);
-      const ref = g[0];
-      let sx = 0, sy = 0;
-      g.forEach((it) => { sx += wrapD(it.x - ref.x, W); sy += wrapD(it.y - ref.y, H); });
-      return { fam: f, x: ref.x + sx / g.length, y: ref.y + sy / g.length, r: 0 };
-    });
-
     bubbles = { name: 'bubbles', z: 1, W, H, items };
-    labels = { name: 'labels', z: 1, W, H, items: famItems };
-    space.setLayers([labels, bubbles], 110 * k);
-    // Départ : la famille la plus fournie en projets au centre.
-    const top = [...famItems].sort((a, b) => weight(b.fam.key) - weight(a.fam.key))[0];
-    space.cam.x = top.x; space.cam.y = top.y - 20;
+    space.setLayers([bubbles], 110 * k);
+    home();
     space.request();
     restoreMarks();
   }
-  const weight = (key) => skills.filter((s) => s.fam === key).reduce((n, s) => n + s.n, 0);
   const itemOf = (s) => bubbles && bubbles.items[s.i];
+  // Départ : la compétence la plus utilisée, au centre.
+  const lead = () => itemOf([...skills].sort((a, b) => b.n - a.n)[0]);
+  function home() { const it = lead(); space.cam.x = it.x; space.cam.y = it.y - 20; }
 
   holder.querySelector('[data-home]').addEventListener('click', () => {
     reset();
-    const top = [...labels.items].sort((a, b) => weight(b.fam.key) - weight(a.fam.key))[0];
-    space.glideTo(top, labels, space.size.w / 2, space.size.h / 2 + 20, 800);
+    space.glideTo(lead(), bubbles, space.size.w / 2, space.size.h / 2 + 20, 800);
   });
 
   // ── Info-bulle ────────────────────────────────────────
@@ -299,19 +280,6 @@ export function initSkills() {
     });
     s.btn.addEventListener('blur', () => { if (bubbles) space.setItemClass(itemOf(s), 'is-focus', false); hideTip(); });
   });
-
-  // ── Familles : aller à une grappe ─────────────────────
-  sec.querySelectorAll('[data-go-fam]').forEach((b) => b.addEventListener('click', () => {
-    const key = b.dataset.goFam;
-    const on = b.getAttribute('aria-pressed') !== 'true';
-    sec.querySelectorAll('[data-go-fam]').forEach((x) => x.setAttribute('aria-pressed', String(x === b && on)));
-    if (!on) { reset(); return; }
-    aside.hidden = true;
-    mark(skills.filter((s) => s.fam === key).map((s) => s.slug), []);
-    if (sec.dataset.view === 'list') { famOf[key].el.scrollIntoView({ behavior: REDUCE.matches ? 'instant' : 'smooth', block: 'start' }); return; }
-    const L = labels.items.find((f) => f.fam.key === key);
-    space.glideTo(L, labels, space.size.w / 2, space.size.h / 2 + 30, 850);
-  }));
 
   // ── Vue : écosystème / liste ──────────────────────────
   const viewBtns = [...sec.querySelectorAll('[data-view]')];

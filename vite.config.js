@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   VITE.CONFIG.JS — build multi-pages vers dist/ (Cloudflare Pages)
+   VITE.CONFIG.JS : build multi-pages vers dist/ (Cloudflare Pages)
 
      npm run dev      serveur local avec rechargement à chaud
      npm run build    génère le HTML classique (museum.js) puis dist/

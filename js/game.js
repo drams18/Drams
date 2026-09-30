@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   GAME.JS — Side-scroller engine
+   GAME.JS : Side-scroller engine
    Camera: horizontal only, lerp smoothing
    Renders: map → player → HUD → interact prompt
    ══════════════════════════════════════════════════════ */
@@ -193,7 +193,7 @@ class Game {
     this.controls.flush();
 
     // Fenêtre de section ouverte : le panneau (fond ~90 % opaque) masque la
-    // scène. On garde la boucle vivante mais on ne redessine pas la ville —
+    // scène. On garde la boucle vivante mais on ne redessine pas la ville,
     // gros gain CPU/GPU pendant la lecture du contenu.
     if (modalOpen) {
       this._rafId = requestAnimationFrame(this._loop);
@@ -272,7 +272,7 @@ class Game {
     ctx.strokeStyle = '#19e8ff';
     ctx.strokeRect(sx - 8, by - 28, w + 16, building.h + 28);
 
-    // Halo accent — empilement de contours dégradés (remplace un ctx.shadowBlur
+    // Halo accent, empilement de contours dégradés (remplace un ctx.shadowBlur
     // de 28 px par frame, l'une des opérations canvas les plus coûteuses).
     ctx.strokeStyle = building.accent;
     for (let g = 0; g < 4; g++) {

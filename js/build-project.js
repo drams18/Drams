@@ -1,11 +1,11 @@
 /* ══════════════════════════════════════════════════════
-   BUILD-PROJECT.JS — « Construisez votre projet »
+   BUILD-PROJECT.JS : « Construisez votre projet »
    Expérience guidée dans l'univers du portfolio.
 
    Réutilise EXACTEMENT les briques du jeu :
      • Controls / MobileControls  (js/controls.js, js/mobileControls.js)
      • Player                     (js/player.js)
-     • AudioManager               (js/audio.js)  — musique + SFX + SOUND ON/OFF
+     • AudioManager               (js/audio.js) : musique + SFX + SOUND ON/OFF
      • EmailJS                    (même service / template que le formulaire
                                    de contact du portfolio)
 
@@ -30,7 +30,7 @@
 
   // ── Porte de RETOUR ───────────────────────────────────
   // Délibérément à part : placée TOUT À GAUCHE, avant le spawn et les portes
-  // de choix, avec une identité visuelle qui ne partage RIEN avec elles —
+  // de choix, avec une identité visuelle qui ne partage RIEN avec elles,
   // vert « sortie » (couleur absente de la palette des choix), battant plein
   // (pas une faille d'énergie), chambranle de pierre chaude, grande flèche
   // gravée vers la gauche, halo lent et non clignotant. Impossible à
@@ -39,7 +39,7 @@
   const BACK_DOOR_W     = 80;
   const BACK_ACCENT     = '#37e39b';
 
-  // Nuées de smog (parallaxe) — constantes : définies une fois, pas par frame.
+  // Nuées de smog (parallaxe), constantes : définies une fois, pas par frame.
   const BP_CLOUDS = [
     { x: 120,  y: 50, w: 100, h: 36 },
     { x: 520,  y: 34, w: 84,  h: 30 },
@@ -259,7 +259,7 @@
       this._moved = false;      // le joueur a-t-il déjà bougé ? (rappel clavier)
       this._movedAt = 0;
       this.doors = [];
-      this._backDoor = null;    // { x, w, h } — porte de RETOUR, tout à gauche
+      this._backDoor = null;    // { x, w, h }, porte de RETOUR, tout à gauche
       this.worldWidth = 1200;
 
       // Voile de transition (créé une fois)
@@ -283,7 +283,7 @@
       requestAnimationFrame(this._loop);
 
       // La musique reprend l'ambiance du portfolio (démarre au 1er geste,
-      // exactement comme dans le jeu — géré par js/audio.js).
+      // exactement comme dans le jeu, géré par js/audio.js).
       if (window.AudioManager) window.AudioManager.playMusic();
     }
 
@@ -333,7 +333,7 @@
       });
 
       // Touche Entrée : elle NE DOIT JAMAIS ouvrir, sélectionner ou valider une
-      // porte — seule la flèche Haut le permet. Entrée se contente de valider
+      // porte, seule la flèche Haut le permet. Entrée se contente de valider
       // l'étape courante quand un choix a déjà été fait (équivalent du bouton
       // « Valider l'étape »). Neutre dans les champs de formulaire.
       window.addEventListener('keydown', (e) => {
@@ -484,7 +484,7 @@
         // « Flèche Haut » (ou bouton tactile « CHOISIR ») = CHOISIR, rien
         // d'autre : elle sélectionne la porte devant laquelle se tient le
         // joueur. Sans porte à proximité, la touche est ignorée. Elle ne fait
-        // JAMAIS passer à l'étape suivante — c'est le rôle exclusif d'« Entrée »
+        // JAMAIS passer à l'étape suivante, c'est le rôle exclusif d'« Entrée »
         // (ou du bouton « Valider l'étape »).
         if (this.controls._justPressed('ArrowUp')) {
           if (this._nearBack)      this._back();
@@ -558,7 +558,7 @@
       }
 
       // Choix unique : on MÉMORISE seulement la porte choisie et on la met en
-      // évidence. Aucun avancement ici — il faut ensuite appuyer sur « Entrée »
+      // évidence. Aucun avancement ici, il faut ensuite appuyer sur « Entrée »
       // (ou le bouton « Valider l'étape »).
       if (state.data[step.key] === door.value) return; // déjà sélectionnée
       this.doors.forEach((dr) => { dr.selected = (dr === door); });
@@ -901,7 +901,7 @@
 
       const focus = state.phase === 'walk' && !this._transitioning;
 
-      // Porte de RETOUR — dessinée en premier, tout à gauche, à part.
+      // Porte de RETOUR : dessinée en premier, tout à gauche, à part.
       this._drawBackDoor(ctx, camX, groundY, ew, focus && this._nearBack);
 
       for (const d of this.doors) {
@@ -962,7 +962,7 @@
         ctx.fillRect((i * 137.5) % w, (i * 71.3) % skyH, 1.5, 1.5);
       }
 
-      // Fils de toile — diagonales très ténues
+      // Fils de toile, diagonales très ténues
       ctx.save();
       ctx.strokeStyle = 'rgba(255,255,255,0.05)';
       ctx.lineWidth = 1;
@@ -1083,7 +1083,7 @@
         ctx.globalAlpha = 1;
       }
 
-      // Paillasson devant la porte de RETOUR — matière (pas de néon), teinte verte
+      // Paillasson devant la porte de RETOUR : matière (pas de néon), teinte verte
       if (this._backDoor) {
         const px = this._backDoor.x + this._backDoor.w / 2 - camX;
         if (px > -40 && px < w + 40) {
@@ -1226,7 +1226,7 @@
         ctx.restore();
       }
 
-      // Badge « choisi » (étape multi) — pastille néon frappée d'une araignée.
+      // Badge « choisi » (étape multi), pastille néon frappée d'une araignée.
       // Placée sur le montant de la porte (et non au-dessus) pour ne jamais
       // empiéter sur le cartouche de titre.
       if (d.selected) {
@@ -1252,13 +1252,13 @@
     // Empile, sans aucun chevauchement, la légende au-dessus d'une porte.
     //   • hors focus  : seul le TITRE est affiché ;
     //   • devant la porte : TITRE, puis l'action (rôle de la Flèche Haut),
-    //     puis la description courte — chacun dans son cartouche, séparés par
+    //     puis la description courte, chacun dans son cartouche, séparés par
     //     un interligne calculé pour tenir même sur petit écran.
     _drawDoorCaption(ctx, d, cx, by, accent, near) {
       const step = STEPS[state.step];
       const wob  = near ? Math.sin(this._tick * 0.08) * 3 : 0;
 
-      // Texte d'action — uniquement devant la porte.
+      // Texte d'action, uniquement devant la porte.
       let action = null;
       if (near) {
         if (step && step.multi) {
@@ -1270,12 +1270,12 @@
         }
       }
 
-      // Description courte — uniquement devant la porte.
+      // Description courte, uniquement devant la porte.
       const descLines = (near && d.hint)
         ? wrapText(ctx, d.hint.toUpperCase(), 172, '6px "Press Start 2P", monospace')
         : [];
 
-      // Titre — toujours présent.
+      // Titre, toujours présent.
       const titleW  = Math.max(d.w + 40, 128);
       const titleLn = wrapText(ctx, d.label, titleW - 16, '7px "Press Start 2P", monospace');
       const titleH  = 9 + titleLn.length * 10;
@@ -1286,7 +1286,7 @@
       // haut de la porte. On y fait tenir les blocs par priorité
       // TITRE > ACTION > DESCRIPTION, en réduisant d'abord les interlignes,
       // puis, en dernier recours sur écran très bas (paysage mobile), en
-      // masquant la description — le titre et « CHOISIR » restent lisibles
+      // masquant la description, le titre et « CHOISIR » restent lisibles
       // et jamais chevauchés.
       const marginAboveDoor = 12;
       const ceiling = (this._touch ? 128 : 118) / this.zoom;
@@ -1381,14 +1381,14 @@
       const rgb = hexToRgb(BACK_ACCENT);
       const pulse = 0.5 + 0.5 * Math.sin(this._tick * 0.05);
 
-      // Halo vert doux (lent, non clignotant — à l'opposé du spider-sense)
+      // Halo vert doux (lent, non clignotant, à l'opposé du spider-sense)
       const halo = ctx.createRadialGradient(cx, by + bd.h * 0.5, 6, cx, by + bd.h * 0.5, bd.h * 0.95);
       halo.addColorStop(0, 'rgba(' + rgb + ',' + ((near ? 0.30 : 0.15) + 0.07 * pulse).toFixed(3) + ')');
       halo.addColorStop(1, 'rgba(' + rgb + ',0)');
       ctx.fillStyle = halo;
       ctx.fillRect(sx - bd.w, by - 46, bd.w * 3, bd.h + 92);
 
-      // Chambranle massif — pierre chaude, tranche avec l'univers néon froid
+      // Chambranle massif, pierre chaude, tranche avec l'univers néon froid
       ctx.fillStyle = '#2a1e12';
       ctx.fillRect(sx - 10, by - 16, bd.w + 20, bd.h + 16);
       ctx.fillStyle = '#0c0a06';
@@ -1403,7 +1403,7 @@
       ctx.fillStyle = '#0e2c1a';
       ctx.fillRect(sx + 4, by + 4, bd.w - 8, bd.h - 8);
 
-      // Panneaux menuisés haut / bas — code visuel d'une porte réelle
+      // Panneaux menuisés haut / bas, code visuel d'une porte réelle
       ctx.strokeStyle = 'rgba(' + rgb + ',0.5)';
       ctx.lineWidth = 2;
       ctx.strokeRect(sx + 10, by + 10, bd.w - 20, bd.h * 0.40);
@@ -1414,7 +1414,7 @@
       ctx.lineWidth = 2;
       ctx.strokeRect(sx + 1, by + 1, bd.w - 2, bd.h - 2);
 
-      // Grande flèche GAUCHE gravée au centre — « on repart en arrière »
+      // Grande flèche GAUCHE gravée au centre, « on repart en arrière »
       const ay = by + bd.h * 0.5;
       const as = Math.min(17, bd.w * 0.26);
       const ax = cx + as * 0.35;
@@ -1497,7 +1497,7 @@
 
     _drawHintBar(ctx, ew, eh) {
       // Le rappel clavier s'efface en douceur une fois que le joueur a compris
-      // (dès qu'il s'est déplacé) — l'écran reste ainsi dégagé.
+      // (dès qu'il s'est déplacé), l'écran reste ainsi dégagé.
       let alpha = 1;
       if (this._moved) {
         alpha = 1 - (this._tick - this._movedAt - 36) / 48;
@@ -1573,7 +1573,7 @@
     return r + ',' + g + ',' + b;
   }
 
-  // Petite araignée stylisée (corps + 8 pattes) — motif récurrent.
+  // Petite araignée stylisée (corps + 8 pattes), motif récurrent.
   function drawSpider(ctx, cx, cy, s, color) {
     ctx.save();
     ctx.strokeStyle = color;

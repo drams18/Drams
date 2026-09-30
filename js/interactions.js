@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   INTERACTIONS.JS — Section modals & content rendering
+   INTERACTIONS.JS : Section modals & content rendering
    Opens/closes overlay panels with portfolio content
    ══════════════════════════════════════════════════════ */
 
@@ -94,14 +94,14 @@ class InteractionManager {
     this._body.innerHTML = this._renderSection(section);
 
     // Accessibilité : on retient l'élément actif, la fenêtre (role=dialog)
-    // prend le focus — le lecteur d'écran annonce son titre.
+    // prend le focus, le lecteur d'écran annonce son titre.
     if (!this._returnFocus) this._returnFocus = document.activeElement;
     this._modal.classList.remove('hidden');
     this._backdrop.classList.remove('hidden');
     document.body.classList.add('modal-open');
     try { this._modal.focus({ preventScroll: true }); } catch (e) { this._modal.focus(); }
 
-    // Carrousels (Parcours / Galerie) — initialisés une fois la modale visible
+    // Carrousels (Parcours / Galerie), initialisés une fois la modale visible
     this._initCarousels();
     this._syncRoute();
 
@@ -129,7 +129,7 @@ class InteractionManager {
       document.activeElement.blur();
     }
     if (window.AudioManager) window.AudioManager.play('close');
-    // Music keeps playing — only game exit stops it
+    // Music keeps playing, only game exit stops it
     this._syncRoute();
   }
 
@@ -228,7 +228,7 @@ class InteractionManager {
       </div>
     `).join('');
 
-    // Message de positionnement — mis en avant juste sous la bio.
+    // Message de positionnement, mis en avant juste sous la bio.
     const positioningHTML = section.positioning
       ? `<p class="profile-positioning">${section.positioning}</p>`
       : '';
@@ -339,7 +339,7 @@ class InteractionManager {
       </div>
       <div class="contact-links">${linksHTML}</div>
       <div class="section-divider"></div>
-      <div class="contact-notice">[ ! ] Commandes désactivées — cliquez sur FERMER pour quitter</div>
+      <div class="contact-notice">[ ! ] Commandes désactivées, cliquez sur FERMER pour quitter</div>
       <h3 class="sub-title">ENVOYER UN MESSAGE</h3>
       <form class="contact-form" id="contact-form">
         <input type="text"  name="from_name"  placeholder="Votre nom"     class="form-input" required>
@@ -432,7 +432,7 @@ class InteractionManager {
     // La navigation par catégorie (Entrée) n'a de sens que si les slides
     // sont groupées : on n'affiche l'astuce que dans ce cas.
     const groupHint = tabGroup
-      ? ' <span class="carousel-hint__grp">— <b>Entrée</b> : catégorie suivante</span>'
+      ? ' <span class="carousel-hint__grp">· <b>Entrée</b> : catégorie suivante</span>'
       : '';
 
     return `
@@ -440,8 +440,8 @@ class InteractionManager {
         <div class="carousel-tabs" role="tablist">${tabs}</div>
         <p class="carousel-hint">
           <span class="carousel-hint__keys" aria-hidden="true">&lsaquo; &rsaquo;</span>
-          <span class="carousel-hint__desktop">Utilisez les flèches du clavier (ou les boutons) pour naviguer — ou cliquez sur un titre${groupHint}</span>
-          <span class="carousel-hint__touch">Glissez de gauche à droite — ou touchez un titre pour naviguer</span>
+          <span class="carousel-hint__desktop">Utilisez les flèches du clavier (ou les boutons) pour naviguer, ou cliquez sur un titre${groupHint}</span>
+          <span class="carousel-hint__touch">Glissez de gauche à droite, ou touchez un titre pour naviguer</span>
         </p>
         <div class="carousel-viewport">
           <div class="carousel-track">${panels}</div>

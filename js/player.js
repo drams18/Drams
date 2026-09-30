@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   PLAYER.JS — Personnage pixel art (vue de côté)
+   PLAYER.JS : Personnage pixel art (vue de côté)
    Mouvement horizontal (← →). Réécriture visuelle uniquement :
    proportions, animation de marche, idle bob, API et texte du
    nametag INCHANGÉS.
@@ -132,7 +132,7 @@ class Player {
     // accent magenta poitrine
     ctx.fillStyle = '#ff2bb0';
     ctx.fillRect(sx - 2, sy + 18, 5, 8);
-    // petit emblème géométrique (losange + point) — évocation abstraite, non figurative
+    // petit emblème géométrique (losange + point), évocation abstraite, non figurative
     ctx.strokeStyle = 'rgba(25,232,255,0.9)';
     ctx.lineWidth = 1;
     ctx.beginPath();

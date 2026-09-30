@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   CAPTURE.MJS — Génère les VRAIES miniatures de l'écran de sélection
+   CAPTURE.MJS : Génère les VRAIES miniatures de l'écran de sélection
    (et l'image de partage) à partir des pages du site.
 
      npm run capture

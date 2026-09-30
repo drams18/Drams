@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   TIMELINE.JS — Page Parcours : la frise horizontale
+   TIMELINE.JS : Page Parcours : la frise horizontale
 
    La frise (en bas de l'écran) est un jeu d'onglets : chaque nœud est
    une étape ; l'étape choisie s'affiche au-dessus, sans changer de page.

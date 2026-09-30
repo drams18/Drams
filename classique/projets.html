@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<!-- GÉNÉRÉ par scripts/build-classic.mjs depuis js/museum.js — ne pas éditer : npm run content -->
+<!-- GÉNÉRÉ par scripts/build-classic.mjs depuis js/museum.js, ne pas éditer : npm run content -->
 <html lang="fr" data-theme="night">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Projets — Arphan Drame, Développeur Web Full Stack</title>
+  <title>Projets · Arphan Drame, Développeur Web Full Stack</title>
   <meta name="description" content="13 projets d'Arphan Drame : 6 professionnels réalisés en équipe chez DevPhantom, 5 personnels et 2 scolaires. Technologies, rôle et disponibilité de chaque projet.">
   <link rel="canonical" href="https://portfolio-3kx.pages.dev/classique/projets">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:site_name" content="Arphan Drame — Portfolio">
-  <meta property="og:title" content="Projets — Arphan Drame, Développeur Web Full Stack">
+  <meta property="og:site_name" content="Arphan Drame · Portfolio">
+  <meta property="og:title" content="Projets · Arphan Drame, Développeur Web Full Stack">
   <meta property="og:description" content="13 projets d'Arphan Drame : 6 professionnels réalisés en équipe chez DevPhantom, 5 personnels et 2 scolaires. Technologies, rôle et disponibilité de chaque projet.">
   <meta property="og:url" content="https://portfolio-3kx.pages.dev/classique/projets">
   <meta property="og:image" content="https://portfolio-3kx.pages.dev/assets/img/og.jpg">
@@ -76,7 +76,7 @@
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "url": "https://portfolio-3kx.pages.dev/classique/projets",
-  "name": "Projets — Arphan Drame",
+  "name": "Projets · Arphan Drame",
   "inLanguage": "fr",
   "about": {
     "@id": "https://portfolio-3kx.pages.dev/#person"
@@ -280,7 +280,7 @@
 
   <header class="topbar">
     <div class="topbar__inner">
-      <a class="brand" href="../classique.html" aria-label="Arphan Drame — Profil"><span>A. DRAME</span></a>
+      <a class="brand" href="../classique.html" aria-label="Arphan Drame, Profil"><span>A. DRAME</span></a>
       <span class="topbar__where" aria-hidden="true"><b>02</b>Projets</span>
       <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
         <a href="../classique.html" data-page-link="profil"><span>Profil</span></a>
@@ -313,16 +313,18 @@
       <div class="world-ui">
       <header class="world-head">
         <p class="world-head__k"><span>02</span>Projets</p>
-        <h1 class="world-head__t" id="projets-title">Ce que j’ai construit</h1>
-        <p class="world-head__lead">13 projets : 6 professionnels (DevPhantom, en équipe), 5 personnels, 2 scolaires.</p>
+        <h1 class="sr-only" id="projets-title">Ce que j’ai construit</h1>
+        
+        <details class="legend js-only">
+          <summary>Légende<svg class="ico legend__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+          <div class="legend__in">
+            <div class="legend__g"><p class="legend__t">Catégorie</p><ul><li><i class="cat-dot" data-cat="Professionnel"></i>Professionnel</li><li><i class="cat-dot" data-cat="Personnel"></i>Personnel</li><li><i class="cat-dot" data-cat="Scolaire"></i>Scolaire</li></ul></div>
+            <div class="legend__g"><p class="legend__t">État</p><ul><li><i class="lg-dot lg-dot--on"></i>Disponible</li><li><i class="lg-dot lg-dot--wip"></i>En développement</li><li><i class="lg-dot lg-dot--off"></i>Projet privé</li></ul></div>
+            <div class="legend__g"><p class="legend__t">Taille</p><ul><li><i class="lg-size lg-size--l"></i>À ne pas rater</li><li><i class="lg-size lg-size--m"></i>Professionnel</li><li><i class="lg-size lg-size--s"></i>Autre</li></ul></div>
+          </div>
+        </details>
       </header>
         <div class="pj-bar js-only" role="toolbar" aria-label="Affichage des projets">
-          <div class="seg-group" role="group" aria-label="Filtrer par catégorie">
-            <button type="button" class="seg" data-filter="all" aria-pressed="true">Tous <span>13</span></button>
-            <button type="button" class="seg" data-filter="Professionnel" aria-pressed="false"><i class="cat-dot" data-cat="Professionnel" aria-hidden="true"></i>Professionnel <span>6</span></button>
-            <button type="button" class="seg" data-filter="Personnel" aria-pressed="false"><i class="cat-dot" data-cat="Personnel" aria-hidden="true"></i>Personnel <span>5</span></button>
-            <button type="button" class="seg" data-filter="Scolaire" aria-pressed="false"><i class="cat-dot" data-cat="Scolaire" aria-hidden="true"></i>Scolaire <span>2</span></button>
-          </div>
           <div class="seg-group" role="group" aria-label="Vue">
             <button type="button" class="seg" data-view="space" aria-pressed="true"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-orbit"/></svg>Espace</button>
             <button type="button" class="seg" data-view="list" aria-pressed="false"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-list"/></svg>Liste</button>
@@ -365,7 +367,7 @@
                 <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Allsab-MS</span></div>
                 <p class="pj-item__desc">Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.</p>
                 <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#php" data-skill="php" data-fam="back">PHP</a></li><li><a class="tag-link" href="competences.html#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="competences.html#mysql" data-skill="mysql" data-fam="data">MySQL</a></li></ul>
-                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet DevPhantom, en équipe — l'un des premiers projets que j'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.</p></div>
+                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet DevPhantom, en équipe : l'un des premiers projets que j'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://allsab-ms.com/" target="_blank" rel="noopener">Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
             </article>
@@ -460,7 +462,7 @@
                 <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Wild Kédougou Experience</span></div>
                 <p class="pj-item__desc">Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.</p>
                 <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#react" data-skill="react" data-fam="front">React</a></li><li><a class="tag-link" href="competences.html#typescript" data-skill="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="competences.html#vite" data-skill="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="competences.html#tailwind-css" data-skill="tailwind-css" data-fam="front">Tailwind CSS</a></li><li>Framer Motion</li><li><a class="tag-link" href="competences.html#supabase" data-skill="supabase" data-fam="data">Supabase</a></li><li>Google Calendar API</li><li>Brevo</li><li><a class="tag-link" href="competences.html#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare Workers</a></li><li>PWA</li><li>SEO</li></ul>
-                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel — conception et développement complets (frontend, backend serverless, intégrations).</p></div>
+                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel : conception et développement complets (frontend, backend serverless, intégrations).</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
             </article>
@@ -479,7 +481,7 @@
                 <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Pool Party Experience</span></div>
                 <p class="pj-item__desc">Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.</p>
                 <ul class="tags" aria-label="Technologies"><li>WordPress</li><li><a class="tag-link" href="competences.html#php" data-skill="php" data-fam="back">PHP</a></li><li>CSS</li></ul>
-                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet en cours, réalisé pour un ami — création et intégration d'un site vitrine WordPress.</p></div>
+                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet en cours, réalisé pour un ami : création et intégration d'un site vitrine WordPress.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://poolparty-experience.fr/" target="_blank" rel="noopener">Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
             </article>
@@ -498,7 +500,7 @@
                 <div class="pj-cover pj-cover--type" aria-hidden="true"><span>ISLAAH</span></div>
                 <p class="pj-item__desc">Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l'App Store.</p>
                 <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#react-native" data-skill="react-native" data-fam="front">React Native</a></li><li><a class="tag-link" href="competences.html#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="competences.html#mysql" data-skill="mysql" data-fam="data">MySQL</a></li><li><a class="tag-link" href="competences.html#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare</a></li><li>Railway</li><li>Expo</li></ul>
-                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel — conception et développement complet : app mobile, API et mise en production.</p></div>
+                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel, conception et développement complet : app mobile, API et mise en production.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener">Télécharger<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
             </article>
@@ -517,7 +519,7 @@
                 <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Prospectly</span></div>
                 <p class="pj-item__desc">Plateforme permettant de rechercher une enseigne qui a besoin d'un site web ou d'une mise à jour.</p>
                 <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#node-js" data-skill="node-js" data-fam="back">Node.js</a></li><li>Railway</li><li>HTML</li><li>CSS</li><li><a class="tag-link" href="competences.html#javascript" data-skill="javascript" data-fam="front">JavaScript</a></li><li>NoSQL</li></ul>
-                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel — idée, conception et développement réalisés seul.</p></div>
+                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel : idée, conception et développement réalisés seul.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://prospectly.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
             </article>
@@ -536,7 +538,7 @@
                 <div class="pj-cover pj-cover--type" aria-hidden="true"><span>OneDay</span></div>
                 <p class="pj-item__desc">Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d'avancement, modèles de journée réutilisables (« programmes ») applicables à n'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.</p>
                 <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#react" data-skill="react" data-fam="front">React</a></li><li><a class="tag-link" href="competences.html#typescript" data-skill="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="competences.html#vite" data-skill="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="competences.html#tailwind-css" data-skill="tailwind-css" data-fam="front">Tailwind CSS</a></li><li>React Router</li><li><a class="tag-link" href="competences.html#supabase" data-skill="supabase" data-fam="data">Supabase</a></li><li><a class="tag-link" href="competences.html#postgresql" data-skill="postgresql" data-fam="data">PostgreSQL</a></li><li>PWA</li><li>Web Push</li><li><a class="tag-link" href="competences.html#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare Pages</a></li><li><a class="tag-link" href="competences.html#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare Workers</a></li></ul>
-                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel — conception et développement complets (frontend, backend serverless, notifications push). PWA que j'ai construite pour organiser mes journées, mieux travailler et m'installer des habitudes.</p></div>
+                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel : conception et développement complets (frontend, backend serverless, notifications push). PWA que j'ai construite pour organiser mes journées, mieux travailler et m'installer des habitudes.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener">Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
             </article>
@@ -555,7 +557,7 @@
                 <div class="pj-cover pj-cover--type" aria-hidden="true"><span>SkyWalk</span></div>
                 <p class="pj-item__desc">Plateforme web destinée à accompagner les personnes dans leurs projets d'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.</p>
                 <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#react" data-skill="react" data-fam="front">React</a></li><li><a class="tag-link" href="competences.html#typescript" data-skill="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="competences.html#vite" data-skill="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="competences.html#tailwind-css" data-skill="tailwind-css" data-fam="front">Tailwind</a></li><li>React Query</li><li><a class="tag-link" href="competences.html#nestjs" data-skill="nestjs" data-fam="back">NestJS</a></li><li><a class="tag-link" href="competences.html#postgresql" data-skill="postgresql" data-fam="data">PostgreSQL</a></li><li><a class="tag-link" href="competences.html#typeorm" data-skill="typeorm" data-fam="data">TypeORM</a></li><li>JWT</li><li><a class="tag-link" href="competences.html#docker" data-skill="docker" data-fam="ops">Docker</a></li><li><a class="tag-link" href="competences.html#nginx" data-skill="nginx" data-fam="ops">Nginx</a></li><li><a class="tag-link" href="competences.html#gitlab" data-skill="gitlab" data-fam="ops">GitLab CI</a></li></ul>
-                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet réalisé en équipe de 7 (ETNA — Grand Projet d'Étude). J'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l'architecture technique et à la documentation / au diagramme d'architecture.</p></div>
+                <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet réalisé en équipe de 7 (ETNA, Grand Projet d'Étude). J'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l'architecture technique et à la documentation / au diagramme d'architecture.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://skywalk-chi.vercel.app/" target="_blank" rel="noopener">Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
             </article>
@@ -580,10 +582,6 @@
             </article>
           </li>
         </ol>
-      </div>
-      <div class="pj-legend js-only" aria-hidden="true">
-        <span><i class="lg-dot lg-dot--on"></i>Disponible</span><span><i class="lg-dot lg-dot--wip"></i>En développement</span><span><i class="lg-dot lg-dot--off"></i>Projet privé</span>
-        <span class="pj-legend__sep"></span><span><i class="lg-size lg-size--l"></i>à ne pas rater</span><span><i class="lg-size lg-size--m"></i>professionnel</span><span><i class="lg-size lg-size--s"></i>autre</span>
       </div>
     </section>
   </main>

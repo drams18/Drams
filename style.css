@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   ARPHAN.DEV — Portfolio pixel-art / comics néon
+   ARPHAN.DEV : Portfolio pixel-art / comics néon
    Direction artistique : comics moderne · ville nocturne ·
    néon · décalage RGB · halftone · mouvement permanent.
 
@@ -15,7 +15,7 @@
    css/tokens.css, chargé AVANT cette feuille par chaque page. */
 :root {
   /* ── Compat : anciens noms encore lus ailleurs (construire-projet.html,
-     interactions.js…) — re-mappés sur la nouvelle DA ──────────────── */
+     interactions.js…), re-mappés sur la nouvelle DA ──────────────── */
   --mc-green:   var(--red);
   --mc-dirt:    #2a1830;
   --mc-stone:   #23283c;
@@ -44,7 +44,7 @@ body.modal-open { overflow: hidden; }
 
 a { color: inherit; }
 
-/* Focus visible cohérent (accessibilité clavier) — cyan interactif */
+/* Focus visible cohérent (accessibilité clavier), cyan interactif */
 :focus-visible {
   outline: 3px solid var(--cyan);
   outline-offset: 2px;
@@ -70,7 +70,7 @@ a { color: inherit; }
   97% { transform: translate(-1px,0) skewX(0); }
 }
 
-/* Balayage lignes de vitesse (défile en fond) — via transform (compositeur
+/* Balayage lignes de vitesse (défile en fond), via transform (compositeur
    GPU) : animer background-position forçait un repaint plein écran par frame. */
 @keyframes speedSweep {
   from { transform: translate3d(0, 0, 0); }
@@ -83,7 +83,7 @@ a { color: inherit; }
   50%      { box-shadow: 0 0 0 3px var(--stroke), 6px 6px 0 0 var(--magenta-deep), 0 0 40px rgba(255,43,176,0.7); }
 }
 
-/* Spider-sense — anneaux qui s'étendent et s'estompent (via box-shadow,
+/* Spider-sense, anneaux qui s'étendent et s'estompent (via box-shadow,
    non rognés par overflow:hidden). Garde un cœur néon rouge/magenta. */
 @keyframes spiderSensePulse {
   0%, 100% {
@@ -98,7 +98,7 @@ a { color: inherit; }
   }
 }
 
-/* Spider-sense au survol des éléments cliquables — anneau pseudo qui pulse */
+/* Spider-sense au survol des éléments cliquables, anneau pseudo qui pulse */
 @keyframes senseRing {
   0%   { transform: scale(1);    opacity: 0.5; }
   100% { transform: scale(1.14); opacity: 0;   }
@@ -120,7 +120,7 @@ a { color: inherit; }
 .section-modal::before { top: 0; left: 0; }
 .section-modal::after  { bottom: 0; right: 0; transform: rotate(180deg); }
 
-/* Entrée modale — zoom + clip comics */
+/* Entrée modale, zoom + clip comics */
 @keyframes comicIn {
   from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); clip-path: inset(45% 0 45% 0); }
   60%  { opacity: 1; clip-path: inset(0 0 0 0); }
@@ -137,7 +137,7 @@ a { color: inherit; }
   to   { opacity: 1; transform: scale(1); clip-path: inset(0 0 0 0); }
 }
 
-/* Transitions d'écran — wipe + flash + RGB */
+/* Transitions d'écran, wipe + flash + RGB */
 @keyframes screenExit {
   0%   { opacity: 1; transform: scale(1); filter: none; }
   40%  { filter: drop-shadow(-8px 0 0 var(--red)) drop-shadow(8px 0 0 var(--cyan)); }
@@ -202,7 +202,7 @@ body::after {
   image-rendering: crisp-edges;
 }
 
-/* Bouton retour accueil — onglet comics néon */
+/* Bouton retour accueil, onglet comics néon */
 .game-home-btn {
   text-decoration: none;
   position: fixed;
@@ -266,7 +266,7 @@ body::after {
 .game-menu__panel a:hover, .game-menu__panel button:hover,
 .game-menu__panel a:focus-visible, .game-menu__panel button:focus-visible { background: rgba(25,232,255,.1); }
 
-/* Aide de 1re visite — non bloquante (la ville reste jouable derrière) */
+/* Aide de 1re visite, non bloquante (la ville reste jouable derrière) */
 .game-hint {
   position: fixed; z-index: 55; top: 64px; left: 50%;
   width: min(92vw, 440px); transform: translate(-50%, -8px); opacity: 0;
@@ -313,7 +313,7 @@ body::after {
 /* Transition entre modes : même nom que la page de départ (View Transitions) */
 .vt-stage { view-transition-name: stage; }
 
-/* Bouton SOUND ON / OFF — même niveau que le bouton Accueil */
+/* Bouton SOUND ON / OFF : même niveau que le bouton Accueil */
 .sound-toggle {
   position: fixed;
   top: 12px;
@@ -355,7 +355,7 @@ body::after {
 }
 .modal-backdrop.hidden { display: none; }
 
-/* ── Section modal — panneau comics ─────────────────── */
+/* ── Section modal, panneau comics ─────────────────── */
 .section-modal {
   position: fixed;
   top: 50%;
@@ -390,7 +390,7 @@ body::after {
   flex-shrink: 0;
 }
 
-/* Nom de section — identité, police pixel + décalage RGB */
+/* Nom de section, identité, police pixel + décalage RGB */
 .modal-title {
   font-family: var(--pixel-font);
   font-size: 11px;
@@ -417,7 +417,7 @@ body::after {
 .modal-close:hover { color: #fff; background: rgba(25,232,255,0.16); box-shadow: 2px 2px 0 var(--stroke), 0 0 12px rgba(25,232,255,0.5); }
 .modal-close:active { transform: translateY(2px); box-shadow: 0 0 0 var(--stroke); }
 
-/* Corps de modal — INFORMATION : surface pleine, lisible */
+/* Corps de modal, INFORMATION : surface pleine, lisible */
 .modal-body {
   padding: 22px 24px;
   overflow-y: auto;
@@ -440,7 +440,7 @@ body::after {
 
 /* ── Composants de contenu ──────────────────────────── */
 
-/* Titre de sous-section — identité, police pixel */
+/* Titre de sous-section, identité, police pixel */
 .sub-title {
   position: relative;
   font-family: var(--pixel-font);
@@ -453,7 +453,7 @@ body::after {
   border-left: 4px solid var(--modal-accent);
   text-shadow: 0 0 10px color-mix(in srgb, var(--modal-accent) 40%, transparent);
 }
-/* Petite araignée stylisée — marqueur récurrent (mask : couleur = accent) */
+/* Petite araignée stylisée, marqueur récurrent (mask : couleur = accent) */
 .sub-title::before {
   content: '';
   position: absolute;
@@ -555,7 +555,7 @@ body::after {
 }
 .skill-badge:hover { background: rgba(255,255,255,0.08); transform: translateY(-1px); }
 
-/* Message de positionnement — mis en avant sous la bio */
+/* Message de positionnement, mis en avant sous la bio */
 .profile-positioning {
   font-size: 13.5px;
   line-height: 1.65;
@@ -582,7 +582,7 @@ body::after {
 /* Qualités / posture */
 .qualities { display: flex; flex-wrap: wrap; gap: 8px; }
 .qualities .tag { border-left: 3px solid var(--modal-accent); }
-/* « Je recherche un CDI » — l'information clé, mise en avant (rouge = important) */
+/* « Je recherche un CDI », l'information clé, mise en avant (rouge = important) */
 .tag--seeking { border-color: var(--red); color: #fff; background: rgba(255,18,61,0.16); }
 
 /* Langues */
@@ -631,7 +631,7 @@ body::after {
   transform: translateX(3px);
   box-shadow: 4px 4px 0 var(--stroke), 0 0 16px color-mix(in srgb, var(--modal-accent) 35%, transparent);
 }
-/* Dates du CV — INFORMATION : police classique lisible */
+/* Dates du CV : INFORMATION : police classique lisible */
 .timeline-date {
   font-family: var(--body-font);
   font-size: 12px;
@@ -865,7 +865,7 @@ body::after {
   border: 1px solid var(--proj-accent, var(--magenta));
   padding: 3px 8px;
 }
-/* Catégorie — INFORMATION : police classique */
+/* Catégorie, INFORMATION : police classique */
 .proj-type   {
   font-family: var(--body-font);
   font-size: 11px;
@@ -874,7 +874,7 @@ body::after {
   text-transform: uppercase;
   color: var(--proj-accent, var(--magenta));
 }
-/* Projet mis en avant — mention discrète sur la carte */
+/* Projet mis en avant, mention discrète sur la carte */
 .proj-pick {
   font-family: var(--body-font);
   font-size: 10px;
@@ -952,12 +952,12 @@ body::after {
 .proj-link--off::after { border-color: transparent transparent transparent #8b93a5; opacity: 0.6; }
 .proj-link--off:hover { filter: none; }
 
-/* ══ Carrousel — Parcours & Galerie ═══════════════════
+/* ══ Carrousel, Parcours & Galerie ═══════════════════
    Onglets = navigation (titres d'étape à la place de numéros).
    Piste horizontale + hauteur animée sur la slide active. */
 .carousel { position: relative; }
 
-/* Barre d'onglets — défilable horizontalement, sans scrollbar visible */
+/* Barre d'onglets, défilable horizontalement, sans scrollbar visible */
 .carousel-tabs {
   position: relative;
   display: flex;
@@ -1029,7 +1029,7 @@ body::after {
   text-shadow: 0 0 8px color-mix(in srgb, var(--tab-accent, var(--modal-accent)) 55%, transparent);
 }
 
-/* Onglet d'un projet mis en avant — pastille discrète dans le coin */
+/* Onglet d'un projet mis en avant, pastille discrète dans le coin */
 .carousel-tab.is-pick { position: relative; }
 .carousel-tab.is-pick::after {
   content: "";
@@ -1063,7 +1063,7 @@ body::after {
   .carousel-group { font-size: 8px; padding: 0 3px 0 5px; letter-spacing: 1px; }
 }
 
-/* Indication de navigation — discrète, sous les onglets */
+/* Indication de navigation, discrète, sous les onglets */
 .carousel-hint {
   display: flex;
   align-items: center;
@@ -1087,7 +1087,7 @@ body::after {
 .carousel-hint__grp b { font-weight: 800; }
 .carousel-hint__touch { display: none; }
 
-/* Fenêtre — masque le débordement horizontal, hauteur animée */
+/* Fenêtre, masque le débordement horizontal, hauteur animée */
 .carousel-viewport {
   overflow: hidden;
   transition: height .35s cubic-bezier(.4, 0, .2, 1);
@@ -1109,7 +1109,7 @@ body::after {
 }
 .carousel-viewport .carousel-card { width: 100%; }
 
-/* Catégorie d'étape (Parcours) — même traitement que .proj-type */
+/* Catégorie d'étape (Parcours), même traitement que .proj-type */
 .carousel-card__kind {
   font-family: var(--body-font);
   font-size: 11px;
@@ -1180,7 +1180,7 @@ body::after {
   .carousel-hint__touch { display: inline; }
 }
 
-/* ── Spider-sense — anneau au survol des éléments cliquables ─── */
+/* ── Spider-sense, anneau au survol des éléments cliquables ─── */
 .proj-card, .social-link, .contact-link { position: relative; }
 .proj-card::after, .social-link::after, .contact-link::after {
   content: '';
@@ -1203,7 +1203,7 @@ body::after {
   pointer-events: none;
 }
 
-/* ── Toast — bulle comics ───────────────────────────── */
+/* ── Toast, bulle comics ───────────────────────────── */
 .toast {
   position: fixed;
   bottom: 32px;

@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   CONTACT.JS — Composant de contact commun (HTML/CSS/JS vanilla)
+   CONTACT.JS : Composant de contact commun (HTML/CSS/JS vanilla)
    Source UNIQUE des coordonnées pour tout le portfolio.
 
    Au clic sur un CTA de contact ([data-contact-cta]), ouvre un
@@ -20,7 +20,7 @@
 
   var doc = global.document;
 
-  // ── Coordonnées — NE PAS dupliquer / inventer ailleurs ─────
+  // ── Coordonnées, NE PAS dupliquer / inventer ailleurs ─────
   var EMAIL = 'arphandrame0@gmail.com';
   var PHONE = '07 67 31 84 26';
   var PHONE_TEL = PHONE.replace(/[^\d+]/g, ''); // "0767318426"
@@ -294,7 +294,7 @@
       var call = doc.createElement('a');
       call.className = 'cw-option';
       call.href = 'tel:' + PHONE_TEL;
-      call.appendChild(span('cw-option-label', 'Téléphone — appeler'));
+      call.appendChild(span('cw-option-label', 'Téléphone : appeler'));
       call.appendChild(span('cw-option-value', PHONE));
       call.appendChild(span('cw-option-hint', "Ouvre l'application Téléphone pour appeler"));
       call.addEventListener('click', function () { setTimeout(close, 150); });
@@ -303,7 +303,7 @@
       sms.className = 'cw-option';
       sms.href = 'sms:' + PHONE_TEL +
         ((body || subject) ? '?&body=' + encodeURIComponent(body || subject) : '');
-      sms.appendChild(span('cw-option-label', 'Téléphone — message'));
+      sms.appendChild(span('cw-option-label', 'Téléphone : message'));
       sms.appendChild(span('cw-option-value', PHONE));
       sms.appendChild(span('cw-option-hint', "Ouvre l'application Messages pour envoyer un SMS"));
       sms.addEventListener('click', function () { setTimeout(close, 150); });

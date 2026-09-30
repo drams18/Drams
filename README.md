@@ -7,16 +7,16 @@ https://portfolio-3kx.pages.dev/
 
 | URL | Fichier | Rôle |
 |---|---|---|
-| `/` | `index.html` | **Écran de sélection** — « Comment souhaitez-vous me découvrir ? » |
-| `/classique` | `classique.html` | **Mode classique** — page d'entrée : Profil (jour / nuit selon l'heure locale) |
-| `/classique/projets` | `classique/projets.html` | Mode classique — Projets (espace de bulles) |
-| `/classique/parcours` | `classique/parcours.html` | Mode classique — Parcours (frise horizontale) |
-| `/classique/competences` | `classique/competences.html` | Mode classique — Compétences (écosystème) |
-| `/classique/contact` | `classique/contact.html` | Mode classique — Contact |
-| `/aventure` | `aventure.html` | **Mode aventure** — la ville interactive (canvas) |
+| `/` | `index.html` | **Écran de sélection** · « Comment souhaitez-vous me découvrir ? » |
+| `/classique` | `classique.html` | **Mode classique** · page d'entrée : Profil (jour / nuit selon l'heure locale) |
+| `/classique/projets` | `classique/projets.html` | Mode classique · Projets (espace de bulles) |
+| `/classique/parcours` | `classique/parcours.html` | Mode classique · Parcours (frise horizontale) |
+| `/classique/competences` | `classique/competences.html` | Mode classique · Compétences (écosystème) |
+| `/classique/contact` | `classique/contact.html` | Mode classique · Contact |
+| `/aventure` | `aventure.html` | **Mode aventure** · la ville interactive (canvas) |
 | `/tarifs` | `tarifs.html` | Grille tarifaire + recherche (style classique, commune aux deux modes) |
-| `/devis` | `devis.html` | « Construisez votre projet » — formulaire par étapes (site classique) |
-| `/construire-projet` | `construire-projet.html` | « Construisez votre projet » — mini-jeu (mode aventure) |
+| `/devis` | `devis.html` | « Construisez votre projet » · formulaire par étapes (site classique) |
+| `/construire-projet` | `construire-projet.html` | « Construisez votre projet » · mini-jeu (mode aventure) |
 | `/cv`, `/contact`, `/projets`, `/parcours`, `/competences` | `_redirects` | Liens courts |
 
 - **Contenu : une seule source**, `js/museum.js`. Le mode aventure le lit directement ; les cinq
@@ -51,13 +51,13 @@ copiés tels quels.
 **Mode classique : cinq pages, cinq environnements** (`src/classic-app.js` charge seulement
 l'expérience de la page courante) :
 
-- Profil — `src/classic/profile.js` (**GSAP**) : le nom au centre, puis métier → contexte → accès.
-- Projets — `src/classic/projects.js` : espace sans bord couvrant l'écran (deux couches en
+- Profil, `src/classic/profile.js` (**GSAP**) : le nom au centre, puis métier → contexte → accès.
+- Projets, `src/classic/projects.js` : espace sans bord couvrant l'écran (deux couches en
   parallaxe, répétition virtuelle), filtres, vue liste, fiche immersive (`#<projet>`,
   `#tech/<compétence>`). Miniatures : déposer `assets/img/projets/<slug>.webp` (16:10) puis `npm run build`.
-- Parcours — `src/classic/timeline.js` : frise horizontale en bas (glisser, molette, clavier),
+- Parcours, `src/classic/timeline.js` : frise horizontale en bas (glisser, molette, clavier),
   l'étape choisie au-dessus (`#<étape>`).
-- Compétences — `src/classic/skills.js` : écosystème « globe » (glisser + inertie), panneau détail,
+- Compétences, `src/classic/skills.js` : écosystème « globe » (glisser + inertie), panneau détail,
   lien projet ↔ technologie dans les deux sens (`#<compétence>`, `#projet/<slug>`).
 - `src/classic/space.js` : moteur commun aux espaces (caméra, gestes, répétition par copies réutilisées).
 - Navigation : barre du haut, portes latérales, flèches ← → du clavier ; transitions entre pages
