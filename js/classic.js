@@ -170,11 +170,12 @@
   doc.querySelectorAll('.copy').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var value = btn.getAttribute('data-copy');
+      var label = btn.querySelector('span') || btn;
       var done = function () {
-        var prevText = btn.textContent;
-        btn.textContent = 'Copié';
+        clearTimeout(btn._t);
+        label.textContent = 'Copié';
         btn.classList.add('is-ok');
-        setTimeout(function () { btn.textContent = prevText; btn.classList.remove('is-ok'); }, 1500);
+        btn._t = setTimeout(function () { label.textContent = 'Copier'; btn.classList.remove('is-ok'); }, 1600);
       };
       if (navigator.clipboard) navigator.clipboard.writeText(value).then(done, function () {});
     });
@@ -190,17 +191,20 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       submit.disabled = true;
-      submit.textContent = 'Envoi...';
+      submit.textContent = 'Envoi…';
+      form.classList.add('is-sending');
       status.textContent = '';
       status.className = 'form-status';
       window.ContactForm.sendForm(form).then(function () {
-        status.textContent = 'Message envoyé !';
+        form.classList.remove('is-sending');
+        status.textContent = 'Message envoyé, merci ! Je vous réponds par e-mail.';
         status.classList.add('is-ok');
         form.reset();
         submit.disabled = false;
         submit.innerHTML = label;
       }).catch(function (err) {
         console.error('EmailJS error:', err);
+        form.classList.remove('is-sending');
         status.textContent = 'Erreur lors de l\'envoi. Réessayez.';
         status.classList.add('is-error');
         submit.disabled = false;

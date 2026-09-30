@@ -237,7 +237,9 @@ const SPRITE = `
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-orbit" viewBox="0 0 24 24"><circle cx="8" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16.5" cy="7" r="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor"/></symbol>
-    <symbol id="i-center" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-center"viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>`;
 
 function topbar(page, L) {
@@ -797,26 +799,30 @@ function contactPage() {
     const links = contact.links.map(l => {
       const id = /github/i.test(l.label) ? 'github' : /linkedin/i.test(l.label) ? 'linkedin' : /cv/i.test(l.label) ? 'download' : 'external';
       const href = /^https?:/.test(l.url) ? l.url : L.up + l.url;
-      return `<li><a class="ct-link" href="${esc(href)}" target="_blank" rel="noopener">${icon(id)}<span>${esc(l.label)}</span>${icon('external', 'ico ico--xs ct-link__go')}</a></li>`;
+      return `<li><a class="ct-link" href="${esc(href)}" target="_blank" rel="noopener"><span class="ct-ic">${icon(id)}</span><span class="ct-link__l">${esc(l.label)}</span>${icon('external', 'ico ico--xs ct-link__go')}</a></li>`;
     }).join('\n              ');
+    const copyBtn = (value, what) =>
+      `<button type="button" class="copy" data-copy="${esc(value)}" aria-label="Copier ${what}">${icon('copy', 'ico copy__i')}${icon('check', 'ico copy__ok')}<span>Copier</span></button>`;
     return `
     <section class="ct" aria-labelledby="contact-title">
       <div class="wrap ct__grid">
         <div class="ct__intro">
           <p class="world-head__k"><span>${page.n}</span>${esc(page.label)}</p>
-          <h1 class="ct__title" id="contact-title">Travaillons ensemble.</h1>
+          <h1 class="ct__title" id="contact-title">Travaillons <em>ensemble.</em></h1>
           ${bio.seeking ? `<p class="ct__status"><span class="pulse" aria-hidden="true"></span>${esc(bio.seeking)} · ${esc(bio.location)}</p>` : ''}
           <p class="ct__lead">Écrivez-moi ou appelez-moi directement : je réponds personnellement.</p>
           <div class="ct__direct">
-            <div class="ct-row ct-row--mail">
-              <span class="ct-row__k">${icon('mail')}E-mail</span>
+            <div class="ct-row">
+              <span class="ct-ic">${icon('mail')}</span>
+              <span class="ct-row__k">E-mail</span>
               <a class="ct-row__v" href="mailto:${esc(contact.email)}">${esc(contact.email)}</a>
-              <button type="button" class="copy" data-copy="${esc(contact.email)}" aria-label="Copier l'adresse e-mail">Copier</button>
+              ${copyBtn(contact.email, "l'adresse e-mail")}
             </div>
             <div class="ct-row">
-              <span class="ct-row__k">${icon('phone')}Téléphone</span>
+              <span class="ct-ic">${icon('phone')}</span>
+              <span class="ct-row__k">Téléphone</span>
               <span class="ct-row__v" data-phone="${esc(tel)}">${esc(contact.phone)}</span>
-              <button type="button" class="copy" data-copy="${esc(contact.phone)}" aria-label="Copier le numéro de téléphone">Copier</button>
+              ${copyBtn(contact.phone, 'le numéro de téléphone')}
             </div>
             <ul class="ct-links">
               ${links}
@@ -824,11 +830,19 @@ function contactPage() {
           </div>
         </div>
         <form class="card ct__form" id="classic-contact-form" aria-labelledby="form-title">
-          <h2 class="ct__form-t" id="form-title">Envoyer un message</h2>
-          <label>Votre nom<input type="text" name="from_name" autocomplete="name" required></label>
-          <label>Votre e-mail<input type="email" name="from_email" autocomplete="email" required></label>
-          <label>Votre message<textarea name="message" rows="5" required></textarea></label>
-          <button type="submit" class="btn btn--primary">Envoyer${icon('arrow')}</button>
+          <div class="ct__form-h">
+            <h2 class="ct__form-t" id="form-title">Envoyer un message</h2>
+            <p>Quelques lignes suffisent, je vous réponds par e-mail.</p>
+          </div>
+          <div class="ct__pair">
+            <label class="fld"><span class="fld__l">Nom</span><input type="text" name="from_name" autocomplete="name" placeholder="Prénom Nom" required></label>
+            <label class="fld"><span class="fld__l">E-mail</span><input type="email" name="from_email" autocomplete="email" placeholder="vous@exemple.fr" required></label>
+          </div>
+          <label class="fld fld--grow"><span class="fld__l">Message</span><textarea name="message" rows="6" placeholder="Bonjour, je vous contacte au sujet de…" required></textarea></label>
+          <div class="ct__send">
+            <button type="submit" class="btn btn--primary">Envoyer le message${icon('arrow')}</button>
+            <p class="ct__note">Vos coordonnées servent uniquement à vous répondre.</p>
+          </div>
           <p class="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>
