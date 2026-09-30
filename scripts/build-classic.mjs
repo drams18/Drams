@@ -176,9 +176,38 @@ function spanOf(date) {
   return { start, end, fuzzy: !b.m, year: a.y };
 }
 const KIND = { 'ACADÉMIQUE': 'Formation', 'PROFESSIONNEL': 'Expérience' };
+// Le mode classique ne montre que les étapes datées (« Autres expériences »
+// reste dans museum.js pour le mode aventure et le CV).
 const timeline = steps.map(s => ({ s, span: spanOf(s.date) }));
 const dated   = timeline.filter(t => t.span).sort((a, b) => a.span.start - b.span.start);
-const undated = timeline.filter(t => !t.span);
+
+// Jalons : SECTIONS.parcours.milestones + projets personnels / scolaires datés.
+// Une année seule est placée au milieu de l'année (le libellé garde l'année).
+const MONTH_LABEL = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+function pointOf(date) {
+  const m = /^(?:(\d{1,2})\/)?((?:19|20)\d{2})$/.exec(String(date || '').trim());
+  if (!m) return null;
+  const y = +m[2], mo = m[1] ? +m[1] : null;
+  return { at: mo ? y + (mo - 1) / 12 : y + 0.5, label: mo ? `${MONTH_LABEL[mo - 1]} ${y}` : String(y) };
+}
+const PIN_KIND = { 'DIPLÔME': 'Diplôme', 'CERTIFICATION': 'Certification', 'ÉTAPE': 'Étape' };
+const teamOf = (p) => {
+  const r = p.role || '';
+  if (/binôme/i.test(r)) return 'en binôme';
+  const n = (r.match(/équipe de (\d+)/i) || [])[1];
+  return n ? `en équipe de ${n}` : '';
+};
+const milestones = [
+  ...(SECTIONS.parcours.milestones || []).map(m => ({
+    slug: m.slug, title: m.title, desc: m.desc || '', step: m.step || null,
+    kind: m.kind === 'ÉTAPE' ? 'edu' : 'award', label: PIN_KIND[m.kind] || m.kind, pt: pointOf(m.date),
+  })),
+  ...projects.filter(p => p.date && p.category !== 'Professionnel').map(p => ({
+    slug: p.slug, title: p.title, project: p, step: p.category === 'Scolaire' ? 'etna' : null,
+    kind: p.category === 'Scolaire' ? 'edu' : 'perso',
+    label: p.category === 'Scolaire' ? 'Projet ETNA' : 'Projet personnel', pt: pointOf(p.date),
+  })),
+].filter(m => m.pt).sort((a, b) => a.pt.at - b.pt.at);
 // Poids visuel : l'expérience professionnelle liée aux projets domine ;
 // une formation longue compte plus qu'un point ; « autres » reste discret.
 function weightOf({ s, span }) {
@@ -447,7 +476,7 @@ function profilPage() {
 
   const doors = [
     { key: 'projets', q: 'Qu’est-ce qu’il a construit\u202f?', hint: `${plural(projects.length, 'projet', 'projets')} · ${byCat.Professionnel.length} professionnels, ${byCat.Personnel.length} personnels, ${byCat.Scolaire.length} scolaires` },
-    { key: 'parcours', q: 'Quel a été son parcours\u202f?', hint: `${firstYear} → ${lastYear - 1} · ${plural(steps.length, 'étape', 'étapes')}` },
+    { key: 'parcours', q: 'Quel a été son parcours\u202f?', hint: `${firstYear} → ${lastYear - 1} · ${plural(dated.length, 'étape', 'étapes')}` },
     { key: 'competences', q: 'Quel est son univers technique\u202f?', hint: `${plural(allSkills.length, 'compétence', 'compétences')} · ${families.length} familles` },
     { key: 'contact', q: 'Comment le contacter\u202f?', hint: bio.seeking || 'E-mail, téléphone, formulaire' },
   ];
@@ -623,80 +652,136 @@ function projetsPage() {
 // ══════════════════════════════════════════════════════
 // 03 · PARCOURS
 // ══════════════════════════════════════════════════════
-// Frise : une échelle en années ; chaque étape a un nœud (son début) et,
-// si elle dure, une barre sur sa ligne (formation / expérience).
-// « Autres expériences » n'a pas de date : nœud hors échelle, au début.
+// Frise : une échelle en années. Ligne principale = les étapes (un nœud à
+// leur début, une barre si elles durent) ; au-dessus, les jalons (diplômes,
+// projets datés) en petits points, empilés quand ils sont proches.
+// Étapes et jalons sont des onglets, dans l'ordre chronologique.
 function parcoursPage() {
   const page = PAGE.parcours;
   const years = lastYear - firstYear;
   const at = (v) => ((v - firstYear) / years).toFixed(4);           // position 0 → 1
   const kindKey = (s) => s.kind === 'ACADÉMIQUE' ? 'edu' : 'pro';
-
-  // Étapes affichées, dans l'ordre de la frise.
-  const events = [
-    ...undated.map(t => ({ ...t, w: weightOf(t) })),
-    ...dated.map(t => ({ ...t, w: weightOf(t) })),
-  ];
   const next = bio.seeking && seeking ? { slug: 'et-ensuite', at: seeking.at, year: seeking.year } : null;
-  const initial = devphantom.slug;
+  const initial = next ? next.slug : dated[dated.length - 1].s.slug;
 
-  const panel = ({ s, span, w }, L) => {
-    const projectsOf = s.slug === devphantom.slug ? byCat.Professionnel : [];
-    const details = (s.details && s.details.length) ? `<ul class="tl-panel__details">${s.details.map(d => `<li>${esc(d)}</li>`).join('')}</ul>` : '';
+  // Étapes : deux étiquettes trop proches s'écartent (la première finit à
+  // son point, la suivante y commence) au lieu de se chevaucher.
+  const stepItems = dated.map(t => ({ ...t, type: 'step', w: weightOf(t), at: t.span.start }));
+  if (next) stepItems.push({ type: 'next', at: next.at });
+  stepItems.reduce((prev, e) => { if (prev && e.at - prev.at < 0.6) { prev.align = 'end'; e.align = 'start'; } return e; }, null);
+
+  // Jalons : premier niveau libre (0,2 an d'écart au moins), sinon on empile.
+  const lanes = [];
+  const pins = milestones.map(m => {
+    let lvl = lanes.findIndex(last => m.pt.at - last >= 0.2);
+    if (lvl < 0) lvl = lanes.length;
+    lanes[lvl] = m.pt.at;
+    return { ...m, type: 'pin', at: m.pt.at, lvl };
+  });
+  const items = [...stepItems, ...pins].sort((a, b) => a.at - b.at || (a.type === 'pin') - (b.type === 'pin'));
+  const pinsOf = (slug) => pins.filter(m => m.step === slug);
+
+  const kinList = (list) => `
+              <div class="tl-kin">
+                <p class="mini-title">Jalons</p>
+                <ul>${list.map(m => `<li><a href="#${m.slug}" data-kind="${m.kind}"><i aria-hidden="true"></i><strong>${esc(m.title)}</strong><span>${esc(m.pt.label)}</span></a></li>`).join('')}</ul>
+              </div>`;
+  const more = (title, text) => `
+              <details class="tl-more"><summary>${esc(title)}${icon('chevron', 'ico tl-more__chev')}</summary><p>${esc(text)}</p></details>`;
+
+  const stepPanel = ({ s, w }, L) => {
+    const pro = s.slug === devphantom.slug ? byCat.Professionnel : [];
+    const kin = pinsOf(s.slug);
+    // Les jalons d'une étape (diplômes…) remplacent sa liste de détails.
+    const details = !kin.length && s.details && s.details.length
+      ? `<ul class="tl-panel__details">${s.details.map(d => `<li>${esc(d)}</li>`).join('')}</ul>` : '';
     return `
-          <article class="tl-panel tl-panel--${w}" id="${s.slug}" data-step="${s.slug}" data-kind="${kindKey(s)}" data-year="${span ? span.year : ''}" aria-labelledby="tl-${s.slug}-t">
+          <article class="tl-panel tl-panel--${w}" id="${s.slug}" data-step="${s.slug}" data-kind="${kindKey(s)}" data-route="parcours/${s.slug}" aria-labelledby="tl-${s.slug}-t">
             <header class="tl-panel__head">
               <p class="tl-panel__k"><span>${esc(KIND[s.kind] || s.kind)}</span>${esc(s.date)}</p>
               <h2 class="tl-panel__t" id="tl-${s.slug}-t">${esc(s.title)}</h2>
               ${s.place ? `<p class="tl-panel__place">${esc(s.place)}</p>` : ''}
               ${s.desc ? `<p class="tl-panel__lead">${esc(s.desc)}</p>` : ''}
             </header>
-            <div class="tl-panel__body">
-              ${s.context ? `<p>${esc(s.context)}</p>` : ''}
-              ${details}
-              ${s.role && !projectsOf.length ? `<p class="tl-panel__role"><span>Mon rôle</span>${esc(s.role)}</p>` : ''}
-              ${projectsOf.length ? `
+            <div class="tl-panel__body">${s.context && !pro.length ? `
+              <p>${esc(s.context)}</p>` : ''}${details}${kin.length ? kinList(kin) : ''}${pro.length ? `
               <div class="tl-panel__projects">
                 <p class="mini-title">Projets ${esc(company)} · en équipe</p>
-                <ul>${projectsOf.map(p => `<li><a href="${L.page('projets', p.slug)}" data-cat="${esc(p.category)}"><strong>${esc(p.title)}</strong><span>${esc(p.type)}</span></a></li>`).join('')}</ul>
-              </div>` : ''}
+                <ul>${pro.map(p => `<li><a href="${L.page('projets', p.slug)}" data-cat="${esc(p.category)}"><strong>${esc(p.title)}</strong><span>${esc(p.type)}</span></a></li>`).join('')}</ul>
+              </div>` : ''}${s.context && pro.length ? more('Au quotidien', s.context) : ''}${s.role && !pro.length ? more('Mon rôle', s.role) : ''}
             </div>
           </article>`;
   };
-  const nextPanel = (L) => next ? `
-          <article class="tl-panel tl-panel--next" id="${next.slug}" data-step="${next.slug}" data-kind="next" data-year="${next.year}" aria-labelledby="tl-next-t">
+  const pinPanel = (m, L) => {
+    const p = m.project;
+    const parent = m.step && step(m.step);
+    // Accroche : la première phrase de la description qui n'est ni le type ni
+    // le statut (déjà écrits dessous) ; à défaut, le rôle.
+    const lead = p
+      ? p.desc.split(/(?<=\.)\s+/).find(x => norm(x.replace(/\.$/, '')) !== norm(p.type) && !(p.status && norm(x).startsWith(norm(`projet ${p.status}`)))) || p.role
+      : m.desc;
+    const place = p ? [p.type, teamOf(p), p.status].filter(Boolean).join(' · ') : '';
+    const route = p ? `projets/${p.slug}` : parent ? `parcours/${parent.slug}` : 'parcours';
+    return `
+          <article class="tl-panel tl-panel--pin" id="${m.slug}" data-step="${m.slug}" data-kind="${m.kind}" data-route="${route}" aria-labelledby="tl-${m.slug}-t">
+            <header class="tl-panel__head">
+              <p class="tl-panel__k"><span>${esc(m.label)}</span>${esc(m.pt.label)}</p>
+              <h2 class="tl-panel__t" id="tl-${m.slug}-t">${esc(m.title)}</h2>
+              ${place ? `<p class="tl-panel__place">${esc(place)}</p>` : ''}
+              ${lead ? `<p class="tl-panel__lead">${esc(lead)}</p>` : ''}
+            </header>
+            <div class="tl-panel__body">
+              <p class="tl-panel__acts">${p ? `<a class="btn btn--primary btn--sm" href="${L.page('projets', p.slug)}">Voir le projet${icon('arrow')}</a>` : ''}${parent ? `<a class="tl-up" href="#${parent.slug}"><span>Pendant</span>${esc(stepLabel(parent))}</a>` : ''}</p>
+            </div>
+          </article>`;
+  };
+  const nextPanel = (L) => `
+          <article class="tl-panel tl-panel--next" id="${next.slug}" data-step="${next.slug}" data-kind="next" data-route="parcours" aria-labelledby="tl-next-t">
             <header class="tl-panel__head">
               <p class="tl-panel__k"><span>Et ensuite</span>${next.year}</p>
               <h2 class="tl-panel__t" id="tl-next-t">${esc(bio.seeking)}</h2>
               <p class="tl-panel__place">${esc(bio.title)} · ${esc(bio.location)}</p>
+              <p class="tl-panel__lead">${esc(profile.positioning)}</p>
             </header>
             <div class="tl-panel__body">
-              <p class="tl-panel__lead">${esc(profile.positioning)}</p>
-              <p><a class="btn btn--primary btn--sm" href="${L.page('contact')}">Me contacter${icon('arrow')}</a></p>
+              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="${L.page('contact')}">Me contacter${icon('arrow')}</a></p>
             </div>
-          </article>` : '';
+          </article>`;
+  const panel = (e, L) => e.type === 'pin' ? pinPanel(e, L) : e.type === 'next' ? nextPanel(L) : stepPanel(e, L);
 
-  // Nœuds + barres.
-  const node = ({ s, span, w }) => {
-    const pos = span ? at(span.start) : null;
-    return `<a class="tl-node tl-node--${w}${span ? '' : ' tl-node--off'}" href="#${s.slug}" data-step="${s.slug}" data-kind="${kindKey(s)}"${pos !== null ? ` style="--at:${pos}"` : ''}>
+  // Nœuds : étapes sur la ligne, jalons au-dessus (info-bulle au survol).
+  const node = (e) => {
+    if (e.type === 'pin') return `<a class="tl-node tl-pin" href="#${e.slug}" data-step="${e.slug}" data-kind="${e.kind}"${e.step ? ` data-parent="${e.step}"` : ''} style="--at:${at(e.at)};--lvl:${e.lvl}">
               <span class="tl-node__dot" aria-hidden="true"></span>
-              <span class="tl-node__l">${esc(stepLabel(s))}</span>
-              <span class="tl-node__d">${esc(span ? (s.date.length > 12 ? String(span.year) : s.date) : 'Hors frise')}</span>
+              <span class="tl-node__tip"><span class="tl-node__l">${esc(e.project ? bubbleName(e.project) : e.title)}</span><span class="tl-node__d">${esc(e.pt.label)}</span></span>
+            </a>`;
+    const [l, d] = e.type === 'next'
+      ? [seekingBits(bio.seeking)[0] || 'Et ensuite', seekingBits(bio.seeking)[1] || next.year]
+      : [stepLabel(e.s), e.s.date.length > 12 ? String(e.span.year) : e.s.date];
+    const slug = e.type === 'next' ? next.slug : e.s.slug;
+    return `<a class="tl-node tl-node--${e.type === 'next' ? 'next' : e.w}" href="#${slug}" data-step="${slug}" data-kind="${e.type === 'next' ? 'next' : kindKey(e.s)}"${e.align ? ` data-align="${e.align}"` : ''} style="--at:${at(e.at)}">
+              <span class="tl-node__dot" aria-hidden="true"></span>
+              <span class="tl-node__l">${esc(l)}</span>
+              <span class="tl-node__d">${esc(d)}</span>
             </a>`;
   };
   const bars = dated.filter(t => t.span.end).map(({ s, span }) =>
     `<i class="tl-bar${span.fuzzy ? ' tl-bar--fuzzy' : ''}" data-step="${s.slug}" data-kind="${kindKey(s)}" style="--at:${at(span.start)};--len:${((span.end - span.start) / years).toFixed(4)}"></i>`).join('');
   const ticks = Array.from({ length: years + 1 }, (_, i) => `<span style="--at:${at(firstYear + i)}">${firstYear + i}</span>`).join('');
+  const legendKinds = [['edu', 'bar', 'Formation'], ['pro', 'bar', 'Expérience'], ['perso', 'dot', 'Projet perso'], ['edu', 'dot', 'Projet ETNA'], ['award', 'dia', 'Diplôme']]
+    .filter(([k, shape]) => shape === 'bar' || pins.some(m => m.kind === k));
 
   const body = (L) => `
     <section class="tl" aria-labelledby="parcours-title">
-      <div class="world-ui">${worldHead(page, 'Mon parcours', `Alternance chez ${esc(company)} (${esc(devphantom.date)}), en parallèle de l'ETNA (${esc(etna.date)}).`)}
+      <div class="world-ui">${worldHead(page, 'Mon parcours', '', '', { quiet: true })}
       </div>
-      <p class="tl-stage__year" aria-hidden="true"></p>
       <div class="tl-stage" data-initial="${initial}">
-        <div class="tl-panels">${events.map(e => panel(e, L)).join('')}${nextPanel(L)}
+        <div class="tl-panels">${items.map(e => panel(e, L)).join('')}
         </div>
+      </div>
+      <div class="tl-foot js-only" aria-hidden="true">
+        <p class="tl-hint"><span class="tl-hint--fine">Cliquez un point · ← → pour tout parcourir</span><span class="tl-hint--touch">Glissez la frise · touchez un point</span></p>
+        <p class="tl-legend">${legendKinds.map(([k, shape, t]) => `<span data-kind="${k}"><i class="tl-legend__${shape}"></i>${t}</span>`).join('')}</p>
       </div>
       <nav class="tl-track" aria-label="Frise chronologique ${firstYear} – ${lastYear - 1}" data-from="${firstYear}" data-to="${lastYear}">
         <div class="tl-rail">
@@ -704,19 +789,14 @@ function parcoursPage() {
           <div class="tl-lanes" aria-hidden="true">${bars}</div>
           <div class="tl-line" aria-hidden="true"></div>
           <div class="tl-nodes">
-            ${events.map(node).join('\n            ')}${next ? `
-            <a class="tl-node tl-node--next" href="#${next.slug}" data-step="${next.slug}" data-kind="next" style="--at:${at(next.at)}">
-              <span class="tl-node__dot" aria-hidden="true"></span>
-              <span class="tl-node__l">${esc(seekingBits(bio.seeking)[0] || 'Et ensuite')}</span>
-              <span class="tl-node__d">${esc(seekingBits(bio.seeking)[1] || next.year)}</span>
-            </a>` : ''}
+            ${items.map(node).join('\n            ')}
           </div>
         </div>
       </nav>
     </section>`;
   return shell(page, {
     title: `Parcours · ${displayName}, ${bio.title}`,
-    description: `Parcours d'${displayName} : ${steps.map(s => stepLabel(s)).join(', ')}. ${devphantom.title} chez ${company} (${devphantom.date}), ${etna.title} (${etna.date}).`,
+    description: `Parcours d'${displayName} : ${dated.map(t => stepLabel(t.s)).join(', ')}. ${devphantom.title} chez ${company} (${devphantom.date}), ${etna.title} (${etna.date}).`,
     jsonld: {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',

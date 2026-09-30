@@ -81,7 +81,7 @@ const SECTIONS = {
     id: 'parcours',
     label: 'PARCOURS',
     accent: '#8a3bff',
-    // Une entrée = un onglet du carrousel : BAC · BTS · ETNA · DEVPHANTOM · AUTRES
+    // Une entrée = un onglet du carrousel : BAC · BTS · DORANCO · ETNA · DEVPHANTOM · AUTRES
     steps: [
       {
         short: 'BAC',
@@ -103,10 +103,19 @@ const SECTIONS = {
         role: 'Ma contribution : travail sur le capteur d\'humidité, Arduino Uno, programmation en C / C++. Le câblage, le prototype et certains composants ont été réalisés avec l\'équipe.',
       },
       {
+        short: 'DORANCO',
+        slug: 'doranco',
+        kind: 'ACADÉMIQUE',
+        date: '01/2023 - 06/2023',
+        title: 'Formation Développeur Web Full Stack',
+        place: 'Doranco',
+        desc: 'Six mois de formation au développement web full stack, avant l\'entrée à l\'ETNA.',
+      },
+      {
         short: 'ETNA',
         slug: 'etna',
         kind: 'ACADÉMIQUE',
-        date: '2023 - 2026',
+        date: '10/2023 - 10/2026',
         title: 'ETNA, Bachelor puis Master',
         details: [
           'Bachelor Concepteur Développeur d\'Applications Web (2023 → 2024)',
@@ -138,6 +147,16 @@ const SECTIONS = {
           'Super U : expérience de vente pendant environ un mois.',
         ],
       },
+    ],
+    // Jalons ponctuels (mode classique : petits points sur la frise).
+    // `step` = l'étape pendant laquelle le jalon a eu lieu. Les projets datés
+    // (`date` dans SECTIONS.projets.items) s'y ajoutent automatiquement.
+    milestones: [
+      { slug: 'bts-diplome', kind: 'DIPLÔME', date: '2022', title: 'BTS Systèmes Numériques obtenu', step: 'bts' },
+      { slug: 'pix', kind: 'CERTIFICATION', date: '2022', title: 'Certification Pix', desc: 'Certification des compétences numériques.' },
+      { slug: 'piscine-etna', kind: 'ÉTAPE', date: '10/2023', title: 'Piscine ETNA', desc: 'Période intensive d\'admission, point de départ du cursus ETNA.', step: 'etna' },
+      { slug: 'bachelor', kind: 'DIPLÔME', date: '2024', title: 'Bachelor Concepteur Développeur d\'Applications Web', step: 'etna' },
+      { slug: 'master', kind: 'DIPLÔME', date: '10/2026', title: 'Master Architecte de Systèmes d\'Information', step: 'etna' },
     ],
   },
 
@@ -247,6 +266,7 @@ const SECTIONS = {
       {
         short: 'KÉDOUGOU',
         slug: 'wild-kedougou',
+        date: '05/2026',
         title: 'Wild Kédougou Experience',
         type: 'Plateforme de réservation',
         category: 'Personnel',
@@ -262,6 +282,7 @@ const SECTIONS = {
       {
         short: 'POOL PARTY',
         slug: 'pool-party',
+        date: '08/2026',
         title: 'Pool Party Experience',
         type: 'Site vitrine WordPress',
         category: 'Personnel',
@@ -277,6 +298,7 @@ const SECTIONS = {
       {
         short: 'ISLAAH',
         slug: 'islaah',
+        date: '06/2025',
         title: 'ISLAAH',
         type: 'Application Mobile',
         category: 'Personnel',
@@ -292,6 +314,7 @@ const SECTIONS = {
       {
         short: 'PROSPECTLY',
         slug: 'prospectly',
+        date: '09/2025',
         title: 'Plateforme de recherche de prospects',
         type: 'Projet personnel',
         category: 'Personnel',
@@ -306,6 +329,7 @@ const SECTIONS = {
       {
         short: 'ONEDAY',
         slug: 'oneday',
+        date: '01/2026',
         title: 'OneDay',
         type: 'PWA de planification',
         category: 'Personnel',
@@ -320,6 +344,7 @@ const SECTIONS = {
       {
         short: 'SKYWALK',
         slug: 'skywalk',
+        date: '01/2025',
         title: 'SkyWalk',
         type: 'Plateforme Web',
         category: 'Scolaire',
@@ -335,6 +360,7 @@ const SECTIONS = {
       {
         short: 'CROWDIN',
         slug: 'crowdin',
+        date: '08/2026',
         title: 'Crowdin (clone)',
         type: 'Plateforme de localisation',
         category: 'Scolaire',

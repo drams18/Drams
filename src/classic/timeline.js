@@ -2,13 +2,15 @@
    TIMELINE.JS : Page Parcours : la frise horizontale
 
    La frise (en bas de l'écran) est un jeu d'onglets : chaque nœud est
-   une étape ; l'étape choisie s'affiche au-dessus, sans changer de page.
-     • glisser la frise (souris), la faire défiler (doigt, molette,
-       pavé tactile), survoler, cliquer ;
-     • clavier : ← → entre les étapes, Début / Fin ;
+   une étape (sur la ligne) ou un jalon (petit point au-dessus : diplôme,
+   projet daté) ; le choix s'affiche au-dessus, sans changer de page.
+     • la frise tient dans l'écran quand il est assez large ; sinon la
+       glisser (souris), la faire défiler (doigt, molette, pavé tactile) ;
+     • clavier : ← → dans l'ordre chronologique, Début / Fin ;
+     • une étape choisie éclaire ses jalons, et inversement ;
      • « Aujourd'hui » placé à la date réelle du visiteur ;
-     • au départ : l'étape la plus importante (DevPhantom), sauf lien
-       direct (#bts, #etna…).
+     • au départ : la prochaine étape (recherche de CDI), sauf lien
+       direct (#bts, #skywalk…).
    Sans JavaScript : toutes les étapes à la suite, la frise en liens.
    ══════════════════════════════════════════════════════ */
 const doc = document;
@@ -20,7 +22,6 @@ export function initTimeline() {
   if (!track) return;
   const rail = track.querySelector('.tl-rail');
   const stage = sec.querySelector('.tl-stage');
-  const yearEl = sec.querySelector('.tl-stage__year');
   const tablist = track.querySelector('.tl-nodes');
   const nodes = [...tablist.querySelectorAll('.tl-node')];
   const panels = Object.fromEntries([...sec.querySelectorAll('.tl-panel')].map((p) => [p.dataset.step, p]));
@@ -28,10 +29,11 @@ export function initTimeline() {
   const from = +track.dataset.from, to = +track.dataset.to;
   const years = to - from;
 
-  // ── Échelle : la frise dépasse l'écran, on la manipule ─
+  // ── Échelle : toute la frise à l'écran si possible, sinon on la manipule ─
   function scale() {
-    const w = track.clientWidth;
-    const ppy = Math.max(w < 700 ? 150 : 180, Math.round((w * 1.15) / years));
+    const cs = getComputedStyle(rail);
+    const room = track.clientWidth - 2 * parseFloat(cs.marginLeft) - parseFloat(cs.getPropertyValue('--off')) - parseFloat(cs.getPropertyValue('--end'));
+    const ppy = Math.max(track.clientWidth < 700 ? 110 : 120, Math.floor(room / years));
     rail.style.setProperty('--ppy', `${ppy}px`);
     rail.style.setProperty('--years', years);
   }
@@ -73,6 +75,10 @@ export function initTimeline() {
       n.tabIndex = k === i ? 0 : -1;
     });
     bars.forEach((b) => b.classList.toggle('is-on', b.dataset.step === step));
+    // Parenté étape ↔ jalons : l'étape d'un jalon, les jalons d'une étape.
+    const parent = nodes[i].dataset.parent;
+    nodes.forEach((n) => n.classList.toggle('is-kin', n.dataset.parent === step || (!!parent && n.dataset.step === parent)));
+    bars.forEach((b) => b.classList.toggle('is-kin', !!parent && b.dataset.step === parent));
     const panel = panels[step];
     Object.values(panels).forEach((p) => { p.hidden = p !== panel; });
     stage.scrollTop = 0;
@@ -84,23 +90,16 @@ export function initTimeline() {
         [{ opacity: 0, transform: `translateX(${40 * dir}px)` }, { opacity: 1, transform: 'none' }],
         { duration: 480, delay: k * 45, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' }));
     }
-    // Grande année en filigrane.
-    const y = panel.dataset.year || '';
-    if (yearEl && yearEl.textContent !== y) {
-      yearEl.textContent = y;
-      if (prev !== null && !REDUCE.matches) yearEl.animate([{ opacity: 0, transform: 'translateY(6%)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: 'cubic-bezier(.16,1,.3,1)' });
-    }
     center(i, opts.instant);
     if (opts.focus) nodes[i].focus({ preventScroll: true });
     if (!opts.keepHash) history.replaceState(null, '', `${location.pathname}${location.search}#${step}`);
-    doc.dispatchEvent(new CustomEvent('classic:route', { detail: panel.dataset.kind === 'next' ? 'parcours' : `parcours/${step}` }));
+    doc.dispatchEvent(new CustomEvent('classic:route', { detail: panel.dataset.route || 'parcours' }));
   }
 
-  // Le nœud choisi vient vers le centre de la frise.
+  // Le nœud choisi vient vers le centre de la frise (si elle dépasse).
   function center(i, instant) {
-    if (i === null || i === undefined) return;
-    const n = nodes[i];
-    const x = n.offsetLeft + rail.offsetLeft - track.clientWidth / 2;
+    if (i === null || i === undefined || track.scrollWidth <= track.clientWidth) return;
+    const x = nodes[i].offsetLeft + rail.offsetLeft - track.clientWidth / 2;
     track.scrollTo({ left: Math.max(0, x), behavior: instant || REDUCE.matches ? 'instant' : 'smooth' });
   }
 
@@ -111,6 +110,14 @@ export function initTimeline() {
       select(n.dataset.step, { focus: false });
     });
   });
+  // Liens entre fiches (jalons d'une étape, « Pendant : ETNA ») : même onglet.
+  stage.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    const to = a && decodeURIComponent(a.hash.slice(1));
+    if (!to || !panels[to]) return;
+    e.preventDefault();
+    select(to, { focus: true });
+  });
   tablist.addEventListener('keydown', (e) => {
     const k = { ArrowRight: 1, ArrowLeft: -1, Home: -Infinity, End: Infinity }[e.key];
     if (k === undefined) return;
@@ -118,9 +125,9 @@ export function initTimeline() {
     const i = Math.min(nodes.length - 1, Math.max(0, (current ?? 0) + (Number.isFinite(k) ? k : k > 0 ? nodes.length : -nodes.length)));
     select(nodes[i].dataset.step, { focus: true });
   });
-  // Survol d'un nœud : sa barre s'allume.
+  // Survol d'un nœud : sa barre (ou celle de l'étape du jalon) s'allume.
   nodes.forEach((n) => {
-    n.addEventListener('pointerenter', () => bars.forEach((b) => b.classList.toggle('is-hot', b.dataset.step === n.dataset.step)));
+    n.addEventListener('pointerenter', () => bars.forEach((b) => b.classList.toggle('is-hot', b.dataset.step === (n.dataset.parent || n.dataset.step))));
     n.addEventListener('pointerleave', () => bars.forEach((b) => b.classList.remove('is-hot')));
   });
 
@@ -167,13 +174,10 @@ export function initTimeline() {
     hintOff();
   }, { passive: false });
 
-  const hint = doc.createElement('p');
-  hint.className = 'tl-hint';
-  hint.setAttribute('aria-hidden', 'true');
-  hint.textContent = 'Glissez la frise · cliquez une étape';
-  track.before(hint);
-  function hintOff() { hint.classList.add('is-gone'); }
-  track.addEventListener('scroll', () => { if (track.scrollLeft > 40) hintOff(); }, { passive: true });
+  const hint = sec.querySelector('.tl-hint');
+  function hintOff() { if (hint) hint.classList.add('is-gone'); }
+  // Seul un geste du visiteur l'éteint (pas le centrage automatique).
+  track.addEventListener('pointerdown', hintOff, { passive: true });
 
   // ── Départ ────────────────────────────────────────────
   const fromHash = () => {
