@@ -337,7 +337,8 @@ function topbar(page, L) {
   const nav = PAGES.map(p => {
     const cur = p === page;
     return `<a href="${L.page(p.key)}"${cur ? ' aria-current="page"' : ''} data-page-link="${p.key}"><span>${p.label}</span>${cur ? '<i class="nav__ink" aria-hidden="true"></i>' : ''}</a>`;
-  }).concat(`<a href="${L.up}tarifs.html"><span>Tarifs</span></a>`).join('\n        ');
+  }).concat(`<a href="${L.up}tarifs.html"><span>Tarifs</span></a>`,
+    `<a class="nav__cv" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener"><span>CV (PDF)</span></a>`).join('\n        ');
   return `
   <header class="topbar">
     <div class="topbar__inner">
@@ -494,10 +495,10 @@ ${worlds(page, L)}${scrolls ? footer(L) : ''}
 `;
 }
 
-function worldHead(page, title, lead, extra = '', { quiet = false } = {}) {
+function worldHead(page, title, lead, extra = '', { quiet = false, count = '' } = {}) {
   return `
       <header class="world-head">
-        <p class="world-head__k"><span>${page.n}</span>${esc(page.label)}</p>
+        <p class="world-head__k"><span>${page.n}</span>${esc(page.label)}${count ? `<em class="world-head__n" data-count>${esc(count)}</em>` : ''}</p>
         <h1 class="${quiet ? 'sr-only' : 'world-head__t'}" id="${page.key}-title">${esc(title)}</h1>
         ${lead ? `<p class="world-head__lead">${lead}</p>` : ''}${extra}
       </header>`;
@@ -570,7 +571,7 @@ function profilPage() {
         <p class="pf-ctx"><span class="pulse" aria-hidden="true"></span>${ctx}</p>
         <div class="pf-cta">
           <a class="btn btn--primary" href="${L.page('projets')}">Voir mes projets${icon('arrow')}</a>
-          <a class="btn btn--ghost" href="${L.up}tarifs.html">Un projet à me confier\u202f?${icon('arrow')}</a>
+          <a class="btn btn--ghost" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">Télécharger mon CV${icon('download')}</a>
         </div>
       </div>
       <a class="pf-scroll" href="#a-la-une"><span>Projets à la une</span>${icon('chevron')}</a>
@@ -695,7 +696,7 @@ function projetsPage() {
         { title: 'Catégorie', items: CATEGORIES.map(c => `<i class="cat-dot" data-cat="${c}"></i>${c}`) },
         { title: 'État', items: ['<i class="lg-dot lg-dot--on"></i>Disponible', '<i class="lg-dot lg-dot--wip"></i>En développement', '<i class="lg-dot lg-dot--off"></i>Projet privé'] },
         { title: 'Taille', items: ['<i class="lg-size lg-size--l"></i>À ne pas rater', '<i class="lg-size lg-size--m"></i>Professionnel', '<i class="lg-size lg-size--s"></i>Autre'] },
-      ]), { quiet: true })}
+      ]), { quiet: true, count: plural(projects.length, 'projet', 'projets') })}
         <div class="pj-bar js-only" role="toolbar" aria-label="Affichage des projets">
           <div class="seg-group" role="group" aria-label="Vue">
             <button type="button" class="seg" data-view="space" aria-pressed="true">${icon('orbit')}Espace</button>
@@ -906,7 +907,7 @@ function competencesPage() {
       const used = f.skills.filter(s => s.used.length).length;
       return `
           <section class="fam" data-fam="${f.key}" aria-labelledby="fam-${f.key}">
-            <h2 class="fam__t" id="fam-${f.key}"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">${esc(f.label)}</span><span class="fam__n">${used}/${f.skills.length} dans les projets</span></h2>
+            <h2 class="fam__t" id="fam-${f.key}"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">${esc(f.label)}</span>${used ? `<span class="fam__n">${used}/${f.skills.length} dans les projets</span>` : ''}</h2>
             <ul class="fam__list">${sorted.map(s => {
               const n = s.used.length;
               const logo = logoOf(s.item);

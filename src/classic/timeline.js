@@ -38,7 +38,8 @@ export function initTimeline() {
     rail.style.setProperty('--years', years);
   }
   scale();
-  new ResizeObserver(() => { scale(); center(current, true); }).observe(track);
+  let intro = false;      // défilement d'arrivée en cours : ne pas recentrer
+  new ResizeObserver(() => { scale(); if (!intro) center(current, true); }).observe(track);
 
   // « Aujourd'hui »
   const now = rail.querySelector('.tl-now');
@@ -194,6 +195,30 @@ export function initTimeline() {
     const h = decodeURIComponent(location.hash.slice(1));
     return panels[h] ? h : null;
   };
+  // Fondu à gauche tant que des étapes restent hors écran de ce côté.
+  const edge = () => track.classList.toggle('has-before', track.scrollLeft > 8);
+  track.addEventListener('scroll', edge, { passive: true });
+
   select(fromHash() || stage.dataset.initial, { instant: true, keepHash: !fromHash() });
+  // Frise plus large que l'écran (mobile) : elle défile une fois du début
+  // jusqu'à l'étape choisie, pour montrer qu'il y a un avant.
+  const end = track.scrollLeft;
+  if (!fromHash() && !REDUCE.matches && end > 40) {
+    intro = true;
+    track.scrollLeft = 0;
+    const t0 = performance.now() + 500, dur = 1600;
+    let stop = false;
+    const halt = () => { stop = true; intro = false; };
+    track.addEventListener('pointerdown', halt, { once: true, passive: true });
+    track.addEventListener('wheel', halt, { once: true, passive: true });
+    const tick = (now) => {
+      if (stop) return;
+      const k = Math.min(1, Math.max(0, (now - t0) / dur));
+      track.scrollLeft = end * (k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+      if (k < 1) requestAnimationFrame(tick); else intro = false;
+    };
+    requestAnimationFrame(tick);
+  }
+  edge();
   addEventListener('hashchange', () => { const h = fromHash(); if (h) select(h); });
 }

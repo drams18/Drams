@@ -48,12 +48,31 @@ export function initProjects(app) {
   });
   const bySlug = Object.fromEntries(data.map((d) => [d.slug, d]));
 
+  // ── Projets consultés (le temps de la visite) : « 13 projets · 4 vus » ─
+  const SEEN_KEY = 'drame.classic.seen';
+  let seen = new Set();
+  try { seen = new Set(JSON.parse(sessionStorage.getItem(SEEN_KEY) || '[]').filter((s) => bySlug[s])); } catch (e) { /* noop */ }
+  const counter = sec.querySelector('[data-count]');
+  function showSeen() {
+    data.forEach((d) => d.li.classList.toggle('is-seen', seen.has(d.slug)));
+    if (!counter) return;
+    const all = seen.size === data.length;
+    counter.textContent = `${data.length} projets` + (seen.size ? ` · ${all ? 'tous vus' : `${seen.size} vu${seen.size > 1 ? 's' : ''}`}` : '');
+  }
+  function markSeen(slug) {
+    if (seen.has(slug)) return;
+    seen.add(slug);
+    try { sessionStorage.setItem(SEEN_KEY, JSON.stringify([...seen])); } catch (e) { /* noop */ }
+    showSeen();
+  }
+  showSeen();
+
   // ── Espace ────────────────────────────────────────────
   holder.insertAdjacentHTML('beforeend', `
     <div class="space-tip" aria-hidden="true"></div>
     <div class="space-ui">
       <button type="button" class="space-btn" data-home>${icon('center')}Recentrer</button>
-      <p class="space-hint">Glissez pour explorer · l’espace n’a pas de bord</p>
+      <p class="space-hint">${data.length} projets · les bulles se répètent</p>
     </div>`);
   const tip = holder.querySelector('.space-tip');
   const hint = holder.querySelector('.space-hint');
@@ -428,6 +447,7 @@ export function initProjects(app) {
     const wasOpen = dlg.open;
     if (wasOpen && current === d) return;
     fill(d);
+    markSeen(d.slug);
     if (!wasOpen) {
       returnTo = opts.from || doc.activeElement;
       doc.documentElement.classList.add('has-dialog');

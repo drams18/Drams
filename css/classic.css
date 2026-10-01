@@ -194,6 +194,7 @@ html:not(.js) .topbar, .no-app .topbar, .topbar.is-scrolled {
   color: var(--muted); text-decoration: none; border-radius: 999px;
   transition: color .25s;
 }
+.nav .nav__cv { display: none; }       /* seulement dans le menu mobile, quand le lien CV de la barre est masqué */
 .nav a > span { position: relative; z-index: 1; display: inline-block; transition: transform .35s var(--ease-out); }
 .nav a:hover { color: var(--text); }
 .nav a:hover > span { transform: translateY(-1px); }
@@ -255,7 +256,8 @@ html:not(.js) .topbar, .no-app .topbar, .topbar.is-scrolled {
 }
 @media (max-width: 520px) {
   .topbar__where b { display: none; }
-  .topbar__cv { display: none; }       /* CV présent dans le Profil et le Contact */
+  .topbar__cv { display: none; }       /* le CV passe dans le menu */
+  .js .nav .nav__cv { display: block; }
   .topbar__inner { padding: 0 16px; }
 }
 
@@ -287,7 +289,21 @@ html:not(.js) .topbar, .no-app .topbar, .topbar.is-scrolled {
 .worlds__door--prev:hover .ico { transform: translateX(-2px); }
 @media (max-width: 1240px) { .worlds__door { width: 46px; } .worlds__door--prev { left: 12px; } .worlds__door--next { right: 12px; } .worlds__l { display: none; } }   /* marge trop étroite pour le nom */
 .page--doc .worlds { display: none; }        /* pages-documents : portes dans le contenu */
-@media (max-width: 760px) { .worlds { display: none; } }
+@media (max-width: 760px) {
+  /* Mobile : barre en bas de l'écran, la page se réduit d'autant. */
+  .worlds {
+    inset: auto 0 0; display: flex; justify-content: space-between; align-items: center;
+    height: calc(var(--dock) + env(safe-area-inset-bottom, 0px)); padding: 0 8px env(safe-area-inset-bottom, 0px);
+    background: var(--bg); border-top: 1px solid var(--line); pointer-events: auto;
+  }
+  .worlds__door { position: static; translate: none; flex-direction: row; gap: 2px; width: auto; height: var(--dock); padding: 0 8px; }
+  .worlds__door--next { flex-direction: row-reverse; margin-left: auto; }
+  .worlds__door .ico { padding: 6px; border: 0; background: none; backdrop-filter: none; }
+  .worlds__l { display: block; font-size: 14px; letter-spacing: 0; color: var(--text-2); text-shadow: none; }
+  body { --dock: 46px; }
+  .page--world .space-ui { padding-bottom: 16px; }      /* la barre du bas porte déjà la marge de sécurité */
+  .js:not(.no-app) body.page--world .world { height: calc(100vh - var(--dock)); height: calc(100dvh - var(--dock) - env(safe-area-inset-bottom, 0px)); }
+}
 html:not(.js) .worlds, .no-app .worlds { display: none; }
 
 /* ── Environnement de chaque page ───────────────────── */
@@ -327,6 +343,8 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
   font-size: 12.5px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
 }
 .world-head__k span { color: var(--accent); font-variant-numeric: tabular-nums; }
+.world-head__n { font-style: normal; font-weight: 500; letter-spacing: .02em; text-transform: none; color: var(--muted); }
+.world-head__n::before { content: '·'; margin-right: 10px; }
 .world-head__t { font-size: clamp(30px, 4vw, 48px); font-weight: 700; line-height: 1.04; letter-spacing: -.04em; color: var(--text); }
 .world-head__lead { max-width: 58ch; font-size: 15.5px; line-height: 1.55; color: var(--muted); }
 .page--world .world-head__lead { text-shadow: 0 0 18px var(--bg), 0 0 6px var(--bg); }
@@ -703,6 +721,7 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 }
 .pj-item[data-tier="m"] .pj-item__orb { width: 21px; height: 21px; }
 .pj-item[data-tier="s"] .pj-item__orb { width: 15px; height: 15px; }
+.pj-item.is-seen .pj-item__title::after { content: 'vu'; margin-left: 10px; font-size: 11.5px; font-weight: 500; letter-spacing: .04em; color: var(--muted); }
 .pj-item__title { font-size: 18px; font-weight: 650; line-height: 1.3; letter-spacing: -.015em; color: var(--text); }
 .pj-item__meta { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 13.5px; color: var(--muted); }
 .pj-item__status { grid-column: 3; grid-row: 1 / span 2; }
@@ -1060,9 +1079,11 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 }
 .js:not(.no-app) .tl-track::-webkit-scrollbar { display: none; }
 .tl-track.is-dragging { cursor: grabbing; }
+.tl-track.has-before { -webkit-mask: linear-gradient(90deg, transparent, #000 44px); mask: linear-gradient(90deg, transparent, #000 44px); }
 .tl-track.is-dragging .tl-node { pointer-events: none; }
 @media (max-width: 700px) {
-  .tl-rail { --off: 24px; --end: 56px; --y-bar: 34px; --y-pin: 92px; --y-line: 118px; height: 176px; }
+  .tl-rail { --off: 24px; --end: 56px; --y-bar: 34px; --y-pin: 108px; --y-line: 138px; --lvl-h: 22px; height: 196px; }
+  .tl-pin::before { left: -17px; width: 34px; }      /* zone tactile plus généreuse */
   .tl-node__l { font-size: 12.5px; }
   .tl-node--major .tl-node__l { font-size: 13.5px; }
   .tl-node__d { top: 36px; font-size: 11.5px; }
