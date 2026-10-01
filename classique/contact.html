@@ -88,7 +88,7 @@
 }
   </script>
   </head>
-<body class="page page--contact page--doc" data-page="contact" data-route="contact">
+<body class="page page--contact page--world" data-page="contact" data-route="contact">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
@@ -108,6 +108,7 @@
     <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 3 10.5l7 3 3 7zM10 13.5 21 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
     <symbol id="i-center"viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>
 
@@ -145,61 +146,64 @@
   <main id="main" class="world world--contact vt-stage" tabindex="-1">
     <div class="world__bg" aria-hidden="true"><i></i></div>
     <section class="ct" aria-labelledby="contact-title">
-      <div class="wrap ct__grid">
-        <div class="ct__intro">
+      <div class="world-ui">
+        <header class="world-head">
           <p class="world-head__k"><span>05</span>Contact</p>
-          <h1 class="ct__title" id="contact-title">Travaillons <em>ensemble.</em></h1>
-          <p class="ct__status"><span class="pulse" aria-hidden="true"></span>En recherche de CDI (dès sept. 2026) · Île-de-France</p>
-          <p class="ct__lead">Écrivez-moi ou appelez-moi directement : je réponds personnellement.</p>
-          <div class="ct__direct">
-            <div class="ct-row">
-              <span class="ct-ic"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg></span>
-              <span class="ct-row__k">E-mail</span>
-              <a class="ct-row__v" href="mailto:arphandrame0@gmail.com">arphandrame0@gmail.com</a>
-              <button type="button" class="copy" data-copy="arphandrame0@gmail.com" aria-label="Copier l'adresse e-mail"><svg class="ico copy__i" aria-hidden="true" focusable="false"><use href="#i-copy"/></svg><svg class="ico copy__ok" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Copier</span></button>
-            </div>
-            <div class="ct-row">
-              <span class="ct-ic"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span>
-              <span class="ct-row__k">Téléphone</span>
-              <span class="ct-row__v" data-phone="0767318426">07 67 31 84 26</span>
-              <button type="button" class="copy" data-copy="07 67 31 84 26" aria-label="Copier le numéro de téléphone"><svg class="ico copy__i" aria-hidden="true" focusable="false"><use href="#i-copy"/></svg><svg class="ico copy__ok" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Copier</span></button>
-            </div>
-            <ul class="ct-links">
-              <li><a class="ct-link" href="https://github.com/drams18" target="_blank" rel="noopener"><span class="ct-ic"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-github"/></svg></span><span class="ct-link__l">GitHub</span><svg class="ico ico--xs ct-link__go" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></li>
-              <li><a class="ct-link" href="https://www.linkedin.com/in/arphan-drame/" target="_blank" rel="noopener"><span class="ct-ic"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-linkedin"/></svg></span><span class="ct-link__l">LinkedIn</span><svg class="ico ico--xs ct-link__go" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></li>
-              <li><a class="ct-link" href="../assets/CV.pdf" target="_blank" rel="noopener"><span class="ct-ic"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-download"/></svg></span><span class="ct-link__l">Voir mon CV en PDF</span><svg class="ico ico--xs ct-link__go" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></li>
-            </ul>
-          </div>
+        </header>
+      </div>
+      <div class="ct-stage">
+        <div class="ct-hero">
+          <p class="ct-ctx"><span class="pulse" aria-hidden="true"></span><span>En recherche de CDI (dès sept. 2026)</span><span>Île-de-France</span></p>
+          <h1 class="ct-title" id="contact-title">Travaillons <em>ensemble.</em></h1>
         </div>
-        <form class="card ct__form" id="classic-contact-form" aria-labelledby="form-title">
-          <div class="ct__form-h">
-            <h2 class="ct__form-t" id="form-title">Envoyer un message</h2>
+        <ul class="ct-orbs" aria-label="Moyens de contact">
+          <li><a class="ct-orb" data-orb="message" href="#message" data-open-message aria-haspopup="dialog">
+            <span class="ct-orb__core"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-send"/></svg><span class="ct-orb__l">Message</span></span>
+            <span class="ct-orb__s">Formulaire</span>
+          </a></li>
+          <li><a class="ct-orb" data-orb="mail" href="mailto:arphandrame0@gmail.com" data-copy="arphandrame0@gmail.com" data-copied="Adresse copiée">
+            <span class="ct-orb__core"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg><span class="ct-orb__l">E-mail</span></span>
+            <span class="ct-orb__s">arphandrame0@gmail.com</span>
+          </a></li>
+          <li><a class="ct-orb" data-orb="phone" href="tel:0767318426" data-copy="07 67 31 84 26" data-copied="Numéro copié">
+            <span class="ct-orb__core"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg><span class="ct-orb__l">Téléphone</span></span>
+            <span class="ct-orb__s">07 67 31 84 26</span>
+          </a></li>
+          <li><a class="ct-orb" data-orb="github" href="https://github.com/drams18" target="_blank" rel="noopener">
+            <span class="ct-orb__core"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-github"/></svg><span class="ct-orb__l">GitHub</span></span>
+            <span class="ct-orb__s">drams18</span>
+          </a></li>
+          <li><a class="ct-orb" data-orb="linkedin" href="https://www.linkedin.com/in/arphan-drame/" target="_blank" rel="noopener">
+            <span class="ct-orb__core"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-linkedin"/></svg><span class="ct-orb__l">LinkedIn</span></span>
+            <span class="ct-orb__s">arphan-drame</span>
+          </a></li>
+          <li><a class="ct-orb" data-orb="cv" href="../assets/CV.pdf" target="_blank" rel="noopener">
+            <span class="ct-orb__core"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-download"/></svg><span class="ct-orb__l">CV</span></span>
+            <span class="ct-orb__s">PDF</span>
+          </a></li>
+        </ul>
+        <p class="sr-only" role="status" data-copy-status></p>
+        <p class="ct-project" id="projet"><span>Un projet à réaliser ?</span><a class="text-link" href="../devis.html">Construisez votre projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="inline-link" href="../tarifs.html">Voir mes tarifs</a></p>
+      </div>
+      <dialog class="ct-dlg" id="message" aria-labelledby="form-title">
+        <form class="ct-form" id="classic-contact-form">
+          <div class="ct-form__h">
+            <h2 class="ct-form__t" id="form-title" tabindex="-1" autofocus>Envoyer un message</h2>
             <p>Quelques lignes suffisent, je vous réponds par e-mail.</p>
           </div>
-          <div class="ct__pair">
+          <div class="ct-form__pair">
             <label class="fld"><span class="fld__l">Nom</span><input type="text" name="from_name" autocomplete="name" placeholder="Prénom Nom" required></label>
             <label class="fld"><span class="fld__l">E-mail</span><input type="email" name="from_email" autocomplete="email" placeholder="vous@exemple.fr" required></label>
           </div>
-          <label class="fld fld--grow"><span class="fld__l">Message</span><textarea name="message" rows="6" placeholder="Bonjour, je vous contacte au sujet de…" required></textarea></label>
-          <div class="ct__send">
-            <button type="submit" class="btn btn--primary">Envoyer le message<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
-            <p class="ct__note">Vos coordonnées servent uniquement à vous répondre.</p>
+          <label class="fld"><span class="fld__l">Message</span><textarea name="message" rows="5" placeholder="Bonjour, je vous contacte au sujet de…" required></textarea></label>
+          <div class="ct-form__send">
+            <button type="submit" class="btn btn--primary">Envoyer<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
+            <p class="ct-form__note">Vos coordonnées servent uniquement à vous répondre.</p>
           </div>
           <p class="form-status" role="status" aria-live="polite"></p>
+          <button type="button" class="icon-btn ct-dlg__close js-only" data-close-message aria-label="Fermer le formulaire"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-close"/></svg></button>
         </form>
-      </div>
-      <div class="wrap">
-        <div class="ct-band" id="projet">
-          <div>
-            <h2 class="ct-band__t">Vous avez un projet ?</h2>
-            <p>Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.</p>
-          </div>
-          <div class="ct-band__cta">
-            <a class="btn btn--primary" href="../devis.html">Construisez votre projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
-            <a class="btn btn--ghost" href="../tarifs.html">Voir mes tarifs</a>
-          </div>
-        </div>
-      </div>
+      </dialog>
     </section>
   </main>
 
@@ -208,17 +212,6 @@
       <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span class="worlds__l"><small>04</small>Compétences</span>
     </a>
   </nav>
-  <footer class="footer">
-    <div class="wrap footer__inner">
-      <p>Arphan Drame · Développeur Web Full Stack · Île-de-France</p>
-      <nav class="footer__links" aria-label="Autres pages">
-        <a href="../index.html">Choisir un mode</a>
-        <a href="../aventure.html#ville" data-switch-adventure>Mode aventure</a>
-        <a href="../tarifs.html">Tarifs</a>
-        <a href="../assets/CV.pdf" target="_blank" rel="noopener">CV</a>
-      </nav>
-    </div>
-  </footer>
 
   <script src="../js/deeplink.js"></script>
   <script src="../js/contact-form.js"></script>

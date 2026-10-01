@@ -9,7 +9,7 @@
        View Transitions), nom ↔ logo quand le nom est hors écran
      • bouton « Mode aventure » contextuel (emporte ce qu'on regarde)
      • préchargement du mode aventure à l'intention (survol / toucher)
-     • copier, téléphone, formulaire (page Contact)
+     • page Contact : copie au clic (ordinateur), formulaire en panneau
    Les expériences (projets, frise, compétences) sont dans
    src/classic/*.js. Aucun code du jeu (canvas, audio) n'est chargé ici.
    ══════════════════════════════════════════════════════ */
@@ -167,31 +167,52 @@
     a.addEventListener('touchstart', prefetch, { passive: true });
   });
 
-  // ── Téléphone : appel direct sur mobile, texte + COPIER sur ordinateur ──
-  var mobile = matchMedia('(pointer: coarse)').matches && matchMedia('(max-width: 900px)').matches;
-  doc.querySelectorAll('[data-phone]').forEach(function (el) {
-    if (!mobile) return;
-    var a = doc.createElement('a');
-    a.className = el.className;
-    a.href = 'tel:' + el.getAttribute('data-phone');
-    a.textContent = el.textContent;
-    el.replaceWith(a);
-  });
-
-  // ── Copier ────────────────────────────────────────────
-  doc.querySelectorAll('.copy').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var value = btn.getAttribute('data-copy');
-      var label = btn.querySelector('span') || btn;
-      var done = function () {
-        clearTimeout(btn._t);
-        label.textContent = 'Copié';
-        btn.classList.add('is-ok');
-        btn._t = setTimeout(function () { label.textContent = 'Copier'; btn.classList.remove('is-ok'); }, 1600);
-      };
-      if (navigator.clipboard) navigator.clipboard.writeText(value).then(done, function () {});
+  // ── Contact : e-mail et téléphone ─────────────────────
+  // Au doigt, le lien fait son travail (mailto / tel). Au pointeur fin
+  // (ordinateur), un clic copie la valeur : plus utile qu'un logiciel de
+  // messagerie qui s'ouvre. Presse-papiers indisponible → lien normal.
+  var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var copyStatus = doc.querySelector('[data-copy-status]');
+  doc.querySelectorAll('a[data-copy]').forEach(function (a) {
+    if (!fine || !navigator.clipboard) return;
+    var sub = a.querySelector('.ct-orb__s');
+    var text = sub.textContent;
+    a.title = 'Cliquer pour copier';
+    a.addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      navigator.clipboard.writeText(a.getAttribute('data-copy')).then(function () {
+        clearTimeout(a._t);
+        var said = a.getAttribute('data-copied');
+        sub.textContent = said;
+        if (copyStatus) copyStatus.textContent = said;
+        a.classList.add('is-ok');
+        a._t = setTimeout(function () {
+          sub.textContent = text;
+          if (copyStatus) copyStatus.textContent = '';
+          a.classList.remove('is-ok');
+        }, 1800);
+      }, function () { location.href = a.href; });
     });
   });
+
+  // ── Contact : le formulaire, en panneau ───────────────
+  var sheet = doc.getElementById('message');
+  if (sheet && sheet.showModal) {
+    var openSheet = function () {
+      if (sheet.open) return;
+      sheet.showModal();
+      root.classList.add('has-dialog');
+    };
+    doc.querySelectorAll('[data-open-message]').forEach(function (a) {
+      a.addEventListener('click', function (e) { e.preventDefault(); openSheet(); });
+    });
+    sheet.querySelector('[data-close-message]').addEventListener('click', function () { sheet.close(); });
+    // Clic sur le voile (hors de la carte) : on referme.
+    sheet.addEventListener('click', function (e) { if (e.target === sheet) sheet.close(); });
+    sheet.addEventListener('close', function () { root.classList.remove('has-dialog'); });
+    if (location.hash === '#message') openSheet();
+  }
 
   // ── Formulaire de contact (EmailJS chargé à la demande) ──
   var form = doc.getElementById('classic-contact-form');

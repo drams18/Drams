@@ -324,6 +324,7 @@ const SPRITE = `
     <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 3 10.5l7 3 3 7zM10 13.5 21 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
     <symbol id="i-center"viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>`;
 
@@ -940,69 +941,64 @@ function competencesPage() {
 function contactPage() {
   const page = PAGE.contact;
   const tel = contact.phone.replace(/[^\d+]/g, '');
+  // Chaque canal est une bulle : un geste, une action. E-mail et téléphone
+  // ouvrent l'application (mailto / tel) ; au pointeur fin, js/classic.js
+  // les copie à la place. Le formulaire vit dans un panneau (dialog).
   const body = (L) => {
+    const orb = ({ key, ic, label, sub, href, attrs = '' }) => `
+          <li><a class="ct-orb" data-orb="${key}" href="${esc(href)}"${attrs}>
+            <span class="ct-orb__core">${icon(ic)}<span class="ct-orb__l">${esc(label)}</span></span>
+            <span class="ct-orb__s">${esc(sub)}</span>
+          </a></li>`;
     const links = contact.links.map(l => {
-      const id = /github/i.test(l.label) ? 'github' : /linkedin/i.test(l.label) ? 'linkedin' : /cv/i.test(l.label) ? 'download' : 'external';
+      const cv = /cv/i.test(l.label);
+      const id = /github/i.test(l.label) ? 'github' : /linkedin/i.test(l.label) ? 'linkedin' : cv ? 'download' : 'external';
       const href = /^https?:/.test(l.url) ? l.url : L.up + l.url;
-      return `<li><a class="ct-link" href="${esc(href)}" target="_blank" rel="noopener"><span class="ct-ic">${icon(id)}</span><span class="ct-link__l">${esc(l.label)}</span>${icon('external', 'ico ico--xs ct-link__go')}</a></li>`;
-    }).join('\n              ');
-    const copyBtn = (value, what) =>
-      `<button type="button" class="copy" data-copy="${esc(value)}" aria-label="Copier ${what}">${icon('copy', 'ico copy__i')}${icon('check', 'ico copy__ok')}<span>Copier</span></button>`;
+      const handle = l.url.replace(/\/+$/, '').split('/').pop();
+      return { key: cv ? 'cv' : id, ic: id, label: cv ? 'CV' : l.label, sub: cv ? 'PDF' : handle, href, attrs: ' target="_blank" rel="noopener"' };
+    });
+    const orbs = [
+      { key: 'message', ic: 'send', label: 'Message', sub: 'Formulaire', href: '#message', attrs: ' data-open-message aria-haspopup="dialog"' },
+      { key: 'mail', ic: 'mail', label: 'E-mail', sub: contact.email, href: `mailto:${contact.email}`, attrs: ` data-copy="${esc(contact.email)}" data-copied="Adresse copiée"` },
+      { key: 'phone', ic: 'phone', label: 'Téléphone', sub: contact.phone, href: `tel:${tel}`, attrs: ` data-copy="${esc(contact.phone)}" data-copied="Numéro copié"` },
+      ...links,
+    ];
     return `
     <section class="ct" aria-labelledby="contact-title">
-      <div class="wrap ct__grid">
-        <div class="ct__intro">
+      <div class="world-ui">
+        <header class="world-head">
           <p class="world-head__k"><span>${page.n}</span>${esc(page.label)}</p>
-          <h1 class="ct__title" id="contact-title">Travaillons <em>ensemble.</em></h1>
-          ${bio.seeking ? `<p class="ct__status"><span class="pulse" aria-hidden="true"></span>${esc(bio.seeking)} · ${esc(bio.location)}</p>` : ''}
-          <p class="ct__lead">Écrivez-moi ou appelez-moi directement : je réponds personnellement.</p>
-          <div class="ct__direct">
-            <div class="ct-row">
-              <span class="ct-ic">${icon('mail')}</span>
-              <span class="ct-row__k">E-mail</span>
-              <a class="ct-row__v" href="mailto:${esc(contact.email)}">${esc(contact.email)}</a>
-              ${copyBtn(contact.email, "l'adresse e-mail")}
-            </div>
-            <div class="ct-row">
-              <span class="ct-ic">${icon('phone')}</span>
-              <span class="ct-row__k">Téléphone</span>
-              <span class="ct-row__v" data-phone="${esc(tel)}">${esc(contact.phone)}</span>
-              ${copyBtn(contact.phone, 'le numéro de téléphone')}
-            </div>
-            <ul class="ct-links">
-              ${links}
-            </ul>
-          </div>
+        </header>
+      </div>
+      <div class="ct-stage">
+        <div class="ct-hero">
+          ${bio.seeking ? `<p class="ct-ctx"><span class="pulse" aria-hidden="true"></span><span>${esc(bio.seeking)}</span><span>${esc(bio.location)}</span></p>` : ''}
+          <h1 class="ct-title" id="contact-title">Travaillons <em>ensemble.</em></h1>
         </div>
-        <form class="card ct__form" id="classic-contact-form" aria-labelledby="form-title">
-          <div class="ct__form-h">
-            <h2 class="ct__form-t" id="form-title">Envoyer un message</h2>
+        <ul class="ct-orbs" aria-label="Moyens de contact">${orbs.map(orb).join('')}
+        </ul>
+        <p class="sr-only" role="status" data-copy-status></p>
+        <p class="ct-project" id="projet"><span>Un projet à réaliser ?</span><a class="text-link" href="${L.up}devis.html">Construisez votre projet${icon('arrow')}</a><a class="inline-link" href="${L.up}tarifs.html">Voir mes tarifs</a></p>
+      </div>
+      <dialog class="ct-dlg" id="message" aria-labelledby="form-title">
+        <form class="ct-form" id="classic-contact-form">
+          <div class="ct-form__h">
+            <h2 class="ct-form__t" id="form-title" tabindex="-1" autofocus>Envoyer un message</h2>
             <p>Quelques lignes suffisent, je vous réponds par e-mail.</p>
           </div>
-          <div class="ct__pair">
+          <div class="ct-form__pair">
             <label class="fld"><span class="fld__l">Nom</span><input type="text" name="from_name" autocomplete="name" placeholder="Prénom Nom" required></label>
             <label class="fld"><span class="fld__l">E-mail</span><input type="email" name="from_email" autocomplete="email" placeholder="vous@exemple.fr" required></label>
           </div>
-          <label class="fld fld--grow"><span class="fld__l">Message</span><textarea name="message" rows="6" placeholder="Bonjour, je vous contacte au sujet de…" required></textarea></label>
-          <div class="ct__send">
-            <button type="submit" class="btn btn--primary">Envoyer le message${icon('arrow')}</button>
-            <p class="ct__note">Vos coordonnées servent uniquement à vous répondre.</p>
+          <label class="fld"><span class="fld__l">Message</span><textarea name="message" rows="5" placeholder="Bonjour, je vous contacte au sujet de…" required></textarea></label>
+          <div class="ct-form__send">
+            <button type="submit" class="btn btn--primary">Envoyer${icon('arrow')}</button>
+            <p class="ct-form__note">Vos coordonnées servent uniquement à vous répondre.</p>
           </div>
           <p class="form-status" role="status" aria-live="polite"></p>
+          <button type="button" class="icon-btn ct-dlg__close js-only" data-close-message aria-label="Fermer le formulaire">${icon('close')}</button>
         </form>
-      </div>
-      <div class="wrap">
-        <div class="ct-band" id="projet">
-          <div>
-            <h2 class="ct-band__t">Vous avez un projet ?</h2>
-            <p>Particulier ou professionnel : consultez mes tarifs, ou décrivez votre projet pas à pas.</p>
-          </div>
-          <div class="ct-band__cta">
-            <a class="btn btn--primary" href="${L.up}devis.html">Construisez votre projet${icon('arrow')}</a>
-            <a class="btn btn--ghost" href="${L.up}tarifs.html">Voir mes tarifs</a>
-          </div>
-        </div>
-      </div>
+      </dialog>
     </section>`;
   };
   return shell(page, {
@@ -1018,7 +1014,6 @@ function contactPage() {
     },
     body,
     scripts: '<script src="{up}js/contact-form.js"></script>',
-    scrolls: true,
   });
 }
 

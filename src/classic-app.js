@@ -10,7 +10,7 @@
      projets      src/classic/projects.js   espace de bulles + fiche
      parcours     src/classic/timeline.js   frise horizontale
      competences  src/classic/skills.js     écosystème (globe)
-     contact      (aucune)                      (CSS seul)
+     contact      (aucune)                  CSS + js/classic.js
    ══════════════════════════════════════════════════════ */
 const root = document.documentElement;
 const app = (window.ClassicApp = window.ClassicApp || {});
