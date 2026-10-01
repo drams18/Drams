@@ -383,32 +383,39 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 .pf-scroll:hover { color: var(--text); }
 @keyframes nudge { 0%, 60%, 100% { transform: none; } 30% { transform: translateY(4px); } }
 
-/* Orbes : les projets en suspension (couleur = catégorie, taille = rang) */
+/* Orbes : les technologies les plus utilisées (logo, couleur = famille, taille = usage) */
 .pf-orbs { position: absolute; inset: 0; pointer-events: none; }
 .pf-orbs i {
-  --s: 30px;
+  --s: 38px;
   position: absolute; left: var(--x); top: var(--y);
   width: calc(var(--s) * (.5 + var(--z))); height: calc(var(--s) * (.5 + var(--z)));
   margin: calc(var(--s) * (.5 + var(--z)) / -2) 0 0 calc(var(--s) * (.5 + var(--z)) / -2);
   transform: translate3d(calc(var(--px, 0px) * var(--z)), calc(var(--py, 0px) * var(--z) + var(--sy, 0px) * var(--z)), 0);
   opacity: calc(.35 + var(--z) * .55);
 }
-.pf-orbs i[data-tier="m"] { --s: 44px; }
+.pf-orbs i[data-tier="m"] { --s: 48px; }
 .pf-orbs i[data-tier="l"] { --s: 62px; }
-.pf-orbs i::before {
-  content: ''; position: absolute; inset: 0; border-radius: 50%;
-  background: radial-gradient(circle at 32% 26%, color-mix(in srgb, var(--cat) 55%, var(--surface)), color-mix(in srgb, var(--cat) 14%, var(--surface)) 70%);
-  border: 1px solid color-mix(in srgb, var(--cat) 55%, transparent);
+.pf-orbs i::before, .pf-orbs i::after {
+  content: ''; position: absolute; inset: 0;
   animation: float 9s ease-in-out infinite alternate; animation-delay: calc(var(--d) * -1);
 }
-.pf-orbs.is-paused i::before { animation-play-state: paused; }
+.pf-orbs i::before {
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 26%, color-mix(in srgb, var(--fam) 55%, var(--surface)), color-mix(in srgb, var(--fam) 14%, var(--surface)) 70%);
+  border: 1px solid color-mix(in srgb, var(--fam) 55%, transparent);
+}
+.pf-orbs i::after {          /* logo : masque monochrome, couleur du texte */
+  inset: 25%; background: var(--text); opacity: .9;
+  -webkit-mask: var(--logo) center / contain no-repeat; mask: var(--logo) center / contain no-repeat;
+}
+.pf-orbs.is-paused i::before, .pf-orbs.is-paused i::after { animation-play-state: paused; }
 @keyframes float { to { transform: translate3d(0, -14px, 0); } }
 @media (max-width: 700px) {
   .pf-name { font-size: 17vw; }
   .pf-ctx { gap: 4px 14px; }
   .pf-ctx .pulse { margin-right: 0; }
   .pf-ctx__i + .pf-ctx__i::before { content: none; }
-  .pf-orbs i { --s: 20px; } .pf-orbs i[data-tier="m"] { --s: 28px; } .pf-orbs i[data-tier="l"] { --s: 38px; }
+  .pf-orbs i { --s: 26px; } .pf-orbs i[data-tier="m"] { --s: 32px; } .pf-orbs i[data-tier="l"] { --s: 40px; }
   .pf-orbs { opacity: .7; }
   .pf-ctx { letter-spacing: .08em; font-size: 11.5px; }
   .pf-cta .btn { flex: 1 1 100%; }

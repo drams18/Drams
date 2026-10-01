@@ -515,17 +515,21 @@ function profilPage() {
   const page = PAGE.profil;
   const ctx = [bio.location, ...seekingBits(bio.seeking)].map(m => `<span class="pf-ctx__i">${esc(m)}</span>`).join('');
   const [first, ...rest] = displayName.split(' ');
-  // Les projets, en orbes flottantes autour du nom (couleur = catégorie,
-  // taille = rang) : un avant-goût de l'espace des projets. Positions fixes,
-  // calculées ici pour laisser le centre (le nom) dégagé.
-  const orbs = projects.map((p, i) => {
+  // Les technologies les plus utilisées (nombre de projets), en orbes
+  // flottantes autour du nom : logo, couleur = famille, taille = usage.
+  // Une orbe par logo (React et React Native partagent le leur). Positions
+  // fixes, calculées ici pour laisser le centre (le nom) dégagé.
+  const orbStack = mainStack.filter((s, i, a) => logoOf(s.item) && a.findIndex(o => logoOf(o.item) === logoOf(s.item)) === i);
+  const orbs = (L) => orbStack.map((s, i) => {
     // De part et d'autre du nom (bandes gauche / droite), jamais dessus.
     const side = i % 2 ? 1 : -1;
-    const band = ((i * 37) % 100) / 100;               // répartition sans motif
-    const x = 50 + side * (31 + band * 17);
-    const y = 12 + ((i * 53) % 76);
-    const z = [0.35, 0.6, 1, 0.8, 0.5][i % 5];         // profondeur (parallaxe, taille)
-    return `<i data-cat="${esc(p.category)}" data-tier="${tierOf(p)}" style="--x:${x.toFixed(1)}%;--y:${y.toFixed(1)}%;--z:${z};--d:${(i * 0.7) % 6}s"></i>`;
+    const k = i >> 1, rows = Math.ceil(orbStack.length / 2);
+    const band = [0.15, 0.85, 0.45, 1, 0, 0.65, 0.3][k % 7];   // quinconce : pas de chevauchement
+    const x = 50 + side * (31 + band * 13);
+    const y = 12 + ((k * 3 + (side > 0 ? 1 : 0)) % rows + (side > 0 ? 0.65 : 0.35)) / rows * 76;
+    const z = [0.5, 0.7, 1, 0.85, 0.6][i % 5];         // profondeur (parallaxe, taille)
+    const tier = s.used.length >= 5 ? 'l' : s.used.length >= 3 ? 'm' : 's';
+    return `<i data-fam="${s.fam.key}" data-tier="${tier}" style="--x:${x.toFixed(1)}%;--y:${y.toFixed(1)}%;--z:${z};--d:${(i * 0.7) % 6}s;--logo:url('${L.up}${logoOf(s.item)}')"></i>`;
   }).join('');
   const langs = bio.languages.map(l => `<li><strong>${esc(l.label)}</strong> ${esc(l.level)}</li>`).join('');
   const quals = profile.qualities.map(q => `<li>${esc(q)}</li>`).join('');
@@ -540,7 +544,7 @@ function profilPage() {
 
   const body = (L) => `
     <section class="pf-hero" aria-labelledby="profil-title">
-      <div class="pf-orbs" aria-hidden="true">${orbs}</div>
+      <div class="pf-orbs" aria-hidden="true">${orbs(L)}</div>
       <div class="pf-hero__inner">
         <h1 class="pf-name" id="profil-title"><span class="pf-name__w"><span>${esc(first)}</span></span> <span class="pf-name__w"><span>${esc(rest.join(' '))}</span></span></h1>
         <p class="pf-role">${esc(bio.title)}</p>

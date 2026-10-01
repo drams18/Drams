@@ -3,7 +3,7 @@
 
    Séquence d'entrée, dans l'ordre de lecture :
      identité (le nom) → métier → contexte → exploration.
-   Puis une profondeur discrète : les orbes (les projets) et le halo
+   Puis une profondeur discrète : les orbes (les technologies) et le halo
    suivent le pointeur selon leur plan ; au défilement, le nom recule.
    Arrivée depuis une autre page (View Transition) : le nom est déjà là
    (il vient du logo), seule la suite se dévoile.
