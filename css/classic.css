@@ -889,6 +889,25 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 .tl-photos a:hover img { transform: scale(1.03); }
 .tl-photos figcaption { font-size: 12.5px; line-height: 1.4; color: var(--muted); }
 .tl-panel__acts { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; }
+/* Aperçu d'un projet (jalon) : capture à côté du texte, dessous sur petit écran */
+.tl-shots { display: flex; align-items: flex-start; gap: 12px; margin-top: 22px; text-decoration: none; }
+.tl-shots img {
+  display: block; min-width: 0; width: auto; height: auto; max-width: 100%; max-height: min(42vh, 400px);
+  border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface-2);
+  transition: transform .5s var(--ease-out), border-color .2s;
+}
+.tl-shots--mobile img { flex: 0 1 auto; max-height: min(46vh, 420px); border-radius: 14px; }
+.tl-shots:hover img { transform: translateY(-3px); border-color: var(--k); }
+@media (min-width: 900px) {
+  .tl-panel--shots { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); grid-template-rows: auto 1fr; gap: 0 56px; align-items: start; }
+  .tl-panel--shots .tl-panel__head { grid-area: 1 / 1; }
+  .tl-panel--shots .tl-panel__body { grid-area: 2 / 1; }
+  .tl-panel--shots .tl-shots { grid-area: 1 / 2 / 3 / 3; align-self: center; margin-top: 0; }
+}
+@media (max-width: 700px) {
+  .tl-shots { margin-top: 16px; gap: 8px; }
+  .tl-shots img, .tl-shots--mobile img { max-height: min(30vh, 260px); }
+}
 
 /* Jalons d'une étape : une liste chronologique, chaque ligne ouvre le jalon */
 .tl-kin ul { border-top: 1px solid var(--line); }

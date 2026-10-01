@@ -256,6 +256,26 @@ const tlPhotos = (photos, L) => {
                 <figure><a href="${L.up}${ph.src}" target="_blank" rel="noopener"><img src="${L.up}${ph.src}" alt="${esc(ph.alt)}" loading="lazy" decoding="async"></a>${ph.alt ? `<figcaption>${esc(ph.alt)}</figcaption>` : ''}</figure>`).join('')}
               </div>` : '';
 };
+// Dimensions d'un webp (en-tête VP8 / VP8L / VP8X) : réserve la place de
+// l'image avant son chargement.
+function webpSize(file) {
+  const b = readFileSync(join(ROOT, file));
+  const k = b.toString('latin1', 12, 16);
+  if (k === 'VP8 ') return { w: b.readUInt16LE(26) & 0x3fff, h: b.readUInt16LE(28) & 0x3fff };
+  if (k === 'VP8L') { const v = b.readUInt32LE(21); return { w: (v & 0x3fff) + 1, h: ((v >>> 14) & 0x3fff) + 1 }; }
+  if (k === 'VP8X') return { w: 1 + b.readUIntLE(24, 3), h: 1 + b.readUIntLE(27, 3) };
+  return null;
+}
+// Aperçu d'un projet dans sa fiche de la frise : la première capture (les
+// trois premières pour une application mobile). Sans capture : rien.
+const tlShots = (p, L) => {
+  const list = projectShots(p).slice(0, p.device === 'mobile' ? 3 : 1)
+    .map(s => ({ ...s, size: webpSize(s.src) })).filter(s => s.size);
+  return list.length ? `
+            <a class="tl-shots${p.device === 'mobile' ? ' tl-shots--mobile' : ''}" href="${L.page('projets', p.slug)}" aria-label="Aperçu du projet ${esc(p.title)} : voir le projet">${list.map(s => `
+              <img src="${L.up}${esc(s.src)}" alt="${esc(s.alt)}" width="${s.size.w}" height="${s.size.h}" loading="lazy" decoding="async">`).join('')}
+            </a>` : '';
+};
 const firstYear = Math.floor(Math.min(...dated.map(t => t.span.start)));
 const lastYear  = Math.max(...dated.map(t => Math.ceil(t.span.end ?? t.span.start + 1)), seeking ? seeking.year + 1 : 0);
 
@@ -759,14 +779,15 @@ function parcoursPage() {
       : m.desc;
     const place = p ? [p.type, teamOf(p), p.status].filter(Boolean).join(' · ') : '';
     const route = p ? `projets/${p.slug}` : parent ? `parcours/${parent.slug}` : 'parcours';
+    const shots = p ? tlShots(p, L) : '';
     return `
-          <article class="tl-panel tl-panel--pin" id="${m.slug}" data-step="${m.slug}" data-kind="${m.kind}" data-route="${route}" aria-labelledby="tl-${m.slug}-t">
+          <article class="tl-panel tl-panel--pin${shots ? ' tl-panel--shots' : ''}" id="${m.slug}" data-step="${m.slug}" data-kind="${m.kind}" data-route="${route}" aria-labelledby="tl-${m.slug}-t">
             <header class="tl-panel__head">${tlLogo(m.logo, m.title, L)}
               <p class="tl-panel__k"><span>${esc(m.label)}</span>${esc(m.pt.label)}</p>
               <h2 class="tl-panel__t" id="tl-${m.slug}-t">${esc(m.title)}</h2>
               ${place ? `<p class="tl-panel__place">${esc(place)}</p>` : ''}
               ${lead ? `<p class="tl-panel__lead">${esc(lead)}</p>` : ''}
-            </header>
+            </header>${shots}
             <div class="tl-panel__body">
               <p class="tl-panel__acts">${p ? `<a class="btn btn--primary btn--sm" href="${L.page('projets', p.slug)}">Voir le projet${icon('arrow')}</a>` : ''}${parent ? `<a class="tl-up" href="#${parent.slug}"><span>Pendant</span>${esc(stepLabel(parent))}</a>` : ''}</p>
             </div>
