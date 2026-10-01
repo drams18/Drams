@@ -182,6 +182,11 @@ const projectShots = (p) => (p.shots || [])
 const projectImage = (p) => projectShots(p).length && existsSync(join(ROOT, `assets/img/projets/${p.slug}.webp`))
   ? `assets/img/projets/${p.slug}.webp` : null;
 
+// Projets à la une (page Profil), dans cet ordre : les plus aboutis, en
+// ligne, avec captures. Un slug inconnu est simplement ignoré.
+const FEATURED = ['wild-kedougou', 'islaah', 'skywalk'];
+const featured = FEATURED.map(slug => projects.find(p => p.slug === slug)).filter(Boolean);
+
 // ── Chronologie ────────────────────────────────────────
 // « 01/2024 - 10/2026 », « 2021 - début 2022 », « 2020 »… → années décimales.
 // Une fin sans mois est « floue » : dessinée jusqu'au milieu de l'année,
@@ -532,11 +537,24 @@ function profilPage() {
     return `<i data-fam="${s.fam.key}" data-tier="${tier}" style="--x:${x.toFixed(1)}%;--y:${y.toFixed(1)}%;--z:${z};--d:${(i * 0.7) % 6}s;--logo:url('${L.up}${logoOf(s.item)}')"></i>`;
   }).join('');
   const langs = bio.languages.map(l => `<li><strong>${esc(l.label)}</strong> ${esc(l.level)}</li>`).join('');
-  const quals = profile.qualities.map(q => `<li>${esc(q)}</li>`).join('');
-  const top = mainStack.slice(0, 6);
 
+  // Projets à la une : la preuve avant le discours. La carte entière mène à
+  // la fiche du projet (les technologies ne sont donc pas des liens ici).
+  const featCard = (p, L) => {
+    const ctx = p.category === 'Personnel' ? '' : contextOf(p);   // la pastille le dit déjà
+    const tech = p.tech || [];
+    return `
+          <li data-cat="${esc(p.category)}"><article class="feat-card" aria-labelledby="f-${p.slug}">
+            ${projectCover(p, L)}
+            <p class="feat-card__meta"><span class="chip-cat">${esc(p.category)}</span><span>${esc(p.type)}</span>${ctx ? `<span>${esc(ctx)}</span>` : ''}</p>
+            <h3 class="feat-card__title" id="f-${p.slug}"><a href="${L.page('projets', p.slug)}">${esc(p.title)}</a></h3>
+            <p class="feat-card__desc">${esc(p.desc.split(/(?<=\.)\s+/)[0])}</p>
+            <ul class="tags" aria-label="Technologies">${tech.slice(0, 4).map(t => `<li>${esc(t)}</li>`).join('')}${tech.length > 4 ? `<li>+${tech.length - 4}</li>` : ''}</ul>
+          </article></li>`;
+  };
+
+  // Les projets sont déjà montrés plus haut : il reste trois portes.
   const doors = [
-    { key: 'projets', q: 'Qu’est-ce qu’il a construit\u202f?', hint: `${plural(projects.length, 'projet', 'projets')} · ${byCat.Professionnel.length} professionnels, ${byCat.Personnel.length} personnels, ${byCat.Scolaire.length} scolaires` },
     { key: 'parcours', q: 'Quel a été son parcours\u202f?', hint: `${firstYear} → ${lastYear - 1} · ${plural(dated.length, 'étape', 'étapes')}` },
     { key: 'competences', q: 'Quel est son univers technique\u202f?', hint: `${plural(allSkills.length, 'compétence', 'compétences')} · ${families.length} familles` },
     { key: 'contact', q: 'Comment le contacter\u202f?', hint: bio.seeking || 'E-mail, téléphone, formulaire' },
@@ -551,10 +569,22 @@ function profilPage() {
         <p class="pf-ctx"><span class="pulse" aria-hidden="true"></span>${ctx}</p>
         <div class="pf-cta">
           <a class="btn btn--primary" href="${L.page('projets')}">Voir mes projets${icon('arrow')}</a>
-          <a class="btn btn--ghost" href="${L.up}tarifs.html">Un projet\u202f? Contactez-moi directement${icon('arrow')}</a>
+          <a class="btn btn--ghost" href="${L.up}tarifs.html">Un projet à me confier\u202f?${icon('arrow')}</a>
         </div>
       </div>
-      <a class="pf-scroll" href="#presentation"><span>Découvrir le profil</span>${icon('chevron')}</a>
+      <a class="pf-scroll" href="#a-la-une"><span>Projets à la une</span>${icon('chevron')}</a>
+    </section>
+
+    <section class="pf-feat" id="a-la-une" aria-labelledby="a-la-une-title">
+      <div class="wrap">
+        <h2 class="kicker" id="a-la-une-title">Projets à la une</h2>
+        <ol class="feat">${featured.map(p => featCard(p, L)).join('')}
+        </ol>
+        <p class="pf-feat__more">
+          <a class="text-link" href="${L.page('projets')}">Voir les ${plural(projects.length, 'projet', 'projets')}${icon('arrow')}</a>
+          <span>${byCat.Professionnel.length} professionnels chez ${esc(company)}, ${byCat.Personnel.length} personnels, ${byCat.Scolaire.length} scolaires</span>
+        </p>
+      </div>
     </section>
 
     <section class="pf-about" id="presentation" aria-labelledby="presentation-title">
@@ -563,20 +593,13 @@ function profilPage() {
         <p class="pf-statement">${esc(profile.positioning)}</p>
         <div class="pf-about__grid">
           <div class="pf-about__text">
-            <p>${esc(bioSentences.slice(1).join(' '))}</p>
-            <ul class="chips" aria-label="Qualités">${quals}</ul>
+            <p>${esc(bioSentences[1] || '')}</p>
           </div>
           <dl class="facts">
-            ${bio.seeking ? `<div><dt>Je recherche</dt><dd>${esc(bio.seeking)}</dd></div>` : ''}
             <div><dt>Aujourd'hui</dt><dd>${esc(bio.availability)} <a class="inline-link" href="${L.page('parcours', devphantom.slug)}">${esc(devphantom.date)}</a></dd></div>
-            <div><dt>Basé en</dt><dd>${esc(bio.location)}</dd></div>
             <div><dt>Formation</dt><dd>${esc(etna.title)} <span class="facts__m">${esc(etna.date)}</span></dd></div>
             <div><dt>Langues</dt><dd><ul class="inline-list">${langs}</ul></dd></div>
           </dl>
-        </div>
-        <div class="pf-stack">
-          <p class="mini-title">Les technologies les plus présentes dans mes projets</p>
-          <ul class="pf-stack__list">${top.map(s => `<li><a href="${L.page('competences', s.slug)}" data-fam="${s.fam.key}"><strong>${esc(s.item)}</strong><span>${plural(s.used.length, 'projet', 'projets')}</span></a></li>`).join('')}</ul>
         </div>
       </div>
     </section>

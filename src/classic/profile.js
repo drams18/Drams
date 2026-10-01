@@ -73,9 +73,11 @@ function scroll() {
   // un élément pas encore dévoilé reste atteignable au clavier).
   const below = (el) => el.getBoundingClientRect().top > innerHeight * 0.9;
   const groups = [
+    ['.pf-feat .kicker', 0],
+    ['.feat > li', 0.1],
+    ['.pf-feat__more', 0],
     ['.pf-about .kicker, .pf-statement', 0.1],
     ['.pf-about__text, .facts', 0.12],
-    ['.pf-stack', 0],
     ['.pf-next .kicker', 0],
     ['.doors > li', 0.08],
   ];
@@ -89,8 +91,8 @@ function scroll() {
     });
   });
   doc.addEventListener('focusin', (e) => {
-    const el = e.target.closest('.pf-about *, .pf-next *');
-    if (el) gsap.to(el.closest('.doors > li, .pf-stack, .facts, .pf-about__text') || el, { opacity: 1, y: 0, duration: 0.3, overwrite: true });
+    const el = e.target.closest('.pf-feat *, .pf-about *, .pf-next *');
+    if (el) gsap.to(el.closest('.feat > li, .doors > li, .pf-feat__more, .facts, .pf-about__text') || el, { opacity: 1, y: 0, duration: 0.3, overwrite: true });
   });
 }
 

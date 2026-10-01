@@ -422,7 +422,33 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
   .pf-cta { width: 100%; max-width: 340px; }
 }
 
-.pf-about { padding: 120px 0 72px; }
+/* Projets à la une : la preuve, juste sous le nom */
+.pf-feat { padding: 112px 0 0; }
+.feat { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
+.feat-card {
+  position: relative; display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 12px 12px 18px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+  transition: border-color .3s, transform .45s var(--ease-out);
+}
+.feat-card:hover { border-color: color-mix(in srgb, var(--cat) 55%, var(--line-2)); transform: translateY(-4px); }
+.feat-card > :not(.pj-cover) { margin-inline: 8px; }
+.feat-card .pj-cover { margin-bottom: 6px; }
+.feat-card__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 13px; color: var(--muted); }
+.feat-card__title { font-size: 22px; font-weight: 700; line-height: 1.2; letter-spacing: -.03em; }
+.feat-card__title a { color: var(--text); text-decoration: none; }
+.feat-card__title a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }   /* toute la carte est le lien */
+.feat-card__desc {
+  display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  font-size: 15px; color: var(--text-2);
+}
+.feat-card .tags { margin-top: auto; padding-top: 6px; }
+.pf-feat__more { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; margin-top: 24px; font-size: 14px; color: var(--muted); }
+@media (max-width: 960px) {
+  .pf-feat { padding-top: 72px; }
+  .feat { grid-template-columns: 1fr; max-width: 560px; }
+}
+
+.pf-about { padding: 104px 0 64px; }
 .pf-statement {
   margin-top: 22px; max-width: 24ch;
   font-size: clamp(28px, 4.2vw, 52px); font-weight: 650; line-height: 1.12; letter-spacing: -.035em; color: var(--text);
@@ -434,27 +460,16 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 .facts dt { font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .facts dd { color: var(--text); font-weight: 500; }
 .facts__m { color: var(--muted); font-weight: 400; margin-left: 6px; }
-.pf-stack { margin-top: 64px; }
-.pf-stack__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
-.pf-stack__list a {
-  position: relative; display: flex; flex-direction: column; padding: 13px 15px 13px 30px; text-decoration: none;
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
-  transition: border-color .25s, transform .35s var(--ease-out);
-}
-.pf-stack__list a::before { content: ''; position: absolute; left: 14px; top: 21px; width: 7px; height: 7px; border-radius: 50%; background: var(--fam); }
-.pf-stack__list a:hover { border-color: var(--fam); transform: translateY(-2px); }
-.pf-stack__list strong { font-size: 16px; font-weight: 600; color: var(--text); }
-.pf-stack__list span { font-size: 13px; color: var(--muted); }
 @media (max-width: 860px) {
-  .pf-about { padding: 80px 0 48px; }
+  .pf-about { padding: 72px 0 40px; }
   .pf-about__grid { grid-template-columns: 1fr; gap: 32px; margin-top: 36px; }
   .facts > div { grid-template-columns: 1fr; gap: 2px; }
 }
 
 .pf-next { padding: 48px 0 120px; }
-.doors { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+.doors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
 .door {
-  position: relative; display: flex; flex-direction: column; gap: 6px; height: 100%; min-height: 220px; padding: 22px 22px 56px;
+  position: relative; display: flex; flex-direction: column; gap: 6px; height: 100%; min-height: 168px; padding: 20px 22px 48px;
   text-decoration: none; overflow: hidden; isolation: isolate;
   background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
   transition: border-color .3s, transform .45s var(--ease-out);
@@ -464,7 +479,6 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
   background: radial-gradient(circle, var(--door, var(--glow)) 0%, transparent 60%); opacity: .55;
   transition: opacity .4s, transform .6s var(--ease-out);
 }
-.door--projets { --door: color-mix(in srgb, var(--c-pro) 30%, transparent); }
 .door--parcours { --door: color-mix(in srgb, var(--c-school) 30%, transparent); }
 .door--competences { --door: color-mix(in srgb, var(--f-data) 26%, transparent); }
 .door--contact { --door: color-mix(in srgb, var(--accent) 30%, transparent); }
@@ -476,8 +490,7 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 .door__h { margin-top: auto; font-size: 13px; color: var(--muted); }
 .door__go { position: absolute; right: 20px; bottom: 20px; width: 20px; height: 20px; color: var(--text); transition: transform .35s var(--ease-out); }
 .door:hover .door__go { transform: translateX(4px); }
-@media (max-width: 960px) { .doors { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 520px) { .doors { grid-template-columns: 1fr; } .door { min-height: 0; } }
+@media (max-width: 760px) { .doors { grid-template-columns: 1fr; } .door { min-height: 0; } }
 
 /* ══════════════════════════════════════════════════════
    02 · PROJETS : espace de bulles
