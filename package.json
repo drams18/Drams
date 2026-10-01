@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "content": "node scripts/build-classic.mjs",
+    "images": "node scripts/images.mjs",
     "build": "node scripts/build-classic.mjs && vite build",
     "preview": "vite preview",
     "capture": "node scripts/capture.mjs"

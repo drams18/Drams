@@ -8,7 +8,8 @@
        (parallaxe), sur une tuile de période différente : l'espace se
        remplit sans motif répétitif visible ;
      • la fiche d'un projet (<dialog>) : on plonge dans la bulle, qui
-       s'ouvre jusqu'à devenir la fiche.
+       s'ouvre jusqu'à devenir la fiche ; ses captures y défilent
+       (galerie), la première sert de fond à la bulle.
 
    Accessibilité : les bulles sont un décor (aria-hidden). La liste des
    projets reste dans la page ; en vue « espace » elle est masquée à
@@ -38,6 +39,7 @@ export function initProjects(app) {
     return {
       i, li, slug: li.dataset.slug, cat: li.dataset.cat, tier: li.dataset.tier,
       status: li.dataset.status, name: li.dataset.name, img: li.dataset.img || null,
+      shots: li.dataset.shots ? JSON.parse(li.dataset.shots) : [], device: li.dataset.device || 'desktop',
       title: li.querySelector('.pj-item__title').textContent,
       type: meta[1] || '', ctx: meta[2] || '',
       statusLabel: li.querySelector('.status').textContent.trim(),
@@ -61,13 +63,15 @@ export function initProjects(app) {
     make(it, L) {
       const d = it.d;
       const el = doc.createElement('div');
-      el.className = `bub bub--${L.name}`;
+      el.className = `bub bub--${L.name}${d.img ? ' bub--img' : ''}`;
       el.dataset.i = d.i;
       el.dataset.cat = d.cat;
       el.dataset.tier = d.tier;
       el.dataset.status = d.status;
       el.style.setProperty('--r', `${it.r.toFixed(1)}px`);
-      el.innerHTML = `<span class="bub__core"><span class="bub__name" lang="fr">${esc(d.name)}</span><span class="bub__st"></span></span>`;
+      // Capture du projet en fond de bulle (sinon : le fond de catégorie).
+      const img = d.img ? `<span class="bub__img" style="background-image:url('${esc(d.img)}')"></span>` : '';
+      el.innerHTML = `<span class="bub__core">${img}<span class="bub__name" lang="fr">${esc(d.name)}</span><span class="bub__st"></span></span>`;
       return el;
     },
     onPick(it, el) { hideTip(); openProject(it.d.slug, { from: el }); },
@@ -142,6 +146,7 @@ export function initProjects(app) {
   function showTip(d, el) {
     tipEl = el;
     tip.dataset.cat = d.cat;
+    tip.dataset.device = d.device;
     tip.innerHTML = `${d.img ? `<img class="space-tip__img" src="${esc(d.img)}" alt="" loading="lazy" decoding="async">` : ''}
       <p class="space-tip__t">${esc(d.title)}</p>
       <p class="space-tip__m"><i class="cat-dot" aria-hidden="true"></i>${esc(d.cat)}${d.ctx ? ` · ${esc(d.ctx)}` : ''}</p>
@@ -305,7 +310,17 @@ export function initProjects(app) {
   dlg.setAttribute('aria-labelledby', 'pjd-title');
   dlg.innerHTML = `
     <div class="pjd__panel">
-      <div class="pjd__media"><div class="pjd__orb"><span></span></div><div class="pjd__shot"></div></div>
+      <div class="pjd__media">
+        <div class="pjd__orb"><span></span></div>
+        <div class="pjd__gal" hidden>
+          <div class="pjd__track" tabindex="0" role="group" aria-roledescription="galerie" aria-label="Captures du projet"></div>
+          <div class="pjd__galbar">
+            <button type="button" class="pjd__gbtn" data-shot="-1" aria-label="Capture précédente">${icon('back')}</button>
+            <span class="pjd__dots" aria-hidden="true"></span>
+            <button type="button" class="pjd__gbtn" data-shot="1" aria-label="Capture suivante">${icon('arrow')}</button>
+          </div>
+        </div>
+      </div>
       <div class="pjd__body">
         <div class="pjd__content">
           <p class="pjd__kicker"></p>
@@ -337,18 +352,7 @@ export function initProjects(app) {
     current = d;
     dlg.dataset.cat = d.cat;
     $('.pjd__orb span').textContent = d.name;
-    const shot = $('.pjd__shot');
-    shot.classList.remove('is-loaded');
-    shot.innerHTML = '';
-    if (d.img) {
-      const img = new Image();
-      img.alt = `Aperçu du projet ${d.title}`;
-      img.decoding = 'async';
-      img.onload = () => shot.classList.add('is-loaded');
-      img.onerror = () => img.remove();          // repli : la bulle reste
-      img.src = d.img;
-      shot.appendChild(img);
-    }
+    fillGallery(d);
     $('.pjd__kicker').innerHTML = `<span class="chip-cat" data-cat="${esc(d.cat)}">${esc(d.cat)}</span><span>${esc(d.type)}</span>${d.ctx ? `<span>${esc(d.ctx)}</span>` : ''}`;
     $('.pjd__title').textContent = d.title;
     const links = d.li.querySelector('.pj-item__links');
@@ -370,6 +374,50 @@ export function initProjects(app) {
     $('.pjd__body').scrollTop = 0;
     panel.scrollTop = 0;
   }
+
+  // ── Galerie de captures (fiche) ───────────────────────
+  // Une piste à défilement horizontal (glisser au doigt, molette, flèches) ;
+  // sans capture, la bulle du projet reste seule.
+  const gal = $('.pjd__gal'), track = $('.pjd__track'), dots = $('.pjd__dots');
+  let shotAt = 0;
+  function fillGallery(d) {
+    const has = d.shots.length > 0;
+    gal.hidden = !has;
+    $('.pjd__media').classList.toggle('has-shots', has);
+    $('.pjd__media').dataset.device = d.device;
+    track.innerHTML = d.shots.map((s, i) => `
+      <figure class="pjd__slide" aria-label="${i + 1} sur ${d.shots.length}">
+        <div class="pjd__frame pjd__frame--${d.device}"><img src="${esc(s.src)}" alt="${esc(s.alt)}" decoding="async"${i ? ' loading="lazy"' : ''}></div>
+        ${s.alt ? `<figcaption>${esc(s.alt)}</figcaption>` : ''}
+      </figure>`).join('');
+    track.querySelectorAll('img').forEach((img) => {
+      const done = () => img.closest('.pjd__frame').classList.add('is-loaded');
+      if (img.complete) done(); else { img.onload = done; img.onerror = () => img.closest('.pjd__slide').remove(); }
+    });
+    dots.innerHTML = d.shots.length > 1 ? d.shots.map(() => '<i></i>').join('') : '';
+    gal.classList.toggle('is-single', d.shots.length < 2);
+    track.scrollLeft = 0;
+    setShot(0);
+  }
+  function setShot(i) {
+    shotAt = i;
+    [...dots.children].forEach((n, k) => n.classList.toggle('is-on', k === i));
+    const n = track.children.length;
+    gal.querySelector('[data-shot="-1"]').disabled = i <= 0;
+    gal.querySelector('[data-shot="1"]').disabled = i >= n - 1;
+  }
+  function goShot(i) {
+    const n = track.children.length;
+    if (!n) return;
+    i = Math.max(0, Math.min(n - 1, i));
+    track.scrollTo({ left: i * track.clientWidth, behavior: REDUCE.matches ? 'auto' : 'smooth' });
+    setShot(i);
+  }
+  track.addEventListener('scroll', () => {
+    const i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+    if (i !== shotAt) setShot(i);
+  }, { passive: true });
+  gal.querySelectorAll('[data-shot]').forEach((b) => b.addEventListener('click', () => goShot(shotAt + +b.dataset.shot)));
 
   const contentParts = () => [...$('.pjd__content').children].filter((n) => !n.hidden);
   const anim = (el, frames, o) => (REDUCE.matches || !el ? null : el.animate(frames, { fill: 'both', easing: 'cubic-bezier(.16,1,.3,1)', ...o }));
@@ -394,6 +442,7 @@ export function initProjects(app) {
       const dir = opts.dir || 1;
       contentParts().forEach((n, i) => anim(n, [{ opacity: 0, transform: `translateX(${24 * dir}px)` }, { opacity: 1, transform: 'none' }], { duration: 420, delay: i * 35 }));
       anim($('.pjd__orb'), [{ opacity: 0, transform: 'scale(.85)' }, { opacity: 1, transform: 'none' }], { duration: 520 });
+      anim(gal.hidden ? null : gal, [{ opacity: 0, transform: `translateX(${32 * dir}px)` }, { opacity: 1, transform: 'none' }], { duration: 520 });
     }
     $('.pjd__title').focus({ preventScroll: true });
     // Historique : « retour » ferme la fiche ; le lien reste partageable.
@@ -420,6 +469,7 @@ export function initProjects(app) {
       { duration: 620, easing: 'cubic-bezier(.65,0,.35,1)' });
     a.onfinish = () => a.cancel();
     anim($('.pjd__orb'), [{ opacity: 0, transform: 'scale(.55)' }, { opacity: 1, transform: 'none' }], { duration: 700, delay: 80 });
+    anim(gal.hidden ? null : gal, [{ opacity: 0, transform: 'scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 700, delay: 140 });
     contentParts().forEach((n, i) => anim(n, [{ opacity: 0, transform: 'translateY(22px)' }, { opacity: 1, transform: 'none' }], { duration: 560, delay: 240 + i * 60 }));
     [$('.pjd__nav'), $('.pjd__close')].forEach((n) => anim(n, [{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 520 }));
   }
@@ -477,6 +527,12 @@ export function initProjects(app) {
   dlg.querySelectorAll('[data-step]').forEach((b) => b.addEventListener('click', () => step(+b.dataset.step)));
   dlg.addEventListener('keydown', (e) => {
     if (e.target.closest('input, textarea')) return;
+    // Dans la galerie, les flèches changent de capture, pas de projet.
+    if (e.target.closest('.pjd__gal') && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+      e.preventDefault();
+      goShot(shotAt + (e.key === 'ArrowRight' ? 1 : -1));
+      return;
+    }
     if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
   });

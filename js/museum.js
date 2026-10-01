@@ -100,7 +100,11 @@ const SECTIONS = {
         title: 'BTS Systèmes Numériques, option B Électronique et Communication',
         context: 'Projet de fin d\'études réalisé en équipe : « Jardin connecté », pour permettre à un jardinier de surveiller et contrôler à distance l\'humidité de son sol depuis une interface sur téléphone.',
         desc: 'Formation orientée systèmes embarqués, électronique et communication numérique.',
-        role: 'Ma contribution : travail sur le capteur d\'humidité, Arduino Uno, programmation en C / C++. Le câblage, le prototype et certains composants ont été réalisés avec l\'équipe.',
+        role: 'Ma contribution : travail sur le capteur d\'humidité, carte Teensy 3.6 et Arduino Uno, programmation en C / C++ (carte) et C# (interface). Le câblage, le prototype et certains composants ont été réalisés avec l\'équipe.',
+        photos: [
+          { file: 'jardin-connecte-montage', alt: 'Banc de test du capteur capacitif d\'humidité du sol, avec le logiciel Arduino' },
+          { file: 'jardin-connecte-materiel', alt: 'Matériel nécessaire à ma partie du projet' },
+        ],
       },
       {
         short: 'DORANCO',
@@ -109,6 +113,7 @@ const SECTIONS = {
         date: '01/2023 - 06/2023',
         title: 'Formation Développeur Web Full Stack',
         place: 'Doranco',
+        logo: 'doranco-logo',
         desc: 'Six mois de formation au développement web full stack, avant l\'entrée à l\'ETNA.',
       },
       {
@@ -117,6 +122,7 @@ const SECTIONS = {
         kind: 'ACADÉMIQUE',
         date: '10/2023 - 10/2026',
         title: 'ETNA, Bachelor puis Master',
+        logo: 'etna-logo',
         details: [
           'Bachelor Concepteur Développeur d\'Applications Web (2023 → 2024)',
           'Master Architecte de Systèmes d\'Information (2024 → 2026)',
@@ -129,6 +135,7 @@ const SECTIONS = {
         kind: 'PROFESSIONNEL',
         date: '01/2024 - 10/2026',
         title: 'Développeur Web Full Stack en alternance',
+        logo: 'devphantom-logo-recadre',
         place: 'DevPhantom · en parallèle de l\'ETNA · équipe d\'environ 4 personnes',
         context: 'Après les rendez-vous clients : compréhension du besoin, récupération des idées et fonctionnalités, définition de la solution, développement ou reprise de projets, création de fonctionnalités et de SaaS. Travail avec Jira, méthodologie Agile, adaptation aux contraintes techniques et métier.',
         desc: 'Une caractéristique importante de mon profil ici : m\'adapter rapidement à un nouveau projet et apprendre les technologies nécessaires au besoin.',
@@ -148,12 +155,15 @@ const SECTIONS = {
         ],
       },
     ],
+    // Images (mode classique, converties par npm run images depuis assets/img/_raw/) :
+    //   logo   → logo de l'école / l'entreprise, en tête du panneau
+    //   photos → illustrations de l'étape (`file` sans extension, `alt` = légende)
     // Jalons ponctuels (mode classique : petits points sur la frise).
     // `step` = l'étape pendant laquelle le jalon a eu lieu. Les projets datés
     // (`date` dans SECTIONS.projets.items) s'y ajoutent automatiquement.
     milestones: [
       { slug: 'bts-diplome', kind: 'DIPLÔME', date: '2022', title: 'BTS Systèmes Numériques obtenu', step: 'bts' },
-      { slug: 'pix', kind: 'CERTIFICATION', date: '2022', title: 'Certification Pix', desc: 'Certification des compétences numériques.' },
+      { slug: 'pix', kind: 'CERTIFICATION', date: '2022', title: 'Certification Pix', desc: 'Certification des compétences numériques.', logo: 'pix-logo' },
       { slug: 'piscine-etna', kind: 'ÉTAPE', date: '10/2023', title: 'Piscine ETNA', desc: 'Période intensive d\'admission, point de départ du cursus ETNA.', step: 'etna' },
       { slug: 'bachelor', kind: 'DIPLÔME', date: '2024', title: 'Bachelor Concepteur Développeur d\'Applications Web', step: 'etna' },
       { slug: 'master', kind: 'DIPLÔME', date: '10/2026', title: 'Master Architecte de Systèmes d\'Information', step: 'etna' },
@@ -183,7 +193,10 @@ const SECTIONS = {
     // Champs optionnels lus par le mode classique seulement :
     //   status → disponibilité affichée telle quelle (sinon : « En ligne »
     //            s'il y a un lien, « Indisponible » sinon)
-    //   image  → miniature (sinon assets/img/projets/<slug>.webp s'il existe)
+    //   shots  → captures : `file` = nom dans assets/img/_raw/ (sans extension),
+    //            `alt` = légende. La première sert de couverture (bulle,
+    //            info-bulle, liste). npm run images les convertit en webp.
+    //   device → 'mobile' : captures de téléphone (cadre portrait)
     items: [
       {
         short: 'INFINITIA',
@@ -195,6 +208,9 @@ const SECTIONS = {
         role: 'Projet DevPhantom, en équipe. J\'ai participé à la création à partir de zéro après un échange avec le client : conception de la base de données, développement du backend, préparation de l\'architecture du projet.',
         desc: 'Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n\'a finalement pas été terminée, le client ayant cessé de répondre.',
         links: [],
+        shots: [
+          { file: 'infinitia-database-schema', alt: 'Schéma de la base de données conçu pour la plateforme' },
+        ],
         accent: '#19e8ff',
       },
       {
@@ -210,6 +226,9 @@ const SECTIONS = {
         links: [
           { label: 'Voir le site', url: 'https://allsab-ms.com/' },
         ],
+        shots: [
+          { file: 'allsab-ms-admin', alt: 'Tableau de bord de l\'intranet : pointages, congés, remboursements, planning' },
+        ],
         accent: '#8a3bff',
       },
       {
@@ -222,6 +241,10 @@ const SECTIONS = {
         role: 'Projet DevPhantom, en équipe. Développement de plusieurs CRUD, de fonctionnalités liées à la communication interne, et participation à l\'évolution de la plateforme.',
         desc: 'Plateforme destinée à faciliter le travail opérationnel et la communication interne.',
         links: [],
+        shots: [
+          { file: 'hexagon-login', alt: 'Page de connexion de l\'intranet' },
+          { file: 'hexagon-home', alt: 'Tableau de bord administrateur' },
+        ],
         accent: '#ff2bb0',
       },
       {
@@ -234,6 +257,9 @@ const SECTIONS = {
         role: 'Projet DevPhantom, en équipe. Développement de CRUD, génération de rapports, exports PDF, Excel et CSV.',
         desc: 'Plateforme destinée à faciliter la génération de rapports et la communication interne.',
         links: [],
+        shots: [
+          { file: 'gexp-dashboard', alt: 'Tableau de bord : chiffre d\'affaires, commandes et facturation' },
+        ],
         accent: '#19e8ff',
       },
       {
@@ -248,6 +274,13 @@ const SECTIONS = {
         links: [
           { label: 'App Store', url: 'https://apps.apple.com/fr/app/ilamiria/id6749936753' },
         ],
+        device: 'mobile',
+        shots: [
+          { file: 'ilamiria-onboarding-2', alt: 'Notification d\'un sujet tendance' },
+          { file: 'ilamiria-onboarding-4', alt: 'Idées de contenu personnalisées par l\'IA' },
+          { file: 'ilamiria-onboarding-1', alt: 'Présentation des alertes tendances' },
+          { file: 'ilamiria-onboarding-3', alt: 'Présentation des idées générées par IA' },
+        ],
         accent: '#8a3bff',
       },
       {
@@ -261,6 +294,14 @@ const SECTIONS = {
         role: 'Projet interne DevPhantom, en équipe. J\'étais principalement impliqué sur le développement backend.',
         desc: 'Application pour organiser des sorties entre amis : définition d\'un budget, choix d\'un lieu et d\'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d\'autres.',
         links: [],
+        device: 'mobile',
+        shots: [
+          { file: 'badn-onboarding-1', alt: 'Suggestions de sorties' },
+          { file: 'badn-onboarding-2', alt: 'Choix de la date par vote du groupe' },
+          { file: 'badn-onboarding-3', alt: 'Sorties à venir' },
+          { file: 'badn-contacts', alt: 'Contacts, groupes et amis' },
+          { file: 'badn-profil', alt: 'Profil et paramètres' },
+        ],
         accent: '#ff123d',
       },
       {
@@ -276,6 +317,10 @@ const SECTIONS = {
         desc: 'Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l\'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.',
         links: [
           { label: 'Voir le projet', url: 'https://wild-kedougou-experience.hitmind-pro.workers.dev/' },
+        ],
+        shots: [
+          { file: 'wild-kedougou-home', alt: 'Page d\'accueil' },
+          { file: 'wild-kedougou-reserver', alt: 'Formulaire de réservation' },
         ],
         accent: '#19e8ff',
       },
@@ -305,9 +350,18 @@ const SECTIONS = {
         pick: true,
         tech: ['React Native', 'Symfony', 'MySQL', 'Cloudflare', 'Railway', 'Expo'],
         role: 'Projet personnel, conception et développement complet : app mobile, API et mise en production.',
-        desc: 'Application mobile dédiée à la pratique islamique : prières, lecture du Coran, rappels quotidiens. Disponible sur l\'App Store.',
+        desc: 'Teste ta connaissance du Coran : application mobile pour s\'entraîner à reconnaître les versets, avec écoute de récitations, plusieurs modes de quiz et suivi de progression. Disponible sur l\'App Store.',
         links: [
           { label: 'Télécharger', url: 'https://apps.apple.com/us/app/islaah/id6758726142' },
+        ],
+        device: 'mobile',
+        shots: [
+          { file: 'islaah-home-logged-in', alt: 'Accueil : les modes de jeu' },
+          { file: 'islaah-onboarding', alt: 'Écran de bienvenue' },
+          { file: 'islaah-audio-listening', alt: 'Écoute d\'un verset et choix de la sourate' },
+          { file: 'islaah-bad-answer', alt: 'Correction après une mauvaise réponse' },
+          { file: 'islaas-levels', alt: 'Système de rangs' },
+          { file: 'islaah-home-logged-out', alt: 'Accueil sans compte' },
         ],
         accent: '#8a3bff',
       },
@@ -324,6 +378,9 @@ const SECTIONS = {
         links: [
           { label: 'Accéder', url: 'https://prospectly.hitmind-pro.workers.dev/' },
         ],
+        shots: [
+          { file: 'prospectly-search', alt: 'Recherche d\'enseignes : fiche d\'un commerce' },
+        ],
         accent: '#ff123d',
       },
       {
@@ -338,6 +395,11 @@ const SECTIONS = {
         desc: 'Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d\'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d\'avancement, modèles de journée réutilisables (« programmes ») applicables à n\'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.',
         links: [
           { label: 'Voir le projet', url: 'https://oneday-5s9.pages.dev/' },
+        ],
+        device: 'mobile',
+        shots: [
+          { file: 'oneday-home-program', alt: 'Journée du jour avec un programme appliqué' },
+          { file: 'oneday-home-without-program', alt: 'Journée vide : ajout d\'une tâche' },
         ],
         accent: '#19e8ff',
       },
@@ -355,6 +417,12 @@ const SECTIONS = {
         links: [
           { label: 'Accéder', url: 'https://skywalk-chi.vercel.app/' },
         ],
+        shots: [
+          { file: 'skywalk-home-logged-out', alt: 'Page d\'accueil' },
+          { file: 'skywalk-home', alt: 'Tableau de bord' },
+          { file: 'skywalk-search-destination', alt: 'Exploration des destinations' },
+          { file: 'skywalk-create-project', alt: 'Création d\'un projet d\'expatriation' },
+        ],
         accent: '#ff2bb0',
       },
       {
@@ -368,6 +436,10 @@ const SECTIONS = {
         role: 'Projet scolaire ETNA réalisé en binôme (déc. 2024 – janv. 2025) ; j\'ai porté la majeure partie du développement : modélisation Doctrine et migrations, CRUD projets / langues / sources / traductions, import et export CSV, verrouillage des chaînes sources, inscription avec vérification d\'e-mail, contrôle d\'accès par voter.',
         desc: 'Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d\'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d\'accès par rôles.',
         links: [],
+        shots: [
+          { file: 'crowdin-home', alt: 'Page d\'accueil' },
+          { file: 'crowdin-dashboard', alt: 'Tableau de bord : projets et avancement des traductions' },
+        ],
         accent: '#8a3bff',
       },
     ],

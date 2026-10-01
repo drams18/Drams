@@ -30,7 +30,8 @@ function copyStatic() {
     configResolved(c) { outDir = c.build.outDir; },
     closeBundle() {
       for (const p of STATIC) {
-        if (existsSync(p)) cpSync(p, resolve(outDir, p), { recursive: true });
+        // assets/img/_raw : captures brutes, converties par npm run images.
+        if (existsSync(p)) cpSync(p, resolve(outDir, p), { recursive: true, filter: (f) => !/[\\/]_raw([\\/]|$)/.test(f) });
       }
     },
   };

@@ -118,6 +118,24 @@ const families = profile.skillGroups.map(g => ({
   skills: g.items.map((item, i) => ({ item, i, slug: slugify(item), used: projectsUsing(item) })),
 }));
 const allSkills = families.flatMap(f => f.skills.map(s => ({ ...s, fam: f })));
+
+// Logo de chaque compétence : assets/img/logos/<fichier>.svg (logos officiels
+// monochromes Simple Icons / Devicon ; pictos maison pour les notions
+// génériques). Une compétence absente d'ici garde sa bulle sans logo.
+const LOGO = {
+  'React': 'react', 'React Native': 'react', 'Next.js': 'nextdotjs', 'TypeScript': 'typescript',
+  'JavaScript': 'javascript', 'Vite': 'vite', 'Tailwind CSS': 'tailwindcss', 'Redux / Zustand': 'redux',
+  'Node.js': 'nodedotjs', 'Express': 'express', 'NestJS': 'nestjs', 'Symfony': 'symfony', 'Laravel': 'laravel',
+  'PHP': 'php', 'Python': 'python', 'REST API': 'api', 'GraphQL': 'graphql',
+  'MySQL': 'mysql', 'PostgreSQL': 'postgresql', 'Supabase': 'supabase', 'Prisma': 'prisma', 'TypeORM': 'typeorm',
+  'Docker': 'docker', 'Git': 'git', 'GitHub': 'github', 'GitLab': 'gitlab', 'CI/CD': 'cicd', 'Nginx': 'nginx',
+  'AWS': 'amazonwebservices', 'GCP': 'googlecloud', 'Cloudflare': 'cloudflare',
+  'Jest': 'jest', 'Cypress': 'cypress', 'Vitest': 'vitest', 'Playwright': 'playwright',
+  'Figma': 'figma', 'Jira': 'jira', 'Bruno': 'bruno', 'API REST': 'api',
+  'Intégration IA / LLM': 'ai', 'Modèles locaux & API IA selon les projets': 'chip',
+};
+const logoOf = (item) => LOGO[item] && existsSync(join(ROOT, `assets/img/logos/${LOGO[item]}.svg`))
+  ? `assets/img/logos/${LOGO[item]}.svg` : null;
 const maxUse = Math.max(1, ...allSkills.map(s => s.used.length));
 const mainStack = allSkills.filter(s => s.used.length >= 2).sort((a, b) => b.used.length - a.used.length);
 const skillOfTech = (t) => allSkills.find(s => techMatches(s.item, t)) || null;
@@ -155,10 +173,14 @@ function contextOf(p) {
 const titleCase = (s) => s.toLowerCase().replace(/(^|[\s-])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
 const bubbleName = (p) => p.title.length > 26 && p.short ? titleCase(p.short) : p.title;
 
-// Miniature : champ `image` du projet, sinon assets/img/projets/<slug>.webp
-// s'il existe (il suffit de déposer le fichier, 16:10 conseillé).
-const projectImage = (p) => p.image
-  || (existsSync(join(ROOT, `assets/img/projets/${p.slug}.webp`)) ? `assets/img/projets/${p.slug}.webp` : null);
+// Captures (museum.js `shots`, converties par npm run images) : seules
+// celles dont le webp existe sont publiées. Couverture : assets/img/projets/
+// <slug>.webp (la première capture, réduite). Sans capture : le fond actuel.
+const projectShots = (p) => (p.shots || [])
+  .map(s => ({ src: `assets/img/projets/${s.file}.webp`, alt: s.alt || '' }))
+  .filter(s => existsSync(join(ROOT, s.src)));
+const projectImage = (p) => projectShots(p).length && existsSync(join(ROOT, `assets/img/projets/${p.slug}.webp`))
+  ? `assets/img/projets/${p.slug}.webp` : null;
 
 // ── Chronologie ────────────────────────────────────────
 // « 01/2024 - 10/2026 », « 2021 - début 2022 », « 2020 »… → années décimales.
@@ -199,7 +221,7 @@ const teamOf = (p) => {
 };
 const milestones = [
   ...(SECTIONS.parcours.milestones || []).map(m => ({
-    slug: m.slug, title: m.title, desc: m.desc || '', step: m.step || null,
+    slug: m.slug, title: m.title, desc: m.desc || '', step: m.step || null, logo: m.logo || null,
     kind: m.kind === 'ÉTAPE' ? 'edu' : 'award', label: PIN_KIND[m.kind] || m.kind, pt: pointOf(m.date),
   })),
   ...projects.filter(p => p.date && p.category !== 'Professionnel').map(p => ({
@@ -220,6 +242,20 @@ function stepLabel(s) {
   const words = `${s.title} ${s.place || ''}`.split(/[\s·,()]+/);
   return words.find(w => w.toUpperCase() === s.short) || titleCase(s.short);
 }
+// Images du parcours (museum.js `logo` / `photos`, converties par npm run
+// images) : publiées seulement si le fichier existe.
+const tlImage = (file) => file && ['webp', 'svg'].map(e => `assets/img/parcours/${file}.${e}`).find(f => existsSync(join(ROOT, f)));
+const tlLogo = (file, name, L) => {
+  const src = tlImage(file);
+  return src ? `<p class="tl-logo"><img src="${L.up}${src}" alt="Logo ${esc(name)}" decoding="async"></p>` : '';
+};
+const tlPhotos = (photos, L) => {
+  const list = (photos || []).map(ph => ({ ...ph, src: tlImage(ph.file) })).filter(ph => ph.src);
+  return list.length ? `
+              <div class="tl-photos">${list.map(ph => `
+                <figure><a href="${L.up}${ph.src}" target="_blank" rel="noopener"><img src="${L.up}${ph.src}" alt="${esc(ph.alt)}" loading="lazy" decoding="async"></a>${ph.alt ? `<figcaption>${esc(ph.alt)}</figcaption>` : ''}</figure>`).join('')}
+              </div>` : '';
+};
 const firstYear = Math.floor(Math.min(...dated.map(t => t.span.start)));
 const lastYear  = Math.max(...dated.map(t => Math.ceil(t.span.end ?? t.span.start + 1)), seeking ? seeking.year + 1 : 0);
 
@@ -557,7 +593,7 @@ function profilPage() {
 function projectCover(p, L) {
   const img = projectImage(p);
   if (img) {
-    return `<div class="pj-cover"><img class="pj-cover__img" src="${L.up}${esc(img)}" alt="Aperçu du projet ${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800"></div>`;
+    return `<div class="pj-cover${p.device === 'mobile' ? ' pj-cover--mobile' : ''}"><img class="pj-cover__img" src="${L.up}${esc(img)}" alt="Aperçu du projet ${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800"></div>`;
   }
   // Pas de capture (projet privé ou visuel à venir) : couverture
   // typographique, jamais d'image inventée.
@@ -576,13 +612,14 @@ function techList(p, L) {
 function projectItem(p, L) {
   const ctx = contextOf(p);
   const img = projectImage(p);
+  const shots = img ? projectShots(p).map(s => ({ ...s, src: L.up + s.src })) : [];
   const st = statusOf(p);
   const links = (p.links || []).map(l =>
     `<a class="btn btn--sm" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external', 'ico ico--xs')}</a>`).join('');
   return `
           <li class="pj-item" id="${p.slug}" data-slug="${p.slug}"
               data-cat="${esc(p.category)}" data-tier="${tierOf(p)}" data-status="${st.tone}"
-              data-name="${esc(bubbleName(p))}" data-skills="${projectSkills(p).join(' ')}"${img ? ` data-img="${L.up}${esc(img)}"` : ''}${p.pick ? ' data-pick' : ''}>
+              data-name="${esc(bubbleName(p))}" data-skills="${projectSkills(p).join(' ')}"${img ? ` data-img="${L.up}${esc(img)}" data-shots="${esc(JSON.stringify(shots))}"` : ''}${p.device ? ` data-device="${esc(p.device)}"` : ''}${p.pick ? ' data-pick' : ''}>
             <article aria-labelledby="p-${p.slug}">
               <div class="pj-item__head">
                 <span class="pj-item__orb" aria-hidden="true"></span>
@@ -697,14 +734,14 @@ function parcoursPage() {
       ? `<ul class="tl-panel__details">${s.details.map(d => `<li>${esc(d)}</li>`).join('')}</ul>` : '';
     return `
           <article class="tl-panel tl-panel--${w}" id="${s.slug}" data-step="${s.slug}" data-kind="${kindKey(s)}" data-route="parcours/${s.slug}" aria-labelledby="tl-${s.slug}-t">
-            <header class="tl-panel__head">
+            <header class="tl-panel__head">${tlLogo(s.logo, stepLabel(s), L)}
               <p class="tl-panel__k"><span>${esc(KIND[s.kind] || s.kind)}</span>${esc(s.date)}</p>
               <h2 class="tl-panel__t" id="tl-${s.slug}-t">${esc(s.title)}</h2>
               ${s.place ? `<p class="tl-panel__place">${esc(s.place)}</p>` : ''}
               ${s.desc ? `<p class="tl-panel__lead">${esc(s.desc)}</p>` : ''}
             </header>
             <div class="tl-panel__body">${s.context && !pro.length ? `
-              <p>${esc(s.context)}</p>` : ''}${details}${kin.length ? kinList(kin) : ''}${pro.length ? `
+              <p>${esc(s.context)}</p>` : ''}${tlPhotos(s.photos, L)}${details}${kin.length ? kinList(kin) : ''}${pro.length ? `
               <div class="tl-panel__projects">
                 <p class="mini-title">Projets ${esc(company)} · en équipe</p>
                 <ul>${pro.map(p => `<li><a href="${L.page('projets', p.slug)}" data-cat="${esc(p.category)}"><strong>${esc(p.title)}</strong><span>${esc(p.type)}</span></a></li>`).join('')}</ul>
@@ -724,7 +761,7 @@ function parcoursPage() {
     const route = p ? `projets/${p.slug}` : parent ? `parcours/${parent.slug}` : 'parcours';
     return `
           <article class="tl-panel tl-panel--pin" id="${m.slug}" data-step="${m.slug}" data-kind="${m.kind}" data-route="${route}" aria-labelledby="tl-${m.slug}-t">
-            <header class="tl-panel__head">
+            <header class="tl-panel__head">${tlLogo(m.logo, m.title, L)}
               <p class="tl-panel__k"><span>${esc(m.label)}</span>${esc(m.pt.label)}</p>
               <h2 class="tl-panel__t" id="tl-${m.slug}-t">${esc(m.title)}</h2>
               ${place ? `<p class="tl-panel__place">${esc(place)}</p>` : ''}
@@ -824,9 +861,10 @@ function competencesPage() {
             <h2 class="fam__t" id="fam-${f.key}"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">${esc(f.label)}</span><span class="fam__n">${used}/${f.skills.length} dans les projets</span></h2>
             <ul class="fam__list">${sorted.map(s => {
               const n = s.used.length;
+              const logo = logoOf(s.item);
               return `
-              <li class="sk${n ? '' : ' sk--decl'}" id="${s.slug}" data-skill="${s.slug}" data-fam="${f.key}" data-count="${n}" data-projects="${s.used.map(p => p.slug).join(' ')}" style="--w:${(n / maxUse).toFixed(3)}">
-                <button type="button" class="sk__btn"><span class="sk__name">${esc(s.item)}</span><span class="sk__dots" aria-hidden="true">${'<i></i>'.repeat(n)}</span></button>
+              <li class="sk${n ? '' : ' sk--decl'}" id="${s.slug}" data-skill="${s.slug}" data-fam="${f.key}" data-count="${n}" data-projects="${s.used.map(p => p.slug).join(' ')}"${logo ? ` data-logo="${L.up}${logo}"` : ''} style="--w:${(n / maxUse).toFixed(3)}${logo ? `;--logo:url('${L.up}${logo}')` : ''}">
+                <button type="button" class="sk__btn">${logo ? '<i class="sk__logo" aria-hidden="true"></i>' : ''}<span class="sk__name">${esc(s.item)}</span><span class="sk__dots" aria-hidden="true">${'<i></i>'.repeat(n)}</span></button>
                 <p class="sk__used">${n ? `Utilisée dans ${plural(n, 'projet', 'projets')} : ` : 'Hors des projets présentés ici'}</p>${n ? `
                 <ul class="sk__projects">${s.used.map(p => `<li><a href="${L.page('projets', p.slug)}" data-project="${p.slug}" data-cat="${esc(p.category)}">${esc(p.title)}</a></li>`).join('')}</ul>` : ''}
               </li>`;

@@ -4,7 +4,8 @@
    Chaque compétence du HTML généré porte ses projets (data-projects).
    On en tire un globe qu'on fait tourner à la main :
      • une bulle par compétence, taille = nombre de projets qui
-       l'utilisent (toutes restent visibles, même à zéro) ;
+       l'utilisent (toutes restent visibles, même à zéro), avec le logo
+       officiel de la technologie quand il existe ;
      • familles mêlées au hasard (la couleur dit la famille) ;
      • la tuile se répète : glisser fait « tourner » le monde, avec
        inertie ; les bulles rapetissent et s'estompent vers les bords
@@ -50,7 +51,7 @@ export function initSkills() {
   const famOf = Object.fromEntries(fams.map((f) => [f.key, f]));
   const skills = [...sec.querySelectorAll('.sk')].map((li, i) => ({
     i, li, btn: li.querySelector('.sk__btn'),
-    slug: li.dataset.skill, fam: li.dataset.fam, n: +li.dataset.count || 0,
+    slug: li.dataset.skill, fam: li.dataset.fam, n: +li.dataset.count || 0, logo: li.dataset.logo || null,
     name: li.querySelector('.sk__name').textContent,
     projects: (li.dataset.projects || '').split(' ').filter(Boolean),
   }));
@@ -87,7 +88,10 @@ export function initSkills() {
       el.dataset.i = s.i;
       el.dataset.fam = s.fam;
       el.style.setProperty('--r', `${it.r.toFixed(1)}px`);
-      el.innerHTML = `<span class="skb__c">${it.below ? '' : `<span class="skb__n">${esc(s.name)}</span>`}${s.n && it.r > 44 ? `<span class="skb__k">${s.n}</span>` : ''}</span>${it.below ? `<span class="skb__n">${esc(s.name)}</span>` : ''}`;
+      // Logo officiel de la technologie, au-dessus du nom (seul dans une petite bulle).
+      if (s.logo) { el.classList.add('skb--logo'); el.style.setProperty('--logo', `url('${s.logo}')`); }
+      const logo = s.logo ? '<i class="skb__logo" aria-hidden="true"></i>' : '';
+      el.innerHTML = `<span class="skb__c">${logo}${it.below ? '' : `<span class="skb__n">${esc(s.name)}</span>`}${s.n && it.r > 44 ? `<span class="skb__k">${s.n}</span>` : ''}</span>${it.below ? `<span class="skb__n">${esc(s.name)}</span>` : ''}`;
       return el;
     },
     onPick(it) { hideTip(); select(it.s.slug, { glide: true }); },
@@ -211,7 +215,7 @@ export function initSkills() {
     }).join('');
     openPanel(`
       <div class="skd__top"><p class="skd__fam" data-fam="${s.fam}">${esc(famOf[s.fam].label)}</p><button type="button" class="skd__close" data-close aria-label="Fermer le détail">${icon('close')}</button></div>
-      <h2 class="skd__name" tabindex="-1">${esc(s.name)}</h2>
+      <h2 class="skd__name" tabindex="-1">${s.logo ? `<i class="skd__logo" aria-hidden="true" style="--logo:url('${esc(s.logo)}')"></i>` : ''}${esc(s.name)}</h2>
       <p class="skd__count">${countText(s.n)}</p>
       ${list ? `<ul class="skd__list">${list}</ul>` : `<p class="skd__empty">Compétence de mon profil, absente des ${projects.length} projets présentés ici.</p>`}
       ${related.length ? `<div class="skd__sec"><p class="mini-title">Souvent associée à</p><div class="skd__rel">${related.slice(0, 8).map(([k, n]) =>
