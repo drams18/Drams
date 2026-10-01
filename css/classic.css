@@ -261,28 +261,31 @@ html:not(.js) .topbar, .no-app .topbar, .topbar.is-scrolled {
 
 /* ── Portes latérales : page précédente / suivante ──── */
 .worlds { position: fixed; inset: 50% 0 auto; z-index: 40; pointer-events: none; }
-.worlds__door {
-  position: absolute; top: 0; translate: 0 -50%;
-  display: flex; align-items: center; gap: 0; height: 44px; padding: 0 13px;
+.worlds__door {      /* flèche ronde + nom de la page dessous : on sait où elle mène */
+  position: absolute; top: 0; translate: 0 -22px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px; width: 78px;
   color: var(--text-2); text-decoration: none; pointer-events: auto;
+}
+.worlds__door--prev { left: 1px; }
+.worlds__door--next { right: 1px; }
+.worlds__door .ico {
+  box-sizing: content-box; width: 17px; height: 17px; padding: 13px;
   background: color-mix(in srgb, var(--surface) 80%, transparent);
-  border: 1px solid var(--line-2); border-radius: 999px;
-  transition: gap .35s var(--ease-out), padding .35s var(--ease-out), color .2s, border-color .2s, background .2s;
+  border: 1px solid var(--line-2); border-radius: 50%;
+  transition: transform .3s var(--ease-out), border-color .2s, background .2s;
 }
-@supports (backdrop-filter: blur(8px)) { .worlds__door { backdrop-filter: blur(12px); } }
-.worlds__door--prev { left: 18px; }
-.worlds__door--next { right: 18px; flex-direction: row-reverse; }
-.worlds__door .ico { width: 17px; height: 17px; }
+@supports (backdrop-filter: blur(8px)) { .worlds__door .ico { backdrop-filter: blur(12px); } }
 .worlds__l {
-  display: flex; align-items: baseline; gap: 7px; max-width: 0; overflow: hidden; white-space: nowrap;
-  font-size: 14px; font-weight: 600; color: var(--text);
-  transition: max-width .45s var(--ease-out);
+  max-width: 100%; white-space: nowrap; font-size: 11px; font-weight: 600; letter-spacing: .02em; color: var(--muted);
+  text-shadow: 0 0 10px var(--bg), 0 0 4px var(--bg);
+  transition: color .2s;
 }
-.worlds__l small { font-size: 11.5px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
-.worlds__door:hover, .worlds__door:focus-visible { gap: 10px; padding: 0 17px; color: var(--text); border-color: var(--muted); background: var(--surface); }
-.worlds__door:hover .worlds__l, .worlds__door:focus-visible .worlds__l { max-width: 160px; }
+.worlds__door:hover, .worlds__door:focus-visible { color: var(--text); }
+.worlds__door:hover .ico, .worlds__door:focus-visible .ico { border-color: var(--muted); background: var(--surface); }
+.worlds__door:hover .worlds__l, .worlds__door:focus-visible .worlds__l { color: var(--text); }
 .worlds__door--next:hover .ico { transform: translateX(2px); }
-.worlds__door .ico { transition: transform .3s var(--ease-out); }
+.worlds__door--prev:hover .ico { transform: translateX(-2px); }
+@media (max-width: 1240px) { .worlds__door { width: 46px; } .worlds__door--prev { left: 12px; } .worlds__door--next { right: 12px; } .worlds__l { display: none; } }   /* marge trop étroite pour le nom */
 .page--doc .worlds { display: none; }        /* pages-documents : portes dans le contenu */
 @media (max-width: 760px) { .worlds { display: none; } }
 html:not(.js) .worlds, .no-app .worlds { display: none; }
@@ -330,6 +333,11 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 .pj-bar, .eco-bar { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 18px; }
 @media (max-width: 700px) {
   .world-ui { padding-top: calc(var(--top) + 14px); }
+  /* Les bulles s'effacent sous l'en-tête : le titre de la page reste lisible. */
+  .js:not(.no-app) .page--world :is(.pj, .eco) .world-ui::before {
+    content: ''; position: absolute; inset: 0 0 -28px; z-index: -1; pointer-events: none;
+    background: linear-gradient(var(--bg) 62%, transparent);
+  }
   .world-head__t { font-size: 28px; }
   .world-head__lead { font-size: 13.5px; }
   .pj-bar, .eco-bar { flex-wrap: nowrap; overflow-x: auto; margin: 12px calc(var(--gut) * -1) 0; padding: 2px var(--gut) 4px; scrollbar-width: none; }
@@ -420,6 +428,7 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
   .pf-ctx { letter-spacing: .08em; font-size: 11.5px; }
   .pf-cta .btn { flex: 1 1 100%; }
   .pf-cta { width: 100%; max-width: 340px; }
+  .pf-cta .btn:not(.btn--primary) { background: var(--bg); }     /* les orbes passent derrière, pas à travers */
 }
 
 /* Projets à la une : la preuve, juste sous le nom */
@@ -1007,10 +1016,11 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 /* Jalons : petits points au-dessus de la ligne, empilés s'ils sont proches ;
    un fil pointillé les rattache à leur date. Nom + date en info-bulle. */
 .tl-pin { top: calc(var(--y-pin) - var(--lvl, 0) * var(--lvl-h)); z-index: 1; }
-.tl-pin::before { left: -12px; top: -12px; width: 24px; height: 24px; }
+.tl-pin::before { left: -14px; top: calc(var(--lvl-h) / -2); width: 28px; height: var(--lvl-h); border-radius: 6px; }
 .tl-pin::after {
   content: ''; position: absolute; left: 0; top: 7px; height: calc(var(--y-line) - var(--y-pin) + var(--lvl, 0) * var(--lvl-h) - 10px);
   border-left: 1px dotted color-mix(in srgb, var(--k) 45%, transparent);
+  pointer-events: none;      /* le fil traverse les jalons du dessous : il ne doit pas prendre leur clic */
 }
 .tl-pin .tl-node__dot { width: 9px; height: 9px; border: 0; background: var(--k); }
 .tl-pin[data-kind="award"] .tl-node__dot { border-radius: 1px; rotate: 45deg; }

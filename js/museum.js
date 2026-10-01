@@ -25,6 +25,14 @@ const CATEGORY_ACCENT = {
   'Scolaire':      '#8a3bff', // violet
 };
 
+// Disponibilité : « dès <mois courant> », recalculée à chaque chargement
+// (mode aventure) et à chaque build (mode classique, puis js/seeking.js
+// la remet à jour dans la page).
+const SEEKING_MONTHS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+function seekingNow(d = new Date()) {
+  return `En recherche de CDI (dès ${SEEKING_MONTHS[d.getMonth()]} ${d.getFullYear()})`;
+}
+
 const SECTIONS = {
   profile: {
     id: 'profile',
@@ -36,7 +44,7 @@ const SECTIONS = {
       location: 'Île-de-France',
       availability: 'Alternance chez DevPhantom',
       // Ce que je recherche, information n°1 pour un recruteur (mode classique : hero).
-      seeking: 'En recherche de CDI (dès sept. 2026)',
+      seeking: seekingNow(),
       description: 'Développeur Web Full Stack. Je pars d\'un besoin métier, je le comprends, et je le transforme en solution concrète, du frontend au backend. Je m\'intègre vite à une base de code existante et j\'apprends les outils nécessaires au projet.',
       photo: 'assets/img/profile.jpg',
       languages: [
@@ -71,7 +79,6 @@ const SECTIONS = {
       { label: 'Backend', items: ['Node.js', 'Express', 'NestJS', 'Symfony', 'Laravel', 'PHP', 'Python', 'REST API', 'GraphQL'] },
       { label: 'Bases de données', items: ['MySQL', 'PostgreSQL', 'Supabase', 'Prisma', 'TypeORM'] },
       { label: 'DevOps / Infrastructure', items: ['Docker', 'Git', 'GitHub', 'GitLab', 'CI/CD', 'Nginx', 'AWS', 'GCP', 'Cloudflare'] },
-      { label: 'Tests', items: ['Jest', 'Cypress', 'Vitest', 'Playwright'] },
       { label: 'Outils / conception', items: ['Figma', 'Jira', 'Bruno', 'API REST'] },
       { label: 'IA / LLM', items: ['Intégration IA / LLM', 'Modèles locaux & API IA selon les projets'] },
     ],

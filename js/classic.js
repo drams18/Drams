@@ -93,6 +93,8 @@
     var t = e.target;
     if (t.closest && t.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"], [data-keys], [role="tablist"], dialog, .eco-panel')) return;
     if (doc.querySelector('dialog[open]') || (nav && nav.classList.contains('is-open'))) return;
+    // Parcours : ← → parcourent la frise (src/classic/timeline.js), pas les pages.
+    if (doc.body.dataset.page === 'parcours' && !root.classList.contains('no-app')) return;
     if (go(e.key === 'ArrowLeft' ? 'prev' : 'next')) e.preventDefault();
   });
 

@@ -370,7 +370,7 @@ function worlds(page, L) {
   const prev = PAGES[page.i - 1], next = PAGES[page.i + 1];
   const door = (p, dir) => p ? `
     <a class="worlds__door worlds__door--${dir}" href="${L.page(p.key)}" rel="${dir}" aria-keyshortcuts="${dir === 'prev' ? 'ArrowLeft' : 'ArrowRight'}">
-      ${icon(dir === 'prev' ? 'back' : 'arrow')}<span class="worlds__l"><small>${p.n}</small>${p.label}</span>
+      ${icon(dir === 'prev' ? 'back' : 'arrow')}<span class="worlds__l">${p.label}</span>
     </a>` : '';
   return `
   <nav class="worlds" aria-label="Page précédente et suivante">${door(prev, 'prev')}${door(next, 'next')}
@@ -485,6 +485,7 @@ ${topbar(page, L)}
   </main>
 ${worlds(page, L)}${scrolls ? footer(L) : ''}
 
+  <script src="${L.up}js/seeking.js"></script>
   <script src="${L.up}js/deeplink.js"></script>${scripts ? `\n  ${scripts.replaceAll('{up}', L.up)}` : ''}
   <script src="${L.up}js/classic.js"></script>
   <script type="module" src="${L.up}src/classic-app.js"></script>
@@ -518,7 +519,7 @@ function legend(groups) {
 // ══════════════════════════════════════════════════════
 function profilPage() {
   const page = PAGE.profil;
-  const ctx = [bio.location, ...seekingBits(bio.seeking)].map(m => `<span class="pf-ctx__i">${esc(m)}</span>`).join('');
+  const ctx = [bio.location, ...seekingBits(bio.seeking)].map(m => `<span class="pf-ctx__i" data-seeking>${esc(m)}</span>`).join('');
   const [first, ...rest] = displayName.split(' ');
   // Les technologies les plus utilisées (nombre de projets), en orbes
   // flottantes autour du nom : logo, couleur = famille, taille = usage.
@@ -612,7 +613,7 @@ function profilPage() {
             <span class="door__n">${PAGE[d.key].n}</span>
             <span class="door__l">${PAGE[d.key].label}</span>
             <span class="door__q">${esc(d.q)}</span>
-            <span class="door__h">${esc(d.hint)}</span>
+            <span class="door__h" data-seeking>${esc(d.hint)}</span>
             ${icon('arrow', 'ico door__go')}
           </a></li>`).join('')}
         </ol>
@@ -823,7 +824,7 @@ function parcoursPage() {
           <article class="tl-panel tl-panel--next" id="${next.slug}" data-step="${next.slug}" data-kind="next" data-route="parcours" aria-labelledby="tl-next-t">
             <header class="tl-panel__head">
               <p class="tl-panel__k"><span>Et ensuite</span>${next.year}</p>
-              <h2 class="tl-panel__t" id="tl-next-t">${esc(bio.seeking)}</h2>
+              <h2 class="tl-panel__t" id="tl-next-t" data-seeking>${esc(bio.seeking)}</h2>
               <p class="tl-panel__place">${esc(bio.title)} · ${esc(bio.location)}</p>
               <p class="tl-panel__lead">${esc(profile.positioning)}</p>
             </header>
@@ -846,7 +847,7 @@ function parcoursPage() {
     return `<a class="tl-node tl-node--${e.type === 'next' ? 'next' : e.w}" href="#${slug}" data-step="${slug}" data-kind="${e.type === 'next' ? 'next' : kindKey(e.s)}"${e.align ? ` data-align="${e.align}"` : ''} style="--at:${at(e.at)}">
               <span class="tl-node__dot" aria-hidden="true"></span>
               <span class="tl-node__l">${esc(l)}</span>
-              <span class="tl-node__d">${esc(d)}</span>
+              <span class="tl-node__d"${e.type === 'next' ? ' data-seeking' : ''}>${esc(d)}</span>
             </a>`;
   };
   const bars = dated.filter(t => t.span.end).map(({ s, span }) =>
@@ -999,7 +1000,7 @@ function contactPage() {
       </div>
       <div class="ct-stage">
         <div class="ct-hero">
-          ${bio.seeking ? `<p class="ct-ctx"><span class="pulse" aria-hidden="true"></span><span>${esc(bio.seeking)}</span><span>${esc(bio.location)}</span></p>` : ''}
+          ${bio.seeking ? `<p class="ct-ctx"><span class="pulse" aria-hidden="true"></span><span data-seeking>${esc(bio.seeking)}</span><span>${esc(bio.location)}</span></p>` : ''}
           <h1 class="ct-title" id="contact-title">Travaillons <em>ensemble.</em></h1>
         </div>
         <ul class="ct-orbs" aria-label="Moyens de contact">${orbs.map(orb).join('')}
@@ -1047,7 +1048,7 @@ function contactPage() {
 // ── Écran de sélection : bloc identité ──────────────────
 function identity() {
   return `
-        ${bio.seeking ? `<p class="pill sel-status"><span class="pulse" aria-hidden="true"></span>${esc(bio.seeking)}</p>` : ''}
+        ${bio.seeking ? `<p class="pill sel-status"><span class="pulse" aria-hidden="true"></span><span data-seeking>${esc(bio.seeking)}</span></p>` : ''}
         <h1 class="sel-name">${esc(displayName)}</h1>
         <p class="sel-title">${esc(bio.title)} <span>· ${esc(bio.location)}</span></p>
         `;

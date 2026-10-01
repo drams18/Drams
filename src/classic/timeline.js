@@ -118,12 +118,22 @@ export function initTimeline() {
     e.preventDefault();
     select(to, { focus: true });
   });
-  tablist.addEventListener('keydown', (e) => {
+  function onKey(e) {
     const k = { ArrowRight: 1, ArrowLeft: -1, Home: -Infinity, End: Infinity }[e.key];
     if (k === undefined) return;
     e.preventDefault();
     const i = Math.min(nodes.length - 1, Math.max(0, (current ?? 0) + (Number.isFinite(k) ? k : k > 0 ? nodes.length : -nodes.length)));
     select(nodes[i].dataset.step, { focus: true });
+  }
+  tablist.addEventListener('keydown', onKey);
+  // ← → parcourent la frise dès l'arrivée sur la page, sans avoir à cliquer un point.
+  doc.addEventListener('keydown', (e) => {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const t = e.target;
+    if (t.closest && t.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"], [role="tablist"], dialog, .nav')) return;
+    if (doc.querySelector('dialog[open], .nav.is-open')) return;
+    onKey(e);
   });
   // Survol d'un nœud : sa barre (ou celle de l'étape du jalon) s'allume.
   nodes.forEach((n) => {
