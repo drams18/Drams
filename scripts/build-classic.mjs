@@ -786,11 +786,9 @@ function parcoursPage() {
               <p class="tl-panel__k"><span>${esc(m.label)}</span>${esc(m.pt.label)}</p>
               <h2 class="tl-panel__t" id="tl-${m.slug}-t">${esc(m.title)}</h2>
               ${place ? `<p class="tl-panel__place">${esc(place)}</p>` : ''}
+              ${p || parent ? `<p class="tl-panel__acts">${p ? `<a class="btn btn--primary btn--sm" href="${L.page('projets', p.slug)}">Voir le projet${icon('arrow')}</a>` : ''}${parent ? `<a class="tl-up" href="#${parent.slug}"><span>Pendant</span>${esc(stepLabel(parent))}</a>` : ''}</p>` : ''}
               ${lead ? `<p class="tl-panel__lead">${esc(lead)}</p>` : ''}
             </header>${shots}
-            <div class="tl-panel__body">
-              <p class="tl-panel__acts">${p ? `<a class="btn btn--primary btn--sm" href="${L.page('projets', p.slug)}">Voir le projet${icon('arrow')}</a>` : ''}${parent ? `<a class="tl-up" href="#${parent.slug}"><span>Pendant</span>${esc(stepLabel(parent))}</a>` : ''}</p>
-            </div>
           </article>`;
   };
   const nextPanel = (L) => `

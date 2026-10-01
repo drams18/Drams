@@ -316,13 +316,6 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
   position: relative; z-index: 5; padding: calc(var(--top) + 26px) var(--gut) 0; max-width: 940px;
   pointer-events: none;
 }
-/* Zone calme derrière l'en-tête : les bulles passent dessous sans gêner la lecture */
-.js:not(.no-app) .page--world .world-ui::before {
-  content: ''; position: absolute; z-index: -1; left: 0; top: 0; width: min(1180px, 100vw); height: calc(100% + 150px);
-  background: radial-gradient(ellipse 60% 64% at 16% 36%, var(--bg) 50%, color-mix(in srgb, var(--bg) 72%, transparent) 68%, transparent 88%);
-  pointer-events: none;
-}
-.tl .world-ui::before { display: none; }
 .world-ui > * { pointer-events: auto; }
 .js:not(.no-app) .page--world .world-ui { position: absolute; left: 0; right: 0; top: 0; }
 .world-head { display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
@@ -501,10 +494,8 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 }
 .space-vignette {
   position: absolute; inset: 0; z-index: 3; pointer-events: none;
-  background:
-    linear-gradient(var(--bg), transparent 26%),
-    linear-gradient(0deg, var(--bg), transparent 16%),
-    linear-gradient(90deg, color-mix(in srgb, var(--bg) 70%, transparent), transparent 12%, transparent 88%, color-mix(in srgb, var(--bg) 70%, transparent));
+  /* Pas de voile sur les bulles : seul un fondu court garde la barre du haut lisible */
+  background: linear-gradient(var(--bg) calc(var(--top) - 20px), transparent calc(var(--top) + 40px));
 }
 
 .bub {
@@ -889,6 +880,7 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 .tl-photos a:hover img { transform: scale(1.03); }
 .tl-photos figcaption { font-size: 12.5px; line-height: 1.4; color: var(--muted); }
 .tl-panel__acts { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; }
+.tl-panel__head .tl-panel__acts { margin-top: 16px; }
 /* Aperçu d'un projet (jalon) : capture à côté du texte, dessous sur petit écran */
 .tl-shots { display: flex; align-items: flex-start; gap: 12px; margin-top: 22px; text-decoration: none; }
 .tl-shots img {
@@ -899,10 +891,8 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
 .tl-shots--mobile img { flex: 0 1 auto; max-height: min(46vh, 420px); border-radius: 14px; }
 .tl-shots:hover img { transform: translateY(-3px); border-color: var(--k); }
 @media (min-width: 900px) {
-  .tl-panel--shots { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); grid-template-rows: auto 1fr; gap: 0 56px; align-items: start; }
-  .tl-panel--shots .tl-panel__head { grid-area: 1 / 1; }
-  .tl-panel--shots .tl-panel__body { grid-area: 2 / 1; }
-  .tl-panel--shots .tl-shots { grid-area: 1 / 2 / 3 / 3; align-self: center; margin-top: 0; }
+  .tl-panel--shots { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 0 56px; align-items: start; }
+  .tl-panel--shots .tl-shots { align-self: center; margin-top: 0; }
 }
 @media (max-width: 700px) {
   .tl-shots { margin-top: 16px; gap: 8px; }
@@ -1055,11 +1045,6 @@ html:not(.js) .worlds, .no-app .worlds { display: none; }
    04 · COMPÉTENCES : écosystème (globe)
    ══════════════════════════════════════════════════════ */
 .eco-space { position: absolute; inset: 0; z-index: 1; transition: opacity .4s var(--ease); }
-.eco-space .space-vignette {
-  background:
-    radial-gradient(ellipse 72% 68% at 50% 54%, transparent 55%, color-mix(in srgb, var(--bg) 85%, transparent) 100%),
-    linear-gradient(var(--bg), transparent 24%);
-}
 .skb {
   position: absolute; left: 0; top: 0; z-index: 2;
   width: calc(var(--r) * 2); height: calc(var(--r) * 2);
