@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="night">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -15,19 +15,22 @@
   <meta name="description" content="Grille tarifaire d'Arphan DRAME, Développeur Full Stack. Tarifs particuliers et professionnels, recherche rapide, devis personnalisé.">
   <meta name="theme-color" content="#0a0a0d">
   <script src="js/theme.js"></script>
+  <script>document.documentElement.classList.add('js');</script>
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/site.css">
   <link rel="stylesheet" href="css/classic.css">
   <link rel="stylesheet" href="css/annexe.css">
   <!-- ══════════════════════════════════════════════════════
-       TARIFS.HTML : Grille tarifaire, style du site classique
-       (css/site.css + css/classic.css + css/annexe.css).
+       TARIFS.HTML : Grille tarifaire, même habillage que les pages du
+       mode classique (barre du haut, fond d'ambiance, thèmes jour/nuit :
+       css/site.css + css/classic.css + css/annexe.css).
 
-       Parcours (2–3 interactions) :
+       Une seule question par écran :
          1. Profil       → Particuliers / Professionnels
-         2. Catégorie    → « Je veux un site », « J'ai un problème »…
-         3. Prestations  → liste compacte, nom + prix
+         2. Besoin       → « Je veux un site », « J'ai un problème »…
+         3. Prestations  → nom + prix ; le détail s'ouvre au clic,
+                           la suite de la liste à la demande
 
        En plus, à tout moment :
          • Recherche temps réel (nom + catégorie + mots-clés/synonymes)
@@ -45,64 +48,75 @@
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>
 
+  <a class="skip" href="#tarifsMain">Aller au contenu</a>
+
+  <!-- Même barre que les pages du mode classique -->
   <header class="topbar">
-    <div class="wrap topbar__inner">
-      <a class="brand" href="index.html">A. DRAME</a>
-      <nav class="nav" aria-label="Pages">
-        <a href="classique.html">Portfolio</a>
-        <a href="tarifs.html" aria-current="page">Tarifs</a>
-        <a href="devis.html" data-project-link>Construisez votre projet</a>
+    <div class="topbar__inner">
+      <a class="brand" href="index.html" aria-label="Arphan Drame, accueil"><span>A. DRAME</span></a>
+      <span class="topbar__where" aria-hidden="true">Tarifs</span>
+      <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
+        <a href="classique.html"><span>Profil</span></a>
+        <a href="classique/projets.html"><span>Projets</span></a>
+        <a href="classique/parcours.html"><span>Parcours</span></a>
+        <a href="classique/competences.html"><span>Compétences</span></a>
+        <a href="classique/contact.html"><span>Contact</span></a>
+        <a href="tarifs.html" aria-current="page"><span>Tarifs</span><i class="nav__ink" aria-hidden="true"></i></a>
       </nav>
       <div class="topbar__actions">
-        <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer de thème">
-          <svg class="ico ico--sun" aria-hidden="true"><use href="#i-sun"/></svg>
-          <svg class="ico ico--moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        <a class="topbar__cv" href="assets/CV.pdf" target="_blank" rel="noopener">CV</a>
+        <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer d'ambiance">
+          <svg class="ico ico--sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>
+          <svg class="ico ico--moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>
+        </button>
+        <button type="button" class="icon-btn nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Ouvrir le menu">
+          <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>
         </button>
       </div>
     </div>
   </header>
 
-  <div class="page wrap" id="page">
-    <header class="page-head">
-      <h1 class="page-title" id="pageTitle">Mes tarifs</h1>
-      <p class="page-sub">Arphan Drame · Développeur Full Stack</p>
-    </header>
+  <div class="world world--tarifs">
+    <div class="world__bg" aria-hidden="true"><i></i></div>
 
-    <div class="search">
-      <svg class="ico search__ico" aria-hidden="true"><use href="#i-search"/></svg>
-      <label class="sr-only" for="tarifSearch">Rechercher une prestation</label>
-      <input id="tarifSearch" class="search__input" type="search" inputmode="search"
-             enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false"
-             placeholder="Rechercher une prestation...">
-      <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
+    <div class="page wrap tarifs">
+      <header class="page-head">
+        <nav class="crumbs" id="crumbs" aria-label="Fil d'Ariane"></nav>
+        <h1 class="page-title" id="pageTitle" tabindex="-1">Mes tarifs</h1>
+        <p class="page-sub" id="pageSub">Pour qui est ce projet ?</p>
+      </header>
+
+      <div class="search" role="search">
+        <svg class="ico search__ico" aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
+        <label class="sr-only" for="tarifSearch">Rechercher une prestation</label>
+        <input id="tarifSearch" class="search__input" type="search" inputmode="search"
+               enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false"
+               placeholder="Rechercher une prestation">
+        <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
+      </div>
+      <p class="sr-only" role="status" id="tarifStatus"></p>
+
+      <main id="tarifsMain" class="tarifs-main" tabindex="-1">
+        <noscript>
+          <div class="fallback">
+            <p>La grille interactive nécessite JavaScript.</p>
+            <p>Pour toute demande de tarif ou de devis :
+              <a href="mailto:arphandrame0@gmail.com?subject=Demande%20de%20tarif">arphandrame0@gmail.com</a>
+              ou <a href="devis.html">construisez votre projet</a> pas à pas.</p>
+          </div>
+        </noscript>
+      </main>
     </div>
-
-    <main id="tarifsMain" class="tarifs-main" aria-live="polite">
-      <noscript>
-        <div class="fallback">
-          <p>La recherche interactive nécessite JavaScript.</p>
-          <p>Pour toute demande de tarif ou de devis :
-            <a href="mailto:arphandrame0@gmail.com?subject=Demande%20de%20tarif">arphandrame0@gmail.com</a>
-            ou <a href="devis.html">construisez votre projet</a> pas à pas.</p>
-        </div>
-      </noscript>
-    </main>
-
-    <footer class="page-foot">
-      <a href="index.html" class="btn btn-back">Retour à l'accueil</a>
-      <!-- <p class="allovoisins">
-        Vous m'avez trouvé via <a href="https://www.allovoisins.com/" target="_blank" rel="noopener">AlloVoisins</a> ?
-        Précisez-le lors de votre demande.
-      </p> -->
-    </footer>
   </div>
 
   <!-- Composant de contact commun (E-mail / Téléphone), chargé avant
        le routeur pour que ContactWidget soit prêt à chaque rendu. -->
   <script src="js/contact.js"></script>
-  <!-- « Retour à l'accueil » → dernier mode utilisé (classique ou aventure) -->
+  <!-- Logo → dernier mode utilisé (classique ou aventure) -->
   <script src="js/deeplink.js"></script>
   <script>
     Deeplink.rewriteHomeLinks(document, false);
@@ -111,7 +125,29 @@
     window.projectHref = function () {
       return Deeplink.getMode() === 'aventure' ? 'construire-projet.html' : 'devis.html';
     };
-    document.querySelectorAll('[data-project-link]').forEach(function (a) { a.href = projectHref(); });
+
+    // Barre du haut : menu mobile et fond au défilement (comme js/classic.js,
+    // qui n'est pas chargé ici : il forcerait le mode « classique »).
+    (function () {
+      var nav = document.getElementById('site-nav');
+      var toggle = document.querySelector('.nav-toggle');
+      var topbar = document.querySelector('.topbar');
+      function setNav(open) {
+        nav.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+      }
+      toggle.addEventListener('click', function () { setNav(!nav.classList.contains('is-open')); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && nav.classList.contains('is-open')) { setNav(false); toggle.focus(); }
+      });
+      document.addEventListener('click', function (e) {
+        if (nav.classList.contains('is-open') && !e.target.closest('#site-nav, .nav-toggle')) setNav(false);
+      });
+      function onScroll() { topbar.classList.toggle('is-scrolled', window.scrollY > 24); }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
   </script>
 
   <script>
@@ -124,9 +160,14 @@
     var doc = document;
     var mainEl   = doc.getElementById('tarifsMain');
     var titleEl  = doc.getElementById('pageTitle');
-    var pageEl   = doc.getElementById('page');
+    var subEl    = doc.getElementById('pageSub');
+    var crumbsEl = doc.getElementById('crumbs');
+    var statusEl = doc.getElementById('tarifStatus');
     var input    = doc.getElementById('tarifSearch');
     var clearBtn = doc.getElementById('tarifSearchClear');
+
+    // Prestations visibles d'emblée ; le reste s'affiche à la demande.
+    var LIMIT = 5;
 
     var PROFILES = {
       particuliers:   { label: 'Particuliers',   title: 'Tarifs particuliers' },
@@ -528,218 +569,167 @@
       return n;
     }
 
-    function serviceRow(svc, withTag) {
-      var li = el('li', 'svc' + (svc.profile === 'professionnels' ? ' svc--pro' : ''));
+    function plural(n, word) { return n + ' ' + word + (n > 1 ? 's' : ''); }
 
-      var m = el('div', 'svc__main');
-      var name = el('div', 'svc__name', svc.name);
-      if (withTag) name.appendChild(el('span', 'svc__tag', PROFILES[svc.profile].label));
-      m.appendChild(name);
-      if (svc.desc) m.appendChild(el('p', 'svc__desc', svc.desc));
+    function inCategory(profile, catId) {
+      return SERVICES.filter(function (s) {
+        return s.profile === profile && s.cats.indexOf(catId) !== -1;
+      });
+    }
 
-      var p = el('div', 'svc__price');
+    /* Carte de choix (profil, besoin) : un vrai lien vers l'écran suivant. */
+    function pick(hash, label, hint, cls) {
+      var a = el('a', 'pick' + (cls ? ' ' + cls : ''));
+      a.href = '#' + hash;
+      a.appendChild(el('span', 'pick__label', label));
+      a.appendChild(el('span', 'pick__hint', hint));
+      return a;
+    }
+
+    /* Prestation : nom + prix ; la description s'ouvre au clic
+       (une seule ouverte à la fois, attribut name des <details>). */
+    function serviceItem(svc) {
+      var li = el('li', 'svc-item');
+      var d = el('details', 'svc');
+      d.setAttribute('name', 'svc');
+
+      var head = el('summary', 'svc__head');
+      head.appendChild(el('span', 'svc__name', svc.name));
+      var p = el('span', 'svc__price');
       if (svc.from) p.appendChild(el('span', 'svc__from', 'à partir de'));
       p.appendChild(el('span', 'svc__amount', svc.price));
       if (svc.unit) p.appendChild(el('span', 'svc__unit', svc.unit));
+      head.appendChild(p);
+      var chev = el('span', 'svc__chev');
+      chev.setAttribute('aria-hidden', 'true');
+      head.appendChild(chev);
 
-      li.appendChild(m);
-      li.appendChild(p);
+      d.appendChild(head);
+      d.appendChild(el('p', 'svc__desc', svc.desc));
+      li.appendChild(d);
       return li;
     }
 
-    /* Bloc « Construisez votre projet » + « Demander un devis ». */
-    function helpBlock(profile) {
-      var wrap = el('div', 'help-block');
-      wrap.appendChild(el('p', 'help-block__q', 'Vous ne savez pas quelle prestation choisir ?'));
-      wrap.appendChild(el('p', null, 'Construisez votre projet en quelques étapes.'));
+    /* Liste de prestations dans un panneau, limitée à LIMIT lignes. */
+    function servicePanel(list, title) {
+      var panel = el('section', 'panel');
+      if (title) panel.appendChild(el('h2', 'panel__title', title));
 
-      var row = el('div', 'help-block__row');
-      var build = el('a', 'btn btn-cta', 'Construisez votre projet');
-      build.href = window.projectHref ? projectHref() : 'devis.html';
-      row.appendChild(build);
+      var ul = el('ul', 'svc-list');
+      var items = list.map(serviceItem);
+      // Pas de bouton pour une ou deux lignes de plus.
+      var cut = items.length > LIMIT + 2 ? LIMIT : items.length;
+      items.forEach(function (li, i) {
+        if (i >= cut) li.hidden = true;
+        ul.appendChild(li);
+      });
+      panel.appendChild(ul);
 
-      var devis = el('button', 'btn btn-back btn-back--no-arrow');
+      if (cut < items.length) {
+        var rest = items.length - cut;
+        var more = el('button', 'more', 'Afficher les ' + rest + ' autres prestations');
+        more.type = 'button';
+        more.addEventListener('click', function () {
+          items.forEach(function (li) { li.hidden = false; });
+          more.remove();
+          items[cut].querySelector('summary').focus();
+        });
+        panel.appendChild(more);
+      }
+      return panel;
+    }
+
+    /* Une ligne d'aide sous chaque écran. */
+    function helpLine(profile) {
+      var p = el('p', 'help-line');
+      p.appendChild(el('span', null, 'Vous hésitez ?'));
+
+      var build = el('a', 'text-link', 'Construisez votre projet');
+      build.href = projectHref();
+      build.insertAdjacentHTML('beforeend',
+        '<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg>');
+      p.appendChild(build);
+
+      var devis = el('button', 'inline-link', 'Demander un devis');
       devis.type = 'button';
-      devis.textContent = 'Demander un devis';
       devis.setAttribute('data-contact-cta', '');
       devis.setAttribute('data-contact-subject',
         'Demande de devis personnalisé' + (profile ? ' · ' + PROFILES[profile].label : ''));
-      row.appendChild(devis);
-
-      wrap.appendChild(row);
-      return wrap;
+      p.appendChild(devis);
+      return p;
     }
 
-    function navRow(buttons) {
-      var nav = el('nav', 'nav-row');
-      buttons.forEach(function (b) { nav.appendChild(b); });
-      return nav;
-    }
-    function gotoBtn(cls, label, hash) {
-      var b = el('button', 'btn ' + cls, label);
-      b.type = 'button';
-      b.addEventListener('click', function () { setHash(hash); });
-      return b;
-    }
+    /* ── Vues : { title, sub, crumbs, body } ───────────── */
+    var ROOT = { label: 'Tarifs', hash: 'choix' };
 
-    /* ── Vues ──────────────────────────────────────────── */
     function viewProfile() {
-      var frag = doc.createDocumentFragment();
-      frag.appendChild(el('p', 'lead', 'Pour qui est ce projet ? Choisissez votre profil.'));
-
-      var grid = el('div', 'choice-grid');
-      [
-        { id: 'particuliers', tag: 'Projets personnels', name: 'Particuliers',
-          desc: 'Tarifs accessibles : sites, dépannage, création de visuels et accompagnement.' },
-        { id: 'professionnels', tag: 'Entreprises', name: 'Professionnels',
-          desc: 'Projets complets pour entreprises : sites, e-commerce, applications, maintenance.' }
-      ].forEach(function (c) {
-        var card = el('button', 'choice-card' + (c.id === 'professionnels' ? ' choice-card--pro' : ''));
-        card.type = 'button';
-        card.appendChild(el('span', 'choice-tag', c.tag));
-        card.appendChild(el('span', 'choice-name', c.name));
-        card.appendChild(el('span', 'choice-desc', c.desc));
-        card.appendChild(el('span', 'choice-cta', 'Voir les catégories'));
-        card.addEventListener('click', function () { setHash(c.id); });
-        grid.appendChild(card);
-      });
-      frag.appendChild(grid);
-      frag.appendChild(helpBlock(null));
-      return frag;
+      var grid = el('div', 'pick-grid');
+      grid.appendChild(pick('particuliers', 'Particuliers',
+        'Site, dépannage, CV, visuels, accompagnement.', 'pick--lg pick--perso'));
+      grid.appendChild(pick('professionnels', 'Professionnels',
+        'Site, e-commerce, application, maintenance.', 'pick--lg pick--pro'));
+      return {
+        title: 'Mes tarifs', sub: 'Pour qui est ce projet ?', docTitle: 'Tarifs',
+        crumbs: [], body: [grid, helpLine(null)]
+      };
     }
 
     function viewCategories(profile) {
-      var frag = doc.createDocumentFragment();
-
-      frag.appendChild(navRow([
-        gotoBtn('btn-back', 'Tarifs', 'choix')
-      ]));
-
-      var crumbs = el('p', 'crumbs');
-      frag.appendChild(crumbs);
-
-      frag.appendChild(el('p', 'lead', 'Choisissez la catégorie qui correspond à votre besoin.'));
-
-      var grid = el('div', 'cat-grid');
+      var grid = el('div', 'pick-grid');
       CATEGORIES[profile].forEach(function (cat) {
-        var count = SERVICES.filter(function (s) {
-          return s.profile === profile && s.cats.indexOf(cat.id) !== -1;
-        }).length;
-        var btn = el('button', 'cat-btn');
-        btn.type = 'button';
-        btn.appendChild(el('span', 'cat-btn__label', cat.label));
-        btn.appendChild(el('span', 'cat-btn__meta',
-          cat.hint + ' · ' + count + (count > 1 ? ' prestations' : ' prestation')));
-        btn.addEventListener('click', function () { setHash(profile + '/' + cat.id); });
-        grid.appendChild(btn);
+        grid.appendChild(pick(profile + '/' + cat.id, cat.label, cat.hint));
       });
-      frag.appendChild(grid);
-      frag.appendChild(helpBlock(profile));
-      return frag;
+      return {
+        title: PROFILES[profile].title, sub: 'Quel est votre besoin ?', docTitle: PROFILES[profile].title,
+        crumbs: [ROOT, { label: PROFILES[profile].label }],
+        body: [grid, helpLine(profile)]
+      };
     }
 
     function viewServices(profile, catId) {
       var cat = CATEGORIES[profile].filter(function (c) { return c.id === catId; })[0];
-      var list = SERVICES.filter(function (s) {
-        return s.profile === profile && s.cats.indexOf(catId) !== -1;
-      });
-
-      var frag = doc.createDocumentFragment();
-
-      frag.appendChild(navRow([
-        gotoBtn('btn-back', 'Retour aux catégories', profile),
-      ]));
-
-      var crumbs = el('p', 'crumbs');
-      frag.appendChild(crumbs);
-
-      var panel = el('main', 'panel');
-      var head = el('div', 'cat-head', cat.label);
-      head.appendChild(el('span', 'cat-head__count',
-        list.length + (list.length > 1 ? ' prestations' : ' prestation')));
-      panel.appendChild(head);
-
-      var ul = el('ul', 'svc-list');
-      list.forEach(function (svc) { ul.appendChild(serviceRow(svc, false)); });
-      panel.appendChild(ul);
-      frag.appendChild(panel);
-
-      frag.appendChild(helpBlock(profile));
-      return frag;
+      var list = inCategory(profile, catId);
+      return {
+        title: cat.label,
+        sub: plural(list.length, 'prestation') + '. Touchez une ligne pour le détail.',
+        docTitle: cat.label + ' · ' + PROFILES[profile].title,
+        crumbs: [ROOT, { label: PROFILES[profile].label, hash: profile }, { label: cat.label }],
+        body: [servicePanel(list), helpLine(profile)]
+      };
     }
 
     function viewSearch(query) {
-      var results = search(query);
-      var frag = doc.createDocumentFragment();
+      var q = query.trim();
+      var results = search(query) || [];
+      var view = {
+        title: 'Recherche', docTitle: 'Recherche',
+        crumbs: [ROOT, { label: 'Recherche' }]
+      };
 
-      frag.appendChild(navRow([ backFromSearchBtn() ]));
-
-      if (!results || !results.length) {
+      if (!results.length) {
         var nr = el('div', 'noresult');
-        nr.appendChild(el('p', 'noresult__title', 'Aucune prestation ne correspond'));
-        nr.appendChild(el('p', null, 'Aucune prestation ne correspond à « ' + query.trim() +
-          ' ». Vous avez peut-être un besoin spécifique ?'));
-
+        nr.appendChild(el('p', null, 'Votre besoin est peut-être spécifique : parlons-en.'));
         var btn = el('button', 'btn btn-cta', 'Me contacter');
         btn.type = 'button';
         btn.addEventListener('click', function () {
           openContact(
-            'Demande d\'information : ' + query.trim(),
-            'Bonjour, je souhaiterais avoir des informations concernant : ' + query.trim() + '.'
+            'Demande d\'information : ' + q,
+            'Bonjour, je souhaiterais avoir des informations concernant : ' + q + '.'
           );
         });
         nr.appendChild(btn);
-
-        var alt = el('p', 'noresult__alt');
-        alt.innerHTML = 'Vous ne savez pas par où commencer ? ' +
-          '<a href="' + (window.projectHref ? projectHref() : 'devis.html') + '">Construisez votre projet</a> pas à pas.';
-        nr.appendChild(alt);
-
-        frag.appendChild(nr);
-        return frag;
+        view.sub = 'Aucune prestation pour « ' + q + ' ».';
+        view.body = [nr, helpLine(null)];
+        return view;
       }
 
-      var info = el('p', 'result-info');
-      info.innerHTML = '<b>' + results.length + '</b> résultat' + (results.length > 1 ? 's' : '') +
-        ' pour « ' + escapeHtml(query.trim()) + ' »';
-      frag.appendChild(info);
-
-      var panel = el('main', 'panel');
+      view.sub = plural(results.length, 'résultat') + ' pour « ' + q + ' ».';
+      view.body = [];
       ['particuliers', 'professionnels'].forEach(function (prof) {
         var group = results.filter(function (s) { return s.profile === prof; });
-        if (!group.length) return;
-        var g = el('div', 'result-group');
-        g.appendChild(el('div', 'result-group__title', PROFILES[prof].label));
-        var ul = el('ul', 'svc-list');
-        group.forEach(function (svc) { ul.appendChild(serviceRow(svc, true)); });
-        g.appendChild(ul);
-        panel.appendChild(g);
+        if (group.length) view.body.push(servicePanel(group, PROFILES[prof].label));
       });
-      frag.appendChild(panel);
-      return frag;
-    }
-
-    function backFromSearchBtn() {
-      var r = parseHash();
-      var label, hash;
-      if (r.category)      { label = 'Retour aux prestations'; hash = r.profile + '/' + r.category; }
-      else if (r.profile)  { label = 'Retour aux catégories';  hash = r.profile; }
-      else                 { label = 'Retour aux profils';     hash = 'choix'; }
-      var b = el('button', 'btn btn-back', label);
-      b.type = 'button';
-      b.addEventListener('click', function () {
-        input.value = '';
-        clearBtn.hidden = true;
-        setHash(hash);
-        render(true);
-      });
-      return b;
-    }
-
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, function (c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-      });
+      return view;
     }
 
     /* ── Contact (réutilise js/contact.js) ─────────────── */
@@ -764,52 +754,76 @@
       return { profile: profile, category: category };
     }
 
-    function setHash(h) {
-      if (('#' + h) === location.hash) { render(true); }
-      else { location.hash = h; }        // déclenche hashchange → render()
-    }
-
     function searchActive() { return tokens(input.value).length > 0; }
 
-    function render(doFocus) {
-      var frag, heading, docTitle;
+    function clearSearch() {
+      input.value = '';
+      clearBtn.hidden = true;
+      lastWasSearch = false;
+    }
 
-      if (searchActive()) {
-        pageEl.classList.remove('is-pro');
-        frag = viewSearch(input.value);
-        heading = 'Recherche';
-        docTitle = 'Recherche';
-      } else {
-        var r = parseHash();
-        pageEl.classList.toggle('is-pro', r.profile === 'professionnels');
-
-        if (!r.profile) {
-          frag = viewProfile();
-          heading = 'Mes tarifs';
-          docTitle = 'Tarifs';
-        } else if (!r.category) {
-          frag = viewCategories(r.profile);
-          heading = PROFILES[r.profile].title;
-          docTitle = 'Tarifs ' + r.profile;
+    /* Fil d'Ariane : les étapes précédentes sont des liens (retour). */
+    function renderCrumbs(crumbs) {
+      crumbsEl.innerHTML = '';
+      crumbsEl.hidden = !crumbs.length;
+      if (!crumbs.length) return;
+      var ol = el('ol');
+      crumbs.forEach(function (c) {
+        var li = el('li');
+        if (c.hash) {
+          var a = el('a', null, c.label);
+          a.href = '#' + c.hash;
+          a.addEventListener('click', function (e) {
+            // Quitte la recherche ; même hash → pas de hashchange, on rend ici.
+            e.preventDefault();
+            clearSearch();
+            if (location.hash === '#' + c.hash) render(true);
+            else location.hash = c.hash;
+          });
+          li.appendChild(a);
         } else {
-          frag = viewServices(r.profile, r.category);
-          heading = PROFILES[r.profile].title;
-          docTitle = 'Tarifs ' + r.profile;
+          var here = el('span', null, c.label);
+          here.setAttribute('aria-current', 'page');
+          li.appendChild(here);
         }
+        ol.appendChild(li);
+      });
+      crumbsEl.appendChild(ol);
+    }
+
+    function render(moved) {
+      var isSearch = searchActive();
+      var r = parseHash();
+      var view = isSearch ? viewSearch(input.value)
+        : !r.profile ? viewProfile()
+        : !r.category ? viewCategories(r.profile)
+        : viewServices(r.profile, r.category);
+
+      // En recherche, le fil ramène à l'écran d'où l'on vient.
+      if (isSearch && r.profile) {
+        view.crumbs = [ROOT, { label: PROFILES[r.profile].label, hash: r.profile }, { label: 'Recherche' }];
       }
 
-      titleEl.textContent = heading;
-      document.title = docTitle + ' · Arphan Drame';
+      titleEl.textContent = view.title;
+      subEl.textContent = view.sub;
+      statusEl.textContent = isSearch ? view.sub : '';
+      document.title = view.docTitle + ' · Arphan Drame';
+      renderCrumbs(view.crumbs);
 
       mainEl.innerHTML = '';
-      mainEl.appendChild(frag);
+      view.body.forEach(function (n) { mainEl.appendChild(n); });
 
       // (Re)câble les CTA de devis générés dynamiquement.
       if (window.ContactWidget && window.ContactWidget.init) {
         window.ContactWidget.init(mainEl);
       }
 
-      if (doFocus) { window.scrollTo(0, 0); }
+      // Changement d'écran : retour en haut, le titre reçoit le focus
+      // (lecteurs d'écran, clavier), sauf pendant la saisie d'une recherche.
+      if (moved) {
+        window.scrollTo(0, 0);
+        if (doc.activeElement !== input) titleEl.focus({ preventScroll: true });
+      }
     }
 
     /* ── Écouteurs ─────────────────────────────────────── */
@@ -823,14 +837,16 @@
     });
 
     clearBtn.addEventListener('click', function () {
-      input.value = '';
-      clearBtn.hidden = true;
-      lastWasSearch = false;
+      clearSearch();
       input.focus();
       render(false);
     });
 
-    window.addEventListener('hashchange', function () { render(true); });
+    window.addEventListener('hashchange', function () {
+      // Un choix fait depuis l'écran courant sort de la recherche.
+      clearSearch();
+      render(true);
+    });
 
     render(false);
   })();
