@@ -338,7 +338,7 @@ function topbar(page, L) {
     const cur = p === page;
     return `<a href="${L.page(p.key)}"${cur ? ' aria-current="page"' : ''} data-page-link="${p.key}"><span>${p.label}</span>${cur ? '<i class="nav__ink" aria-hidden="true"></i>' : ''}</a>`;
   }).concat(`<a href="${L.up}tarifs.html"><span>Tarifs</span></a>`,
-    `<a class="nav__cv" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener"><span>CV (PDF)</span></a>`).join('\n        ');
+    `<a class="nav__cv" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener"><span>Voir mon CV</span></a>`).join('\n        ');
   return `
   <header class="topbar">
     <div class="topbar__inner">
@@ -348,7 +348,7 @@ function topbar(page, L) {
         ${nav}
       </nav>
       <div class="topbar__actions">
-        <a class="topbar__cv" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">CV</a>
+        <a class="topbar__cv" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">Voir mon CV</a>
         <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer d'ambiance">
           ${icon('sun', 'ico ico--sun')}
           ${icon('moon', 'ico ico--moon')}
@@ -571,7 +571,7 @@ function profilPage() {
         <p class="pf-ctx"><span class="pulse" aria-hidden="true"></span>${ctx}</p>
         <div class="pf-cta">
           <a class="btn btn--primary" href="${L.page('projets')}">Voir mes projets${icon('arrow')}</a>
-          <a class="btn btn--ghost" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">Télécharger mon CV${icon('download')}</a>
+          <a class="btn btn--ghost" href="${L.up}tarifs.html">Un projet à me confier\u202f?${icon('arrow')}</a>
         </div>
       </div>
       <a class="pf-scroll" href="#a-la-une"><span>Projets à la une</span>${icon('chevron')}</a>
@@ -623,7 +623,7 @@ function profilPage() {
 
   return shell(page, {
     title: `${displayName}, ${bio.title} · Portfolio`,
-    description: `Portfolio d'${displayName}, ${bio.title} en ${bio.location}. ${bio.seeking}. Projets professionnels (${company}), personnels et scolaires, parcours, compétences et contact.`,
+    description: `Portfolio d'${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. Projets professionnels (${company}), personnels et scolaires, parcours, compétences et contact.`,
     ogDescription: `${bio.seeking}. ${profile.positioning}`,
     jsonld: {
       '@context': 'https://schema.org',
@@ -1032,7 +1032,7 @@ function contactPage() {
   };
   return shell(page, {
     title: `Contact · ${displayName}, ${bio.title}`,
-    description: `Contacter ${displayName}, ${bio.title} en ${bio.location}. ${bio.seeking}. E-mail, téléphone, LinkedIn, GitHub, CV et formulaire de contact.`,
+    description: `Contacter ${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. E-mail, téléphone, LinkedIn, GitHub, CV et formulaire de contact.`,
     jsonld: {
       '@context': 'https://schema.org',
       '@type': 'ContactPage',
@@ -1062,11 +1062,11 @@ function person() {
     '@id': `${SITE_URL}#person`,
     name: displayName,
     jobTitle: bio.title,
-    description: `${bio.title} en ${bio.location}. ${bio.seeking || ''}`.trim(),
+    description: `${bio.title} à ${bio.location}. ${bio.seeking || ''}`.trim(),
     url: SITE_URL,
     image: `${SITE_URL}assets/img/og.jpg`,
     email: `mailto:${contact.email}`,
-    address: { '@type': 'PostalAddress', addressRegion: bio.location, addressCountry: 'FR' },
+    address: { '@type': 'PostalAddress', addressLocality: bio.location, addressCountry: 'FR' },
     sameAs: bio.socials.map(s => s.url),
     knowsLanguage: bio.languages.map(l => l.label),
     knowsAbout: [...new Set(profile.skillGroups.flatMap(g => g.items))],

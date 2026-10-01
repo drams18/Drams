@@ -41,7 +41,7 @@ const SECTIONS = {
     bio: {
       name: 'Arphan DRAME',
       title: 'Développeur Web Full Stack',
-      location: 'Île-de-France',
+      location: 'Paris',
       availability: 'Alternance chez DevPhantom',
       // Ce que je recherche, information n°1 pour un recruteur (mode classique : hero).
       seeking: seekingNow(),
