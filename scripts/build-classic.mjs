@@ -551,7 +551,7 @@ function profilPage() {
         <p class="pf-ctx"><span class="pulse" aria-hidden="true"></span>${ctx}</p>
         <div class="pf-cta">
           <a class="btn btn--primary" href="${L.page('projets')}">Voir mes projets${icon('arrow')}</a>
-          <a class="btn btn--ghost" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">${icon('download')}Télécharger mon CV</a>
+          <a class="btn btn--ghost" href="${L.up}tarifs.html">Vous avez un projet\u202f? Contactez-moi${icon('arrow')}</a>
         </div>
       </div>
       <a class="pf-scroll" href="#presentation"><span>Découvrir le profil</span>${icon('chevron')}</a>
