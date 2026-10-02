@@ -17,6 +17,8 @@
      stopMusic()         arrête et remet à zéro
      play(name)          joue un SFX : 'click' | 'open' | 'close' |
                                        'transition' | 'success'
+     synth(name)         bruitage synthétisé : 'jump' | 'land' | 'step' |
+                                       'coin' | 'talk' | 'stamp' | 'fanfare'
      setEnabled(bool) / toggle() / isEnabled()
      setMusicVolume(0..1) / setSfxVolume(0..1)
      onChange(fn)        notifié quand SOUND ON/OFF change
@@ -46,6 +48,19 @@
       transition: { file: 'transition.mp3', volume: 0.45 },
       success:    { file: 'success.mp3',    volume: 0.55 },
     },
+  };
+
+  // Bruitages synthétisés : f = fréquence (Hz), to = glissando, d = durée (s),
+  // at = décalage (s), v = volume. Volontairement très discrets.
+  const SYNTH = {
+    jump:    [{ f: 300, to: 640, d: 0.13, v: 0.045 }],
+    land:    [{ f: 150, to: 70, d: 0.08, v: 0.05, type: 'triangle' }],
+    step:    [{ f: 105, to: 80, d: 0.035, v: 0.022, type: 'triangle' }],
+    coin:    [{ f: 988, d: 0.06, v: 0.045 }, { f: 1319, d: 0.14, v: 0.045, at: 0.06 }],
+    talk:    [{ f: 520, d: 0.035, v: 0.02 }, { f: 620, d: 0.035, v: 0.02, at: 0.05 }],
+    stamp:   [{ f: 523, d: 0.08, v: 0.045 }, { f: 659, d: 0.08, v: 0.045, at: 0.08 }, { f: 784, d: 0.18, v: 0.045, at: 0.16 }],
+    fanfare: [{ f: 523, d: 0.1, v: 0.045 }, { f: 659, d: 0.1, v: 0.045, at: 0.1 }, { f: 784, d: 0.1, v: 0.045, at: 0.2 },
+              { f: 1047, d: 0.34, v: 0.05, at: 0.3 }, { f: 784, d: 0.34, v: 0.03, at: 0.3, type: 'triangle' }],
   };
 
   function clamp01(v) {
@@ -285,6 +300,44 @@
       try { el.currentTime = 0; } catch (e) {}
       const p = el.play();
       if (p && p.catch) p.catch(() => {});
+    }
+
+    // ── Bruitages synthétisés (mode aventure) ──────────
+    // Petits bips 8-bit générés par WebAudio : aucun fichier à charger.
+    // Même règles que play() : rien avant le 1er geste, rien si SOUND OFF.
+    synth(name) {
+      if (!this._enabled || !this._unlocked) return;
+      const notes = SYNTH[name];
+      if (!notes) return;
+
+      const t = now();
+      if (t - (this._lastPlay['~' + name] || 0) < this.cfg.retriggerGuardMs) return;
+      this._lastPlay['~' + name] = t;
+
+      if (!this._ac) {
+        const AC = global.AudioContext || global.webkitAudioContext;
+        if (!AC) return;
+        try { this._ac = new AC(); } catch (e) { return; }
+      }
+      const ac = this._ac;
+      if (ac.state === 'suspended') { const p = ac.resume(); if (p && p.catch) p.catch(() => {}); }
+
+      const t0 = ac.currentTime;
+      for (let i = 0; i < notes.length; i++) {
+        const n = notes[i];
+        const start = t0 + (n.at || 0);
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = n.type || 'square';
+        osc.frequency.setValueAtTime(n.f, start);
+        if (n.to) osc.frequency.exponentialRampToValueAtTime(n.to, start + n.d);
+        gain.gain.setValueAtTime(n.v, start);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + n.d);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(start);
+        osc.stop(start + n.d + 0.02);
+      }
     }
 
     // ── Activation / désactivation globale ─────────────

@@ -111,10 +111,12 @@ class InteractionManager {
     }
 
     if (buildingId === 'contact') this._bindContactForm();
+    if (typeof this.onOpen === 'function') this.onOpen(buildingId, firstVisit);
   }
 
   close() {
     if (!this._currentSection) return;
+    const closed = this._currentSection;
     this._currentSection = null;
     this._teardownCarousels();
     this._modal.classList.add('hidden');
@@ -131,6 +133,17 @@ class InteractionManager {
     if (window.AudioManager) window.AudioManager.play('close');
     // Music keeps playing, only game exit stops it
     this._syncRoute();
+    if (typeof this.onClose === 'function') this.onClose(closed);
+  }
+
+  // Partie reprise : lieux déjà visités (js/game.js, sauvegarde).
+  restoreVisited(ids) {
+    for (const id of ids) {
+      const b = BUILDINGS_DATA.find(b => b.id === id);
+      if (!b) continue;
+      b.visited = true;
+      this._visited.add(id);
+    }
   }
 
   // ── Lien profond ────────────────────────────────────

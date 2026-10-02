@@ -1,13 +1,16 @@
 /* ══════════════════════════════════════════════════════
    MOBILECONTROLS.JS : Touch buttons for side-scroller
    Buttons: ← left | → right | ENTRER | FERMER
+   opts.jump (mode aventure) : SAUT remplace FERMER, une fenêtre ouverte
+   recouvre de toute façon cette barre et a son propre bouton FERMER.
    ══════════════════════════════════════════════════════ */
 
 'use strict';
 
 class MobileControls {
-  constructor(controls) {
+  constructor(controls, opts) {
     this._controls = controls;
+    this._jump = !!(opts && opts.jump);
     this._isMobile = this._detectMobile();
 
     if (this._isMobile) {
@@ -29,7 +32,9 @@ class MobileControls {
     div.innerHTML = `
       <button id="mbtn-left"  class="mbtn" aria-label="Aller à gauche">${MobileControls.ARROW_LEFT}</button>
       <button id="mbtn-enter" class="mbtn mbtn-enter" aria-label="Entrer">ENTRER</button>
-      <button id="mbtn-close" class="mbtn mbtn-close" aria-label="Fermer">FERMER</button>
+      ${this._jump
+        ? '<button id="mbtn-jump" class="mbtn mbtn-close" aria-label="Sauter">SAUT</button>'
+        : '<button id="mbtn-close" class="mbtn mbtn-close" aria-label="Fermer">FERMER</button>'}
       <button id="mbtn-right" class="mbtn" aria-label="Aller à droite">${MobileControls.ARROW_RIGHT}</button>
     `;
     document.body.appendChild(div);
@@ -61,6 +66,14 @@ class MobileControls {
         this._controls._keys['ArrowUp'] = true;
       },
       () => { this._controls._keys['ArrowUp'] = false; }
+    );
+
+    bind('mbtn-jump',
+      () => {
+        this._controls._justPressedKeys['Space'] = true;
+        this._controls._keys['Space'] = true;
+      },
+      () => { this._controls._keys['Space'] = false; }
     );
 
     bind('mbtn-close',

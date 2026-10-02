@@ -1,8 +1,8 @@
 /* ══════════════════════════════════════════════════════
    MAP.JS : Side-scroller world (ville nocturne néon / comics)
    Spawn left, all buildings to the right, close together.
-   Réécriture visuelle uniquement : structure de données, API
-   (nearBuilding / draw) et positions INCHANGÉES.
+   Structure de données, API (nearBuilding / draw) et positions stables.
+   État de jeu lu ici : b.visited, b.doorOpen, SPECIAL_DOOR.boost.
    ══════════════════════════════════════════════════════ */
 
 'use strict';
@@ -120,6 +120,7 @@ class GameMap {
     this._sky        = null;                  // { under, over }, ciel statique bufferisé
     this._skyline    = null;                  // { far, near }  , skyline statique bufferisée
     this._sizeKey    = '';
+    this.traffic     = null;                  // circulation d'ambiance (js/actors.js)
 
     // Les sprites de texte néon sont pré-rendus : si la police pixel n'est pas
     // encore chargée au 1er rendu, on jette le cache une fois prête.
@@ -163,11 +164,15 @@ class GameMap {
       this._grad    = Object.create(null);
     }
 
+    // this.traffic (js/actors.js, facultatif) : métro aérien derrière la
+    // ville, voitures qui passent derrière les immeubles.
     this._drawSky(ctx, canvasH, tick);
     this._drawSkyline(ctx, cameraX, groundY);
+    if (this.traffic) this.traffic.drawFar(ctx, cameraX, groundY);
     this._drawClouds(ctx, cameraX, groundY);
     this._drawGround(ctx, cameraX, groundY, canvasH);
     this._drawTrees(ctx, cameraX, groundY, tick);
+    if (this.traffic) this.traffic.drawNear(ctx, cameraX, groundY);
     this._drawBuildings(ctx, cameraX, groundY, tick);
     this._drawPortal(ctx, cameraX, groundY, tick);
   }
@@ -456,6 +461,17 @@ class GameMap {
     ctx.fillStyle = beam;
     ctx.fillRect(cx - pillarW, by - 80, pillarW * 2, d.h + 80);
 
+    // Mission accomplie (d.boost) : colonne de lumière élargie, qui pulse.
+    if (d.boost) {
+      ctx.fillStyle = CITY.magenta;
+      ctx.globalAlpha = 0.07 + 0.07 * glow;
+      ctx.fillRect(cx - d.w * 0.8, 0, d.w * 1.6, by + d.h);
+      ctx.fillStyle = CITY.cyan;
+      ctx.globalAlpha = 0.10 + 0.10 * glow;
+      ctx.fillRect(cx - d.w * 0.32, 0, d.w * 0.64, by + d.h);
+      ctx.globalAlpha = 1;
+    }
+
     // Monolithes sombres
     for (const px of [sx, sx + d.w - pillarW]) {
       ctx.fillStyle = '#04040c';
@@ -612,7 +628,8 @@ class GameMap {
       for (let c = 0; c < cols; c++) {
         const wx = sx + 12 + c * (winW + gapX);
         const wy = winY0 + r * 30;
-        const lit = ((r * 7 + c * 3 + b.x) % 5) !== 0;
+        // Lieu visité : toutes les fenêtres s'allument.
+        const lit = b.visited || ((r * 7 + c * 3 + b.x) % 5) !== 0;
         this._drawWindow(ctx, wx, wy, winW, winH, b.windowColor, lit, tick + r + c);
       }
     }
@@ -641,6 +658,9 @@ class GameMap {
     const blink = (Math.sin(tick * 0.14 + b.x) > 0.6);
     ctx.fillStyle = blink ? CITY.red : 'rgba(255,18,61,0.25)';
     ctx.fillRect(sx + b.w - 28, by - 38, 7, 5);
+
+    // Pictogramme du lieu, sur un panneau planté sur le toit : lisible de loin.
+    this._drawPicto(ctx, b, sx + b.w / 2, by - 10);
 
     // Enseigne néon en toiture (texte b.label inchangé)
     const signY = by + 6;
@@ -674,11 +694,30 @@ class GameMap {
     ctx.fillStyle = dg;
     ctx.fillRect(3, doorY + 3, doorW - 6, doorH - 6);
     ctx.restore();
+    // Porte qui s'ouvre (b.doorOpen 0 → 1) : la lumière de l'intérieur se
+    // découvre, le battant se replie vers la gauche, un halo se pose au sol.
+    const open = b.doorOpen || 0;
+    if (open > 0.02) {
+      ctx.fillStyle = b.accent;
+      ctx.globalAlpha = 0.25 + 0.6 * open;
+      ctx.fillRect(doorX + 3, doorY + 3, doorW - 6, doorH - 6);
+      ctx.fillStyle = CITY.paper;
+      ctx.globalAlpha = 0.35 * open;
+      ctx.fillRect(doorX + 8, doorY + 8, doorW - 16, doorH - 8);
+      ctx.fillStyle = b.accent;
+      ctx.globalAlpha = 0.22 * open;
+      ctx.fillRect(doorX - 10 * open, groundY, doorW + 20 * open, 10);
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = '#02030a';
+      ctx.fillRect(doorX + 3, doorY + 3, Math.round((doorW - 6) * (1 - open)), doorH - 6);
+    }
     ctx.strokeStyle = b.accent;
     ctx.lineWidth = 2;
     ctx.strokeRect(doorX + 1, doorY + 1, doorW - 2, doorH - 2);
-    ctx.fillStyle = CITY.paper;
-    ctx.fillRect(doorX + doorW - 9, doorY + doorH / 2 - 2, 4, 4);
+    if (open < 0.5) {
+      ctx.fillStyle = CITY.paper;
+      ctx.fillRect(doorX + doorW - 9, doorY + doorH / 2 - 2, 4, 4);
+    }
 
     // Tampon « visité », pastille néon frappée d'une petite araignée
     if (b.visited) {
@@ -694,6 +733,58 @@ class GameMap {
       ctx.stroke();
       this._drawSpider(ctx, cx, cy, 13, b.accent);
       ctx.restore();
+    }
+  }
+
+  // Panneau pictogramme (cx = centre, baseY = dessus du toit).
+  _drawPicto(ctx, b, cx, baseY) {
+    const pw = 38, ph = 32;
+    const px = Math.round(cx - pw / 2);
+    const py = baseY - ph - 10;
+
+    // Pieds du panneau
+    ctx.fillStyle = '#05060d';
+    ctx.fillRect(px + 6, py + ph, 3, 10);
+    ctx.fillRect(px + pw - 9, py + ph, 3, 10);
+
+    ctx.fillStyle = '#03040c';
+    ctx.fillRect(px, py, pw, ph);
+    ctx.strokeStyle = CITY.ink;
+    ctx.lineWidth = 3;
+    ctx.strokeRect(px + 1.5, py + 1.5, pw - 3, ph - 3);
+    ctx.strokeStyle = b.accent;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(px - 1, py - 1, pw + 2, ph + 2);
+
+    // Icône dans une boîte 20 × 18
+    const ox = px + 9, oy = py + 7;
+    ctx.fillStyle = b.accent;
+    if (b.id === 'profile') {
+      ctx.fillRect(ox + 6, oy, 8, 8);                 // tête
+      ctx.fillRect(ox + 2, oy + 10, 16, 8);           // épaules
+      ctx.fillStyle = '#03040c';
+      ctx.fillRect(ox + 8, oy + 10, 4, 3);            // col
+    } else if (b.id === 'parcours') {
+      ctx.fillRect(ox, oy + 12, 5, 6);                // marches qui montent
+      ctx.fillRect(ox + 7, oy + 7, 5, 11);
+      ctx.fillRect(ox + 14, oy + 2, 5, 16);
+      ctx.fillStyle = CITY.paper;
+      ctx.fillRect(ox + 14, oy - 2, 5, 3);            // sommet
+    } else if (b.id === 'contact') {
+      ctx.fillRect(ox, oy + 2, 20, 14);               // enveloppe
+      ctx.strokeStyle = '#03040c';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(ox + 1, oy + 3);
+      ctx.lineTo(ox + 10, oy + 10);
+      ctx.lineTo(ox + 19, oy + 3);
+      ctx.stroke();
+    } else {
+      ctx.fillRect(ox, oy, 9, 8);                     // mosaïque de projets
+      ctx.fillRect(ox + 11, oy, 9, 8);
+      ctx.fillRect(ox, oy + 10, 9, 8);
+      ctx.fillStyle = CITY.paper;
+      ctx.fillRect(ox + 11, oy + 10, 9, 8);
     }
   }
 

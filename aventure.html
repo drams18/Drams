@@ -26,16 +26,8 @@
   <div class="game-bar">
     <a id="btn-classic" href="classique.html" class="game-home-btn" data-switch-classic
        title="Passer en mode classique, à l'endroit que vous regardez">Mode classique</a>
-    <div class="game-menu">
-      <button type="button" id="btn-menu" class="game-home-btn game-menu__btn"
-              aria-expanded="false" aria-controls="game-menu-panel">Menu</button>
-      <div id="game-menu-panel" class="game-menu__panel" hidden>
-        <a href="assets/CV.pdf" target="_blank" rel="noopener" class="cv-link">CV <span>Mon CV en PDF</span></a>
-        <a href="tarifs.html" class="tarifs-link">Tarifs <span>Mes prestations</span></a>
-        <button type="button" class="contact-link" data-contact-cta data-contact-subject="Prise de contact · Portfolio">Contact <span>Me joindre directement</span></button>
-        <a href="index.html">Changer de mode <span>Retour au choix</span></a>
-      </div>
-    </div>
+    <button type="button" id="btn-menu" class="game-home-btn game-menu__btn"
+            aria-haspopup="dialog" aria-controls="pause" title="Pause (Échap)">Menu</button>
   </div>
 
   <button id="btn-sound" type="button" class="sound-toggle" aria-pressed="true"
@@ -53,19 +45,101 @@
     </canvas>
   </div>
 
-  <!-- Aide de 1re visite, NON bloquante : la ville reste jouable derrière,
-       elle disparaît au premier déplacement (js/game.js). -->
-  <div id="game-hint" class="game-hint" role="note" aria-labelledby="game-hint-title" hidden>
-    <p class="game-hint__title" id="game-hint-title">COMMENT ÇA MARCHE ?</p>
-    <p class="game-hint__text">Un mini-jeu : déplacez votre personnage et entrez dans les maisons pour découvrir chaque section (profil, parcours, projets, contact). Une porte à part mène à « Construisez votre projet ».</p>
-    <ul class="game-hint__list" id="hint-controls">
-      <li><b>← →</b><span>Se déplacer (ou A / D)</span></li>
-      <li><b>↑</b><span>Entrer dans une maison (ou W)</span></li>
-      <li><b>↓</b><span>Fermer une fenêtre (ou S)</span></li>
-      <li><b>CLIC</b><span>Sur une maison : y aller directement</span></li>
-    </ul>
-    <p class="game-hint__sound">Le son (musique et effets) fait partie de l'expérience. Il est recommandé de l'activer. Vous pouvez l'activer ou le couper à tout moment avec le bouton SOUND, en haut de l'écran.</p>
-    <button type="button" id="hint-close" class="game-hint__close">C'est parti</button>
+  <!-- HUD : objectif courant, compteurs, carte de la rue (js/quest.js) -->
+  <div id="hud" class="hud" hidden>
+    <div class="hud__row">
+      <button type="button" id="hud-goal" class="hud__goal" title="Y aller directement">
+        <span class="hud__k">OBJECTIF</span>
+        <span id="hud-goal-txt" class="hud__goal-txt"></span>
+        <span id="hud-goal-dir" class="hud__goal-dir" aria-hidden="true"></span>
+      </button>
+      <p class="hud__count" title="Lieux visités"><span class="hud__k">LIEUX</span> <b id="hud-places">0/4</b></p>
+      <p class="hud__count" title="Jetons de compétences ramassés"><span class="hud__k">JETONS</span> <b id="hud-tokens">0/8</b></p>
+    </div>
+    <div id="hud-map" class="hud__map" role="group" aria-label="Carte de la rue"></div>
+  </div>
+  <div id="hud-banner" class="hud-banner" role="status" hidden></div>
+
+  <!-- Écran titre : une fois par session (js/game.js) -->
+  <div id="title-screen" class="title-screen" hidden>
+    <div class="title-screen__box">
+      <p class="title-screen__kicker">PORTFOLIO · MODE AVENTURE</p>
+      <p class="title-screen__name">ARPHAN DRAME</p>
+      <p class="title-screen__role">Développeur Web Full Stack</p>
+      <p class="title-screen__pitch">Une ville, quatre lieux à visiter : chaque maison est une section du portfolio.</p>
+      <p id="title-save" class="title-screen__save" hidden></p>
+      <div class="title-screen__actions">
+        <button type="button" id="title-start" class="game-cta game-cta--blink">APPUYEZ SUR ENTRÉE</button>
+        <button type="button" id="title-new" class="game-cta game-cta--ghost" hidden>NOUVELLE PARTIE</button>
+      </div>
+      <p class="title-screen__sound">Le son (musique et effets) fait partie de l'expérience. Bouton SOUND, en haut de l'écran.</p>
+    </div>
+  </div>
+
+  <!-- Tutoriel de 1re partie, NON bloquant : la ville reste jouable derrière,
+       chaque étape se valide en jouant (js/quest.js). -->
+  <div id="tuto" class="tuto" role="status" aria-live="polite" hidden>
+    <p id="tuto-step" class="tuto__step"></p>
+    <div class="tuto__main">
+      <span id="tuto-keys" class="tuto__keys" aria-hidden="true"></span>
+      <div>
+        <p id="tuto-title" class="tuto__title"></p>
+        <p id="tuto-text" class="tuto__text"></p>
+      </div>
+    </div>
+    <div class="tuto__foot">
+      <span id="tuto-dots" class="tuto__dots" aria-hidden="true"></span>
+      <button type="button" id="tuto-next" class="game-cta game-cta--small" hidden>C'est parti</button>
+      <button type="button" id="tuto-skip" class="tuto__skip">Passer le tutoriel</button>
+    </div>
+  </div>
+
+  <!-- Pause : carte, inventaire, commandes, liens (CV, tarifs, contact, modes) -->
+  <div id="pause" class="pause" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+    <div class="pause__card">
+      <div class="pause__head">
+        <p id="pause-title" class="pause__title">PAUSE</p>
+        <button type="button" id="pause-resume" class="game-cta game-cta--small">Reprendre</button>
+      </div>
+      <div class="pause__cols">
+        <section>
+          <p class="pause__h">CARTE <span id="pause-places"></span></p>
+          <ul id="pause-map" class="pause__list"></ul>
+        </section>
+        <section>
+          <p class="pause__h">JETONS <span id="pause-tokens"></span></p>
+          <ul id="pause-inv" class="pause__inv"></ul>
+          <p class="pause__h">COMMANDES</p>
+          <ul id="pause-keys" class="pause__keys"></ul>
+        </section>
+      </div>
+      <nav class="pause__links" aria-label="Liens">
+        <a href="assets/CV.pdf" target="_blank" rel="noopener" class="cv-link">CV <span>Mon CV en PDF</span></a>
+        <a href="tarifs.html" class="tarifs-link">Tarifs <span>Mes prestations</span></a>
+        <button type="button" data-contact-cta data-contact-subject="Prise de contact · Portfolio">Contact <span>Me joindre directement</span></button>
+        <a href="index.html">Changer de mode <span>Retour au choix</span></a>
+      </nav>
+      <div class="pause__foot">
+        <button type="button" id="pause-tuto" class="pause__textbtn">Revoir le tutoriel</button>
+        <button type="button" id="pause-reset" class="pause__textbtn">Recommencer la partie</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fin de mission : les 4 lieux ont été visités -->
+  <div id="mission" class="pause mission" role="dialog" aria-modal="true" aria-labelledby="mission-title" hidden>
+    <div class="pause__card">
+      <p class="mission__kicker">4/4 LIEUX VISITÉS</p>
+      <p id="mission-title" class="pause__title">MISSION ACCOMPLIE</p>
+      <p class="mission__text">Vous avez fait le tour de la ville. Le portail «&nbsp;Construisez votre projet&nbsp;» s'est illuminé.</p>
+      <p id="mission-stats" class="mission__stats"></p>
+      <div class="mission__actions">
+        <a href="assets/CV.pdf" target="_blank" rel="noopener" class="game-cta cv-link">Voir mon CV en PDF</a>
+        <button type="button" class="game-cta game-cta--alt" data-contact-cta data-contact-subject="Prise de contact · Portfolio">Me joindre directement</button>
+        <button type="button" id="mission-portal" class="game-cta game-cta--ghost">Construisez votre projet</button>
+      </div>
+      <button type="button" id="mission-continue" class="pause__textbtn">Continuer à explorer</button>
+    </div>
   </div>
 
   <div id="modal-backdrop" class="modal-backdrop hidden"></div>
@@ -90,6 +164,8 @@
   <script src="js/interactions.js"></script>
   <script src="js/player.js"></script>
   <script src="js/map.js"></script>
+  <script src="js/actors.js"></script>
+  <script src="js/quest.js"></script>
   <script src="js/game.js"></script>
 </body>
 </html>

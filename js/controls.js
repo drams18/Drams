@@ -2,6 +2,7 @@
    CONTROLS.JS : Keyboard input (side-scroller)
    ← / Q / A move left | → / D move right
    ↑ / W / Z interact  | ↓ / S close
+   Espace jump | Entrée confirm (mode aventure)
    ══════════════════════════════════════════════════════ */
 
 'use strict';
@@ -59,4 +60,13 @@ class Controls {
   get right()    { return !this._isTyping() && !!(this._keys['ArrowRight'] || this._keys['KeyD']); }
   get interact() { return !this._isTyping() && (this._justPressed('ArrowUp')   || this._justPressed('KeyW') || this._justPressed('KeyZ')); }
   get close()    { return !this._isTyping() && (this._justPressed('ArrowDown') || this._justPressed('KeyS')); }
+
+  // Mode aventure. Espace / Entrée restent l'activation native d'un bouton ou
+  // d'un lien qui a le focus : dans ce cas on ne les prend pas pour le jeu.
+  _onWidget() {
+    const tag = document.activeElement?.tagName;
+    return tag === 'BUTTON' || tag === 'A';
+  }
+  get jump()  { return !this._isTyping() && !this._onWidget() && this._justPressed('Space'); }
+  get enter() { return !this._isTyping() && !this._onWidget() && (this._justPressed('Enter') || this._justPressed('NumpadEnter')); }
 }

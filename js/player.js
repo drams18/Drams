@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════
    PLAYER.JS : Personnage pixel art (vue de côté)
-   Mouvement horizontal (← →). Réécriture visuelle uniquement :
+   Mouvement horizontal (← →) + saut. Réécriture visuelle uniquement :
    proportions, animation de marche, idle bob, API et texte du
    nametag INCHANGÉS.
    ══════════════════════════════════════════════════════ */
@@ -12,6 +12,8 @@ const PLAYER_H = 54;
 const PLAYER_SPEED = 12;
 const PLAYER_ACCEL = 2.4;    // montée en vitesse : démarrage doux
 const PLAYER_BRAKE = 3.2;    // freinage un peu plus vif à l'arrêt
+const PLAYER_JUMP = 13;      // impulsion du saut (sommet ≈ 94 px)
+const PLAYER_GRAVITY = 0.9;
 
 class Player {
   constructor(x, groundY) {
@@ -24,9 +26,24 @@ class Player {
     this._idleBob = 0;     // subtle idle bob
     this._idleDir = 1;
     this._bobY = 0;
+
+    // Saut (mode aventure) : jumpY = hauteur au-dessus du sol.
+    this.jumpY = 0;
+    this.vy = 0;
+    this.alpha = 1;        // fondu quand le personnage entre dans une maison
+    this._squash = 0;      // écrasement à l'atterrissage / à l'arrêt (1 → 0)
+    this.onStep = null;    // appelé à chaque pas posé au sol
+    this.onLand = null;    // appelé à l'atterrissage
   }
 
-  get y() { return this.groundY - PLAYER_H; }
+  get y() { return this.groundY - PLAYER_H - this.jumpY; }
+  get airborne() { return this.jumpY > 0 || this.vy !== 0; }
+
+  jump() {
+    if (this.airborne) return false;
+    this.vy = PLAYER_JUMP;
+    return true;
+  }
 
   move(controls, worldWidth) {
     // Vitesse cible selon les touches, puis on s'en rapproche progressivement :
@@ -47,9 +64,30 @@ class Player {
     this.x += this.vx;
     this.x = Math.max(PLAYER_W / 2, Math.min(worldWidth - PLAYER_W / 2, this.x));
 
-    if (Math.abs(this.vx) > 0.4) {
+    // Saut : simple parabole, atterrissage = petit écrasement.
+    if (this.airborne) {
+      this.jumpY += this.vy;
+      this.vy -= PLAYER_GRAVITY;
+      if (this.jumpY <= 0) {
+        this.jumpY = 0;
+        this.vy = 0;
+        this._squash = 1;
+        if (this.onLand) this.onLand();
+      }
+    }
+    if (this._squash > 0.02) this._squash *= 0.8; else this._squash = 0;
+
+    const walking = Math.abs(this.vx) > 0.4;
+    if (this._wasWalking && !walking && !this.airborne) this._squash = Math.max(this._squash, 0.45);
+    this._wasWalking = walking;
+
+    if (walking) {
       // Cadence de marche proportionnelle à la vitesse réelle.
+      const prev = this._walkFrame;
       this._walkFrame += 0.12 + (Math.abs(this.vx) / PLAYER_SPEED) * 0.08;
+      // Un pas posé à chaque demi-cycle.
+      if (this.onStep && !this.airborne &&
+          Math.floor(prev / Math.PI) !== Math.floor(this._walkFrame / Math.PI)) this.onStep();
     } else {
       // Idle bob
       this._idleBob += 0.05 * this._idleDir;
@@ -67,6 +105,7 @@ class Player {
     this._drawSpeedLines(ctx, sx, sy);
 
     ctx.save();
+    if (this.alpha < 1) ctx.globalAlpha = Math.max(0, this.alpha);
 
     // Flip if facing left
     if (this.facing === 'left') {
@@ -75,12 +114,22 @@ class Player {
       ctx.translate(-sx, 0);
     }
 
+    // Écrasement / étirement autour des pieds.
+    const stretch = this.airborne ? Math.min(0.1, Math.abs(this.vy) * 0.012) : 0;
+    const k = this._squash * 0.16 - stretch;
+    if (k) {
+      const feet = sy + PLAYER_H;
+      ctx.translate(sx, feet);
+      ctx.scale(1 + k, 1 - k);
+      ctx.translate(-sx, -feet);
+    }
+
     this._drawSprite(ctx, sx, sy);
 
     ctx.restore();
 
     // Nametag (always unflipped)
-    this._drawNametag(ctx, sx, sy);
+    if (this.alpha > 0.6) this._drawNametag(ctx, sx, sy);
   }
 
   _drawSpeedLines(ctx, sx, sy) {
@@ -106,14 +155,17 @@ class Player {
   }
 
   _drawSprite(ctx, sx, sy) {
-    const walk = Math.abs(this.vx) > 0.4;
-    const legSwing = walk ? Math.sin(this._walkFrame) * 8 : 0;
-    const armSwing = walk ? Math.sin(this._walkFrame) * 6 : 0;
+    const air = this.airborne;
+    const walk = !air && Math.abs(this.vx) > 0.4;
+    // En l'air : jambes groupées, bras levés.
+    const legSwing = air ? 5 : walk ? Math.sin(this._walkFrame) * 8 : 0;
+    const armSwing = air ? -7 : walk ? Math.sin(this._walkFrame) * 6 : 0;
 
-    // ── Shadow ──────────────────────────────
+    // ── Shadow ──────────────────────────────  (reste au sol, rétrécit en l'air)
+    const sh = 1 - Math.min(0.55, this.jumpY / 170);
     ctx.fillStyle = 'rgba(0,0,0,0.4)';
     ctx.beginPath();
-    ctx.ellipse(sx, this.groundY + 3, 15, 4, 0, 0, Math.PI * 2);
+    ctx.ellipse(sx, this.groundY + 3, 15 * sh, 4 * sh, 0, 0, Math.PI * 2);
     ctx.fill();
 
     // ── Legs ──────────────────────────────── (combinaison sombre)
