@@ -33,9 +33,9 @@ const require = createRequire(import.meta.url);
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { SECTIONS } = require('../js/museum.js');
 
-// Adresse publique du site (Cloudflare Pages). À changer ici, et dans les
-// <head> des autres pages, le jour où un nom de domaine est acheté.
-const SITE_URL = 'https://portfolio-3kx.pages.dev/';
+// Adresse publique (canonique) du site. À changer ici, et dans les <head>
+// des autres pages, robots.txt et sitemap.xml, si le domaine change.
+const SITE_URL = 'https://arphandrame.fr/';
 
 // ── Helpers ────────────────────────────────────────────
 const esc = (v) => String(v ?? '')
@@ -456,6 +456,7 @@ function shell(page, { title, description, ogDescription, jsonld, body, scripts 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="${url}">
   <meta property="og:type" content="${page.key === 'profil' ? 'profile' : 'website'}">
   <meta property="og:locale" content="fr_FR">
