@@ -538,7 +538,7 @@ function legend(groups) {
 // ══════════════════════════════════════════════════════
 function profilPage() {
   const page = PAGE.profil;
-  const ctx = [bio.location, ...seekingBits(bio.seeking)].map(m => `<span class="pf-ctx__i" data-seeking>${esc(m)}</span>`).join('');
+  const ctx = [bio.location, ...seekingBits(bio.seeking)].map(m => `<span class="pf-ctx__i" data-seeking>${esc(m)}</span>`).join(' ');
   const [first, ...rest] = displayName.split(' ');
   // Les technologies les plus utilisées (nombre de projets), en orbes
   // flottantes autour du nom : logo, couleur = famille, taille = usage.
@@ -580,12 +580,16 @@ function profilPage() {
     { key: 'contact', q: 'Comment le contacter\u202f?', hint: bio.seeking || 'E-mail, téléphone, formulaire' },
   ];
 
+  // Titre de la page = nom + métier : le <h1> enveloppe ces deux lignes du
+  // hero sans boîte propre (display:contents), le rendu ne change pas.
   const body = (L) => `
     <section class="pf-hero" aria-labelledby="profil-title">
       <div class="pf-orbs" aria-hidden="true">${orbs(L)}</div>
       <div class="pf-hero__inner">
-        <h1 class="pf-name" id="profil-title"><span class="pf-name__w"><span>${esc(first)}</span></span> <span class="pf-name__w"><span>${esc(rest.join(' '))}</span></span></h1>
-        <p class="pf-role">${esc(bio.title)}</p>
+        <h1 id="profil-title" style="display:contents">
+          <span class="pf-name"><span class="pf-name__w"><span>${esc(first)}</span></span> <span class="pf-name__w"><span>${esc(rest.join(' '))}</span></span></span>
+          <span class="pf-role">${esc(bio.title)}</span>
+        </h1>
         <p class="pf-ctx"><span class="pulse" aria-hidden="true"></span>${ctx}</p>
         <div class="pf-cta">
           <a class="btn btn--primary" href="${L.page('projets')}">Voir mes projets${icon('arrow')}</a>
@@ -613,7 +617,8 @@ function profilPage() {
         <p class="pf-statement">${esc(profile.positioning)}</p>
         <div class="pf-about__grid">
           <div class="pf-about__text">
-            <p>${esc(bioSentences[1] || '')}</p>
+            <p>${esc(`Je suis ${displayName}, ${bio.title.toLowerCase()} à ${bio.location}. ${bioSentences[1] || ''}`.trim())}</p>${profile.aboutStack ? `
+            <p>${esc(profile.aboutStack)}</p>` : ''}
           </div>
           <dl class="facts">
             <div><dt>Aujourd'hui</dt><dd>${esc(bio.availability)} <a class="inline-link" href="${L.page('parcours', devphantom.slug)}">${esc(devphantom.date)}</a></dd></div>
@@ -640,7 +645,7 @@ function profilPage() {
     </section>`;
 
   return shell(page, {
-    title: `${displayName}, ${bio.title} · Portfolio`,
+    title: `${displayName} · ${bio.title} à ${bio.location}`,
     description: `Portfolio d'${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. Projets, parcours, compétences et contact.`,
     ogDescription: `${bio.seeking}. ${profile.positioning}`,
     jsonld: {
@@ -710,7 +715,7 @@ function projetsPage() {
   const page = PAGE.projets;
   const body = (L) => `
     <section class="pj" aria-labelledby="projets-title">
-      <div class="world-ui">${worldHead(page, 'Ce que j’ai construit', '', legend([
+      <div class="world-ui">${worldHead(page, 'Projets de développement web', '', legend([
         { title: 'Catégorie', items: CATEGORIES.map(c => `<i class="cat-dot" data-cat="${c}"></i>${c}`) },
         { title: 'État', items: ['<i class="lg-dot lg-dot--on"></i>Disponible', '<i class="lg-dot lg-dot--wip"></i>En développement', '<i class="lg-dot lg-dot--off"></i>Projet privé'] },
         { title: 'Taille', items: ['<i class="lg-size lg-size--l"></i>À ne pas rater', '<i class="lg-size lg-size--m"></i>Professionnel', '<i class="lg-size lg-size--s"></i>Autre'] },
@@ -729,7 +734,7 @@ function projetsPage() {
       </div>
     </section>`;
   return shell(page, {
-    title: `Projets · ${displayName}, ${bio.title}`,
+    title: `Projets web et mobiles · ${displayName}, ${bio.title}`,
     description: `${plural(projects.length, 'projet', 'projets')} d'${displayName} : ${byCat.Professionnel.length} professionnels réalisés en équipe chez ${company}, ${byCat.Personnel.length} personnels et ${byCat.Scolaire.length} scolaires. Technologies, rôle et disponibilité de chaque projet.`,
     jsonld: {
       '@context': 'https://schema.org',
@@ -877,7 +882,7 @@ function parcoursPage() {
 
   const body = (L) => `
     <section class="tl" aria-labelledby="parcours-title">
-      <div class="world-ui">${worldHead(page, 'Mon parcours', '', '', { quiet: true })}
+      <div class="world-ui">${worldHead(page, 'Parcours de développeur web', '', '', { quiet: true })}
       </div>
       <div class="tl-stage" data-initial="${initial}">
         <div class="tl-panels">${items.map(e => panel(e, L)).join('')}
@@ -944,7 +949,7 @@ function competencesPage() {
     const data = JSON.stringify(projects.map(p => ({ slug: p.slug, title: p.title, cat: p.category, type: p.type, skills: projectSkills(p) }))).replace(/</g, '\\u003c');
     return `
     <section class="eco" aria-labelledby="competences-title">
-      <div class="world-ui">${worldHead(page, 'Écosystème technique', '', legend([
+      <div class="world-ui">${worldHead(page, 'Compétences en développement web', '', legend([
         { title: 'Famille', items: families.map(f => `<i class="fam-dot" data-fam="${f.key}"></i>${esc(f.label)}`) },
         { title: 'Taille', items: ['<i class="lg-size lg-size--l"></i>Utilisée dans beaucoup de projets', '<i class="lg-size lg-size--s"></i>Utilisée dans peu de projets', '<i class="lg-size lg-size--decl"></i>Hors des projets présentés'] },
       ]) + `
@@ -968,7 +973,7 @@ function competencesPage() {
     </section>`;
   };
   return shell(page, {
-    title: `Compétences · ${displayName}, ${bio.title}`,
+    title: `Compétences Symfony, PHP, React · ${displayName}, Développeur Web`,
     description: `Compétences techniques d'${displayName} : ${mainStack.slice(0, 6).map(s => s.item).join(', ')}… classées par famille et reliées aux projets qui les utilisent.`,
     jsonld: {
       '@context': 'https://schema.org',
@@ -1049,7 +1054,7 @@ function contactPage() {
     </section>`;
   };
   return shell(page, {
-    title: `Contact · ${displayName}, ${bio.title}`,
+    title: `Contact · ${displayName}, ${bio.title} à ${bio.location}`,
     description: `Contacter ${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. E-mail, téléphone, LinkedIn, GitHub, CV et formulaire de contact.`,
     jsonld: {
       '@context': 'https://schema.org',

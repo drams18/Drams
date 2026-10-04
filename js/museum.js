@@ -62,6 +62,11 @@ const SECTIONS = {
     // Message principal affiché en avant du bloc compétences.
     positioning: 'Je peux m\'adapter à un environnement technique existant, comprendre rapidement un projet et apprendre les outils nécessaires pour répondre au besoin.',
 
+    // Mode classique, « Qui je suis » : l'expérience et la stack en une phrase
+    // chacune. Symfony / PHP / MySQL = projets DevPhantom (en équipe) ;
+    // React / TypeScript = projets personnels et scolaires uniquement.
+    aboutStack: 'Chez DevPhantom, je développe en équipe des plateformes web et des applications mobiles, surtout avec Symfony, PHP et MySQL. En projet personnel, j\'utilise aussi React et TypeScript.',
+
     qualities: [
       'Adaptabilité',
       'Apprentissage rapide',
