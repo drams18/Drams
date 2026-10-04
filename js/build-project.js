@@ -61,7 +61,7 @@
 
   // Retour au portfolio : dernier mode utilisé (classique ou aventure),
   // devant le portail « Construisez votre projet ».
-  const homeHref = () => (window.Deeplink ? window.Deeplink.homeHref(true) : 'index.html');
+  const homeHref = () => (window.Deeplink ? window.Deeplink.homeHref(true) : '/');
 
   // ── Étapes ────────────────────────────────────────────
   const STEPS = [

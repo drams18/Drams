@@ -14,8 +14,8 @@
   if (!cards.length) return;
 
   var PREFETCH = {
-    classique: ['classique.html', 'css/classic.css', 'js/classic.js', 'js/contact-form.js'],
-    aventure: ['aventure.html', 'style.css', 'js/audio.js', 'js/museum.js', 'js/controls.js',
+    classique: ['/classique', 'css/classic.css', 'js/classic.js', 'js/contact-form.js'],
+    aventure: ['/aventure', 'style.css', 'js/audio.js', 'js/museum.js', 'js/controls.js',
       'js/mobileControls.js', 'js/interactions.js', 'js/player.js', 'js/map.js', 'js/game.js', 'js/contact-form.js'],
   };
   var done = {};

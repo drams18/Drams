@@ -17,7 +17,11 @@
   <meta property="og:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Arphan Drame, Développeur Web Full Stack · Paris">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Projets · Arphan Drame, Développeur Web Full Stack">
+  <meta name="twitter:description" content="13 projets d'Arphan Drame : 6 professionnels réalisés en équipe chez DevPhantom, 5 personnels et 2 scolaires. Technologies, rôle et disponibilité de chaque projet.">
+  <meta name="twitter:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta name="theme-color" content="#0a0a0d">
   <script src="../js/theme.js"></script>
   <script>
@@ -70,187 +74,208 @@
   <link rel="stylesheet" href="../css/site.css">
   <link rel="stylesheet" href="../css/classic.css">
   <script type="speculationrules">
-  {"prerender": [{"source": "list", "urls": ["../classique.html","parcours.html","competences.html","contact.html"], "eagerness": "moderate"}]}
+  {"prerender": [{"source": "list", "urls": ["/classique","/classique/parcours","/classique/competences","/classique/contact"], "eagerness": "moderate"}]}
   </script>
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "url": "https://arphandrame.fr/classique/projets",
-  "name": "Projets · Arphan Drame",
-  "inLanguage": "fr",
-  "about": {
-    "@id": "https://arphandrame.fr/#person"
-  },
-  "mainEntity": {
-    "@type": "ItemList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "Infinitia",
-          "description": "Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n'a finalement pas été terminée, le client ayant cessé de répondre.",
-          "genre": "Plateforme Web",
-          "url": "https://arphandrame.fr/classique/projets#infinitia",
-          "keywords": "Symfony, Node.js, NestJS, MySQL"
-        }
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "url": "https://arphandrame.fr/classique/projets",
+      "name": "Projets · Arphan Drame",
+      "inLanguage": "fr",
+      "about": {
+        "@id": "https://arphandrame.fr/#person"
       },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "Allsab-MS",
-          "description": "Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.",
-          "genre": "Intranet",
-          "url": "https://arphandrame.fr/classique/projets#allsab-ms",
-          "keywords": "PHP, Symfony, MySQL",
-          "sameAs": "https://allsab-ms.com/"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "Hexagon",
-          "description": "Plateforme destinée à faciliter le travail opérationnel et la communication interne.",
-          "genre": "Plateforme Web",
-          "url": "https://arphandrame.fr/classique/projets#hexagon",
-          "keywords": "PHP, Symfony, JavaScript, MySQL"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 4,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "GEXP",
-          "description": "Plateforme destinée à faciliter la génération de rapports et la communication interne.",
-          "genre": "Plateforme Web",
-          "url": "https://arphandrame.fr/classique/projets#gexp",
-          "keywords": "PHP, Symfony, MySQL"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 5,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "Ilamiria",
-          "description": "Application mobile développée chez DevPhantom et publiée sur l'App Store.",
-          "genre": "Application Mobile",
-          "url": "https://arphandrame.fr/classique/projets#ilamiria",
-          "keywords": "React Native",
-          "sameAs": "https://apps.apple.com/fr/app/ilamiria/id6749936753"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 6,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "BADN",
-          "description": "Application pour organiser des sorties entre amis : définition d'un budget, choix d'un lieu et d'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d'autres.",
-          "genre": "Application Mobile",
-          "url": "https://arphandrame.fr/classique/projets#badn",
-          "keywords": "React Native, Node.js"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 7,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "Wild Kédougou Experience",
-          "description": "Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.",
-          "genre": "Plateforme de réservation",
-          "url": "https://arphandrame.fr/classique/projets#wild-kedougou",
-          "keywords": "React, TypeScript, Vite, Tailwind CSS, Framer Motion, Supabase, Google Calendar API, Brevo, Cloudflare Workers, PWA, SEO",
-          "sameAs": "https://wild-kedougou-experience.hitmind-pro.workers.dev/"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 8,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "Pool Party Experience",
-          "description": "Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.",
-          "genre": "Site vitrine WordPress",
-          "url": "https://arphandrame.fr/classique/projets#pool-party",
-          "keywords": "WordPress, PHP, CSS",
-          "sameAs": "https://poolparty-experience.fr/"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 9,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "ISLAAH",
-          "description": "Teste ta connaissance du Coran : application mobile pour s'entraîner à reconnaître les versets, avec écoute de récitations, plusieurs modes de quiz et suivi de progression. Disponible sur l'App Store.",
-          "genre": "Application Mobile",
-          "url": "https://arphandrame.fr/classique/projets#islaah",
-          "keywords": "React Native, Symfony, MySQL, Cloudflare, Railway, Expo",
-          "sameAs": "https://apps.apple.com/us/app/islaah/id6758726142"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 10,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "Plateforme de recherche de prospects",
-          "description": "Plateforme permettant de rechercher une enseigne qui a besoin d'un site web ou d'une mise à jour.",
-          "genre": "Projet personnel",
-          "url": "https://arphandrame.fr/classique/projets#prospectly",
-          "keywords": "Node.js, Railway, HTML, CSS, JavaScript, NoSQL",
-          "sameAs": "https://prospectly.hitmind-pro.workers.dev/"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 11,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "OneDay",
-          "description": "Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d'avancement, modèles de journée réutilisables (« programmes ») applicables à n'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.",
-          "genre": "PWA de planification",
-          "url": "https://arphandrame.fr/classique/projets#oneday",
-          "keywords": "React, TypeScript, Vite, Tailwind CSS, React Router, Supabase, PostgreSQL, PWA, Web Push, Cloudflare Pages, Cloudflare Workers",
-          "sameAs": "https://oneday-5s9.pages.dev/"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 12,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "SkyWalk",
-          "description": "Plateforme web destinée à accompagner les personnes dans leurs projets d'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.",
-          "genre": "Plateforme Web",
-          "url": "https://arphandrame.fr/classique/projets#skywalk",
-          "keywords": "React, TypeScript, Vite, Tailwind, React Query, NestJS, PostgreSQL, TypeORM, JWT, Docker, Nginx, GitLab CI",
-          "sameAs": "https://skywalk-chi.vercel.app/"
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 13,
-        "item": {
-          "@type": "CreativeWork",
-          "name": "Crowdin (clone)",
-          "description": "Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d'accès par rôles.",
-          "genre": "Plateforme de localisation",
-          "url": "https://arphandrame.fr/classique/projets#crowdin",
-          "keywords": "Symfony 7, PHP 8, Doctrine ORM, PostgreSQL, Twig, Docker, Bootstrap"
-        }
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "Infinitia",
+              "description": "Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n'a finalement pas été terminée, le client ayant cessé de répondre.",
+              "genre": "Plateforme Web",
+              "url": "https://arphandrame.fr/classique/projets#infinitia",
+              "keywords": "Symfony, Node.js, NestJS, MySQL"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "Allsab-MS",
+              "description": "Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.",
+              "genre": "Intranet",
+              "url": "https://arphandrame.fr/classique/projets#allsab-ms",
+              "keywords": "PHP, Symfony, MySQL",
+              "sameAs": "https://allsab-ms.com/"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "Hexagon",
+              "description": "Plateforme destinée à faciliter le travail opérationnel et la communication interne.",
+              "genre": "Plateforme Web",
+              "url": "https://arphandrame.fr/classique/projets#hexagon",
+              "keywords": "PHP, Symfony, JavaScript, MySQL"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "GEXP",
+              "description": "Plateforme destinée à faciliter la génération de rapports et la communication interne.",
+              "genre": "Plateforme Web",
+              "url": "https://arphandrame.fr/classique/projets#gexp",
+              "keywords": "PHP, Symfony, MySQL"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "Ilamiria",
+              "description": "Application mobile développée chez DevPhantom et publiée sur l'App Store.",
+              "genre": "Application Mobile",
+              "url": "https://arphandrame.fr/classique/projets#ilamiria",
+              "keywords": "React Native",
+              "sameAs": "https://apps.apple.com/fr/app/ilamiria/id6749936753"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "BADN",
+              "description": "Application pour organiser des sorties entre amis : définition d'un budget, choix d'un lieu et d'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d'autres.",
+              "genre": "Application Mobile",
+              "url": "https://arphandrame.fr/classique/projets#badn",
+              "keywords": "React Native, Node.js"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "Wild Kédougou Experience",
+              "description": "Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.",
+              "genre": "Plateforme de réservation",
+              "url": "https://arphandrame.fr/classique/projets#wild-kedougou",
+              "keywords": "React, TypeScript, Vite, Tailwind CSS, Framer Motion, Supabase, Google Calendar API, Brevo, Cloudflare Workers, PWA, SEO",
+              "sameAs": "https://wild-kedougou-experience.hitmind-pro.workers.dev/"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "Pool Party Experience",
+              "description": "Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.",
+              "genre": "Site vitrine WordPress",
+              "url": "https://arphandrame.fr/classique/projets#pool-party",
+              "keywords": "WordPress, PHP, CSS",
+              "sameAs": "https://poolparty-experience.fr/"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "ISLAAH",
+              "description": "Teste ta connaissance du Coran : application mobile pour s'entraîner à reconnaître les versets, avec écoute de récitations, plusieurs modes de quiz et suivi de progression. Disponible sur l'App Store.",
+              "genre": "Application Mobile",
+              "url": "https://arphandrame.fr/classique/projets#islaah",
+              "keywords": "React Native, Symfony, MySQL, Cloudflare, Railway, Expo",
+              "sameAs": "https://apps.apple.com/us/app/islaah/id6758726142"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "Plateforme de recherche de prospects",
+              "description": "Plateforme permettant de rechercher une enseigne qui a besoin d'un site web ou d'une mise à jour.",
+              "genre": "Projet personnel",
+              "url": "https://arphandrame.fr/classique/projets#prospectly",
+              "keywords": "Node.js, Railway, HTML, CSS, JavaScript, NoSQL",
+              "sameAs": "https://prospectly.hitmind-pro.workers.dev/"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 11,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "OneDay",
+              "description": "Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d'avancement, modèles de journée réutilisables (« programmes ») applicables à n'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.",
+              "genre": "PWA de planification",
+              "url": "https://arphandrame.fr/classique/projets#oneday",
+              "keywords": "React, TypeScript, Vite, Tailwind CSS, React Router, Supabase, PostgreSQL, PWA, Web Push, Cloudflare Pages, Cloudflare Workers",
+              "sameAs": "https://oneday-5s9.pages.dev/"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 12,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "SkyWalk",
+              "description": "Plateforme web destinée à accompagner les personnes dans leurs projets d'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.",
+              "genre": "Plateforme Web",
+              "url": "https://arphandrame.fr/classique/projets#skywalk",
+              "keywords": "React, TypeScript, Vite, Tailwind, React Query, NestJS, PostgreSQL, TypeORM, JWT, Docker, Nginx, GitLab CI",
+              "sameAs": "https://skywalk-chi.vercel.app/"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 13,
+            "item": {
+              "@type": "CreativeWork",
+              "name": "Crowdin (clone)",
+              "description": "Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d'accès par rôles.",
+              "genre": "Plateforme de localisation",
+              "url": "https://arphandrame.fr/classique/projets#crowdin",
+              "keywords": "Symfony 7, PHP 8, Doctrine ORM, PostgreSQL, Twig, Docker, Bootstrap"
+            }
+          }
+        ]
       }
-    ]
-  }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Portfolio",
+          "item": "https://arphandrame.fr/classique"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Projets",
+          "item": "https://arphandrame.fr/classique/projets"
+        }
+      ]
+    }
+  ]
 }
   </script>
   </head>
@@ -285,12 +310,12 @@
       <a class="brand" href="../" aria-label="Arphan Drame, accueil"><span>A. DRAME</span></a>
       <span class="topbar__where" aria-hidden="true"><b>02</b>Projets</span>
       <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
-        <a href="../classique.html" data-page-link="profil"><span>Profil</span></a>
-        <a href="projets.html" aria-current="page" data-page-link="projets"><span>Projets</span><i class="nav__ink" aria-hidden="true"></i></a>
-        <a href="parcours.html" data-page-link="parcours"><span>Parcours</span></a>
-        <a href="competences.html" data-page-link="competences"><span>Compétences</span></a>
-        <a href="contact.html" data-page-link="contact"><span>Contact</span></a>
-        <a href="../tarifs.html"><span>Tarifs</span></a>
+        <a href="/classique" data-page-link="profil"><span>Profil</span></a>
+        <a href="/classique/projets" aria-current="page" data-page-link="projets"><span>Projets</span><i class="nav__ink" aria-hidden="true"></i></a>
+        <a href="/classique/parcours" data-page-link="parcours"><span>Parcours</span></a>
+        <a href="/classique/competences" data-page-link="competences"><span>Compétences</span></a>
+        <a href="/classique/contact" data-page-link="contact"><span>Contact</span></a>
+        <a href="/tarifs"><span>Tarifs</span></a>
         <a class="nav__cv" href="../assets/CV.pdf" target="_blank" rel="noopener"><span>Voir mon CV</span></a>
       </nav>
       <div class="topbar__actions">
@@ -299,7 +324,7 @@
           <svg class="ico ico--sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>
           <svg class="ico ico--moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>
         </button>
-        <a class="switch" href="../aventure.html#projets" data-switch-adventure data-follow-route
+        <a class="switch" href="/aventure#projets" data-switch-adventure data-follow-route
            title="Passer en mode aventure, à l'endroit que vous lisez">
           <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-gamepad"/></svg><span>Mode aventure</span>
         </a>
@@ -350,7 +375,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover"><img class="pj-cover__img" src="../assets/img/projets/infinitia.webp" alt="Aperçu du projet Infinitia" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n'a finalement pas été terminée, le client ayant cessé de répondre.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="competences.html#node-js" data-skill="node-js" data-fam="back">Node.js</a></li><li><a class="tag-link" href="competences.html#nestjs" data-skill="nestjs" data-fam="back">NestJS</a></li><li><a class="tag-link" href="competences.html#mysql" data-skill="mysql" data-fam="data">MySQL</a></li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="/classique/competences#node-js" data-skill="node-js" data-fam="back">Node.js</a></li><li><a class="tag-link" href="/classique/competences#nestjs" data-skill="nestjs" data-fam="back">NestJS</a></li><li><a class="tag-link" href="/classique/competences#mysql" data-skill="mysql" data-fam="data">MySQL</a></li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet DevPhantom, en équipe. J'ai participé à la création à partir de zéro après un échange avec le client : conception de la base de données, développement du backend, préparation de l'architecture du projet.</p></div>
                 
               </div>
@@ -369,7 +394,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover"><img class="pj-cover__img" src="../assets/img/projets/allsab-ms.webp" alt="Aperçu du projet Allsab-MS" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#php" data-skill="php" data-fam="back">PHP</a></li><li><a class="tag-link" href="competences.html#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="competences.html#mysql" data-skill="mysql" data-fam="data">MySQL</a></li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#php" data-skill="php" data-fam="back">PHP</a></li><li><a class="tag-link" href="/classique/competences#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="/classique/competences#mysql" data-skill="mysql" data-fam="data">MySQL</a></li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet DevPhantom, en équipe : l'un des premiers projets que j'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://allsab-ms.com/" target="_blank" rel="noopener">Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
@@ -388,7 +413,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover"><img class="pj-cover__img" src="../assets/img/projets/hexagon.webp" alt="Aperçu du projet Hexagon" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Plateforme destinée à faciliter le travail opérationnel et la communication interne.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#php" data-skill="php" data-fam="back">PHP</a></li><li><a class="tag-link" href="competences.html#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="competences.html#javascript" data-skill="javascript" data-fam="front">JavaScript</a></li><li><a class="tag-link" href="competences.html#mysql" data-skill="mysql" data-fam="data">MySQL</a></li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#php" data-skill="php" data-fam="back">PHP</a></li><li><a class="tag-link" href="/classique/competences#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="/classique/competences#javascript" data-skill="javascript" data-fam="front">JavaScript</a></li><li><a class="tag-link" href="/classique/competences#mysql" data-skill="mysql" data-fam="data">MySQL</a></li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet DevPhantom, en équipe. Développement de plusieurs CRUD, de fonctionnalités liées à la communication interne, et participation à l'évolution de la plateforme.</p></div>
                 
               </div>
@@ -407,7 +432,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover"><img class="pj-cover__img" src="../assets/img/projets/gexp.webp" alt="Aperçu du projet GEXP" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Plateforme destinée à faciliter la génération de rapports et la communication interne.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#php" data-skill="php" data-fam="back">PHP</a></li><li><a class="tag-link" href="competences.html#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="competences.html#mysql" data-skill="mysql" data-fam="data">MySQL</a></li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#php" data-skill="php" data-fam="back">PHP</a></li><li><a class="tag-link" href="/classique/competences#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="/classique/competences#mysql" data-skill="mysql" data-fam="data">MySQL</a></li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet DevPhantom, en équipe. Développement de CRUD, génération de rapports, exports PDF, Excel et CSV.</p></div>
                 
               </div>
@@ -426,7 +451,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover pj-cover--mobile"><img class="pj-cover__img" src="../assets/img/projets/ilamiria.webp" alt="Aperçu du projet Ilamiria" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Application mobile développée chez DevPhantom et publiée sur l'App Store.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#react-native" data-skill="react-native" data-fam="front">React Native</a></li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#react-native" data-skill="react-native" data-fam="front">React Native</a></li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet interne DevPhantom, réalisé en équipe.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://apps.apple.com/fr/app/ilamiria/id6749936753" target="_blank" rel="noopener">App Store<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
@@ -445,7 +470,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover pj-cover--mobile"><img class="pj-cover__img" src="../assets/img/projets/badn.webp" alt="Aperçu du projet BADN" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Application pour organiser des sorties entre amis : définition d'un budget, choix d'un lieu et d'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d'autres.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#react-native" data-skill="react-native" data-fam="front">React Native</a></li><li><a class="tag-link" href="competences.html#node-js" data-skill="node-js" data-fam="back">Node.js</a></li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#react-native" data-skill="react-native" data-fam="front">React Native</a></li><li><a class="tag-link" href="/classique/competences#node-js" data-skill="node-js" data-fam="back">Node.js</a></li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet interne DevPhantom, en équipe. J'étais principalement impliqué sur le développement backend.</p></div>
                 
               </div>
@@ -464,7 +489,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover"><img class="pj-cover__img" src="../assets/img/projets/wild-kedougou.webp" alt="Aperçu du projet Wild Kédougou Experience" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#react" data-skill="react" data-fam="front">React</a></li><li><a class="tag-link" href="competences.html#typescript" data-skill="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="competences.html#vite" data-skill="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="competences.html#tailwind-css" data-skill="tailwind-css" data-fam="front">Tailwind CSS</a></li><li>Framer Motion</li><li><a class="tag-link" href="competences.html#supabase" data-skill="supabase" data-fam="data">Supabase</a></li><li>Google Calendar API</li><li>Brevo</li><li><a class="tag-link" href="competences.html#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare Workers</a></li><li>PWA</li><li>SEO</li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#react" data-skill="react" data-fam="front">React</a></li><li><a class="tag-link" href="/classique/competences#typescript" data-skill="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="/classique/competences#vite" data-skill="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="/classique/competences#tailwind-css" data-skill="tailwind-css" data-fam="front">Tailwind CSS</a></li><li>Framer Motion</li><li><a class="tag-link" href="/classique/competences#supabase" data-skill="supabase" data-fam="data">Supabase</a></li><li>Google Calendar API</li><li>Brevo</li><li><a class="tag-link" href="/classique/competences#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare Workers</a></li><li>PWA</li><li>SEO</li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel : conception et développement complets (frontend, backend serverless, intégrations).</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
@@ -483,7 +508,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover pj-cover--type" aria-hidden="true"><span>Pool Party Experience</span></div>
                 <p class="pj-item__desc">Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.</p>
-                <ul class="tags" aria-label="Technologies"><li>WordPress</li><li><a class="tag-link" href="competences.html#php" data-skill="php" data-fam="back">PHP</a></li><li>CSS</li></ul>
+                <ul class="tags" aria-label="Technologies"><li>WordPress</li><li><a class="tag-link" href="/classique/competences#php" data-skill="php" data-fam="back">PHP</a></li><li>CSS</li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet en cours, réalisé pour un ami : création et intégration d'un site vitrine WordPress.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://poolparty-experience.fr/" target="_blank" rel="noopener">Voir le site<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
@@ -502,7 +527,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover pj-cover--mobile"><img class="pj-cover__img" src="../assets/img/projets/islaah.webp" alt="Aperçu du projet ISLAAH" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Teste ta connaissance du Coran : application mobile pour s'entraîner à reconnaître les versets, avec écoute de récitations, plusieurs modes de quiz et suivi de progression. Disponible sur l'App Store.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#react-native" data-skill="react-native" data-fam="front">React Native</a></li><li><a class="tag-link" href="competences.html#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="competences.html#mysql" data-skill="mysql" data-fam="data">MySQL</a></li><li><a class="tag-link" href="competences.html#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare</a></li><li>Railway</li><li>Expo</li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#react-native" data-skill="react-native" data-fam="front">React Native</a></li><li><a class="tag-link" href="/classique/competences#symfony" data-skill="symfony" data-fam="back">Symfony</a></li><li><a class="tag-link" href="/classique/competences#mysql" data-skill="mysql" data-fam="data">MySQL</a></li><li><a class="tag-link" href="/classique/competences#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare</a></li><li>Railway</li><li>Expo</li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel, conception et développement complet : app mobile, API et mise en production.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener">Télécharger<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
@@ -521,7 +546,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover"><img class="pj-cover__img" src="../assets/img/projets/prospectly.webp" alt="Aperçu du projet Plateforme de recherche de prospects" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Plateforme permettant de rechercher une enseigne qui a besoin d'un site web ou d'une mise à jour.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#node-js" data-skill="node-js" data-fam="back">Node.js</a></li><li>Railway</li><li>HTML</li><li>CSS</li><li><a class="tag-link" href="competences.html#javascript" data-skill="javascript" data-fam="front">JavaScript</a></li><li>NoSQL</li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#node-js" data-skill="node-js" data-fam="back">Node.js</a></li><li>Railway</li><li>HTML</li><li>CSS</li><li><a class="tag-link" href="/classique/competences#javascript" data-skill="javascript" data-fam="front">JavaScript</a></li><li>NoSQL</li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel : idée, conception et développement réalisés seul.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://prospectly.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
@@ -540,7 +565,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover pj-cover--mobile"><img class="pj-cover__img" src="../assets/img/projets/oneday.webp" alt="Aperçu du projet OneDay" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d'avancement, modèles de journée réutilisables (« programmes ») applicables à n'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#react" data-skill="react" data-fam="front">React</a></li><li><a class="tag-link" href="competences.html#typescript" data-skill="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="competences.html#vite" data-skill="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="competences.html#tailwind-css" data-skill="tailwind-css" data-fam="front">Tailwind CSS</a></li><li>React Router</li><li><a class="tag-link" href="competences.html#supabase" data-skill="supabase" data-fam="data">Supabase</a></li><li><a class="tag-link" href="competences.html#postgresql" data-skill="postgresql" data-fam="data">PostgreSQL</a></li><li>PWA</li><li>Web Push</li><li><a class="tag-link" href="competences.html#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare Pages</a></li><li><a class="tag-link" href="competences.html#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare Workers</a></li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#react" data-skill="react" data-fam="front">React</a></li><li><a class="tag-link" href="/classique/competences#typescript" data-skill="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="/classique/competences#vite" data-skill="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="/classique/competences#tailwind-css" data-skill="tailwind-css" data-fam="front">Tailwind CSS</a></li><li>React Router</li><li><a class="tag-link" href="/classique/competences#supabase" data-skill="supabase" data-fam="data">Supabase</a></li><li><a class="tag-link" href="/classique/competences#postgresql" data-skill="postgresql" data-fam="data">PostgreSQL</a></li><li>PWA</li><li>Web Push</li><li><a class="tag-link" href="/classique/competences#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare Pages</a></li><li><a class="tag-link" href="/classique/competences#cloudflare" data-skill="cloudflare" data-fam="ops">Cloudflare Workers</a></li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet personnel : conception et développement complets (frontend, backend serverless, notifications push). PWA que j'ai construite pour organiser mes journées, mieux travailler et m'installer des habitudes.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener">Voir le projet<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
@@ -559,7 +584,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover"><img class="pj-cover__img" src="../assets/img/projets/skywalk.webp" alt="Aperçu du projet SkyWalk" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Plateforme web destinée à accompagner les personnes dans leurs projets d'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#react" data-skill="react" data-fam="front">React</a></li><li><a class="tag-link" href="competences.html#typescript" data-skill="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="competences.html#vite" data-skill="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="competences.html#tailwind-css" data-skill="tailwind-css" data-fam="front">Tailwind</a></li><li>React Query</li><li><a class="tag-link" href="competences.html#nestjs" data-skill="nestjs" data-fam="back">NestJS</a></li><li><a class="tag-link" href="competences.html#postgresql" data-skill="postgresql" data-fam="data">PostgreSQL</a></li><li><a class="tag-link" href="competences.html#typeorm" data-skill="typeorm" data-fam="data">TypeORM</a></li><li>JWT</li><li><a class="tag-link" href="competences.html#docker" data-skill="docker" data-fam="ops">Docker</a></li><li><a class="tag-link" href="competences.html#nginx" data-skill="nginx" data-fam="ops">Nginx</a></li><li><a class="tag-link" href="competences.html#gitlab" data-skill="gitlab" data-fam="ops">GitLab CI</a></li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#react" data-skill="react" data-fam="front">React</a></li><li><a class="tag-link" href="/classique/competences#typescript" data-skill="typescript" data-fam="front">TypeScript</a></li><li><a class="tag-link" href="/classique/competences#vite" data-skill="vite" data-fam="front">Vite</a></li><li><a class="tag-link" href="/classique/competences#tailwind-css" data-skill="tailwind-css" data-fam="front">Tailwind</a></li><li>React Query</li><li><a class="tag-link" href="/classique/competences#nestjs" data-skill="nestjs" data-fam="back">NestJS</a></li><li><a class="tag-link" href="/classique/competences#postgresql" data-skill="postgresql" data-fam="data">PostgreSQL</a></li><li><a class="tag-link" href="/classique/competences#typeorm" data-skill="typeorm" data-fam="data">TypeORM</a></li><li>JWT</li><li><a class="tag-link" href="/classique/competences#docker" data-skill="docker" data-fam="ops">Docker</a></li><li><a class="tag-link" href="/classique/competences#nginx" data-skill="nginx" data-fam="ops">Nginx</a></li><li><a class="tag-link" href="/classique/competences#gitlab" data-skill="gitlab" data-fam="ops">GitLab CI</a></li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet réalisé en équipe de 7 (ETNA, Grand Projet d'Étude). J'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l'architecture technique et à la documentation / au diagramme d'architecture.</p></div>
                 <div class="pj-item__links"><a class="btn btn--sm" href="https://skywalk-chi.vercel.app/" target="_blank" rel="noopener">Accéder<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></div>
               </div>
@@ -578,7 +603,7 @@
               <div class="pj-item__body">
                 <div class="pj-cover"><img class="pj-cover__img" src="../assets/img/projets/crowdin.webp" alt="Aperçu du projet Crowdin (clone)" loading="lazy" decoding="async" width="1280" height="800"></div>
                 <p class="pj-item__desc">Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d'accès par rôles.</p>
-                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="competences.html#symfony" data-skill="symfony" data-fam="back">Symfony 7</a></li><li><a class="tag-link" href="competences.html#php" data-skill="php" data-fam="back">PHP 8</a></li><li>Doctrine ORM</li><li><a class="tag-link" href="competences.html#postgresql" data-skill="postgresql" data-fam="data">PostgreSQL</a></li><li>Twig</li><li><a class="tag-link" href="competences.html#docker" data-skill="docker" data-fam="ops">Docker</a></li><li>Bootstrap</li></ul>
+                <ul class="tags" aria-label="Technologies"><li><a class="tag-link" href="/classique/competences#symfony" data-skill="symfony" data-fam="back">Symfony 7</a></li><li><a class="tag-link" href="/classique/competences#php" data-skill="php" data-fam="back">PHP 8</a></li><li>Doctrine ORM</li><li><a class="tag-link" href="/classique/competences#postgresql" data-skill="postgresql" data-fam="data">PostgreSQL</a></li><li>Twig</li><li><a class="tag-link" href="/classique/competences#docker" data-skill="docker" data-fam="ops">Docker</a></li><li>Bootstrap</li></ul>
                 <div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>Projet scolaire ETNA réalisé en binôme (déc. 2024 – janv. 2025) ; j'ai porté la majeure partie du développement : modélisation Doctrine et migrations, CRUD projets / langues / sources / traductions, import et export CSV, verrouillage des chaînes sources, inscription avec vérification d'e-mail, contrôle d'accès par voter.</p></div>
                 
               </div>
@@ -590,10 +615,10 @@
   </main>
 
   <nav class="worlds" aria-label="Page précédente et suivante">
-    <a class="worlds__door worlds__door--prev" href="../classique.html" rel="prev" aria-keyshortcuts="ArrowLeft">
+    <a class="worlds__door worlds__door--prev" href="/classique" rel="prev" aria-keyshortcuts="ArrowLeft">
       <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span class="worlds__l">Profil</span>
     </a>
-    <a class="worlds__door worlds__door--next" href="parcours.html" rel="next" aria-keyshortcuts="ArrowRight">
+    <a class="worlds__door worlds__door--next" href="/classique/parcours" rel="next" aria-keyshortcuts="ArrowRight">
       <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg><span class="worlds__l">Parcours</span>
     </a>
   </nav>

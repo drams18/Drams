@@ -13,7 +13,13 @@
   <meta property="og:description" content="Tarifs particuliers et professionnels, recherche rapide, devis personnalisé.">
   <meta property="og:url" content="https://arphandrame.fr/tarifs">
   <meta property="og:image" content="https://arphandrame.fr/assets/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Arphan Drame, Développeur Web Full Stack · Paris">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tarifs · Arphan Drame, Développeur Web Full Stack">
+  <meta name="twitter:description" content="Tarifs particuliers et professionnels, recherche rapide, devis personnalisé.">
+  <meta name="twitter:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta name="description" content="Grille tarifaire d'Arphan DRAME, Développeur Full Stack. Tarifs particuliers et professionnels, recherche rapide, devis personnalisé.">
   <meta name="theme-color" content="#0a0a0d">
   <script src="js/theme.js"></script>
@@ -62,12 +68,12 @@
       <a class="brand" href="./" aria-label="Arphan Drame, accueil"><span>A. DRAME</span></a>
       <span class="topbar__where" aria-hidden="true">Tarifs</span>
       <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
-        <a href="classique.html"><span>Profil</span></a>
-        <a href="classique/projets.html"><span>Projets</span></a>
-        <a href="classique/parcours.html"><span>Parcours</span></a>
-        <a href="classique/competences.html"><span>Compétences</span></a>
-        <a href="classique/contact.html"><span>Contact</span></a>
-        <a href="tarifs.html" aria-current="page"><span>Tarifs</span><i class="nav__ink" aria-hidden="true"></i></a>
+        <a href="/classique"><span>Profil</span></a>
+        <a href="/classique/projets"><span>Projets</span></a>
+        <a href="/classique/parcours"><span>Parcours</span></a>
+        <a href="/classique/competences"><span>Compétences</span></a>
+        <a href="/classique/contact"><span>Contact</span></a>
+        <a href="/tarifs" aria-current="page"><span>Tarifs</span><i class="nav__ink" aria-hidden="true"></i></a>
         <a class="nav__cv" href="assets/CV.pdf" target="_blank" rel="noopener"><span>Voir mon CV</span></a>
       </nav>
       <div class="topbar__actions">
@@ -109,7 +115,7 @@
             <p>La grille interactive nécessite JavaScript.</p>
             <p>Pour toute demande de tarif ou de devis :
               <a href="mailto:arphandrame0@gmail.com?subject=Demande%20de%20tarif">arphandrame0@gmail.com</a>
-              ou <a href="devis.html">construisez votre projet</a> pas à pas.</p>
+              ou <a href="/devis">construisez votre projet</a> pas à pas.</p>
           </div>
         </noscript>
       </main>
@@ -126,7 +132,7 @@
     // « Construisez votre projet » : le mini-jeu pour un visiteur du mode
     // aventure, le formulaire classique pour tous les autres.
     window.projectHref = function () {
-      return Deeplink.getMode() === 'aventure' ? 'construire-projet.html' : 'devis.html';
+      return Deeplink.getMode() === 'aventure' ? '/construire-projet' : '/devis';
     };
 
     // Barre du haut : menu mobile et fond au défilement (comme js/classic.js,

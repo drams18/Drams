@@ -340,7 +340,7 @@ class Game {
     void fade.offsetWidth;
     fade.style.opacity = '1';
 
-    const go = () => { window.location.href = portal.href || 'construire-projet.html'; };
+    const go = () => { window.location.href = portal.href || '/construire-projet'; };
     fade.addEventListener('transitionend', go, { once: true });
     setTimeout(go, 700); // filet de sécurité si transitionend ne se déclenche pas
   }

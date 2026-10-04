@@ -14,7 +14,13 @@
   <meta property="og:description" content="Explorez la ville et découvrez mon parcours autrement.">
   <meta property="og:url" content="https://arphandrame.fr/aventure">
   <meta property="og:image" content="https://arphandrame.fr/assets/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Arphan Drame, Développeur Web Full Stack · Paris">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mode aventure · le portfolio d'Arphan Drame">
+  <meta name="twitter:description" content="Explorez la ville et découvrez mon parcours autrement.">
+  <meta name="twitter:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta name="theme-color" content="#0e1630">
   <link rel="preload" href="assets/fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="assets/img/favicon.png">
@@ -25,7 +31,7 @@
   <!-- Barre du jeu : « Mode classique » est le 1er élément focalisable,
        les informations restent toujours accessibles sans jouer. -->
   <div class="game-bar">
-    <a id="btn-classic" href="classique.html" class="game-home-btn" data-switch-classic
+    <a id="btn-classic" href="/classique" class="game-home-btn" data-switch-classic
        title="Passer en mode classique, à l'endroit que vous regardez">Mode classique</a>
     <button type="button" id="btn-menu" class="game-home-btn game-menu__btn"
             aria-haspopup="dialog" aria-controls="pause" title="Pause (Échap)">Menu</button>
@@ -42,7 +48,7 @@
     <canvas id="gameCanvas" role="img"
             aria-label="Ville interactive : chaque maison est une section du portfolio (profil, parcours, contact, galerie de projets).">
       <p>Le mode aventure est une ville interactive : déplacez votre personnage et entrez dans les maisons pour découvrir chaque section.
-        <a href="classique.html">Lire le portfolio en mode classique</a>.</p>
+        <a href="/classique">Lire le portfolio en mode classique</a>.</p>
     </canvas>
   </div>
 
@@ -116,9 +122,9 @@
       </div>
       <nav class="pause__links" aria-label="Liens">
         <a href="assets/CV.pdf" target="_blank" rel="noopener" class="cv-link">CV <span>Mon CV en PDF</span></a>
-        <a href="tarifs.html" class="tarifs-link">Tarifs <span>Mes prestations</span></a>
+        <a href="/tarifs" class="tarifs-link">Tarifs <span>Mes prestations</span></a>
         <button type="button" data-contact-cta data-contact-subject="Prise de contact · Portfolio">Contact <span>Me joindre directement</span></button>
-        <a href="index.html">Changer de mode <span>Retour au choix</span></a>
+        <a href="/">Changer de mode <span>Retour au choix</span></a>
       </nav>
       <div class="pause__foot">
         <button type="button" id="pause-tuto" class="pause__textbtn">Revoir le tutoriel</button>

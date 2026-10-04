@@ -252,7 +252,8 @@ function stepLabel(s) {
 const tlImage = (file) => file && ['webp', 'svg'].map(e => `assets/img/parcours/${file}.${e}`).find(f => existsSync(join(ROOT, f)));
 const tlLogo = (file, name, L) => {
   const src = tlImage(file);
-  return src ? `<p class="tl-logo"><img src="${L.up}${src}" alt="Logo ${esc(name)}" decoding="async"></p>` : '';
+  const size = src && imgSize(src);
+  return src ? `<p class="tl-logo"><img src="${L.up}${src}" alt="Logo ${esc(name)}"${size ? ` width="${size.w}" height="${size.h}"` : ''} decoding="async"></p>` : '';
 };
 const tlPhotos = (photos, L) => {
   const list = (photos || []).map(ph => ({ ...ph, src: tlImage(ph.file) })).filter(ph => ph.src);
@@ -270,6 +271,14 @@ function webpSize(file) {
   if (k === 'VP8L') { const v = b.readUInt32LE(21); return { w: (v & 0x3fff) + 1, h: ((v >>> 14) & 0x3fff) + 1 }; }
   if (k === 'VP8X') return { w: 1 + b.readUIntLE(24, 3), h: 1 + b.readUIntLE(27, 3) };
   return null;
+}
+// Dimensions d'une image du parcours : webp, ou svg (attributs width / height).
+function imgSize(file) {
+  if (!file.endsWith('.svg')) return webpSize(file);
+  const tag = (readFileSync(join(ROOT, file), 'utf8').match(/<svg\b[^>]*>/) || [''])[0];
+  const w = parseFloat((tag.match(/\bwidth="([\d.]+)(?:px)?"/) || [])[1]);
+  const h = parseFloat((tag.match(/\bheight="([\d.]+)(?:px)?"/) || [])[1]);
+  return w && h ? { w, h } : null;
 }
 // Aperçu d'un projet dans sa fiche de la frise : la première capture (les
 // trois premières pour une application mobile). Sans capture : rien.
@@ -295,16 +304,15 @@ const PAGES = [
 PAGES.forEach((p, i) => { p.n = String(i + 1).padStart(2, '0'); p.i = i; });
 const PAGE = Object.fromEntries(PAGES.map(p => [p.key, p]));
 
-// Liens relatifs : la page Profil est à la racine, les autres dans classique/.
+// Liens entre pages : l'URL canonique (/classique/projets, sans « .html »),
+// celle que sert Cloudflare Pages sans redirection. `up` reste relatif pour
+// les fichiers (css, js, images) : la page Profil est à la racine, les autres
+// dans classique/.
 function linker(from) {
   const up = from.key === 'profil' ? '' : '../';
   return {
     up,
-    page: (key, hash = '') => {
-      const to = PAGE[key];
-      const href = from.key === 'profil' ? to.file : key === 'profil' ? '../classique.html' : to.file.replace('classique/', '');
-      return href + (hash ? `#${hash}` : '');
-    },
+    page: (key, hash = '') => `/${PAGE[key].path}` + (hash ? `#${hash}` : ''),
   };
 }
 
@@ -337,7 +345,7 @@ function topbar(page, L) {
   const nav = PAGES.map(p => {
     const cur = p === page;
     return `<a href="${L.page(p.key)}"${cur ? ' aria-current="page"' : ''} data-page-link="${p.key}"><span>${p.label}</span>${cur ? '<i class="nav__ink" aria-hidden="true"></i>' : ''}</a>`;
-  }).concat(`<a href="${L.up}tarifs.html"><span>Tarifs</span></a>`,
+  }).concat(`<a href="/tarifs"><span>Tarifs</span></a>`,
     `<a class="nav__cv" href="${L.up}assets/CV.pdf" target="_blank" rel="noopener"><span>Voir mon CV</span></a>`).join('\n        ');
   return `
   <header class="topbar">
@@ -353,7 +361,7 @@ function topbar(page, L) {
           ${icon('sun', 'ico ico--sun')}
           ${icon('moon', 'ico ico--moon')}
         </button>
-        <a class="switch" href="${L.up}aventure.html#${page.route}" data-switch-adventure data-follow-route
+        <a class="switch" href="/aventure#${page.route}" data-switch-adventure data-follow-route
            title="Passer en mode aventure, à l'endroit que vous lisez">
           ${icon('gamepad')}<span>Mode aventure</span>
         </a>
@@ -384,9 +392,9 @@ function footer(L) {
     <div class="wrap footer__inner">
       <p>${esc(displayName)} · ${esc(bio.title)} · ${esc(bio.location)}</p>
       <nav class="footer__links" aria-label="Autres pages">
-        <a href="${L.up}index.html">Choisir un mode</a>
-        <a href="${L.up}aventure.html#ville" data-switch-adventure>Mode aventure</a>
-        <a href="${L.up}tarifs.html">Tarifs</a>
+        <a href="/">Choisir un mode</a>
+        <a href="/aventure#ville" data-switch-adventure>Mode aventure</a>
+        <a href="/tarifs">Tarifs</a>
         <a href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">CV</a>
       </nav>
     </div>
@@ -446,6 +454,11 @@ const HEAD_SCRIPT = `
 
 function shell(page, { title, description, ogDescription, jsonld, body, scripts = '', scrolls = false }) {
   const L = linker(page);
+  // Sous-pages : fil d'Ariane en données structurées seulement (rien d'affiché).
+  if (page.key !== 'profil') {
+    const { '@context': context, ...webPage } = jsonld;
+    jsonld = { '@context': context, '@graph': [webPage, breadcrumb(page)] };
+  }
   const others = PAGES.filter(p => p !== page).map(p => L.page(p.key));
   const url = SITE_URL + page.path;
   return `<!DOCTYPE html>
@@ -467,7 +480,11 @@ function shell(page, { title, description, ogDescription, jsonld, body, scripts 
   <meta property="og:image" content="${SITE_URL}assets/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="${esc(OG_ALT)}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${esc(title)}">
+  <meta name="twitter:description" content="${esc(ogDescription || description)}">
+  <meta name="twitter:image" content="${SITE_URL}assets/img/og.jpg">
   <meta name="theme-color" content="#0a0a0d">
   <script src="${L.up}js/theme.js"></script>${HEAD_SCRIPT}
   <link rel="icon" href="${L.up}assets/img/favicon.png">
@@ -572,7 +589,7 @@ function profilPage() {
         <p class="pf-ctx"><span class="pulse" aria-hidden="true"></span>${ctx}</p>
         <div class="pf-cta">
           <a class="btn btn--primary" href="${L.page('projets')}">Voir mes projets${icon('arrow')}</a>
-          <a class="btn btn--ghost" href="${L.up}tarifs.html">Un projet à me confier\u202f?${icon('arrow')}</a>
+          <a class="btn btn--ghost" href="/tarifs">Un projet à me confier\u202f?${icon('arrow')}</a>
         </div>
       </div>
       <a class="pf-scroll" href="#a-la-une"><span>Projets à la une</span>${icon('chevron')}</a>
@@ -624,7 +641,7 @@ function profilPage() {
 
   return shell(page, {
     title: `${displayName}, ${bio.title} · Portfolio`,
-    description: `Portfolio d'${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. Projets professionnels (${company}), personnels et scolaires, parcours, compétences et contact.`,
+    description: `Portfolio d'${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. Projets, parcours, compétences et contact.`,
     ogDescription: `${bio.seeking}. ${profile.positioning}`,
     jsonld: {
       '@context': 'https://schema.org',
@@ -883,7 +900,7 @@ function parcoursPage() {
     </section>`;
   return shell(page, {
     title: `Parcours · ${displayName}, ${bio.title}`,
-    description: `Parcours d'${displayName} : ${dated.map(t => stepLabel(t.s)).join(', ')}. ${devphantom.title} chez ${company} (${devphantom.date}), ${etna.title} (${etna.date}).`,
+    description: `Parcours d'${displayName} : ${dated.map(t => stepLabel(t.s)).join(', ')}. ${devphantom.title} chez ${company} (${devphantom.date}).`,
     jsonld: {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',
@@ -952,14 +969,14 @@ function competencesPage() {
   };
   return shell(page, {
     title: `Compétences · ${displayName}, ${bio.title}`,
-    description: `Écosystème technique d'${displayName} : ${families.map(f => f.label).join(', ')}. ${mainStack.slice(0, 6).map(s => s.item).join(', ')}… reliés aux projets qui les utilisent.`,
+    description: `Compétences techniques d'${displayName} : ${mainStack.slice(0, 6).map(s => s.item).join(', ')}… classées par famille et reliées aux projets qui les utilisent.`,
     jsonld: {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',
       url: SITE_URL + page.path,
       name: `Compétences · ${displayName}`,
       inLanguage: 'fr',
-      mainEntity: { '@id': `${SITE_URL}#person`, '@type': 'Person', name: displayName, knowsAbout: allSkills.map(s => s.item) },
+      mainEntity: { '@id': `${SITE_URL}#person`, '@type': 'Person', name: displayName, knowsAbout },
     },
     body,
   });
@@ -1008,7 +1025,7 @@ function contactPage() {
         <ul class="ct-orbs" aria-label="Moyens de contact">${orbs.map(orb).join('')}
         </ul>
         <p class="sr-only" role="status" data-copy-status></p>
-        <p class="ct-project" id="projet"><span>Un projet à réaliser ?</span><a class="text-link" href="${L.up}devis.html">Construisez votre projet${icon('arrow')}</a><a class="inline-link" href="${L.up}tarifs.html">Voir mes tarifs</a></p>
+        <p class="ct-project" id="projet"><span>Un projet à réaliser ?</span><a class="text-link" href="/devis">Construisez votre projet${icon('arrow')}</a><a class="inline-link" href="/tarifs">Voir mes tarifs</a></p>
       </div>
       <dialog class="ct-dlg" id="message" aria-labelledby="form-title">
         <form class="ct-form" id="classic-contact-form">
@@ -1057,6 +1074,22 @@ function identity() {
 }
 
 // ── JSON-LD ────────────────────────────────────────────
+// Compétences déclarées : sans le doublon « API REST » (= « REST API ») ni
+// la mention qui n'est pas une compétence. L'affichage, lui, ne change pas.
+const LD_SKIP = new Set(['API REST', 'Modèles locaux & API IA selon les projets']);
+const knowsAbout = [...new Set(profile.skillGroups.flatMap(g => g.items))].filter(s => !LD_SKIP.has(s));
+// Texte alternatif de l'image de partage (assets/img/og.jpg).
+const OG_ALT = `${displayName}, ${bio.title} · ${bio.location}`;
+
+function breadcrumb(page) {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: [PAGE.profil, page].map((p, i) => ({
+      '@type': 'ListItem', position: i + 1, name: p === PAGE.profil ? 'Portfolio' : p.label, item: SITE_URL + p.path,
+    })),
+  };
+}
+
 function person() {
   return {
     '@type': 'Person',
@@ -1065,12 +1098,11 @@ function person() {
     jobTitle: bio.title,
     description: `${bio.title} à ${bio.location}. ${bio.seeking || ''}`.trim(),
     url: SITE_URL,
-    image: `${SITE_URL}assets/img/og.jpg`,
     email: `mailto:${contact.email}`,
     address: { '@type': 'PostalAddress', addressLocality: bio.location, addressCountry: 'FR' },
     sameAs: bio.socials.map(s => s.url),
     knowsLanguage: bio.languages.map(l => l.label),
-    knowsAbout: [...new Set(profile.skillGroups.flatMap(g => g.items))],
+    knowsAbout,
     alumniOf: { '@type': 'CollegeOrUniversity', name: 'ETNA' },
     worksFor: { '@type': 'Organization', name: company },
   };
@@ -1104,7 +1136,7 @@ const LEGACY = `
       if (!m) return;
       var page = { projets: 'projets', parcours: 'parcours', competences: 'competences', contact: 'contact', portail: 'contact', services: 'contact' }[m[1]];
       var frag = m[2] ? '#' + m[2] : (m[1] === 'portail' || m[1] === 'services') ? '#projet' : '';
-      location.replace('classique/' + page + '.html' + location.search + frag);
+      location.replace('/classique/' + page + location.search + frag);
     })(location.hash);
   </script>`;
 

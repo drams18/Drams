@@ -41,7 +41,7 @@ export function initSkills() {
   const project = Object.fromEntries(projects.map((p) => [p.slug, p]));
   const projectHref = (slug) => {
     const a = sec.querySelector(`.sk__projects a[data-project="${CSS.escape(slug)}"]`);
-    return a ? a.getAttribute('href') : `projets.html#${slug}`;
+    return a ? a.getAttribute('href') : `/classique/projets#${slug}`;
   };
   const projectsPage = projectHref('').split('#')[0];
 

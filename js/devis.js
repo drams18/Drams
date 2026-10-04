@@ -184,7 +184,7 @@
     s.appendChild(u);
     return s;
   }
-  function homeHref() { return window.Deeplink ? window.Deeplink.homeHref(true) : 'index.html'; }
+  function homeHref() { return window.Deeplink ? window.Deeplink.homeHref(true) : '/'; }
 
   function setProgress(n, label) {
     progress.hidden = false;

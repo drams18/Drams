@@ -5,19 +5,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Parcours · Arphan Drame, Développeur Web Full Stack</title>
-  <meta name="description" content="Parcours d'Arphan Drame : Bac, BTS, Doranco, ETNA, DevPhantom. Développeur Web Full Stack en alternance chez DevPhantom (01/2024 - 10/2026), ETNA, Bachelor puis Master (10/2023 - 10/2026).">
+  <meta name="description" content="Parcours d'Arphan Drame : Bac, BTS, Doranco, ETNA, DevPhantom. Développeur Web Full Stack en alternance chez DevPhantom (01/2024 - 10/2026).">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://arphandrame.fr/classique/parcours">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Arphan Drame · Portfolio">
   <meta property="og:title" content="Parcours · Arphan Drame, Développeur Web Full Stack">
-  <meta property="og:description" content="Parcours d'Arphan Drame : Bac, BTS, Doranco, ETNA, DevPhantom. Développeur Web Full Stack en alternance chez DevPhantom (01/2024 - 10/2026), ETNA, Bachelor puis Master (10/2023 - 10/2026).">
+  <meta property="og:description" content="Parcours d'Arphan Drame : Bac, BTS, Doranco, ETNA, DevPhantom. Développeur Web Full Stack en alternance chez DevPhantom (01/2024 - 10/2026).">
   <meta property="og:url" content="https://arphandrame.fr/classique/parcours">
   <meta property="og:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Arphan Drame, Développeur Web Full Stack · Paris">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Parcours · Arphan Drame, Développeur Web Full Stack">
+  <meta name="twitter:description" content="Parcours d'Arphan Drame : Bac, BTS, Doranco, ETNA, DevPhantom. Développeur Web Full Stack en alternance chez DevPhantom (01/2024 - 10/2026).">
+  <meta name="twitter:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta name="theme-color" content="#0a0a0d">
   <script src="../js/theme.js"></script>
   <script>
@@ -70,18 +74,39 @@
   <link rel="stylesheet" href="../css/site.css">
   <link rel="stylesheet" href="../css/classic.css">
   <script type="speculationrules">
-  {"prerender": [{"source": "list", "urls": ["../classique.html","projets.html","competences.html","contact.html"], "eagerness": "moderate"}]}
+  {"prerender": [{"source": "list", "urls": ["/classique","/classique/projets","/classique/competences","/classique/contact"], "eagerness": "moderate"}]}
   </script>
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  "url": "https://arphandrame.fr/classique/parcours",
-  "name": "Parcours · Arphan Drame",
-  "inLanguage": "fr",
-  "mainEntity": {
-    "@id": "https://arphandrame.fr/#person"
-  }
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      "url": "https://arphandrame.fr/classique/parcours",
+      "name": "Parcours · Arphan Drame",
+      "inLanguage": "fr",
+      "mainEntity": {
+        "@id": "https://arphandrame.fr/#person"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Portfolio",
+          "item": "https://arphandrame.fr/classique"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Parcours",
+          "item": "https://arphandrame.fr/classique/parcours"
+        }
+      ]
+    }
+  ]
 }
   </script>
   </head>
@@ -116,12 +141,12 @@
       <a class="brand" href="../" aria-label="Arphan Drame, accueil"><span>A. DRAME</span></a>
       <span class="topbar__where" aria-hidden="true"><b>03</b>Parcours</span>
       <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
-        <a href="../classique.html" data-page-link="profil"><span>Profil</span></a>
-        <a href="projets.html" data-page-link="projets"><span>Projets</span></a>
-        <a href="parcours.html" aria-current="page" data-page-link="parcours"><span>Parcours</span><i class="nav__ink" aria-hidden="true"></i></a>
-        <a href="competences.html" data-page-link="competences"><span>Compétences</span></a>
-        <a href="contact.html" data-page-link="contact"><span>Contact</span></a>
-        <a href="../tarifs.html"><span>Tarifs</span></a>
+        <a href="/classique" data-page-link="profil"><span>Profil</span></a>
+        <a href="/classique/projets" data-page-link="projets"><span>Projets</span></a>
+        <a href="/classique/parcours" aria-current="page" data-page-link="parcours"><span>Parcours</span><i class="nav__ink" aria-hidden="true"></i></a>
+        <a href="/classique/competences" data-page-link="competences"><span>Compétences</span></a>
+        <a href="/classique/contact" data-page-link="contact"><span>Contact</span></a>
+        <a href="/tarifs"><span>Tarifs</span></a>
         <a class="nav__cv" href="../assets/CV.pdf" target="_blank" rel="noopener"><span>Voir mon CV</span></a>
       </nav>
       <div class="topbar__actions">
@@ -130,7 +155,7 @@
           <svg class="ico ico--sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>
           <svg class="ico ico--moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>
         </button>
-        <a class="switch" href="../aventure.html#parcours/devphantom" data-switch-adventure data-follow-route
+        <a class="switch" href="/aventure#parcours/devphantom" data-switch-adventure data-follow-route
            title="Passer en mode aventure, à l'endroit que vous lisez">
           <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-gamepad"/></svg><span>Mode aventure</span>
         </a>
@@ -193,7 +218,7 @@
             </header>
           </article>
           <article class="tl-panel tl-panel--pin" id="pix" data-step="pix" data-kind="award" data-route="parcours" aria-labelledby="tl-pix-t">
-            <header class="tl-panel__head"><p class="tl-logo"><img src="../assets/img/parcours/pix-logo.svg" alt="Logo Certification Pix" decoding="async"></p>
+            <header class="tl-panel__head"><p class="tl-logo"><img src="../assets/img/parcours/pix-logo.svg" alt="Logo Certification Pix" width="240" height="198" decoding="async"></p>
               <p class="tl-panel__k"><span>Certification</span>2022</p>
               <h2 class="tl-panel__t" id="tl-pix-t">Certification Pix</h2>
               
@@ -202,7 +227,7 @@
             </header>
           </article>
           <article class="tl-panel tl-panel--normal" id="doranco" data-step="doranco" data-kind="edu" data-route="parcours/doranco" aria-labelledby="tl-doranco-t">
-            <header class="tl-panel__head"><p class="tl-logo"><img src="../assets/img/parcours/doranco-logo.webp" alt="Logo Doranco" decoding="async"></p>
+            <header class="tl-panel__head"><p class="tl-logo"><img src="../assets/img/parcours/doranco-logo.webp" alt="Logo Doranco" width="480" height="101" decoding="async"></p>
               <p class="tl-panel__k"><span>Formation</span>01/2023 - 06/2023</p>
               <h2 class="tl-panel__t" id="tl-doranco-t">Formation Développeur Web Full Stack</h2>
               <p class="tl-panel__place">Doranco</p>
@@ -212,7 +237,7 @@
             </div>
           </article>
           <article class="tl-panel tl-panel--mid" id="etna" data-step="etna" data-kind="edu" data-route="parcours/etna" aria-labelledby="tl-etna-t">
-            <header class="tl-panel__head"><p class="tl-logo"><img src="../assets/img/parcours/etna-logo.webp" alt="Logo ETNA" decoding="async"></p>
+            <header class="tl-panel__head"><p class="tl-logo"><img src="../assets/img/parcours/etna-logo.webp" alt="Logo ETNA" width="449" height="140" decoding="async"></p>
               <p class="tl-panel__k"><span>Formation</span>10/2023 - 10/2026</p>
               <h2 class="tl-panel__t" id="tl-etna-t">ETNA, Bachelor puis Master</h2>
               
@@ -235,7 +260,7 @@
             </header>
           </article>
           <article class="tl-panel tl-panel--major" id="devphantom" data-step="devphantom" data-kind="pro" data-route="parcours/devphantom" aria-labelledby="tl-devphantom-t">
-            <header class="tl-panel__head"><p class="tl-logo"><img src="../assets/img/parcours/devphantom-logo-recadre.webp" alt="Logo DevPhantom" decoding="async"></p>
+            <header class="tl-panel__head"><p class="tl-logo"><img src="../assets/img/parcours/devphantom-logo-recadre.webp" alt="Logo DevPhantom" width="430" height="205" decoding="async"></p>
               <p class="tl-panel__k"><span>Expérience</span>01/2024 - 10/2026</p>
               <h2 class="tl-panel__t" id="tl-devphantom-t">Développeur Web Full Stack en alternance</h2>
               <p class="tl-panel__place">DevPhantom · en parallèle de l'ETNA · équipe d'environ 4 personnes</p>
@@ -244,7 +269,7 @@
             <div class="tl-panel__body">
               <div class="tl-panel__projects">
                 <p class="mini-title">Projets DevPhantom · en équipe</p>
-                <ul><li><a href="projets.html#infinitia" data-cat="Professionnel"><strong>Infinitia</strong><span>Plateforme Web</span></a></li><li><a href="projets.html#allsab-ms" data-cat="Professionnel"><strong>Allsab-MS</strong><span>Intranet</span></a></li><li><a href="projets.html#hexagon" data-cat="Professionnel"><strong>Hexagon</strong><span>Plateforme Web</span></a></li><li><a href="projets.html#gexp" data-cat="Professionnel"><strong>GEXP</strong><span>Plateforme Web</span></a></li><li><a href="projets.html#ilamiria" data-cat="Professionnel"><strong>Ilamiria</strong><span>Application Mobile</span></a></li><li><a href="projets.html#badn" data-cat="Professionnel"><strong>BADN</strong><span>Application Mobile</span></a></li></ul>
+                <ul><li><a href="/classique/projets#infinitia" data-cat="Professionnel"><strong>Infinitia</strong><span>Plateforme Web</span></a></li><li><a href="/classique/projets#allsab-ms" data-cat="Professionnel"><strong>Allsab-MS</strong><span>Intranet</span></a></li><li><a href="/classique/projets#hexagon" data-cat="Professionnel"><strong>Hexagon</strong><span>Plateforme Web</span></a></li><li><a href="/classique/projets#gexp" data-cat="Professionnel"><strong>GEXP</strong><span>Plateforme Web</span></a></li><li><a href="/classique/projets#ilamiria" data-cat="Professionnel"><strong>Ilamiria</strong><span>Application Mobile</span></a></li><li><a href="/classique/projets#badn" data-cat="Professionnel"><strong>BADN</strong><span>Application Mobile</span></a></li></ul>
               </div>
               <details class="tl-more"><summary>Au quotidien<svg class="ico tl-more__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary><p>Après les rendez-vous clients : compréhension du besoin, récupération des idées et fonctionnalités, définition de la solution, développement ou reprise de projets, création de fonctionnalités et de SaaS. Travail avec Jira, méthodologie Agile, adaptation aux contraintes techniques et métier.</p></details>
             </div>
@@ -263,10 +288,10 @@
               <p class="tl-panel__k"><span>Projet ETNA</span>janv. 2025</p>
               <h2 class="tl-panel__t" id="tl-skywalk-t">SkyWalk</h2>
               <p class="tl-panel__place">Plateforme Web · en équipe de 7</p>
-              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="projets.html#skywalk">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="tl-up" href="#etna"><span>Pendant</span>ETNA</a></p>
+              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="/classique/projets#skywalk">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="tl-up" href="#etna"><span>Pendant</span>ETNA</a></p>
               <p class="tl-panel__lead">Plateforme web destinée à accompagner les personnes dans leurs projets d'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.</p>
             </header>
-            <a class="tl-shots" href="projets.html#skywalk" aria-label="Aperçu du projet SkyWalk : voir le projet">
+            <a class="tl-shots" href="/classique/projets#skywalk" aria-label="Aperçu du projet SkyWalk : voir le projet">
               <img src="../assets/img/projets/skywalk-home-logged-out.webp" alt="Page d'accueil" width="1600" height="775" loading="lazy" decoding="async">
             </a>
           </article>
@@ -275,10 +300,10 @@
               <p class="tl-panel__k"><span>Projet personnel</span>juin 2025</p>
               <h2 class="tl-panel__t" id="tl-islaah-t">ISLAAH</h2>
               <p class="tl-panel__place">Application Mobile</p>
-              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="projets.html#islaah">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
+              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="/classique/projets#islaah">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
               <p class="tl-panel__lead">Teste ta connaissance du Coran : application mobile pour s'entraîner à reconnaître les versets, avec écoute de récitations, plusieurs modes de quiz et suivi de progression.</p>
             </header>
-            <a class="tl-shots tl-shots--mobile" href="projets.html#islaah" aria-label="Aperçu du projet ISLAAH : voir le projet">
+            <a class="tl-shots tl-shots--mobile" href="/classique/projets#islaah" aria-label="Aperçu du projet ISLAAH : voir le projet">
               <img src="../assets/img/projets/islaah-home-logged-in.webp" alt="Accueil : les modes de jeu" width="370" height="800" loading="lazy" decoding="async">
               <img src="../assets/img/projets/islaah-onboarding.webp" alt="Écran de bienvenue" width="370" height="800" loading="lazy" decoding="async">
               <img src="../assets/img/projets/islaah-audio-listening.webp" alt="Écoute d'un verset et choix de la sourate" width="370" height="800" loading="lazy" decoding="async">
@@ -289,10 +314,10 @@
               <p class="tl-panel__k"><span>Projet personnel</span>sept. 2025</p>
               <h2 class="tl-panel__t" id="tl-prospectly-t">Plateforme de recherche de prospects</h2>
               <p class="tl-panel__place">Projet personnel</p>
-              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="projets.html#prospectly">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
+              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="/classique/projets#prospectly">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
               <p class="tl-panel__lead">Plateforme permettant de rechercher une enseigne qui a besoin d'un site web ou d'une mise à jour.</p>
             </header>
-            <a class="tl-shots" href="projets.html#prospectly" aria-label="Aperçu du projet Plateforme de recherche de prospects : voir le projet">
+            <a class="tl-shots" href="/classique/projets#prospectly" aria-label="Aperçu du projet Plateforme de recherche de prospects : voir le projet">
               <img src="../assets/img/projets/prospectly-search.webp" alt="Recherche d'enseignes : fiche d'un commerce" width="1600" height="772" loading="lazy" decoding="async">
             </a>
           </article>
@@ -301,10 +326,10 @@
               <p class="tl-panel__k"><span>Projet personnel</span>janv. 2026</p>
               <h2 class="tl-panel__t" id="tl-oneday-t">OneDay</h2>
               <p class="tl-panel__place">PWA de planification</p>
-              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="projets.html#oneday">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
+              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="/classique/projets#oneday">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
               <p class="tl-panel__lead">Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail.</p>
             </header>
-            <a class="tl-shots tl-shots--mobile" href="projets.html#oneday" aria-label="Aperçu du projet OneDay : voir le projet">
+            <a class="tl-shots tl-shots--mobile" href="/classique/projets#oneday" aria-label="Aperçu du projet OneDay : voir le projet">
               <img src="../assets/img/projets/oneday-home-program.webp" alt="Journée du jour avec un programme appliqué" width="440" height="954" loading="lazy" decoding="async">
               <img src="../assets/img/projets/oneday-home-without-program.webp" alt="Journée vide : ajout d'une tâche" width="440" height="956" loading="lazy" decoding="async">
             </a>
@@ -314,10 +339,10 @@
               <p class="tl-panel__k"><span>Projet personnel</span>mai 2026</p>
               <h2 class="tl-panel__t" id="tl-wild-kedougou-t">Wild Kédougou Experience</h2>
               <p class="tl-panel__place">Plateforme de réservation</p>
-              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="projets.html#wild-kedougou">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
+              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="/classique/projets#wild-kedougou">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
               <p class="tl-panel__lead">Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.</p>
             </header>
-            <a class="tl-shots" href="projets.html#wild-kedougou" aria-label="Aperçu du projet Wild Kédougou Experience : voir le projet">
+            <a class="tl-shots" href="/classique/projets#wild-kedougou" aria-label="Aperçu du projet Wild Kédougou Experience : voir le projet">
               <img src="../assets/img/projets/wild-kedougou-home.webp" alt="Page d'accueil" width="1600" height="778" loading="lazy" decoding="async">
             </a>
           </article>
@@ -326,7 +351,7 @@
               <p class="tl-panel__k"><span>Projet personnel</span>août 2026</p>
               <h2 class="tl-panel__t" id="tl-pool-party-t">Pool Party Experience</h2>
               <p class="tl-panel__place">Site vitrine WordPress · En cours</p>
-              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="projets.html#pool-party">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
+              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="/classique/projets#pool-party">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
               <p class="tl-panel__lead">Projet en cours, réalisé pour un ami : création et intégration d'un site vitrine WordPress.</p>
             </header>
           </article>
@@ -335,10 +360,10 @@
               <p class="tl-panel__k"><span>Projet ETNA</span>août 2026</p>
               <h2 class="tl-panel__t" id="tl-crowdin-t">Crowdin (clone)</h2>
               <p class="tl-panel__place">Plateforme de localisation · en binôme</p>
-              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="projets.html#crowdin">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="tl-up" href="#etna"><span>Pendant</span>ETNA</a></p>
+              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="/classique/projets#crowdin">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="tl-up" href="#etna"><span>Pendant</span>ETNA</a></p>
               <p class="tl-panel__lead">Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation).</p>
             </header>
-            <a class="tl-shots" href="projets.html#crowdin" aria-label="Aperçu du projet Crowdin (clone) : voir le projet">
+            <a class="tl-shots" href="/classique/projets#crowdin" aria-label="Aperçu du projet Crowdin (clone) : voir le projet">
               <img src="../assets/img/projets/crowdin-home.webp" alt="Page d'accueil" width="1600" height="737" loading="lazy" decoding="async">
             </a>
           </article>
@@ -350,7 +375,7 @@
               <p class="tl-panel__lead">Je peux m'adapter à un environnement technique existant, comprendre rapidement un projet et apprendre les outils nécessaires pour répondre au besoin.</p>
             </header>
             <div class="tl-panel__body">
-              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="contact.html">Me contacter<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
+              <p class="tl-panel__acts"><a class="btn btn--primary btn--sm" href="/classique/contact">Me contacter<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
             </div>
           </article>
           <article class="tl-panel tl-panel--pin" id="master" data-step="master" data-kind="award" data-route="parcours/etna" aria-labelledby="tl-master-t">
@@ -459,10 +484,10 @@
   </main>
 
   <nav class="worlds" aria-label="Page précédente et suivante">
-    <a class="worlds__door worlds__door--prev" href="projets.html" rel="prev" aria-keyshortcuts="ArrowLeft">
+    <a class="worlds__door worlds__door--prev" href="/classique/projets" rel="prev" aria-keyshortcuts="ArrowLeft">
       <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span class="worlds__l">Projets</span>
     </a>
-    <a class="worlds__door worlds__door--next" href="competences.html" rel="next" aria-keyshortcuts="ArrowRight">
+    <a class="worlds__door worlds__door--next" href="/classique/competences" rel="next" aria-keyshortcuts="ArrowRight">
       <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg><span class="worlds__l">Compétences</span>
     </a>
   </nav>

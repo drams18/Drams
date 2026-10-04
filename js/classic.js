@@ -148,7 +148,7 @@
   // Préchargement à l'intention (pas au chargement : un visiteur qui reste
   // en classique ne télécharge rien du jeu).
   var up = /\/classique\//.test(location.pathname) ? '../' : '';
-  var PREFETCH = ['aventure.html', 'style.css', 'js/audio.js', 'js/museum.js', 'js/controls.js',
+  var PREFETCH = ['/aventure', 'style.css', 'js/audio.js', 'js/museum.js', 'js/controls.js',
     'js/mobileControls.js', 'js/interactions.js', 'js/player.js', 'js/map.js', 'js/game.js'];
   var prefetched = false;
   function prefetch() {
@@ -159,7 +159,7 @@
     PREFETCH.forEach(function (href) {
       var l = doc.createElement('link');
       l.rel = 'prefetch';
-      l.href = up + href;
+      l.href = href.charAt(0) === '/' ? href : up + href;
       doc.head.appendChild(l);
     });
   }

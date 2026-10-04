@@ -365,7 +365,7 @@ export function initProjects(app) {
   const $ = (s) => dlg.querySelector(s);
   const panel = $('.pjd__panel');
   let current = null, returnTo = null, closing = false, pushed = false;
-  const competences = sec.querySelector('.tag-link') ? sec.querySelector('.tag-link').getAttribute('href').split('#')[0] : 'competences.html';
+  const competences = sec.querySelector('.tag-link') ? sec.querySelector('.tag-link').getAttribute('href').split('#')[0] : '/classique/competences';
 
   function fill(d) {
     current = d;

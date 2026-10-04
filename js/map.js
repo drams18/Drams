@@ -90,7 +90,7 @@ const SPECIAL_DOOR = {
   id: 'build-project',
   label: 'CONSTRUISEZ VOTRE PROJET',
   promptLabel: 'CONSTRUIRE UN PROJET',
-  href: 'construire-projet.html',
+  href: '/construire-projet',
   accent: CITY.cyan,
   isPortal: true,
   x: 769, w: 132, h: 216,

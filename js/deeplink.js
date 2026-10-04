@@ -21,10 +21,9 @@
 
   var MODE_KEY = 'drame.portfolio.mode';
 
-  // Pages des modes. Cloudflare Pages les sert aussi sans « .html »
-  // (/classique, /aventure) ; les liens gardent l'extension pour que le
-  // site fonctionne tel quel en local.
-  var PAGES = { classique: 'classique.html', aventure: 'aventure.html', selection: 'index.html' };
+  // Pages des modes : leur URL canonique, sans « .html » (Cloudflare Pages
+  // et le serveur local de Vite les servent ainsi, sans redirection).
+  var PAGES = { classique: '/classique', aventure: '/aventure', selection: '/' };
 
   // route (URL) ⇄ id de section (SECTIONS / BUILDINGS_DATA)
   var SECTION_OF = { profil: 'profile', parcours: 'parcours', projets: 'projets', contact: 'contact' };
@@ -66,10 +65,10 @@
     return page + (fromPortal && PAGES[mode] ? '#portail' : '');
   }
 
-  // Réécrit les liens « retour au portfolio » (href="index.html") d'une page annexe.
+  // Réécrit les liens « retour au portfolio » (href="/") d'une page annexe.
   function rewriteHomeLinks(root, fromPortal) {
     var href = homeHref(fromPortal);
-    (root || global.document).querySelectorAll('a[href="index.html"]').forEach(function (a) {
+    (root || global.document).querySelectorAll('a[href="/"]').forEach(function (a) {
       a.setAttribute('href', href);
     });
   }

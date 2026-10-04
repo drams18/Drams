@@ -17,7 +17,11 @@
   <meta property="og:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Arphan Drame, Développeur Web Full Stack · Paris">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact · Arphan Drame, Développeur Web Full Stack">
+  <meta name="twitter:description" content="Contacter Arphan Drame, Développeur Web Full Stack à Paris. En recherche de CDI (dès oct. 2026). E-mail, téléphone, LinkedIn, GitHub, CV et formulaire de contact.">
+  <meta name="twitter:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta name="theme-color" content="#0a0a0d">
   <script src="../js/theme.js"></script>
   <script>
@@ -70,22 +74,43 @@
   <link rel="stylesheet" href="../css/site.css">
   <link rel="stylesheet" href="../css/classic.css">
   <script type="speculationrules">
-  {"prerender": [{"source": "list", "urls": ["../classique.html","projets.html","parcours.html","competences.html"], "eagerness": "moderate"}]}
+  {"prerender": [{"source": "list", "urls": ["/classique","/classique/projets","/classique/parcours","/classique/competences"], "eagerness": "moderate"}]}
   </script>
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ContactPage",
-  "url": "https://arphandrame.fr/classique/contact",
-  "name": "Contact · Arphan Drame",
-  "inLanguage": "fr",
-  "mainEntity": {
-    "@id": "https://arphandrame.fr/#person",
-    "@type": "Person",
-    "name": "Arphan Drame",
-    "email": "mailto:arphandrame0@gmail.com",
-    "telephone": "+33767318426"
-  }
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "url": "https://arphandrame.fr/classique/contact",
+      "name": "Contact · Arphan Drame",
+      "inLanguage": "fr",
+      "mainEntity": {
+        "@id": "https://arphandrame.fr/#person",
+        "@type": "Person",
+        "name": "Arphan Drame",
+        "email": "mailto:arphandrame0@gmail.com",
+        "telephone": "+33767318426"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Portfolio",
+          "item": "https://arphandrame.fr/classique"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Contact",
+          "item": "https://arphandrame.fr/classique/contact"
+        }
+      ]
+    }
+  ]
 }
   </script>
   </head>
@@ -120,12 +145,12 @@
       <a class="brand" href="../" aria-label="Arphan Drame, accueil"><span>A. DRAME</span></a>
       <span class="topbar__where" aria-hidden="true"><b>05</b>Contact</span>
       <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
-        <a href="../classique.html" data-page-link="profil"><span>Profil</span></a>
-        <a href="projets.html" data-page-link="projets"><span>Projets</span></a>
-        <a href="parcours.html" data-page-link="parcours"><span>Parcours</span></a>
-        <a href="competences.html" data-page-link="competences"><span>Compétences</span></a>
-        <a href="contact.html" aria-current="page" data-page-link="contact"><span>Contact</span><i class="nav__ink" aria-hidden="true"></i></a>
-        <a href="../tarifs.html"><span>Tarifs</span></a>
+        <a href="/classique" data-page-link="profil"><span>Profil</span></a>
+        <a href="/classique/projets" data-page-link="projets"><span>Projets</span></a>
+        <a href="/classique/parcours" data-page-link="parcours"><span>Parcours</span></a>
+        <a href="/classique/competences" data-page-link="competences"><span>Compétences</span></a>
+        <a href="/classique/contact" aria-current="page" data-page-link="contact"><span>Contact</span><i class="nav__ink" aria-hidden="true"></i></a>
+        <a href="/tarifs"><span>Tarifs</span></a>
         <a class="nav__cv" href="../assets/CV.pdf" target="_blank" rel="noopener"><span>Voir mon CV</span></a>
       </nav>
       <div class="topbar__actions">
@@ -134,7 +159,7 @@
           <svg class="ico ico--sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>
           <svg class="ico ico--moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>
         </button>
-        <a class="switch" href="../aventure.html#contact" data-switch-adventure data-follow-route
+        <a class="switch" href="/aventure#contact" data-switch-adventure data-follow-route
            title="Passer en mode aventure, à l'endroit que vous lisez">
           <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-gamepad"/></svg><span>Mode aventure</span>
         </a>
@@ -185,7 +210,7 @@
           </a></li>
         </ul>
         <p class="sr-only" role="status" data-copy-status></p>
-        <p class="ct-project" id="projet"><span>Un projet à réaliser ?</span><a class="text-link" href="../devis.html">Construisez votre projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="inline-link" href="../tarifs.html">Voir mes tarifs</a></p>
+        <p class="ct-project" id="projet"><span>Un projet à réaliser ?</span><a class="text-link" href="/devis">Construisez votre projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="inline-link" href="/tarifs">Voir mes tarifs</a></p>
       </div>
       <dialog class="ct-dlg" id="message" aria-labelledby="form-title">
         <form class="ct-form" id="classic-contact-form">
@@ -210,7 +235,7 @@
   </main>
 
   <nav class="worlds" aria-label="Page précédente et suivante">
-    <a class="worlds__door worlds__door--prev" href="competences.html" rel="prev" aria-keyshortcuts="ArrowLeft">
+    <a class="worlds__door worlds__door--prev" href="/classique/competences" rel="prev" aria-keyshortcuts="ArrowLeft">
       <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span class="worlds__l">Compétences</span>
     </a>
   </nav>
