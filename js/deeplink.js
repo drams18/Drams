@@ -9,7 +9,9 @@
      #projets[/<slug>]       un projet (skywalk…)
      #contact                coordonnées + formulaire
      #portail                « Construisez votre projet » (+ tarifs)
-     #ville                  la ville, sans section particulière
+     #ville                  le mode aventure, sans section particulière
+     #aventure/<univers>     un univers du mode aventure (ville, hero, club),
+                             lu par src/aventure/main.js
 
    Passer d'un mode à l'autre = garder le fragment, changer de page.
    Le mode courant n'est PAS un état global : c'est la page elle-même.

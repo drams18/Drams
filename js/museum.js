@@ -3,7 +3,7 @@
    Arphan DRAME : Développeur Web Full Stack
 
    Source UNIQUE du contenu, lue par les deux modes :
-     • mode aventure  → modales des maisons (js/interactions.js)
+     • mode aventure  → fenêtres des lieux (src/aventure/portfolio/data.js)
      • mode classique → HTML généré par scripts/build-classic.mjs
        (npm run build après toute modification de ce fichier)
    `slug` = identifiant stable utilisé dans les liens (#projets/skywalk).

@@ -13,7 +13,7 @@
    Produit dans assets/img/ :
      preview-classique-day(.webp | -640.webp)    mode classique, ville de jour
      preview-classique-night(.webp | -640.webp)  mode classique, ville de nuit
-     preview-aventure(.webp | -640.webp)         la ville du mode aventure
+     preview-aventure(.webp | -640.webp)         l'univers VILLE du mode aventure
      og.jpg                                      image de partage 1200×630
    À relancer quand le design d'un mode change.
    ══════════════════════════════════════════════════════ */
@@ -71,8 +71,8 @@ try {
     // ?capture : page classique figée (animations GSAP désactivées).
     { name: 'preview-classique-day',   url: 'classique.html?theme=day&capture' },
     { name: 'preview-classique-night', url: 'classique.html?theme=night&capture' },
-    // ?capture : la ville sans l'aide de 1re visite par-dessus.
-    { name: 'preview-aventure',        url: 'aventure.html?capture#ville', wait: 4000 },
+    // ?capture : l'univers VILLE, sans interface par-dessus.
+    { name: 'preview-aventure',        url: 'aventure.html?capture#aventure/ville', wait: 4000 },
   ];
   for (const j of jobs) {
     const png = join(tmp, j.name + '.png');

@@ -121,7 +121,10 @@
     if (r.bottom < 60 || r.top > innerHeight) {
       name.style.viewTransitionName = 'none';
       brand.style.viewTransitionName = 'name';
-      e.viewTransition.finished.then(function () { name.style.viewTransitionName = ''; brand.style.viewTransitionName = ''; });
+      // Transition interrompue (redirection d'un ancien fragment, ex. /classique#projets
+      // venu du mode aventure) : même nettoyage, sans rejet non géré.
+      var reset = function () { name.style.viewTransitionName = ''; brand.style.viewTransitionName = ''; };
+      e.viewTransition.finished.then(reset, reset);
     }
   });
   // Retour arrière depuis le cache : la page revient telle qu'elle était.
@@ -148,8 +151,7 @@
   // Préchargement à l'intention (pas au chargement : un visiteur qui reste
   // en classique ne télécharge rien du jeu).
   var up = /\/classique\//.test(location.pathname) ? '../' : '';
-  var PREFETCH = ['/aventure', 'style.css', 'js/audio.js', 'js/museum.js', 'js/controls.js',
-    'js/mobileControls.js', 'js/interactions.js', 'js/player.js', 'js/map.js', 'js/game.js'];
+  var PREFETCH = ['/aventure'];
   var prefetched = false;
   function prefetch() {
     if (prefetched) return;
@@ -163,6 +165,23 @@
       doc.head.appendChild(l);
     });
   }
+  // Visiteur qui a déjà une partie en mode aventure : le lien l'y ramène
+  // (« Retour à l'aventure »), directement dans son univers.
+  var universe = null;
+  try {
+    var sv = JSON.parse(localStorage.getItem('drame.aventure.save'));
+    if (sv && sv.version === 2 && /^(ville|hero|club)$/.test(sv.universe)) universe = sv.universe;
+    else if (sv && sv.v === 1) universe = 'ville';
+  } catch (e) { /* stockage indisponible */ }
+  if (universe) {
+    doc.querySelectorAll('[data-switch-adventure]').forEach(function (a) {
+      var label = a.querySelector('span') || a;
+      label.textContent = 'Retour à l\'aventure';
+      a.setAttribute('title', 'Reprendre le mode aventure, à l\'endroit que vous lisez');
+      if (!a.hasAttribute('data-follow-route')) a.setAttribute('href', '/aventure#aventure/' + universe);
+    });
+  }
+
   doc.querySelectorAll('[data-switch-adventure]').forEach(function (a) {
     a.addEventListener('pointerenter', prefetch);
     a.addEventListener('focus', prefetch);

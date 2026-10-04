@@ -15,8 +15,7 @@
 
   var PREFETCH = {
     classique: ['/classique', 'css/classic.css', 'js/classic.js', 'js/contact-form.js'],
-    aventure: ['/aventure', 'style.css', 'js/audio.js', 'js/museum.js', 'js/controls.js',
-      'js/mobileControls.js', 'js/interactions.js', 'js/player.js', 'js/map.js', 'js/game.js', 'js/contact-form.js'],
+    aventure: ['/aventure', 'js/museum.js', 'js/contact-form.js'],
   };
   var done = {};
   function prefetch(mode) {

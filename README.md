@@ -13,7 +13,7 @@ https://arphandrame.fr/
 | `/classique/parcours` | `classique/parcours.html` | Mode classique · Parcours (frise horizontale) |
 | `/classique/competences` | `classique/competences.html` | Mode classique · Compétences (écosystème) |
 | `/classique/contact` | `classique/contact.html` | Mode classique · Contact |
-| `/aventure` | `aventure.html` | **Mode aventure** · la ville interactive (canvas) |
+| `/aventure` | `aventure.html` | **Mode aventure** · trois univers à explorer (canvas + interface DOM) |
 | `/tarifs` | `tarifs.html` | Grille tarifaire + recherche (style classique, commune aux deux modes) |
 | `/devis` | `devis.html` | « Construisez votre projet » · formulaire par étapes (site classique) |
 | `/construire-projet` | `construire-projet.html` | « Construisez votre projet » · mini-jeu (mode aventure) |
@@ -33,12 +33,14 @@ https://arphandrame.fr/
 - **Liens profonds communs** (`js/deeplink.js`) : `#profil`, `#parcours/<slug>`,
   `#projets/<slug>`, `#contact`, `#portail`. Le même fragment ouvre le même contenu dans les
   deux modes : `/classique#projets/skywalk` (ancien format, redirigé vers
-  `/classique/projets#skywalk`) ⇄ `/aventure#projets/skywalk`.
+  `/classique/projets#skywalk`) ⇄ `/aventure#projets/skywalk`. Le mode aventure ajoute
+  `#aventure/ville`, `#aventure/hero`, `#aventure/club` (l'univers, directement).
 - **Ambiance jour / nuit** : `js/theme.js` (07 h → 20 h = jour ; `?theme=day|night` pour forcer).
 - **Deux styles distincts** : l'accueil, le mode classique, les tarifs, le devis et la 404 sont un
   site web sobre et professionnel (`css/site.css` : thèmes clair/sombre, police Inter ;
-  `css/classic.css`, `css/annexe.css`). Le mode aventure et son mini-jeu `construire-projet`
-  gardent la DA jeu comics / néon / pixel (`css/tokens.css`, `style.css`).
+  `css/classic.css`, `css/annexe.css`). Le mode aventure a sa propre interface, habillée par
+  l'univers choisi (`src/aventure/styles/aventure.css`) ; le mini-jeu `construire-projet` garde la
+  DA comics / néon / pixel (`css/tokens.css`, `style.css`).
 - **Devis ⇄ mini-jeu** : `js/devis.js` et `js/build-project.js` posent les mêmes questions, envoient
   le même e-mail et partagent la même session. Depuis les tarifs, « Construisez votre projet » mène au
   mini-jeu pour un visiteur du mode aventure, au formulaire pour les autres.
@@ -47,6 +49,29 @@ https://arphandrame.fr/
 Aucun framework : HTML / CSS / JS vanilla. **Vite** assemble le site dans `dist/` (Cloudflare Pages :
 commande `npm run build`, dossier `dist`) ; les scripts classiques `js/*.js` et les médias y sont
 copiés tels quels.
+
+**Mode aventure : un moteur, trois univers** (`src/aventure/`, modules ES assemblés par Vite) :
+
+- Déroulé : choix de l'expérience (VILLE · urbain, ARPHAN-MAN · héroïque, ARPHAN CLUB · mature) →
+  briefing → exploration. Quatre lieux (profil, parcours, contact, galerie), huit compétences à
+  trouver, un portail vers `construire-projet`. Rien d'essentiel n'est verrouillé : tout le contenu
+  est aussi accessible par les onglets de la fenêtre, le menu (Échap) et les liens profonds.
+- `core/` : `GameLoop` (requestAnimationFrame + deltaTime, pas de simulation ≤ 1/60 s, même jeu de
+  30 à 165 Hz), `Camera` (zone morte, anticipation, zoom, secousse, travelling), `Collision`
+  (sol, murs, plafonds, plateformes traversables), `Input` (clavier + tactile), `SaveManager`
+  (sauvegarde v2, migration de la v1), `Game` (machine à états).
+- `player/` : `Character` (état), `CharacterController` (physique), `CharacterAnimator` (pose),
+  `CharacterRenderer` (dessin). `world/` : niveau, lieux, collectibles, passants, plateformes.
+- `universes/<id>/` : un univers ne fournit que `theme.js` (palette, typographie, vocabulaire,
+  caméra, physique, audio), `world.js` (niveau), `character.js` (apparence), `renderer.js` (décor).
+  Le contrat est dans `universes/theme.js` ; ajouter un univers = un dossier + une ligne dans
+  `UniverseManager.js`.
+- `portfolio/` : lit `js/museum.js` ; les projets associés à une compétence sont dérivés des
+  technologies de chaque projet. `ui/` : sélecteur, briefing, HUD, pause, fin, fenêtre portfolio
+  (tout en DOM). `audio/` : ambiances et bruitages synthétisés (WebAudio), son coupé par défaut.
+- Tests : `npm test` (physique à 30 / 60 / 90 / 120 / 144 / 165 Hz, collisions, sauvegarde, données)
+  et `BASE=http://localhost:5173 npm run test:e2e` (parcours complet dans Chrome headless, serveur
+  `npm run dev` ou `npm run preview` lancé).
 
 **Mode classique : cinq pages, cinq environnements** (`src/classic-app.js` charge seulement
 l'expérience de la page courante) :

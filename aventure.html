@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Mode aventure · Arphan Drame, Développeur Web Full Stack</title>
   <meta name="robots" content="index, follow">
-  <meta name="description" content="Portfolio interactif d'Arphan DRAME, Développeur Full Stack à Paris. Explorez la ville : chaque maison est une section du portfolio.">
+  <meta name="description" content="Portfolio interactif d'Arphan DRAME, Développeur Full Stack à Paris. Trois univers à explorer : chaque lieu est une section du portfolio.">
   <link rel="canonical" href="https://arphandrame.fr/aventure">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Arphan Drame · Portfolio">
   <meta property="og:title" content="Mode aventure · le portfolio d'Arphan Drame">
-  <meta property="og:description" content="Explorez la ville et découvrez mon parcours autrement.">
+  <meta property="og:description" content="Choisissez un univers et découvrez mon parcours autrement.">
   <meta property="og:url" content="https://arphandrame.fr/aventure">
   <meta property="og:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta property="og:image:width" content="1200">
@@ -19,160 +19,36 @@
   <meta property="og:image:alt" content="Arphan Drame, Développeur Web Full Stack · Paris">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Mode aventure · le portfolio d'Arphan Drame">
-  <meta name="twitter:description" content="Explorez la ville et découvrez mon parcours autrement.">
+  <meta name="twitter:description" content="Choisissez un univers et découvrez mon parcours autrement.">
   <meta name="twitter:image" content="https://arphandrame.fr/assets/img/og.jpg">
-  <meta name="theme-color" content="#0e1630">
-  <link rel="preload" href="assets/fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <meta name="theme-color" content="#0b0d14">
   <link rel="icon" href="assets/img/favicon.png">
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="style.css">
+  <style>html, body { margin: 0; background: #0b0d14; }</style>
 </head>
 <body>
-  <!-- Barre du jeu : « Mode classique » est le 1er élément focalisable,
-       les informations restent toujours accessibles sans jouer. -->
-  <div class="game-bar">
-    <a id="btn-classic" href="/classique" class="game-home-btn" data-switch-classic
-       title="Passer en mode classique, à l'endroit que vous regardez">Mode classique</a>
-    <button type="button" id="btn-menu" class="game-home-btn game-menu__btn"
-            aria-haspopup="dialog" aria-controls="pause" title="Pause (Échap)">Menu</button>
-  </div>
-
-  <button id="btn-sound" type="button" class="sound-toggle" aria-pressed="true"
-          aria-label="Activer ou couper tous les sons">
-    <span class="sound-toggle__label">SOUND ON</span>
-  </button>
-
   <h1 class="sr-only">Arphan Drame · Développeur Web Full Stack · portfolio en mode aventure</h1>
 
-  <div id="screen-game" class="screen vt-stage">
-    <canvas id="gameCanvas" role="img"
-            aria-label="Ville interactive : chaque maison est une section du portfolio (profil, parcours, contact, galerie de projets).">
-      <p>Le mode aventure est une ville interactive : déplacez votre personnage et entrez dans les maisons pour découvrir chaque section.
+  <!-- Le moteur (src/aventure/) dessine le monde dans le canvas et construit
+       toute l'interface (sélecteur, HUD, menus, fenêtres) dans #adv-ui. -->
+  <div id="adv" class="adv vt-stage">
+    <canvas id="adv-canvas" role="img"
+            aria-label="Monde interactif : chaque lieu est une section du portfolio (profil, parcours, contact, galerie de projets).">
+      <p>Le mode aventure est un monde interactif : déplacez votre personnage et entrez dans les lieux pour découvrir chaque section.
         <a href="/classique">Lire le portfolio en mode classique</a>.</p>
     </canvas>
+    <div id="adv-ui"></div>
   </div>
 
-  <!-- HUD : objectif courant, compteurs, carte de la rue (js/quest.js) -->
-  <div id="hud" class="hud" hidden>
-    <div class="hud__row">
-      <button type="button" id="hud-goal" class="hud__goal" title="Y aller directement">
-        <span class="hud__k">OBJECTIF</span>
-        <span id="hud-goal-txt" class="hud__goal-txt"></span>
-        <span id="hud-goal-dir" class="hud__goal-dir" aria-hidden="true"></span>
-      </button>
-      <p class="hud__count" title="Lieux visités"><span class="hud__k">LIEUX</span> <b id="hud-places">0/4</b></p>
-      <p class="hud__count" title="Jetons de compétences ramassés"><span class="hud__k">JETONS</span> <b id="hud-tokens">0/8</b></p>
-    </div>
-    <div id="hud-map" class="hud__map" role="group" aria-label="Carte de la rue"></div>
-  </div>
-  <div id="hud-banner" class="hud-banner" role="status" hidden></div>
-
-  <!-- Écran titre : une fois par session (js/game.js) -->
-  <div id="title-screen" class="title-screen" hidden>
-    <div class="title-screen__box">
-      <p class="title-screen__kicker">PORTFOLIO · MODE AVENTURE</p>
-      <p class="title-screen__name">ARPHAN DRAME</p>
-      <p class="title-screen__role">Développeur Web Full Stack</p>
-      <p class="title-screen__pitch">Une ville, quatre lieux à visiter : chaque maison est une section du portfolio.</p>
-      <p id="title-save" class="title-screen__save" hidden></p>
-      <div class="title-screen__actions">
-        <button type="button" id="title-start" class="game-cta game-cta--blink">APPUYEZ SUR ENTRÉE</button>
-        <button type="button" id="title-new" class="game-cta game-cta--ghost" hidden>NOUVELLE PARTIE</button>
-      </div>
-      <p class="title-screen__sound">Le son (musique et effets) fait partie de l'expérience. Bouton SOUND, en haut de l'écran.</p>
-    </div>
-  </div>
-
-  <!-- Tutoriel de 1re partie, NON bloquant : la ville reste jouable derrière,
-       chaque étape se valide en jouant (js/quest.js). -->
-  <div id="tuto" class="tuto" role="status" aria-live="polite" hidden>
-    <p id="tuto-step" class="tuto__step"></p>
-    <div class="tuto__main">
-      <span id="tuto-keys" class="tuto__keys" aria-hidden="true"></span>
-      <div>
-        <p id="tuto-title" class="tuto__title"></p>
-        <p id="tuto-text" class="tuto__text"></p>
-      </div>
-    </div>
-    <div class="tuto__foot">
-      <span id="tuto-dots" class="tuto__dots" aria-hidden="true"></span>
-      <button type="button" id="tuto-next" class="game-cta game-cta--small" hidden>C'est parti</button>
-      <button type="button" id="tuto-skip" class="tuto__skip">Passer le tutoriel</button>
-    </div>
-  </div>
-
-  <!-- Pause : carte, inventaire, commandes, liens (CV, tarifs, contact, modes) -->
-  <div id="pause" class="pause" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
-    <div class="pause__card">
-      <div class="pause__head">
-        <p id="pause-title" class="pause__title">PAUSE</p>
-        <button type="button" id="pause-resume" class="game-cta game-cta--small">Reprendre</button>
-      </div>
-      <div class="pause__cols">
-        <section>
-          <p class="pause__h">CARTE <span id="pause-places"></span></p>
-          <ul id="pause-map" class="pause__list"></ul>
-        </section>
-        <section>
-          <p class="pause__h">JETONS <span id="pause-tokens"></span></p>
-          <ul id="pause-inv" class="pause__inv"></ul>
-          <p class="pause__h">COMMANDES</p>
-          <ul id="pause-keys" class="pause__keys"></ul>
-        </section>
-      </div>
-      <nav class="pause__links" aria-label="Liens">
-        <a href="assets/CV.pdf" target="_blank" rel="noopener" class="cv-link">CV <span>Mon CV en PDF</span></a>
-        <a href="/tarifs" class="tarifs-link">Tarifs <span>Mes prestations</span></a>
-        <button type="button" data-contact-cta data-contact-subject="Prise de contact · Portfolio">Contact <span>Me joindre directement</span></button>
-        <a href="/">Changer de mode <span>Retour au choix</span></a>
-      </nav>
-      <div class="pause__foot">
-        <button type="button" id="pause-tuto" class="pause__textbtn">Revoir le tutoriel</button>
-        <button type="button" id="pause-reset" class="pause__textbtn">Recommencer la partie</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Fin de mission : les 4 lieux ont été visités -->
-  <div id="mission" class="pause mission" role="dialog" aria-modal="true" aria-labelledby="mission-title" hidden>
-    <div class="pause__card">
-      <p class="mission__kicker">4/4 LIEUX VISITÉS</p>
-      <p id="mission-title" class="pause__title">MISSION ACCOMPLIE</p>
-      <p class="mission__text">Vous avez fait le tour de la ville. Le portail «&nbsp;Construisez votre projet&nbsp;» s'est illuminé.</p>
-      <p id="mission-stats" class="mission__stats"></p>
-      <div class="mission__actions">
-        <a href="assets/CV.pdf" target="_blank" rel="noopener" class="game-cta cv-link">Voir mon CV en PDF</a>
-        <button type="button" class="game-cta game-cta--alt" data-contact-cta data-contact-subject="Prise de contact · Portfolio">Me joindre directement</button>
-        <button type="button" id="mission-portal" class="game-cta game-cta--ghost">Construisez votre projet</button>
-      </div>
-      <button type="button" id="mission-continue" class="pause__textbtn">Continuer à explorer</button>
-    </div>
-  </div>
-
-  <div id="modal-backdrop" class="modal-backdrop hidden"></div>
-  <div id="section-modal" class="section-modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
-    <div class="modal-header">
-      <div id="modal-title" class="modal-title"></div>
-      <button id="modal-close" class="modal-close">FERMER</button>
-    </div>
-    <div id="modal-body" class="modal-body"></div>
-  </div>
-
-  <div class="toast hidden" id="toast"></div>
+  <noscript>
+    <p style="position:fixed;inset:0;display:grid;place-items:center;padding:24px;color:#f2f3f7;font:16px/1.5 system-ui,sans-serif;text-align:center">
+      Le mode aventure a besoin de JavaScript. <a href="/classique" style="color:#9fb4ff">Lire le portfolio en mode classique</a>.</p>
+  </noscript>
 
   <script src="js/deeplink.js"></script>
   <!-- EmailJS : chargé à la demande (1er focus dans le formulaire) -->
   <script src="js/contact-form.js"></script>
-  <script src="js/audio.js"></script>
   <script src="js/museum.js"></script>
   <script src="js/contact.js"></script>
-  <script src="js/controls.js"></script>
-  <script src="js/mobileControls.js"></script>
-  <script src="js/interactions.js"></script>
-  <script src="js/player.js"></script>
-  <script src="js/map.js"></script>
-  <script src="js/actors.js"></script>
-  <script src="js/quest.js"></script>
-  <script src="js/game.js"></script>
+  <script type="module" src="src/aventure/main.js"></script>
 </body>
 </html>
