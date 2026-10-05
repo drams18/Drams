@@ -14,7 +14,7 @@ import { cpSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const PAGES = ['index', 'classique', 'classique/projets', 'classique/parcours', 'classique/competences',
-  'classique/contact', 'aventure', 'tarifs', 'devis', 'construire-projet', '404'];
+  'classique/contact', 'aventure', 'tarifs', 'devis', 'construire-projet', 'avis', '404'];
 
 // Copiés tels quels : scripts non-modules, médias, config Cloudflare.
 // css/ et style.css aussi, car les préchargements (classic.js, select.js)

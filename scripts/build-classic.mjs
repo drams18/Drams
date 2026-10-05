@@ -32,6 +32,8 @@ import { dirname, join } from 'node:path';
 const require = createRequire(import.meta.url);
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { SECTIONS } = require('../js/museum.js');
+// Fiche Google : lien unique dans js/reviews.js (vide → rien n'est publié).
+const { REVIEW_URL, PROFILE_URL } = require('../js/reviews.js');
 
 // Adresse publique (canonique) du site. À changer ici, et dans les <head>
 // des autres pages, robots.txt et sitemap.xml, si le domaine change.
@@ -388,6 +390,7 @@ function worlds(page, L) {
 
 function footer(L) {
   return `
+  <div class="wrap review-slot" data-review-slot hidden></div>
   <footer class="footer">
     <div class="wrap footer__inner">
       <p>${esc(displayName)} · ${esc(bio.title)} · ${esc(bio.location)}</p>
@@ -396,6 +399,7 @@ function footer(L) {
         <a href="/aventure#ville" data-switch-adventure>Mode aventure</a>
         <a href="/tarifs">Tarifs</a>
         <a href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">CV</a>
+        <a href="/avis" data-review-entry hidden>Avis Google</a>
       </nav>
     </div>
   </footer>`;
@@ -647,6 +651,7 @@ function profilPage() {
     jsonld: { '@type': 'ProfilePage', name: `Profil · ${displayName}`, mainEntity: PERSON_REF },
     body,
     scrolls: true,
+    scripts: '<script src="{up}js/reviews.js" defer></script>',
   });
 }
 
@@ -1122,7 +1127,7 @@ function person(extra = {}) {
     url: SITE_URL,
     email: `mailto:${contact.email}`,
     address: { '@type': 'PostalAddress', addressLocality: bio.location, addressCountry: 'FR' },
-    sameAs: bio.socials.map(s => s.url),
+    sameAs: [...bio.socials.map(s => s.url), ...(PROFILE_URL && PROFILE_URL !== REVIEW_URL ? [PROFILE_URL] : [])],
     knowsLanguage: bio.languages.map(l => l.label),
     knowsAbout,
     alumniOf: { '@type': 'CollegeOrUniversity', name: 'ETNA' },

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="night">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Votre avis · Arphan Drame</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0a0a0d">
+  <script src="js/theme.js"></script>
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/classic.css">
+  <link rel="stylesheet" href="css/annexe.css">
+  <!-- ══════════════════════════════════════════════════════
+       AVIS.HTML : page envoyée à la main à un client, une fois la
+       prestation terminée (lien personnel : /avis?merci). Aussi
+       accessible par le lien discret « Avis Google » des pieds de page.
+       Le lien Google vit dans js/reviews.js, nulle part ailleurs.
+       Hors sitemap, noindex : ce n'est pas une page de contenu.
+       ══════════════════════════════════════════════════════ -->
+</head>
+<body data-review-page>
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="./">A. DRAME</a>
+    </div>
+  </header>
+
+  <main class="page wrap review-page">
+    <section class="step done">
+      <h1 class="step__title">Nous avons travaillé ensemble ?</h1>
+      <p class="step__help">Merci pour votre confiance. Si vous le souhaitez, vous pouvez partager votre expérience sur Google : quelques lignes sincères, positives ou non, aident d'autres personnes à savoir à quoi s'attendre.</p>
+      <p data-review-ready hidden><a class="btn btn--primary" data-review-go href="#">Donner mon avis sur Google</a></p>
+      <p class="step__help" data-review-pending>Le lien vers Google sera bientôt disponible.</p>
+      <p class="review-page__note">Le lien ouvre Google dans un nouvel onglet. Rien n'est demandé en échange, et rien ne vous y oblige.</p>
+      <p class="review-page__note">Vous n'avez pas encore travaillé avec moi ? Cette page ne vous concerne pas : <a class="inline-link" href="/classique/contact">écrivez-moi plutôt</a>.</p>
+    </section>
+  </main>
+
+  <script src="js/reviews.js"></script>
+</body>
+</html>

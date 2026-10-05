@@ -10,7 +10,7 @@
     "build": "node scripts/build-classic.mjs && node scripts/sitemap.mjs && vite build",
     "preview": "vite preview",
     "capture": "node scripts/capture.mjs",
-    "test": "node tests/physics.test.mjs && node tests/portfolio.test.mjs",
+    "test": "node tests/physics.test.mjs && node tests/portfolio.test.mjs && node tests/reviews.test.mjs",
     "test:e2e": "node tests/aventure.e2e.mjs"
   },
   "devDependencies": {

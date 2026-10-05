@@ -25,7 +25,10 @@ export class EndScreen {
           h('a.adv-btn.adv-btn--ghost', { href: '/classique', onclick: (e) => opts.onClassic(e) }, 'MODE CLASSIQUE'),
           h('button.adv-btn.adv-btn--ghost', { type: 'button', onclick: () => opts.onContinue() }, 'EXPLORER À NOUVEAU')),
         h('p.adv-end__more', null, 'Un projet de site ou d\'application ? ',
-          h('button.adv-link', { type: 'button', onclick: () => opts.onPortal() }, 'Construisez votre projet'))));
+          h('button.adv-link', { type: 'button', onclick: () => opts.onPortal() }, 'Construisez votre projet')),
+        // Retour sur le portfolio lui-même (formulaire de contact) : ce n'est pas un avis client.
+        h('p.adv-end__more.adv-end__feedback', null, 'Un retour sur cette expérience ? ',
+          h('button.adv-link', { type: 'button', onclick: () => opts.onContact() }, 'Dites-le-moi'))));
     this.el.addEventListener('keydown', (e) => trapTab(e, this.el));
     root.appendChild(this.el);
   }

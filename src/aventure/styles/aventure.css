@@ -423,6 +423,7 @@ html, body { margin: 0; height: 100%; background: #0b0d14; overflow: hidden; }
 .adv-end__tile span { font-size: 0.88rem; color: var(--u-muted); }
 .adv-end__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .adv-end__more { margin-top: 18px !important; font-size: 0.95rem; color: var(--u-muted); }
+.adv-end__feedback { margin-top: 6px !important; }
 
 /* ── Identités d'univers (formes) ───────────────────── */
 /* Ville : verre dépoli, coins doux. */

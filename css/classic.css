@@ -1463,3 +1463,18 @@ html:active-view-transition-type(from-projets):active-view-transition-type(fwd):
 
 /* ?capture (npm run capture) : page figée */
 .is-still .pf-scroll .ico, .is-still .pf-orbs i::before, .is-still .tl-node__dot { animation: none !important; }
+
+/* ── Avis Google (js/reviews.js) : rappel discret, client invité ── */
+.review-slot { padding-bottom: 28px; }
+.review-card {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
+  padding: 16px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+}
+.review-card__text { flex: 1 1 280px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.review-card__text strong { color: var(--text); font-weight: 600; }
+.review-card__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; }
+.review-card__later {
+  min-height: 38px; padding: 0; font: inherit; font-size: 14px; color: var(--muted);
+  background: none; border: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+}
+.review-card__later:hover { color: var(--text); }
