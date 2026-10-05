@@ -147,4 +147,35 @@ function simulate(hz, seconds, script) {
   assert.deepEqual(again.data.visitedLocations, []);
 }
 
+// Habillage repris par « Construisez votre projet » (js/universe-theme.js) :
+// la copie de secours suit les univers, et la page a toujours un univers.
+{
+  const { readFileSync } = await import('node:fs');
+  const vm = await import('node:vm');
+  const code = readFileSync(new URL('../js/universe-theme.js', import.meta.url), 'utf8');
+  const run = (items) => {
+    const style = {};
+    const window = {
+      localStorage: { getItem: (k) => (k in items ? items[k] : null) },
+      document: { documentElement: { dataset: {}, style: { setProperty: (k, v) => { style[k] = v; } } } },
+    };
+    vm.runInNewContext(code, { window });
+    return { window, style };
+  };
+  const first = run({});
+  assert.equal(first.window.UniverseTheme.id, 'ville', 'sans univers choisi : VILLE, jamais l\'ancien thème');
+  assert.equal(first.window.UniverseTheme.track, '/sounds/aventure/ville.mp3');
+  assert.equal(run({ 'drame.aventure.save': JSON.stringify({ version: 2, universe: 'club' }) }).window.UniverseTheme.id, 'club');
+  const stored = run({ 'drame.aventure.theme': JSON.stringify({ id: 'hero', palette: first.window.UniverseThemeBuiltin.hero.palette, fonts: first.window.UniverseThemeBuiltin.hero.fonts, track: '/sounds/aventure/hero.mp3' }) });
+  assert.equal(stored.window.document.documentElement.dataset.universe, 'hero');
+  assert.equal(stored.style['--u-primary'], '#ff4d4d');
+  for (const id of ['ville', 'hero', 'club']) {
+    const t = await import(`../src/aventure/universes/${id}/theme.js`);
+    const b = JSON.parse(JSON.stringify(first.window.UniverseThemeBuiltin[id]));
+    assert.deepEqual(b.palette, t.palette, `palette ${id}`);
+    assert.deepEqual(b.fonts, { display: t.fonts.display, weight: t.fonts.weight, style: t.fonts.style || 'normal', spacing: t.fonts.spacing, radius: t.fonts.radius }, `typographie ${id}`);
+    assert.equal(t.audio.track, `/sounds/aventure/${id}.mp3`);
+  }
+}
+
 console.log('OK : physique, collisions, sauvegarde');

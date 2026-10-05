@@ -11,21 +11,48 @@
      • expose window.UniverseTheme : wrap(ctx) retraduit à la volée les
        couleurs et la police néon du canvas dans la palette de l'univers.
 
-   Sans univers choisi, ou si le visiteur vient du mode classique :
-   window.UniverseTheme vaut null et la page garde sa DA comics / néon.
+   La page porte TOUJOURS un univers, jamais l'ancienne DA comics / néon :
+   l'habillage déposé par l'aventure, sinon l'univers de la sauvegarde,
+   sinon VILLE (visite directe, arrivée depuis le mode classique).
    ══════════════════════════════════════════════════════ */
 (function (global) {
   'use strict';
 
   global.UniverseTheme = null;
 
-  var theme = null;
-  try {
-    if (global.localStorage.getItem('drame.portfolio.mode') === 'aventure') {
-      theme = JSON.parse(global.localStorage.getItem('drame.aventure.theme'));
-    }
-  } catch (e) { /* stockage indisponible ou donnée illisible */ }
-  if (!theme || !theme.id || !theme.palette || !theme.fonts) return;
+  // Copie de secours des habillages (src/aventure/universes/<id>/theme.js),
+  // pour quand l'aventure n'a encore rien déposé. tests/physics.test.mjs
+  // vérifie qu'elle reste identique aux univers.
+  var INTER = '"Inter Variable", Inter, system-ui, sans-serif';
+  var SERIF = '"Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif';
+  var BUILTIN = {
+    ville: {
+      palette: { bg: '#101728', surface: 'rgba(18, 25, 44, 0.94)', surface2: '#1d2845', text: '#f4f1ea', muted: '#aab1c6',
+        line: 'rgba(244, 241, 234, 0.16)', primary: '#ffb454', onPrimary: '#1b1407', accent: '#5fd4c4' },
+      fonts: { display: INTER, weight: '650', style: 'normal', spacing: '0.02em', radius: '14px' },
+    },
+    hero: {
+      palette: { bg: '#07142e', surface: 'rgba(8, 20, 48, 0.94)', surface2: '#12295c', text: '#f4f7ff', muted: '#9fb2d8',
+        line: 'rgba(63, 200, 255, 0.24)', primary: '#ff4d4d', onPrimary: '#16040a', accent: '#3fc8ff' },
+      fonts: { display: INTER, weight: '900', style: 'italic', spacing: '0.01em', radius: '3px' },
+    },
+    club: {
+      palette: { bg: '#0c0a10', surface: 'rgba(18, 14, 22, 0.96)', surface2: '#261d2e', text: '#efe6d2', muted: '#a89c8c',
+        line: 'rgba(217, 181, 106, 0.22)', primary: '#d9b56a', onPrimary: '#16100a', accent: '#d95a70' },
+      fonts: { display: SERIF, weight: '700', style: 'normal', spacing: '0.06em', radius: '2px' },
+    },
+  };
+  global.UniverseThemeBuiltin = BUILTIN;
+
+  var read = function (key) {
+    try { return JSON.parse(global.localStorage.getItem(key)); } catch (e) { return null; }
+  };
+  var theme = read('drame.aventure.theme');
+  if (!theme || !theme.id || !theme.palette || !theme.fonts) {
+    var save = read('drame.aventure.save');
+    var id = save && BUILTIN[save.universe] ? save.universe : 'ville';
+    theme = { id: id, palette: BUILTIN[id].palette, fonts: BUILTIN[id].fonts, track: '/sounds/aventure/' + id + '.mp3', trackGain: 0.5 };
+  }
 
   var p = theme.palette, f = theme.fonts;
   var root = global.document.documentElement;

@@ -10,7 +10,8 @@
    type="module") et les médias sont copiés tels quels dans dist/.
    ══════════════════════════════════════════════════════ */
 import { defineConfig } from 'vite';
-import { cpSync, existsSync } from 'node:fs';
+import { cpSync, existsSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 
 const PAGES = ['index', 'classique', 'classique/projets', 'classique/parcours', 'classique/competences',
@@ -37,6 +38,25 @@ function copyStatic() {
   };
 }
 
+// Les scripts classiques (js/*.js) ne sont pas renommés par Vite : sans
+// version dans l'URL, le cache (navigateur, Cloudflare) sert l'ancien fichier
+// plusieurs heures après une mise en ligne, à côté d'un HTML déjà à jour.
+// Chaque référence reçoit donc ?v=<empreinte du contenu>.
+function versionStatic() {
+  const stamp = (file) => createHash('md5').update(readFileSync(file)).digest('hex').slice(0, 8);
+  return {
+    name: 'version-static',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler: (html) => html.replace(/(src=")((?:\.\.\/|\/)*)(js\/[^"?#]+\.js)(")/g, (m, a, prefix, path, z) => {
+        const file = resolve(import.meta.dirname, path);
+        return existsSync(file) ? `${a}${prefix}${path}?v=${stamp(file)}${z}` : m;
+      }),
+    },
+  };
+}
+
 export default defineConfig({
   publicDir: false,
   build: {
@@ -46,5 +66,5 @@ export default defineConfig({
       input: Object.fromEntries(PAGES.map(p => [p, resolve(import.meta.dirname, `${p}.html`)])),
     },
   },
-  plugins: [copyStatic()],
+  plugins: [copyStatic(), versionStatic()],
 });
