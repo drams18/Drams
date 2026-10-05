@@ -1,6 +1,7 @@
-/* ARPHAN CLUB : parking souterrain → quai de chargement → entrepôt.
-   Des caisses et un quai (solides, avec murs) et une passerelle. Un conduit
-   bas au-dessus du quai fait plafond. */
+/* LE PALAIS : galerie des colonnes → estrade du trône → aile des collections.
+   Des socles et une estrade (solides, avec murs) et une tribune. Un linteau
+   bas au-dessus de l'estrade fait plafond. Les `kind` gardent leurs noms
+   d'origine (crate, dock, duct, catwalk) : seul l'habillage change. */
 
 import { solid, platform } from '../../world/Platform.js';
 
@@ -22,12 +23,12 @@ export function createLevel() {
       platform(2030, -140, 190, 'catwalk'),
     ],
     locations: [
-      { id: 'profile', x: 410, w: 220, h: 220, doorX: 520, style: 'steel' },
-      { id: 'contact', x: 1090, w: 200, h: 210, doorX: 1190, style: 'phone' },
-      { id: 'parcours', x: 1690, w: 250, h: 200, baseY: -60, doorX: 1815, style: 'archive' },
-      { id: 'projets', x: 2640, w: 300, h: 230, doorX: 2790, style: 'shutter' },
+      { id: 'profile', x: 410, w: 220, h: 220, doorX: 520, style: 'hall' },
+      { id: 'contact', x: 1090, w: 200, h: 210, doorX: 1190, style: 'bell' },
+      { id: 'parcours', x: 1690, w: 250, h: 200, baseY: -60, doorX: 1815, style: 'library' },
+      { id: 'projets', x: 2640, w: 300, h: 230, doorX: 2790, style: 'curtain' },
     ],
-    portal: { x: 3520, w: 250, h: 270, doorX: 3645, style: 'lift' },
+    portal: { x: 3520, w: 250, h: 270, doorX: 3645, style: 'doors' },
     collectibles: [
       { skill: 'react', x: 720, y: -34 },
       { skill: 'typescript', x: 897, y: -80 },
@@ -43,15 +44,15 @@ export function createLevel() {
       { x0: 3140, x1: 3290, y: 0 },
     ],
     zones: [
-      { name: 'Parking · niveau -2', x0: 0, x1: 1500 },
-      { name: 'Quai de chargement', x0: 1500, x1: 2520 },
-      { name: 'Entrepôt', x0: 2520, x1: 4000 },
+      { name: 'Galerie des colonnes', x0: 0, x1: 1500 },
+      { name: 'Salle du trône', x0: 1500, x1: 2520 },
+      { name: 'Aile des collections', x0: 2520, x1: 4000 },
     ],
     decor: {
-      tubes: [180, 560, 940, 1320, 1700, 2080, 2460, 2840, 3220, 3600],
-      flicker: [2, 6],                       // néons défaillants
+      chandeliers: [180, 560, 940, 1320, 1700, 2080, 2460, 2840, 3220, 3600],
+      flicker: [2, 6],                       // bougies qui vacillent
       pillars: [300, 1000, 1700, 2450, 3150, 3850],
-      cars: [680, 1300, 3260],
+      braziers: [680, 1300, 3260],
     },
   };
 }

@@ -2,7 +2,7 @@
    SCREENEFFECTS.JS : transitions plein écran (voile DOM)
 
    Un seul voile, habillé par l'univers courant (CSS) : fondu doux pour la
-   ville, balayage oblique pour le héros, coupe au noir pour le club.
+   ville, balayage oblique pour le héros, fondu au noir pour le palais.
    Rapides (≈ 300 ms), et réduites à un simple fondu court si l'utilisateur
    préfère moins d'animations.
    ══════════════════════════════════════════════════════ */

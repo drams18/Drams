@@ -52,7 +52,7 @@ copiés tels quels.
 
 **Mode aventure : un moteur, trois univers** (`src/aventure/`, modules ES assemblés par Vite) :
 
-- Déroulé : choix de l'expérience (VILLE · urbain, ARPHAN-MAN · héroïque, ARPHAN CLUB · mature) →
+- Déroulé : choix de l'expérience (VILLE · urbain, HAUTE VOLTIGE · héroïque, LE PALAIS · mature) →
   briefing → exploration. Quatre lieux (profil, parcours, contact, galerie), huit compétences à
   trouver, un portail vers `construire-projet`. Rien d'essentiel n'est verrouillé : tout le contenu
   est aussi accessible par les onglets de la fenêtre, le menu (Échap) et les liens profonds.

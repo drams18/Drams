@@ -1,12 +1,13 @@
 /* ══════════════════════════════════════════════════════
    UNIVERSEAUDIO.JS : ambiance et bruitages, synthétisés (WebAudio)
 
-   OFF par défaut. Aucun fichier : l'expérience ne dépend d'aucune musique
-   externe. Chaque univers décrit son ambiance (`audio` dans son thème) :
+   OFF par défaut. Chaque univers décrit son ambiance (`audio` dans son thème) :
+     track  morceau en boucle (fichier dans sounds/aventure/), facultatif :
+            s'il manque ou ne se lit pas, l'ambiance synthétisée prend le relais
      pad    nappe d'oscillateurs (notes, forme d'onde, filtre)
-     noise  souffle filtré (rumeur de ville, pluie, ventilation)
+     noise  souffle filtré (rumeur de ville, vent des toits, grande salle)
      pulse  basse pulsée (héros)
-     hum    ronflement des néons (club)
+     hum    ronflement continu (facultatif)
      sfx    timbre des bruitages
    Le contexte audio n'est créé qu'après un geste de l'utilisateur.
    ══════════════════════════════════════════════════════ */
@@ -33,12 +34,15 @@ export class UniverseAudio {
     this.ctx = null;
     this.master = null;
     this.spec = null;
-    this._ambient = null;      // { gain, nodes[] }
+    this._ambient = null;      // { gain, nodes[], el? }
+    this._noTrack = new Set(); // morceaux introuvables : on n'insiste pas
     this._last = Object.create(null);
 
     document.addEventListener('visibilitychange', () => {
       if (!this.ctx) return;
-      if (document.hidden) this.ctx.suspend(); else if (this.enabled) this.ctx.resume();
+      const el = this._ambient && this._ambient.el;
+      if (document.hidden) { this.ctx.suspend(); if (el) el.pause(); }
+      else if (this.enabled) { this.ctx.resume(); if (el) el.play().catch(() => {}); }
     });
     // Son déjà activé (sauvegarde) : il démarre au premier geste, jamais avant.
     const kick = () => { if (this.enabled) this._ensure(); };
@@ -96,6 +100,25 @@ export class UniverseAudio {
     out.gain.linearRampToValueAtTime(1, now + 1.6);
     out.connect(this.master);
     const nodes = [];
+
+    if (s.track && !this._noTrack.has(s.track)) {
+      const el = new Audio(s.track);
+      el.loop = true;
+      const src = ctx.createMediaElementSource(el), g = ctx.createGain();
+      g.gain.value = s.trackGain || 0.5;
+      src.connect(g); g.connect(out);
+      nodes.push({ stop: () => el.pause(), disconnect: () => { src.disconnect(); g.disconnect(); } });
+      // Fichier absent ou illisible : retour à l'ambiance synthétisée.
+      el.addEventListener('error', () => {
+        this._noTrack.add(s.track);
+        if (!this._ambient || this._ambient.el !== el) return;
+        this._stopAmbient();
+        if (this.enabled) this._startAmbient();
+      }, { once: true });
+      el.play().catch(() => {});
+      this._ambient = { gain: out, nodes, el };
+      return;
+    }
 
     if (s.pad) {
       const g = ctx.createGain();

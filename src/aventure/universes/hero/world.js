@@ -1,4 +1,4 @@
-/* ARPHAN-MAN : deux niveaux, la RUE puis les TOITS. Trois escaliers de secours
+/* HAUTE VOLTIGE : deux niveaux, la RUE puis les TOITS. Trois escaliers de secours
    montent aux toits ; les toits s'enchaînent par des sauts. Une chute ramène
    simplement à la rue (aucun danger), et ↓ + saut redescend d'un étage. */
 
@@ -60,10 +60,10 @@ export function createLevel() {
     decor: {
       roofs,
       signs: [
-        { x: 1090, y: -300, w: 150, text: 'FULL STACK', color: '#ff4fa3' },
-        { x: 2330, y: -250, w: 110, text: 'PARIS', color: '#39e1ff' },
-        { x: 3000, y: -330, w: 130, text: 'WEB', color: '#d7ff3e' },
-        { x: 3590, y: -220, w: 120, text: 'CODE', color: '#ff4fa3' },
+        { x: 1090, y: -300, w: 150, text: 'FULL STACK', color: '#3fc8ff' },
+        { x: 2330, y: -250, w: 110, text: 'PARIS', color: '#ffd27a' },
+        { x: 3000, y: -330, w: 130, text: 'WEB', color: '#ff4d4d' },
+        { x: 3590, y: -220, w: 120, text: 'CODE', color: '#3fc8ff' },
       ],
     },
   };

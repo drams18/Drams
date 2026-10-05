@@ -1,16 +1,18 @@
-/* ARPHAN-MAN · HÉROÏQUE : nuit, pluie, néons et toits. Identité originale :
-   indigo profond, visière et écharpe jaune acide, enseignes magenta. */
+/* HAUTE VOLTIGE · HÉROÏQUE : l'aube sur la ville, de la rue jusqu'aux toits.
+   Ambiance d'après le thème de « The Amazing Spider-Man 2 » (Hans Zimmer) :
+   fanfare lumineuse, pulsation électrique. Identité originale : bleu roi,
+   rouge vif, bleu électrique, or des cuivres. */
 
 export const palette = {
-  bg: '#0b0920',
-  surface: 'rgba(15, 11, 40, 0.94)',
-  surface2: '#1d1650',
-  text: '#f3f0ff',
-  muted: '#a79fd0',
-  line: 'rgba(215, 255, 62, 0.22)',
-  primary: '#d7ff3e',       // jaune acide : ce qui s'actionne
-  onPrimary: '#12130a',
-  accent: '#ff4fa3',        // magenta : ce qui se découvre
+  bg: '#07142e',
+  surface: 'rgba(8, 20, 48, 0.94)',
+  surface2: '#12295c',
+  text: '#f4f7ff',
+  muted: '#9fb2d8',
+  line: 'rgba(63, 200, 255, 0.24)',
+  primary: '#ff4d4d',       // rouge vif : ce qui s'actionne
+  onPrimary: '#16040a',
+  accent: '#3fc8ff',        // bleu électrique : ce qui se découvre
 };
 
 export const fonts = {
@@ -38,11 +40,12 @@ export const camera = { lerpX: 7.5, lerpY: 7, deadX: 40, deadY: 46, lookAhead: 1
 export const physics = { maxSpeed: 305, accel: 2300, friction: 2500, airControl: 0.8, gravity: 1800, jumpVelocity: 720 };
 
 export const audio = {
-  // Basse pulsée + pluie.
-  pad: { notes: [55, 110, 164.81], type: 'sawtooth', gain: 0.03, lfo: 0.12, filter: 520 },
-  pulse: { note: 110, rate: 2.2, gain: 0.05 },
-  noise: { type: 'highpass', freq: 2600, gain: 0.03 },
+  track: '/sounds/aventure/hero.mp3',   // facultatif : sans fichier, le synthé ci-dessous joue
+  // Accord majeur cuivré (ré majeur) + ostinato électrique + vent des toits.
+  pad: { notes: [73.42, 110, 146.83, 185], type: 'sawtooth', gain: 0.03, lfo: 0.12, filter: 900 },
+  pulse: { note: 146.83, rate: 4, gain: 0.04 },
+  noise: { type: 'lowpass', freq: 600, gain: 0.02 },
   sfx: { wave: 'square', base: 660 },
 };
 
-export const effects = { rain: true, sharp: true, dust: '#8f86c8' };
+export const effects = { sharp: true, dust: '#9fb2d8' };

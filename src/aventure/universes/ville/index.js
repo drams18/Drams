@@ -8,7 +8,7 @@ export default defineUniverse({
   id: 'ville',
   name: 'VILLE',
   category: 'URBAIN',
-  tagline: 'Une ville contemporaine à l\'heure dorée. Sobre et élégant.',
+  tagline: 'Une petite ville tranquille en fin de journée. On s\'y promène, on pousse les portes.',
   palette, fonts, vocabulary, camera, physics, audio, effects,
   character: { player, npcs },
   createLevel,

@@ -129,8 +129,8 @@ html, body { margin: 0; height: 100%; background: #0b0d14; overflow: hidden; }
   clip-path: polygon(0 0, 0 0, -12% 100%, -12% 100%); transition: clip-path 0.3s cubic-bezier(0.7, 0, 0.2, 1);
 }
 .adv[data-universe='hero'] .adv-veil.is-on { clip-path: polygon(0 0, 112% 0, 100% 100%, -12% 100%); }
-/* Club : coupe au noir, sèche. */
-.adv[data-universe='club'] .adv-veil { background: #000; transition: opacity 0.3s steps(4, jump-none); }
+/* Palais : fondu au noir, lent. */
+.adv[data-universe='club'] .adv-veil { background: #000; transition: opacity 0.3s ease-in-out; }
 .adv--reduced .adv-veil { transition: opacity 0.09s linear !important; clip-path: none !important; }
 .adv--reduced[data-universe='hero'] .adv-veil { opacity: 0; background: var(--u-bg); }
 .adv--reduced[data-universe='hero'] .adv-veil.is-on { opacity: 1; }
@@ -439,14 +439,14 @@ html, body { margin: 0; height: 100%; background: #0b0d14; overflow: hidden; }
 .adv[data-universe='hero'] .adv-win__card, .adv[data-universe='hero'] .adv-pause__card, .adv[data-universe='hero'] .adv-end__card, .adv[data-universe='hero'] .adv-brief__card {
   border-color: var(--u-primary); box-shadow: 10px 10px 0 -2px var(--u-accent), 0 30px 80px -30px #000;
 }
-/* Club : dossier dactylographié, traits fins, tampon. */
+/* Palais : capitales gravées, filets d'or, sceau. */
 .adv[data-universe='club'] .adv-btn, .adv[data-universe='club'] .adv-hud__goal-txt, .adv[data-universe='club'] .adv-hud__prompt-main, .adv[data-universe='club'] .adv-win__tab { text-transform: uppercase; }
 .adv[data-universe='club'] .adv-btn { font-size: 0.86rem; }
-.adv[data-universe='club'] .adv-win__card, .adv[data-universe='club'] .adv-pause__card, .adv[data-universe='club'] .adv-end__card, .adv[data-universe='club'] .adv-brief__card { border-width: 1px; border-color: var(--u-text); }
+.adv[data-universe='club'] .adv-win__card, .adv[data-universe='club'] .adv-pause__card, .adv[data-universe='club'] .adv-end__card, .adv[data-universe='club'] .adv-brief__card { border-width: 1px; border-color: var(--u-primary); }
 .adv[data-universe='club'] .adv-end__title, .adv[data-universe='club'] .adv-toast__k {
   display: inline-block; padding: 4px 12px; border: 2px solid var(--u-accent); color: var(--u-accent); transform: rotate(-1.5deg);
 }
-.adv[data-universe='club'] .adv-brief, .adv[data-universe='club'] .adv-pause, .adv[data-universe='club'] .adv-end, .adv[data-universe='club'] .adv-win { backdrop-filter: blur(3px) grayscale(0.6); }
+.adv[data-universe='club'] .adv-brief, .adv[data-universe='club'] .adv-pause, .adv[data-universe='club'] .adv-end, .adv[data-universe='club'] .adv-win { backdrop-filter: blur(3px) grayscale(0.4); }
 
 /* ── Écrans étroits ─────────────────────────────────── */
 @media (max-width: 860px) {

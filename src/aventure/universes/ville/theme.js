@@ -1,4 +1,5 @@
-/* VILLE · URBAIN : une ville contemporaine à l'heure dorée. Élégant, calme, lisible. */
+/* VILLE · URBAIN : une petite ville tranquille à l'heure dorée, pour tout le monde.
+   Ambiance d'après « Killer » (Yugo Kanno) : élégante, posée, un rien de mystère. */
 
 export const palette = {
   bg: '#101728',
@@ -30,8 +31,9 @@ export const camera = { lerpX: 5.5, lerpY: 4.5, deadX: 56, deadY: 80, lookAhead:
 export const physics = { maxSpeed: 250, accel: 1700, friction: 2100, gravity: 1750, jumpVelocity: 630 };
 
 export const audio = {
-  // Nappe douce + rumeur de ville.
-  pad: { notes: [146.83, 220, 293.66, 369.99], type: 'sine', gain: 0.05, lfo: 0.07 },
+  track: '/sounds/aventure/ville.mp3',   // facultatif : sans fichier, le synthé ci-dessous joue
+  // Accord mineur feutré (ré mineur 9) + rumeur de ville.
+  pad: { notes: [146.83, 174.61, 220, 329.63], type: 'sine', gain: 0.05, lfo: 0.07 },
   noise: { type: 'lowpass', freq: 420, gain: 0.035 },
   sfx: { wave: 'sine', base: 520 },
 };

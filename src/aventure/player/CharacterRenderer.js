@@ -7,7 +7,7 @@
      { skin, hair, top, topShade, bottom, shoes, accent,
        build: 1,           largeur de la silhouette
        hairStyle: 'short' | 'hood' | 'mask' | 'cap',
-       coat: false,        manteau long (club)
+       coat: false,        manteau long (palais)
        scarf: false,       écharpe qui flotte (héros)
        bag: false,         sac à dos (ville)
        emblem: false }     marque géométrique sur la poitrine (héros)

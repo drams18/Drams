@@ -6,9 +6,9 @@ import { ClubRenderer } from './renderer.js';
 
 export default defineUniverse({
   id: 'club',
-  name: 'ARPHAN CLUB',
+  name: 'LE PALAIS',
   category: 'MATURE',
-  tagline: 'Sous-sols, béton, néons blafards. Un thriller urbain, sobre.',
+  tagline: 'Un palais la nuit : marbre sombre, or et bougies. Lent, solennel, presque sacré.',
   palette, fonts, vocabulary, camera, physics, audio, effects,
   character: { player, npcs },
   createLevel,

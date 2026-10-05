@@ -170,24 +170,24 @@ ok('changer d\'univers → sélecteur', await state() === 'select' && await p.ev
 await p.click('.adv-card[data-universe="club"]'); await p.sleep(900);
 await p.click('.adv-brief .adv-btn--big'); await p.sleep(300); await p.press('Space'); await p.sleep(300);
 ok('univers club : progression conservée', await state() === 'play' && await p.eval(`${G}.universe.id === 'club' && ${G}.save.data.visitedLocations.length === 4 && ${G}.player.x === ${G}.level.spawn.x`));
-ok('vocabulaire club', await p.eval('document.querySelector(".adv-hud__goal .adv-hud__k").textContent + "|" + [...document.querySelectorAll(".adv-hud__count .adv-hud__k")].map(e => e.textContent).join("|")') === 'MISSION|LIEUX|OUTILS');
+ok('vocabulaire club', await p.eval('document.querySelector(".adv-hud__goal .adv-hud__k").textContent + "|" + [...document.querySelectorAll(".adv-hud__count .adv-hud__k")].map(e => e.textContent).join("|")') === 'QUÊTE|SALLES|ATOUTS');
 // Recommencer.
 await p.press('Escape'); await p.sleep(200);
 await p.eval('document.querySelector(".adv-pause__item--danger").click()'); await p.sleep(100);
 ok('recommencer : confirmation demandée', await p.eval(`${G}.save.data.visitedLocations.length`) === 4);
 await p.eval('document.querySelector(".adv-pause__item--danger").click()'); await p.sleep(200);
 ok('recommencer : nouvelle partie', await state() === 'play' && await p.eval(`${G}.save.data.visitedLocations.length === 0 && ${G}.save.data.collectedSkills.length === 0 && ${G}.save.data.universe === 'club'`));
-// Collisions (club) : la caisse est un mur, le quai se monte par la marche.
+// Collisions (club) : le socle est un mur, l'estrade se monte par la marche.
 await p.eval(`${G}.player.place(780, 0)`);
 await p.down('ArrowRight'); await p.sleep(900); await p.up('ArrowRight'); await p.sleep(300);
 c = await pos();
-ok('mur : arrêté contre la caisse', Math.abs(c.x - (860 - 11)) < 0.5 && c.y === 0, `x ${c.x.toFixed(1)}`);
-ok('plafond : saut stoppé sous le conduit', await p.eval(`(() => { const g = ${G}; g.player.place(2320, -60); let min = 0; const i = { axis: 0, jumpPressed: true, jumpHeld: true, down: false }; for (let k = 0; k < 90; k++) { g.controller.update(1 / 60, i); i.jumpPressed = false; min = Math.min(min, g.player.y); } return min; })()`) >= -188 + 56 - 0.5);
-// Marche automatique avec obstacle : depuis le parking jusqu'aux CASE FILES (sur le quai).
+ok('mur : arrêté contre le socle', Math.abs(c.x - (860 - 11)) < 0.5 && c.y === 0, `x ${c.x.toFixed(1)}`);
+ok('plafond : saut stoppé sous le linteau', await p.eval(`(() => { const g = ${G}; g.player.place(2320, -60); let min = 0; const i = { axis: 0, jumpPressed: true, jumpHeld: true, down: false }; for (let k = 0; k < 90; k++) { g.controller.update(1 / 60, i); i.jumpPressed = false; min = Math.min(min, g.player.y); } return min; })()`) >= -188 + 56 - 0.5);
+// Marche automatique avec obstacle : depuis la galerie jusqu'aux CHRONIQUES (sur l'estrade).
 await p.eval(`${G}.player.place(1420, 0); ${G}.goTo(${G}.level.location('parcours'))`);
 await p.sleep(3200);
-ok('marche auto : franchit la marche du quai et entre', await state() === 'window' && await p.eval('document.querySelector(".adv-win__kicker").textContent') === 'CASE FILES', await state());
-await shot('f1-club-casefiles');
+ok('marche auto : franchit la marche de l\'estrade et entre', await state() === 'window' && await p.eval('document.querySelector(".adv-win__kicker").textContent') === 'CHRONIQUES', await state());
+await shot('f1-club-chroniques');
 await p.press('Escape'); await p.sleep(300);
 // Migration v1 → v2.
 // (écrite depuis une autre page : en quittant /aventure, le jeu réenregistre sa partie)

@@ -11,7 +11,7 @@
      • collisions : core/Collision.js.
 
    Les réglages (`physics`) viennent de l'univers : la ville est souple,
-   le héros nerveux, le club plus lourd.
+   le héros nerveux, le palais plus lourd.
    ══════════════════════════════════════════════════════ */
 
 import { STATES } from './Character.js';

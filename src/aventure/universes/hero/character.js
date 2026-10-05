@@ -1,16 +1,16 @@
-/* ARPHAN-MAN : combinaison indigo, visière et écharpe jaune acide, marque en
+/* HAUTE VOLTIGE : combinaison bleu roi, visière et écharpe rouges, marque en
    chevron sur la poitrine. Aucun élément repris d'un héros existant. */
 
 export const player = {
   look: {
-    skin: '#2a2170', hair: '#17123f', hairStyle: 'mask',
-    top: '#2c2380', topShade: '#1c1658', bottom: '#1d1760', bottomShade: '#151047',
-    shoes: '#d7ff3e', accent: '#d7ff3e', scarf: true, emblem: true, build: 1,
+    skin: '#1a3a8a', hair: '#0c1c47', hairStyle: 'mask',
+    top: '#1f47a8', topShade: '#15306a', bottom: '#152f70', bottomShade: '#0f2352',
+    shoes: '#ff4d4d', accent: '#ff4d4d', scarf: true, emblem: true, build: 1,
   },
   animator: { stride: 52, weight: 0.85 },
 };
 
 export const npcs = [
-  { skin: '#d9a47e', hair: '#ff4fa3', hairStyle: 'hood', top: '#3b2f6b', topShade: '#2a214f', bottom: '#191535', bottomShade: '#120f28', shoes: '#f3f0ff', accent: '#ff4fa3', build: 1 },
-  { skin: '#9a6a48', hair: '#161230', hairStyle: 'cap', top: '#22446b', topShade: '#18324f', bottom: '#191535', bottomShade: '#120f28', shoes: '#39e1ff', accent: '#39e1ff', build: 1.05 },
+  { skin: '#d9a47e', hair: '#3fc8ff', hairStyle: 'hood', top: '#2a4a8a', topShade: '#1d3566', bottom: '#101d40', bottomShade: '#0b1530', shoes: '#f4f7ff', accent: '#3fc8ff', build: 1 },
+  { skin: '#9a6a48', hair: '#0c1c47', hairStyle: 'cap', top: '#8a2f38', topShade: '#66222a', bottom: '#101d40', bottomShade: '#0b1530', shoes: '#ffd27a', accent: '#ffd27a', build: 1.05 },
 ];

@@ -1,13 +1,18 @@
 /* ══════════════════════════════════════════════════════
-   ARPHAN CLUB · renderer : béton, néons blafards, ombres, grain
-   Pas de ciel : un mur de fond, un plafond bas, des tubes fluorescents
-   dont certains faiblissent, des piliers qui passent au premier plan.
+   LE PALAIS · renderer : marbre sombre, or, bougies, ombres
+   Pas de ciel : un mur de fond, un plafond bas, des lustres dont certaines
+   bougies vacillent, des colonnes qui passent au premier plan.
    ══════════════════════════════════════════════════════ */
 
 import { BaseRenderer, rng, hash } from '../BaseRenderer.js';
 
-const INK = '#090a09';
-const BONE = '#e8e3d5';
+const INK = '#08060b';
+const BONE = '#efe6d2';
+const GOLD = '#d9b56a';
+const BRASS = '#5c4a2a';       // or dans l'ombre
+const CRIMSON = '#6e2233';     // tapis, tentures
+const SEAL = '#d95a70';        // cramoisi clair : sceaux
+const WOOD = '#4b3526';
 const CEIL = -340;
 const DOOR_W = 50, DOOR_H = 86;
 const GRAIN = 512;           // px : taille de la tuile de bruit
@@ -15,28 +20,29 @@ const GRAIN = 512;           // px : taille de la tuile de bruit
 export class ClubRenderer extends BaseRenderer {
   constructor(universe) {
     super(universe);
-    this.collectibleGlow = 'rgba(223, 233, 198, 0.4)';
+    this.collectibleGlow = 'rgba(217, 181, 106, 0.45)';
     this._grainAt = 0; this._gx = 0; this._gy = 0;
   }
 
   drawSky(ctx) {
-    ctx.fillStyle = '#0d0e0d';
+    ctx.fillStyle = '#0a080d';
     ctx.fillRect(0, 0, this.pxW, this.pxH);
   }
 
   drawFar(ctx, cam) {
-    // Profondeur du parking : piliers et voitures dans la pénombre.
+    // Profondeur de la salle : colonnes et hautes fenêtres dans la pénombre.
     const far = this.sprite('far', 900, 380, (g, w, h) => {
-      g.fillStyle = '#141614'; g.fillRect(0, 0, w, h);
-      g.fillStyle = '#1b1d1a'; g.fillRect(0, h - 70, w, 70);
-      const r = rng(77);
+      g.fillStyle = '#120e17'; g.fillRect(0, 0, w, h);
+      g.fillStyle = '#19141f'; g.fillRect(0, h - 70, w, 70);
       for (let x = 40; x < w; x += 180) {
-        g.fillStyle = '#1e211d'; g.fillRect(x, 0, 40, h - 40);
-        g.fillStyle = '#10110f';
-        g.beginPath(); g.roundRect(x + 60 + r() * 20, h - 96, 90, 40, 10); g.fill();
+        g.fillStyle = '#1e1826'; g.fillRect(x, 0, 40, h - 40);
+        g.fillStyle = '#0d0a12';
+        g.beginPath(); g.roundRect(x + 76, 70, 68, h - 150, [34, 34, 0, 0]); g.fill();
+        g.fillStyle = 'rgba(150, 140, 200, 0.1)';
+        g.beginPath(); g.roundRect(x + 84, 80, 52, h - 168, [26, 26, 0, 0]); g.fill();
       }
-      g.fillStyle = 'rgba(223, 233, 198, 0.06)';
-      for (let x = 0; x < w; x += 300) g.fillRect(x + 80, 18, 120, 5);
+      g.fillStyle = 'rgba(217, 181, 106, 0.08)';
+      g.fillRect(0, 18, w, 3);
     });
     this.parallax(ctx, cam, far, 0.55, 20, 0.8);
   }
@@ -44,9 +50,9 @@ export class ClubRenderer extends BaseRenderer {
   drawWorld(ctx, cam, t, level, state) {
     const d = level.decor;
 
-    // Mur du fond : béton banché, bande peinte, taches.
+    // Mur du fond : marbre veiné, panneaux, tenture basse filetée d'or.
     const wall = this.sprite('wall', 640, -CEIL, (g, w, h) => {
-      g.fillStyle = '#2b2d29'; g.fillRect(0, 0, w, h);
+      g.fillStyle = '#231b2b'; g.fillRect(0, 0, w, h);
       const r = rng(13);
       for (let i = 0; i < 26; i++) {
         g.fillStyle = `rgba(0, 0, 0, ${0.05 + r() * 0.1})`;
@@ -55,53 +61,58 @@ export class ClubRenderer extends BaseRenderer {
       g.fillStyle = 'rgba(0, 0, 0, 0.22)';
       for (let x = 0; x < w; x += 160) g.fillRect(x, 0, 2, h);
       g.fillRect(0, h * 0.5, w, 2);
-      g.fillStyle = '#6f3a30'; g.fillRect(0, h - 120, w, 26);
-      g.fillStyle = '#3a3c37'; g.fillRect(0, h - 94, w, 94);
+      g.fillStyle = CRIMSON; g.fillRect(0, h - 120, w, 26);
+      g.fillStyle = 'rgba(217, 181, 106, 0.55)'; g.fillRect(0, h - 122, w, 2); g.fillRect(0, h - 96, w, 2);
+      g.fillStyle = '#2e2536'; g.fillRect(0, h - 94, w, 94);
     });
     this.tiles(ctx, cam, wall, CEIL);
 
-    // Voitures garées (décor).
-    for (let i = 0; i < d.cars.length; i++) {
-      if (!this.visible(cam, d.cars[i], 190)) continue;
-      this.blit(ctx, this.sprite('pcar', 190, 70, (g) => this._bakeCar(g)), d.cars[i], -70);
+    // Vasques de braise le long du mur (décor).
+    for (let i = 0; i < d.braziers.length; i++) {
+      if (!this.visible(cam, d.braziers[i], 190)) continue;
+      this.blit(ctx, this.sprite('brazier', 190, 110, (g) => this._bakeBrazier(g)), d.braziers[i], -110);
     }
 
     // Sol et plafond.
     const floor = this.sprite('floor', 520, 420, (g, w, h) => {
-      g.fillStyle = '#3d3f3a'; g.fillRect(0, 0, w, h);
-      g.fillStyle = '#4b4d47'; g.fillRect(0, 0, w, 3);
-      g.fillStyle = 'rgba(232, 227, 213, 0.22)';
-      for (let x = 60; x < w; x += 260) { g.fillRect(x, 26, 5, 110); }
+      g.fillStyle = '#2c2433'; g.fillRect(0, 0, w, h);
+      g.fillStyle = '#4a3d55'; g.fillRect(0, 0, w, 3);
+      g.fillStyle = 'rgba(239, 230, 210, 0.08)';
+      for (let x = 0; x < w; x += 130) g.fillRect(x, 3, 2, 147);
+      // Tapis d'apparat.
+      g.fillStyle = CRIMSON; g.fillRect(0, 44, w, 62);
+      g.fillStyle = 'rgba(217, 181, 106, 0.6)'; g.fillRect(0, 48, w, 2); g.fillRect(0, 100, w, 2);
       g.fillStyle = 'rgba(0, 0, 0, 0.25)'; g.fillRect(0, 150, w, h - 150);
     });
     const ceil = this.sprite('ceil', 520, 600, (g, w, h) => {
-      g.fillStyle = '#131412'; g.fillRect(0, 0, w, h);
-      g.fillStyle = '#1e201d'; g.fillRect(0, h - 14, w, 14);
-      g.fillStyle = '#34362f'; g.fillRect(0, h - 40, w, 9); g.fillRect(0, h - 62, w, 5);
+      g.fillStyle = '#0f0c13'; g.fillRect(0, 0, w, h);
+      g.fillStyle = '#1a1520'; g.fillRect(0, h - 14, w, 14);
+      g.fillStyle = BRASS; g.fillRect(0, h - 40, w, 9); g.fillRect(0, h - 62, w, 5);
     });
     this.tiles(ctx, cam, floor, 0);
     this.tiles(ctx, cam, ceil, CEIL - 600 + 2);
 
-    // Tubes fluorescents : cône de lumière cuit ; deux d'entre eux faiblissent.
+    // Lustres : cône de lumière cuit ; deux d'entre eux vacillent.
     const cone = this.sprite('cone', 420, -CEIL + 20, (g, w, h) => {
       const grad = g.createLinearGradient(0, 0, 0, h);
-      grad.addColorStop(0, 'rgba(223, 233, 198, 0.3)');
-      grad.addColorStop(1, 'rgba(223, 233, 198, 0)');
+      grad.addColorStop(0, 'rgba(255, 200, 120, 0.26)');
+      grad.addColorStop(1, 'rgba(255, 200, 120, 0)');
       g.fillStyle = grad;
       g.beginPath(); g.moveTo(w / 2 - 44, 0); g.lineTo(w / 2 + 44, 0); g.lineTo(w, h); g.lineTo(0, h); g.closePath(); g.fill();
     });
-    for (let i = 0; i < d.tubes.length; i++) {
-      const x = d.tubes[i];
+    const lustre = this.sprite('lustre', 120, 50, (g) => this._bakeChandelier(g));
+    for (let i = 0; i < d.chandeliers.length; i++) {
+      const x = d.chandeliers[i];
       if (!this.visible(cam, x - 210, 420)) continue;
       let a = 1;
-      if (!this.reduced && d.flicker.includes(i)) a = hash(Math.floor(t * 16) + i * 7) > 0.3 ? 1 : 0.2;
+      if (!this.reduced && d.flicker.includes(i)) a = hash(Math.floor(t * 9) + i * 7) > 0.3 ? 1 : 0.6;
       ctx.globalAlpha = a;
-      this.blit(ctx, cone, x - 210, CEIL);
-      ctx.fillStyle = '#f3f8e2'; ctx.fillRect(x - 46, CEIL + 2, 92, 5);
+      this.blit(ctx, cone, x - 210, CEIL + 30);
       ctx.globalAlpha = 1;
+      this.blit(ctx, lustre, x - 60, CEIL);
     }
 
-    // Solides et passerelle.
+    // Solides et tribune.
     for (let i = 0; i < level.solids.length; i++) {
       const s = level.solids[i];
       if (s.kind === 'ground' || s.kind === 'ceiling' || !this.visible(cam, s.x, s.w)) continue;
@@ -109,9 +120,9 @@ export class ClubRenderer extends BaseRenderer {
     }
     for (let i = 0; i < level.platforms.length; i++) {
       const p = level.platforms[i];
-      ctx.fillStyle = '#52554d'; ctx.fillRect(p.x, p.y, p.w, 6);
+      ctx.fillStyle = '#b99652'; ctx.fillRect(p.x, p.y, p.w, 6);
       ctx.fillStyle = INK; ctx.fillRect(p.x, p.y + 6, p.w, 2);
-      ctx.fillStyle = '#34362f';
+      ctx.fillStyle = BRASS;
       ctx.fillRect(p.x + 8, CEIL, 3, p.y - CEIL); ctx.fillRect(p.x + p.w - 11, CEIL, 3, p.y - CEIL);
       ctx.fillRect(p.x, p.y - 28, p.w, 2.5);
     }
@@ -127,25 +138,24 @@ export class ClubRenderer extends BaseRenderer {
 
     const p = level.portal;
     if (this.visible(cam, p.x, p.w)) {
-      this.blit(ctx, this.sprite('portal', p.w, p.h, (g) => this._bakeLift(g, p)), p.x, -p.h);
-      // Voyant du monte-charge : rouge, puis vert une fois la visite terminée.
+      this.blit(ctx, this.sprite('portal', p.w, p.h, (g) => this._bakeDoors(g, p)), p.x, -p.h);
+      // Lanterne de la grande porte : cramoisie, puis dorée une fois la visite terminée.
       const on = this.reduced || Math.sin(t * (p.boost ? 5 : 2)) > -0.2;
-      ctx.fillStyle = !on ? '#2a2c27' : p.boost ? '#b8e08a' : '#d1483b';
+      ctx.fillStyle = !on ? '#2a2132' : p.boost ? '#ffd9a0' : SEAL;
       ctx.beginPath(); ctx.arc(p.doorX, -p.h + 96, 6, 0, Math.PI * 2); ctx.fill();
       this._door(ctx, p);
       if (state.near === p) this.drawNearHighlight(ctx, p, t, this.palette.primary);
     }
   }
 
-  // Piliers au premier plan : défilent plus vite que le monde (profondeur).
+  // Colonnes au premier plan : défilent plus vite que le monde (profondeur).
   drawFront(ctx, cam, t, level) {
     const pillars = level.decor.pillars;
     const s = this.sprite('pillar', 84, 900, (g, w, h) => {
-      g.fillStyle = '#080908'; g.fillRect(0, 0, w, h);
-      g.fillStyle = '#14150f';
-      for (let y = 600; y < h; y += 40) {
-        g.beginPath(); g.moveTo(0, y); g.lineTo(w, y - 30); g.lineTo(w, y - 12); g.lineTo(0, y + 18); g.closePath(); g.fill();
-      }
+      g.fillStyle = '#07050a'; g.fillRect(0, 0, w, h);
+      // Cannelures.
+      g.fillStyle = '#120e17';
+      for (let x = 12; x < w - 8; x += 18) g.fillRect(x, 0, 4, h);
     });
     for (let i = 0; i < pillars.length; i++) {
       const x = cam.cx + (pillars[i] - cam.cx) * 1.45 - 42;
@@ -163,7 +173,7 @@ export class ClubRenderer extends BaseRenderer {
       this._gx = Math.floor(Math.random() * GRAIN);
       this._gy = Math.floor(Math.random() * GRAIN);
     }
-    ctx.globalAlpha = 0.085;
+    ctx.globalAlpha = 0.055;
     for (let y = -this._gy; y < this.pxH; y += GRAIN) {
       for (let x = -this._gx; x < this.pxW; x += GRAIN) ctx.drawImage(grain.c, x, y);
     }
@@ -171,12 +181,12 @@ export class ClubRenderer extends BaseRenderer {
   }
 
   bakeCollectible(g, col) {
-    // Étiquette d'outil : fiche cartonnée, coin rouge.
-    g.fillStyle = BONE; g.fillRect(3, 5, 28, 25);
-    g.fillStyle = '#d1483b';
-    g.beginPath(); g.moveTo(31, 5); g.lineTo(31, 14); g.lineTo(22, 5); g.closePath(); g.fill();
-    g.strokeStyle = INK; g.lineWidth = 1.5; g.strokeRect(3, 5, 28, 25);
-    this.label(g, col.skill.abbr, 16, 19, 12, INK, 800);
+    // Atout : un médaillon d'or.
+    g.fillStyle = GOLD; g.beginPath(); g.arc(17, 17, 15, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = INK; g.lineWidth = 1.5; g.stroke();
+    g.strokeStyle = 'rgba(8, 6, 11, 0.45)'; g.lineWidth = 1;
+    g.beginPath(); g.arc(17, 17, 12, 0, Math.PI * 2); g.stroke();
+    this.label(g, col.skill.abbr, 17, 18, 11, INK, 800);
   }
 
   _bakeGrain() {
@@ -198,16 +208,16 @@ export class ClubRenderer extends BaseRenderer {
   _door(ctx, l) {
     if (l.open < 0.02) return;
     ctx.globalAlpha = l.open;
-    ctx.fillStyle = '#f3ecd0';
+    ctx.fillStyle = '#ffe2b0';
     ctx.fillRect(l.doorX - DOOR_W / 2 + 3, l.baseY - DOOR_H + 3, DOOR_W - 6, DOOR_H - 3);
     ctx.globalAlpha = 1;
   }
 
-  // Lieu visité : un tampon rouge, de travers.
+  // Salle visitée : un sceau cramoisi, de travers.
   _stamp(ctx, l) {
     const s = this.sprite('stamp', 70, 30, (g) => {
-      g.strokeStyle = '#d1483b'; g.lineWidth = 2.5; g.strokeRect(2, 2, 66, 26);
-      this.label(g, 'VU', 35, 16, 16, '#d1483b', 800, 'center', 3);
+      g.strokeStyle = SEAL; g.lineWidth = 2.5; g.strokeRect(2, 2, 66, 26);
+      this.label(g, 'VU', 35, 16, 16, SEAL, 800, 'center', 3);
     });
     ctx.save();
     ctx.translate(l.x + l.w - 46, l.baseY - l.h + 94);       // sous le libellé, sans le recouvrir
@@ -218,113 +228,138 @@ export class ClubRenderer extends BaseRenderer {
 
   _solid(ctx, s) {
     if (s.kind === 'crate') {
-      ctx.fillStyle = '#6a5a41'; ctx.fillRect(s.x, s.y, s.w, s.h);
-      ctx.strokeStyle = '#3d3324'; ctx.lineWidth = 3;
-      ctx.strokeRect(s.x + 1.5, s.y + 1.5, s.w - 3, s.h - 3);
-      ctx.beginPath(); ctx.moveTo(s.x + 3, s.y + 3); ctx.lineTo(s.x + s.w - 3, s.y + s.h - 3); ctx.stroke();
+      // Socle de pierre cerclé d'or.
+      ctx.fillStyle = '#3a303f'; ctx.fillRect(s.x, s.y, s.w, s.h);
+      ctx.fillStyle = '#4a3d55'; ctx.fillRect(s.x - 3, s.y, s.w + 6, 6);
+      ctx.fillStyle = GOLD; ctx.fillRect(s.x, s.y + 8, s.w, 2);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)'; ctx.fillRect(s.x, s.y + s.h - 6, s.w, 6);
     } else if (s.kind === 'duct') {
-      ctx.fillStyle = '#4a4d45'; ctx.fillRect(s.x, s.y, s.w, s.h);
-      ctx.fillStyle = '#2a2c27'; ctx.fillRect(s.x, s.y + s.h - 4, s.w, 4);
+      // Linteau suspendu par des chaînes.
+      ctx.fillStyle = '#3d3345'; ctx.fillRect(s.x, s.y, s.w, s.h);
+      ctx.fillStyle = '#1c1622'; ctx.fillRect(s.x, s.y + s.h - 4, s.w, 4);
+      ctx.fillStyle = BRASS;
       ctx.fillRect(s.x + 20, CEIL, 4, s.y - CEIL); ctx.fillRect(s.x + s.w - 24, CEIL, 4, s.y - CEIL);
     } else {
-      // Quai et marches : béton, liseré de sécurité jaune et noir.
-      ctx.fillStyle = '#55584f'; ctx.fillRect(s.x, s.y, s.w, s.h);
-      ctx.fillStyle = '#2a2c27'; ctx.fillRect(s.x, s.y + 9, s.w, 2);
-      const stripe = this.sprite('hazard', 60, 9, (g) => {
-        g.fillStyle = '#c9a53a'; g.fillRect(0, 0, 60, 9);
-        g.fillStyle = INK;
-        for (let x = -10; x < 60; x += 20) { g.beginPath(); g.moveTo(x, 9); g.lineTo(x + 9, 0); g.lineTo(x + 19, 0); g.lineTo(x + 10, 9); g.closePath(); g.fill(); }
+      // Estrade et marches : marbre, galon cramoisi et or.
+      ctx.fillStyle = '#3a303f'; ctx.fillRect(s.x, s.y, s.w, s.h);
+      ctx.fillStyle = '#1c1622'; ctx.fillRect(s.x, s.y + 9, s.w, 2);
+      const trim = this.sprite('trim', 60, 9, (g) => {
+        g.fillStyle = CRIMSON; g.fillRect(0, 0, 60, 9);
+        g.fillStyle = GOLD; g.fillRect(0, 0, 60, 2);
+        for (let x = 5; x < 60; x += 20) { g.beginPath(); g.moveTo(x, 5.5); g.lineTo(x + 5, 3); g.lineTo(x + 10, 5.5); g.lineTo(x + 5, 8); g.closePath(); g.fill(); }
       });
       for (let x = s.x; x < s.x + s.w; x += 60) {
         const w = Math.min(60, s.x + s.w - x);
-        ctx.drawImage(stripe.c, 0, 0, stripe.c.width * (w / 60), stripe.c.height, x, s.y, w, 9);
+        ctx.drawImage(trim.c, 0, 0, trim.c.width * (w / 60), trim.c.height, x, s.y, w, 9);
       }
     }
   }
 
-  _bakeCar(g) {
-    g.fillStyle = '#1b1c1a';
-    g.beginPath(); g.roundRect(4, 26, 182, 32, 10); g.fill();
-    g.beginPath(); g.roundRect(40, 4, 104, 34, 14); g.fill();
-    g.fillStyle = '#2c2e2a';
-    g.beginPath(); g.roundRect(50, 10, 40, 20, 6); g.fill();
-    g.beginPath(); g.roundRect(96, 10, 40, 20, 6); g.fill();
-    g.fillStyle = INK;
-    g.beginPath(); g.arc(46, 58, 12, 0, Math.PI * 2); g.fill();
-    g.beginPath(); g.arc(146, 58, 12, 0, Math.PI * 2); g.fill();
+  // Lustre : chaîne, couronne d'or, cinq bougies.
+  _bakeChandelier(g) {
+    g.fillStyle = BRASS; g.fillRect(59, 0, 2, 22);
+    g.fillStyle = GOLD;
+    g.beginPath(); g.ellipse(60, 30, 48, 5, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = BRASS; g.beginPath(); g.ellipse(60, 32, 40, 3, 0, 0, Math.PI * 2); g.fill();
+    for (let i = 0; i < 5; i++) {
+      const x = 18 + i * 21;
+      g.fillStyle = BONE; g.fillRect(x - 2, 17, 4, 11);
+      g.fillStyle = '#ffd9a0'; g.beginPath(); g.ellipse(x, 13, 2.6, 5, 0, 0, Math.PI * 2); g.fill();
+    }
   }
 
-  // Libellé au pochoir + sous-titre en clair.
+  // Vasque de braise sur son pied, halo chaud.
+  _bakeBrazier(g) {
+    const cx = 95;
+    const grad = g.createRadialGradient(cx, 40, 4, cx, 40, 90);
+    grad.addColorStop(0, 'rgba(255, 170, 90, 0.3)');
+    grad.addColorStop(1, 'rgba(255, 170, 90, 0)');
+    g.fillStyle = grad; g.fillRect(0, 0, 190, 110);
+    g.fillStyle = '#1c1622'; g.fillRect(cx - 4, 58, 8, 44); g.fillRect(cx - 22, 102, 44, 8);
+    g.fillStyle = BRASS;
+    g.beginPath(); g.moveTo(cx - 34, 44); g.lineTo(cx + 34, 44); g.lineTo(cx + 20, 60); g.lineTo(cx - 20, 60); g.closePath(); g.fill();
+    g.fillStyle = GOLD; g.fillRect(cx - 36, 42, 72, 3);
+    g.fillStyle = '#ff9a55'; g.beginPath(); g.ellipse(cx, 41, 26, 4, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#ffd9a0'; g.beginPath(); g.ellipse(cx, 40, 12, 2.5, 0, 0, Math.PI * 2); g.fill();
+  }
+
+  // Libellé gravé + sous-titre en clair.
   _stencil(g, cx, y, loc) {
-    this.label(g, loc.label, cx, y, 20, BONE, 800, 'center', 3);
-    g.fillStyle = '#d1483b'; g.fillRect(cx - 34, y + 15, 68, 2);
-    this.label(g, this.universe.vocabulary.hints[loc.id], cx, y + 30, 11, '#b3ae9f', 500, 'center', 0.5);
+    this.label(g, loc.label, cx, y, 20, BONE, 700, 'center', 3);
+    g.fillStyle = GOLD; g.fillRect(cx - 34, y + 15, 68, 2);
+    this.label(g, this.universe.vocabulary.hints[loc.id], cx, y + 30, 11, '#b9ad98', 500, 'center', 0.5);
   }
 
-  _doorFrame(g, cx, base, color = '#4a4d45') {
+  _doorFrame(g, cx, base, color = WOOD) {
     g.fillStyle = INK; g.fillRect(cx - DOOR_W / 2 - 5, base - DOOR_H - 5, DOOR_W + 10, DOOR_H + 5);
     g.fillStyle = color; g.fillRect(cx - DOOR_W / 2, base - DOOR_H, DOOR_W, DOOR_H);
+    g.strokeStyle = 'rgba(217, 181, 106, 0.7)'; g.lineWidth = 1.5;
+    g.strokeRect(cx - DOOR_W / 2 + 0.75, base - DOOR_H + 0.75, DOOR_W - 1.5, DOOR_H - 0.75);
     g.fillStyle = 'rgba(0, 0, 0, 0.3)';
     g.fillRect(cx - DOOR_W / 2, base - DOOR_H + 26, DOOR_W, 2); g.fillRect(cx - DOOR_W / 2, base - 30, DOOR_W, 2);
-    g.fillStyle = BONE; g.fillRect(cx + 12, base - 46, 4, 14);
-    // Applique grillagée au-dessus de la porte.
-    g.fillStyle = '#f3f8e2'; g.fillRect(cx - 10, base - DOOR_H - 20, 20, 8);
+    g.fillStyle = GOLD; g.fillRect(cx + 12, base - 46, 4, 14);
+    // Applique à bougie au-dessus de la porte.
+    g.fillStyle = '#ffd9a0'; g.fillRect(cx - 10, base - DOOR_H - 20, 20, 8);
     const grad = g.createRadialGradient(cx, base - DOOR_H - 14, 2, cx, base - DOOR_H - 14, 70);
-    grad.addColorStop(0, 'rgba(243, 248, 226, 0.34)');
-    grad.addColorStop(1, 'rgba(243, 248, 226, 0)');
+    grad.addColorStop(0, 'rgba(255, 205, 130, 0.34)');
+    grad.addColorStop(1, 'rgba(255, 205, 130, 0)');
     g.fillStyle = grad; g.fillRect(cx - 70, base - DOOR_H - 60, 140, 140);
   }
 
   _bakeLocation(g, l) {
     const w = l.w, h = l.h, cx = l.doorX - l.x;
-    g.fillStyle = '#32342f'; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#2a2132'; g.fillRect(0, 0, w, h);
     g.fillStyle = 'rgba(0, 0, 0, 0.3)'; g.fillRect(0, 0, 4, h); g.fillRect(w - 4, 0, 4, h);
-    if (l.style === 'steel') {
-      this._doorFrame(g, cx, h, '#5a5d54');
-    } else if (l.style === 'phone') {
-      // Ligne directe : un téléphone mural dans son alcôve.
-      g.fillStyle = INK; g.fillRect(22, h - 132, 46, 74);
-      g.fillStyle = '#7a7d72'; g.fillRect(28, h - 126, 34, 50);
-      g.fillStyle = INK; g.fillRect(34, h - 118, 22, 12);
-      g.strokeStyle = '#7a7d72'; g.lineWidth = 2;
-      g.beginPath(); g.moveTo(45, h - 76); g.quadraticCurveTo(30, h - 44, 48, h - 34); g.stroke();
-      this._doorFrame(g, cx, h, '#4d5048');
-    } else if (l.style === 'archive') {
-      // Case files : porte vitrée dépolie, casiers d'archives.
+    g.fillStyle = 'rgba(217, 181, 106, 0.5)'; g.fillRect(4, 0, w - 8, 2);
+    if (l.style === 'hall') {
+      this._doorFrame(g, cx, h, '#5a4030');
+    } else if (l.style === 'bell') {
+      // Demander audience : une cloche dans son alcôve.
+      g.fillStyle = INK; g.beginPath(); g.roundRect(22, h - 132, 46, 74, [23, 23, 0, 0]); g.fill();
+      g.fillStyle = BRASS; g.fillRect(44, h - 126, 2, 12);
+      g.fillStyle = GOLD;
+      g.beginPath(); g.moveTo(31, h - 88); g.quadraticCurveTo(33, h - 116, 45, h - 116); g.quadraticCurveTo(57, h - 116, 59, h - 88); g.closePath(); g.fill();
+      g.fillRect(28, h - 89, 34, 3);
+      g.beginPath(); g.arc(45, h - 82, 3.5, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = BRASS; g.lineWidth = 2;
+      g.beginPath(); g.moveTo(45, h - 78); g.quadraticCurveTo(38, h - 54, 47, h - 36); g.stroke();
+      this._doorFrame(g, cx, h);
+    } else if (l.style === 'library') {
+      // Chroniques : rayonnages de registres, porte à vitrail.
       for (let i = 0; i < 3; i++) {
-        g.fillStyle = '#4a4d45'; g.fillRect(14 + i * 26, h - 96, 22, 96);
+        g.fillStyle = WOOD; g.fillRect(14 + i * 26, h - 96, 22, 96);
         g.fillStyle = INK; for (let y = h - 90; y < h - 6; y += 22) g.fillRect(17 + i * 26, y, 16, 2);
+        g.fillStyle = i === 1 ? CRIMSON : BRASS; g.fillRect(19 + i * 26, h - 84, 5, 14); g.fillRect(27 + i * 26, h - 62, 5, 14);
       }
-      this._doorFrame(g, cx, h, '#5a5d54');
-      g.fillStyle = 'rgba(243, 236, 208, 0.5)'; g.fillRect(cx - 17, h - DOOR_H + 8, 34, 30);
+      this._doorFrame(g, cx, h, '#5a4030');
+      g.fillStyle = 'rgba(255, 220, 160, 0.45)'; g.fillRect(cx - 17, h - DOOR_H + 8, 34, 30);
     } else {
-      // Dossiers : rideau de fer entrouvert, lumière chaude dessous.
+      // Collection : tenture relevée, pièces exposées dans la lumière.
       g.fillStyle = INK; g.fillRect(24, h - 150, w - 48, 150);
-      g.fillStyle = '#5a5d54'; g.fillRect(30, h - 144, w - 60, 100);
+      g.fillStyle = CRIMSON; g.fillRect(30, h - 144, w - 60, 100);
       g.fillStyle = 'rgba(0, 0, 0, 0.28)';
-      for (let y = h - 138; y < h - 46; y += 10) g.fillRect(30, y, w - 60, 2);
+      for (let x = 40; x < w - 34; x += 16) g.fillRect(x, h - 144, 3, 100);
+      g.fillStyle = GOLD; g.fillRect(30, h - 48, w - 60, 4);
       g.fillStyle = '#e9c98a'; g.fillRect(30, h - 44, w - 60, 44);
       g.fillStyle = 'rgba(0, 0, 0, 0.5)';
       for (let x = 44; x < w - 60; x += 34) g.fillRect(x, h - 34, 22, 34);
-      this._doorFrame(g, cx, h, '#4d5048');
+      this._doorFrame(g, cx, h);
     }
     this._stencil(g, cx, 34, l);
   }
 
-  // Le portail : un monte-charge.
-  _bakeLift(g, p) {
+  // Le portail : une grande porte à deux vantaux.
+  _bakeDoors(g, p) {
     const w = p.w, h = p.h, cx = p.doorX - p.x;
-    g.fillStyle = '#32342f'; g.fillRect(0, 0, w, h);
-    g.fillStyle = '#c9a53a'; g.fillRect(0, 0, w, 12); g.fillRect(0, h - 10, w, 10);
-    g.fillStyle = INK;
-    for (let x = -10; x < w; x += 28) {
-      g.beginPath(); g.moveTo(x, 12); g.lineTo(x + 12, 0); g.lineTo(x + 26, 0); g.lineTo(x + 14, 12); g.closePath(); g.fill();
-    }
-    this.label(g, 'CONSTRUISEZ', cx, 40, 19, BONE, 800, 'center', 2.5);
-    this.label(g, 'VOTRE PROJET', cx, 64, 19, BONE, 800, 'center', 2.5);
+    g.fillStyle = '#2a2132'; g.fillRect(0, 0, w, h);
+    g.fillStyle = GOLD; g.fillRect(0, 0, w, 12); g.fillRect(0, h - 10, w, 10);
+    g.fillStyle = INK; g.fillRect(0, 8, w, 1.5);
+    this.label(g, 'CONSTRUISEZ', cx, 40, 19, BONE, 700, 'center', 2.5);
+    this.label(g, 'VOTRE PROJET', cx, 64, 19, BONE, 700, 'center', 2.5);
     g.fillStyle = INK; g.fillRect(cx - 62, h - 164, 124, 154);
-    g.fillStyle = '#5a5d54'; g.fillRect(cx - 56, h - 158, 54, 148); g.fillRect(cx + 2, h - 158, 54, 148);
-    g.fillStyle = 'rgba(0, 0, 0, 0.3)';
-    for (let y = h - 150; y < h - 12; y += 12) g.fillRect(cx - 56, y, 112, 2);
+    g.fillStyle = '#5a4030'; g.fillRect(cx - 56, h - 158, 54, 148); g.fillRect(cx + 2, h - 158, 54, 148);
+    g.strokeStyle = 'rgba(217, 181, 106, 0.6)'; g.lineWidth = 1.5;
+    for (const x of [cx - 48, cx + 10]) { g.strokeRect(x, h - 148, 38, 56); g.strokeRect(x, h - 82, 38, 62); }
+    g.fillStyle = GOLD; g.fillRect(cx - 8, h - 92, 4, 14); g.fillRect(cx + 4, h - 92, 4, 14);
   }
 }

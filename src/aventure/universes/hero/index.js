@@ -6,9 +6,9 @@ import { HeroRenderer } from './renderer.js';
 
 export default defineUniverse({
   id: 'hero',
-  name: 'ARPHAN-MAN',
+  name: 'HAUTE VOLTIGE',
   category: 'HÉROÏQUE',
-  tagline: 'La nuit, la pluie, les néons. De la rue jusqu\'aux toits.',
+  tagline: 'L\'aube se lève sur la ville. De l\'élan, des cuivres, et les toits pour terrain de jeu.',
   palette, fonts, vocabulary, camera, physics, audio, effects,
   character: { player, npcs },
   createLevel,

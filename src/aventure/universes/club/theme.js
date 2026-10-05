@@ -1,36 +1,40 @@
-/* ARPHAN CLUB · MATURE : sous-sols, béton, néons blafards. Thriller urbain,
-   sobre et contrasté. Identité originale, aucune violence montrée. */
+/* LE PALAIS · MATURE : un palais la nuit, marbre sombre, or et bougies.
+   Ambiance d'après « In the Palace ~ Lamentoso / Agitato » (Hunter x Hunter) :
+   solennelle, lente, tragique. Identité originale, aucune violence montrée. */
 
 export const palette = {
-  bg: '#0b0c0b',
-  surface: 'rgba(17, 18, 16, 0.96)',
-  surface2: '#22241f',
-  text: '#e8e3d5',
-  muted: '#9b978a',
-  line: 'rgba(232, 227, 213, 0.18)',
-  primary: '#dfe9c6',       // blanc néon : ce qui s'actionne
-  onPrimary: '#10110e',
-  accent: '#d1483b',        // rouge tampon : ce qui se découvre
+  bg: '#0c0a10',
+  surface: 'rgba(18, 14, 22, 0.96)',
+  surface2: '#261d2e',
+  text: '#efe6d2',
+  muted: '#a89c8c',
+  line: 'rgba(217, 181, 106, 0.22)',
+  primary: '#d9b56a',       // or : ce qui s'actionne
+  onPrimary: '#16100a',
+  accent: '#d95a70',        // cramoisi du sceau : ce qui se découvre
 };
 
+const SERIF = '"Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif';
+
 export const fonts = {
-  canvas: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace',
-  display: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace',
+  canvas: SERIF,
+  display: SERIF,
   weight: '700',
-  spacing: '0.08em',
-  radius: '0px',
+  spacing: '0.06em',
+  radius: '2px',
 };
 
 export const vocabulary = {
-  locations: { profile: 'PROFIL', parcours: 'CASE FILES', contact: 'CONTACT', projets: 'DOSSIERS' },
-  hints: { profile: 'Le sujet', parcours: 'Parcours et expériences', contact: 'Ligne directe', projets: 'Mes projets' },
-  objective: 'MISSION',
-  placeFound: 'LIEU IDENTIFIÉ',
-  skills: 'OUTILS',
-  skill: 'Outil',
-  skillFound: 'OUTIL RÉCUPÉRÉ',
-  projects: 'DOSSIERS',
-  experiences: 'EXPÉRIENCES',
+  locations: { profile: 'PROFIL', parcours: 'CHRONIQUES', contact: 'CONTACT', projets: 'COLLECTION' },
+  hints: { profile: 'L\'hôte', parcours: 'Parcours et expériences', contact: 'Demander audience', projets: 'Mes projets' },
+  objective: 'QUÊTE',
+  places: 'SALLES',
+  placeFound: 'SALLE OUVERTE',
+  skills: 'ATOUTS',
+  skill: 'Atout',
+  skillFound: 'ATOUT OBTENU',
+  projects: 'COLLECTION',
+  experiences: 'CHRONIQUES',
 };
 
 // Caméra lente, serrée, cinématique.
@@ -40,11 +44,11 @@ export const camera = { lerpX: 3, lerpY: 3, deadX: 74, deadY: 70, lookAhead: 46,
 export const physics = { maxSpeed: 200, accel: 1100, friction: 1500, airControl: 0.5, gravity: 1900, jumpVelocity: 585 };
 
 export const audio = {
-  // Bourdon grave + ronflement des néons.
-  pad: { notes: [41.2, 61.74, 82.41], type: 'triangle', gain: 0.06, lfo: 0.04 },
-  hum: { freq: 120, gain: 0.012 },
-  noise: { type: 'bandpass', freq: 900, gain: 0.012 },
-  sfx: { wave: 'triangle', base: 300 },
+  track: '/sounds/aventure/club.mp3',   // facultatif : sans fichier, le synthé ci-dessous joue
+  // Accord d'orgue grave (do mineur) + souffle de la grande salle.
+  pad: { notes: [65.41, 98, 130.81, 155.56], type: 'triangle', gain: 0.06, lfo: 0.04 },
+  noise: { type: 'lowpass', freq: 300, gain: 0.012 },
+  sfx: { wave: 'triangle', base: 392 },
 };
 
-export const effects = { grain: true, sharp: true, dust: '#7d7a70' };
+export const effects = { grain: true, sharp: true, dust: '#8a7f8c' };
