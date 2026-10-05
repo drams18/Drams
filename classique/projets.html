@@ -81,10 +81,99 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "CollectionPage",
-      "url": "https://arphandrame.fr/classique/projets",
-      "name": "Projets · Arphan Drame",
+      "@type": "WebSite",
+      "@id": "https://arphandrame.fr/#website",
+      "name": "Arphan Drame · Portfolio",
+      "url": "https://arphandrame.fr/",
       "inLanguage": "fr",
+      "author": {
+        "@id": "https://arphandrame.fr/#person"
+      },
+      "publisher": {
+        "@id": "https://arphandrame.fr/#person"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://arphandrame.fr/#person",
+      "name": "Arphan Drame",
+      "jobTitle": "Développeur Web Full Stack",
+      "description": "Développeur Web Full Stack à Paris. En recherche de CDI (dès oct. 2026)",
+      "url": "https://arphandrame.fr/",
+      "email": "mailto:arphandrame0@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Paris",
+        "addressCountry": "FR"
+      },
+      "sameAs": [
+        "https://github.com/drams18",
+        "https://www.linkedin.com/in/arphan-drame/"
+      ],
+      "knowsLanguage": [
+        "Français",
+        "Anglais",
+        "Espagnol",
+        "Arabe"
+      ],
+      "knowsAbout": [
+        "React",
+        "React Native",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "Vite",
+        "Tailwind CSS",
+        "Redux / Zustand",
+        "Node.js",
+        "Express",
+        "NestJS",
+        "Symfony",
+        "Laravel",
+        "PHP",
+        "Python",
+        "REST API",
+        "GraphQL",
+        "MySQL",
+        "PostgreSQL",
+        "Supabase",
+        "Prisma",
+        "TypeORM",
+        "Docker",
+        "Git",
+        "GitHub",
+        "GitLab",
+        "CI/CD",
+        "Nginx",
+        "AWS",
+        "GCP",
+        "Cloudflare",
+        "Figma",
+        "Jira",
+        "Bruno",
+        "Intégration IA / LLM"
+      ],
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "ETNA"
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "DevPhantom"
+      }
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://arphandrame.fr/classique/projets#collectionpage",
+      "url": "https://arphandrame.fr/classique/projets",
+      "inLanguage": "fr",
+      "isPartOf": {
+        "@id": "https://arphandrame.fr/#website"
+      },
+      "breadcrumb": {
+        "@id": "https://arphandrame.fr/classique/projets#breadcrumb"
+      },
+      "name": "Projets · Arphan Drame",
       "about": {
         "@id": "https://arphandrame.fr/#person"
       },
@@ -100,7 +189,10 @@
               "description": "Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n'a finalement pas été terminée, le client ayant cessé de répondre.",
               "genre": "Plateforme Web",
               "url": "https://arphandrame.fr/classique/projets#infinitia",
-              "keywords": "Symfony, Node.js, NestJS, MySQL"
+              "keywords": "Symfony, Node.js, NestJS, MySQL",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              }
             }
           },
           {
@@ -113,6 +205,9 @@
               "genre": "Intranet",
               "url": "https://arphandrame.fr/classique/projets#allsab-ms",
               "keywords": "PHP, Symfony, MySQL",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              },
               "sameAs": "https://allsab-ms.com/"
             }
           },
@@ -125,7 +220,10 @@
               "description": "Plateforme destinée à faciliter le travail opérationnel et la communication interne.",
               "genre": "Plateforme Web",
               "url": "https://arphandrame.fr/classique/projets#hexagon",
-              "keywords": "PHP, Symfony, JavaScript, MySQL"
+              "keywords": "PHP, Symfony, JavaScript, MySQL",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              }
             }
           },
           {
@@ -137,7 +235,10 @@
               "description": "Plateforme destinée à faciliter la génération de rapports et la communication interne.",
               "genre": "Plateforme Web",
               "url": "https://arphandrame.fr/classique/projets#gexp",
-              "keywords": "PHP, Symfony, MySQL"
+              "keywords": "PHP, Symfony, MySQL",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              }
             }
           },
           {
@@ -150,6 +251,9 @@
               "genre": "Application Mobile",
               "url": "https://arphandrame.fr/classique/projets#ilamiria",
               "keywords": "React Native",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              },
               "sameAs": "https://apps.apple.com/fr/app/ilamiria/id6749936753"
             }
           },
@@ -162,7 +266,10 @@
               "description": "Application pour organiser des sorties entre amis : définition d'un budget, choix d'un lieu et d'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d'autres.",
               "genre": "Application Mobile",
               "url": "https://arphandrame.fr/classique/projets#badn",
-              "keywords": "React Native, Node.js"
+              "keywords": "React Native, Node.js",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              }
             }
           },
           {
@@ -175,6 +282,9 @@
               "genre": "Plateforme de réservation",
               "url": "https://arphandrame.fr/classique/projets#wild-kedougou",
               "keywords": "React, TypeScript, Vite, Tailwind CSS, Framer Motion, Supabase, Google Calendar API, Brevo, Cloudflare Workers, PWA, SEO",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              },
               "sameAs": "https://wild-kedougou-experience.hitmind-pro.workers.dev/"
             }
           },
@@ -188,6 +298,9 @@
               "genre": "Site vitrine WordPress",
               "url": "https://arphandrame.fr/classique/projets#pool-party",
               "keywords": "WordPress, PHP, CSS",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              },
               "sameAs": "https://poolparty-experience.fr/"
             }
           },
@@ -201,6 +314,9 @@
               "genre": "Application Mobile",
               "url": "https://arphandrame.fr/classique/projets#islaah",
               "keywords": "React Native, Symfony, MySQL, Cloudflare, Railway, Expo",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              },
               "sameAs": "https://apps.apple.com/us/app/islaah/id6758726142"
             }
           },
@@ -214,6 +330,9 @@
               "genre": "Projet personnel",
               "url": "https://arphandrame.fr/classique/projets#prospectly",
               "keywords": "Node.js, Railway, HTML, CSS, JavaScript, NoSQL",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              },
               "sameAs": "https://prospectly.hitmind-pro.workers.dev/"
             }
           },
@@ -227,6 +346,9 @@
               "genre": "PWA de planification",
               "url": "https://arphandrame.fr/classique/projets#oneday",
               "keywords": "React, TypeScript, Vite, Tailwind CSS, React Router, Supabase, PostgreSQL, PWA, Web Push, Cloudflare Pages, Cloudflare Workers",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              },
               "sameAs": "https://oneday-5s9.pages.dev/"
             }
           },
@@ -240,6 +362,9 @@
               "genre": "Plateforme Web",
               "url": "https://arphandrame.fr/classique/projets#skywalk",
               "keywords": "React, TypeScript, Vite, Tailwind, React Query, NestJS, PostgreSQL, TypeORM, JWT, Docker, Nginx, GitLab CI",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              },
               "sameAs": "https://skywalk-chi.vercel.app/"
             }
           },
@@ -252,7 +377,10 @@
               "description": "Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d'accès par rôles.",
               "genre": "Plateforme de localisation",
               "url": "https://arphandrame.fr/classique/projets#crowdin",
-              "keywords": "Symfony 7, PHP 8, Doctrine ORM, PostgreSQL, Twig, Docker, Bootstrap"
+              "keywords": "Symfony 7, PHP 8, Doctrine ORM, PostgreSQL, Twig, Docker, Bootstrap",
+              "creator": {
+                "@id": "https://arphandrame.fr/#person"
+              }
             }
           }
         ]
@@ -260,6 +388,7 @@
     },
     {
       "@type": "BreadcrumbList",
+      "@id": "https://arphandrame.fr/classique/projets#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",

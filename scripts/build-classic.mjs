@@ -452,15 +452,11 @@ const HEAD_SCRIPT = `
     })(document.documentElement, window);
   </script>`;
 
-function shell(page, { title, description, ogDescription, jsonld, body, scripts = '', scrolls = false }) {
+function shell(page, { title, description, ogDescription, jsonld, personExtra, body, scripts = '', scrolls = false }) {
   const L = linker(page);
-  // Sous-pages : fil d'Ariane en données structurées seulement (rien d'affiché).
-  if (page.key !== 'profil') {
-    const { '@context': context, ...webPage } = jsonld;
-    jsonld = { '@context': context, '@graph': [webPage, breadcrumb(page)] };
-  }
   const others = PAGES.filter(p => p !== page).map(p => L.page(p.key));
   const url = SITE_URL + page.path;
+  jsonld = pageGraph(page, jsonld, personExtra);
   return `<!DOCTYPE html>
 <!-- GÉNÉRÉ par scripts/build-classic.mjs depuis js/museum.js, ne pas éditer : npm run content -->
 <html lang="fr" data-theme="night">
@@ -648,13 +644,7 @@ function profilPage() {
     title: `${displayName} · ${bio.title} à ${bio.location}`,
     description: `Portfolio d'${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. Projets, parcours, compétences et contact.`,
     ogDescription: `${bio.seeking}. ${profile.positioning}`,
-    jsonld: {
-      '@context': 'https://schema.org',
-      '@type': 'ProfilePage',
-      url: SITE_URL + page.path,
-      inLanguage: 'fr',
-      mainEntity: person(),
-    },
+    jsonld: { '@type': 'ProfilePage', name: `Profil · ${displayName}`, mainEntity: PERSON_REF },
     body,
     scrolls: true,
   });
@@ -737,12 +727,9 @@ function projetsPage() {
     title: `Projets web et mobiles · ${displayName}, ${bio.title}`,
     description: `${plural(projects.length, 'projet', 'projets')} d'${displayName} : ${byCat.Professionnel.length} professionnels réalisés en équipe chez ${company}, ${byCat.Personnel.length} personnels et ${byCat.Scolaire.length} scolaires. Technologies, rôle et disponibilité de chaque projet.`,
     jsonld: {
-      '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      url: SITE_URL + page.path,
       name: `Projets · ${displayName}`,
-      inLanguage: 'fr',
-      about: { '@id': `${SITE_URL}#person` },
+      about: PERSON_REF,
       mainEntity: {
         '@type': 'ItemList',
         itemListElement: projects.map((p, i) => ({
@@ -750,6 +737,7 @@ function projetsPage() {
           item: {
             '@type': 'CreativeWork', name: p.title, description: p.desc, genre: p.type,
             url: `${SITE_URL}${page.path}#${p.slug}`, keywords: (p.tech || []).join(', '),
+            creator: PERSON_REF,
             ...(p.links && p.links[0] ? { sameAs: p.links[0].url } : {}),
           },
         })),
@@ -906,14 +894,7 @@ function parcoursPage() {
   return shell(page, {
     title: `Parcours · ${displayName}, ${bio.title}`,
     description: `Parcours d'${displayName} : ${dated.map(t => stepLabel(t.s)).join(', ')}. ${devphantom.title} chez ${company} (${devphantom.date}).`,
-    jsonld: {
-      '@context': 'https://schema.org',
-      '@type': 'ProfilePage',
-      url: SITE_URL + page.path,
-      name: `Parcours · ${displayName}`,
-      inLanguage: 'fr',
-      mainEntity: { '@id': `${SITE_URL}#person` },
-    },
+    jsonld: { '@type': 'ProfilePage', name: `Parcours · ${displayName}`, mainEntity: PERSON_REF },
     body,
   });
 }
@@ -975,14 +956,7 @@ function competencesPage() {
   return shell(page, {
     title: `Compétences Symfony, PHP, React · ${displayName}, Développeur Web`,
     description: `Compétences techniques d'${displayName} : ${mainStack.slice(0, 6).map(s => s.item).join(', ')}… classées par famille et reliées aux projets qui les utilisent.`,
-    jsonld: {
-      '@context': 'https://schema.org',
-      '@type': 'ProfilePage',
-      url: SITE_URL + page.path,
-      name: `Compétences · ${displayName}`,
-      inLanguage: 'fr',
-      mainEntity: { '@id': `${SITE_URL}#person`, '@type': 'Person', name: displayName, knowsAbout },
-    },
+    jsonld: { '@type': 'ProfilePage', name: `Compétences · ${displayName}`, mainEntity: PERSON_REF },
     body,
   });
 }
@@ -1056,14 +1030,9 @@ function contactPage() {
   return shell(page, {
     title: `Contact · ${displayName}, ${bio.title} à ${bio.location}`,
     description: `Contacter ${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. E-mail, téléphone, LinkedIn, GitHub, CV et formulaire de contact.`,
-    jsonld: {
-      '@context': 'https://schema.org',
-      '@type': 'ContactPage',
-      url: SITE_URL + page.path,
-      name: `Contact · ${displayName}`,
-      inLanguage: 'fr',
-      mainEntity: { '@id': `${SITE_URL}#person`, '@type': 'Person', name: displayName, email: `mailto:${contact.email}`, telephone: `+33${tel.replace(/^0/, '')}` },
-    },
+    jsonld: { '@type': 'ContactPage', name: `Contact · ${displayName}`, mainEntity: PERSON_REF },
+    // Le téléphone n'est affiché que sur cette page : il n'est déclaré qu'ici.
+    personExtra: { telephone: `+33${tel.replace(/^0/, '')}` },
     body,
     scripts: '<script src="{up}js/contact-form.js"></script>',
   });
@@ -1086,19 +1055,67 @@ const knowsAbout = [...new Set(profile.skillGroups.flatMap(g => g.items))].filte
 // Texte alternatif de l'image de partage (assets/img/og.jpg).
 const OG_ALT = `${displayName}, ${bio.title} · ${bio.location}`;
 
+// Une seule personne pour tout le site : toutes les pages pointent sur cet @id.
+// Google ne suit pas un @id d'une page à l'autre : le nœud Person complet est
+// donc répété dans le @graph de CHAQUE page, et `mainEntity` s'y réfère.
+const PERSON_ID  = `${SITE_URL}#person`;
+const WEBSITE_ID = `${SITE_URL}#website`;
+const PERSON_REF = { '@id': PERSON_ID };
+
+const website = () => ({
+  '@type': 'WebSite', '@id': WEBSITE_ID, name: `${displayName} · Portfolio`, url: SITE_URL, inLanguage: 'fr',
+  author: PERSON_REF, publisher: PERSON_REF,
+});
+
+// Retire les valeurs vides (undefined, null, '', [] ) pour ne jamais les publier.
+function clean(v) {
+  if (Array.isArray(v)) return v.map(clean).filter(x => x != null);
+  if (v && typeof v === 'object') {
+    const o = {};
+    for (const [k, x] of Object.entries(v)) { const c = clean(x); if (c != null) o[k] = c; }
+    return Object.keys(o).length ? o : undefined;
+  }
+  return v === '' || v == null ? undefined : v;
+}
+
+// Graphe d'une page classique : site, personne, la page, son fil d'Ariane
+// (sous-pages seulement, en données structurées, rien d'affiché).
+function pageGraph(page, node, personExtra) {
+  const url = SITE_URL + page.path;
+  const sub = page.key !== 'profil';
+  return clean({
+    '@context': 'https://schema.org',
+    '@graph': [
+      website(),
+      person(personExtra),
+      {
+        '@type': node['@type'],
+        '@id': `${url}#${node['@type'].toLowerCase()}`,
+        url,
+        inLanguage: 'fr',
+        isPartOf: { '@id': WEBSITE_ID },
+        ...(sub ? { breadcrumb: { '@id': `${url}#breadcrumb` } } : {}),
+        ...node,
+      },
+      ...(sub ? [breadcrumb(page)] : []),
+    ],
+  });
+}
+
 function breadcrumb(page) {
   return {
     '@type': 'BreadcrumbList',
+    '@id': `${SITE_URL}${page.path}#breadcrumb`,
     itemListElement: [PAGE.profil, page].map((p, i) => ({
       '@type': 'ListItem', position: i + 1, name: p === PAGE.profil ? 'Portfolio' : p.label, item: SITE_URL + p.path,
     })),
   };
 }
 
-function person() {
+function person(extra = {}) {
   return {
     '@type': 'Person',
-    '@id': `${SITE_URL}#person`,
+    '@id': PERSON_ID,
     name: displayName,
     jobTitle: bio.title,
     description: `${bio.title} à ${bio.location}. ${bio.seeking || ''}`.trim(),
@@ -1110,6 +1127,7 @@ function person() {
     knowsAbout,
     alumniOf: { '@type': 'CollegeOrUniversity', name: 'ETNA' },
     worksFor: { '@type': 'Organization', name: company },
+    ...extra,
   };
 }
 const ld = (data) => `\n  <script type="application/ld+json">\n${JSON.stringify(data, null, 2).replace(/</g, '\\u003c')}\n  </script>\n  `;
@@ -1153,13 +1171,7 @@ writePage(PAGE.contact.file, contactPage());
 
 writeMarked('index.html', {
   identity: identity(),
-  jsonld: ld({
-    '@context': 'https://schema.org',
-    '@graph': [
-      { '@type': 'WebSite', '@id': `${SITE_URL}#site`, name: `${displayName} · Portfolio`, url: SITE_URL, inLanguage: 'fr', author: { '@id': `${SITE_URL}#person` } },
-      person(),
-    ],
-  }),
+  jsonld: ld(clean({ '@context': 'https://schema.org', '@graph': [website(), person()] })),
 });
 
 const withImg = projects.filter(projectImage).length;

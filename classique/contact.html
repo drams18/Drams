@@ -81,20 +81,107 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "ContactPage",
-      "url": "https://arphandrame.fr/classique/contact",
-      "name": "Contact · Arphan Drame",
+      "@type": "WebSite",
+      "@id": "https://arphandrame.fr/#website",
+      "name": "Arphan Drame · Portfolio",
+      "url": "https://arphandrame.fr/",
       "inLanguage": "fr",
+      "author": {
+        "@id": "https://arphandrame.fr/#person"
+      },
+      "publisher": {
+        "@id": "https://arphandrame.fr/#person"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://arphandrame.fr/#person",
+      "name": "Arphan Drame",
+      "jobTitle": "Développeur Web Full Stack",
+      "description": "Développeur Web Full Stack à Paris. En recherche de CDI (dès oct. 2026)",
+      "url": "https://arphandrame.fr/",
+      "email": "mailto:arphandrame0@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Paris",
+        "addressCountry": "FR"
+      },
+      "sameAs": [
+        "https://github.com/drams18",
+        "https://www.linkedin.com/in/arphan-drame/"
+      ],
+      "knowsLanguage": [
+        "Français",
+        "Anglais",
+        "Espagnol",
+        "Arabe"
+      ],
+      "knowsAbout": [
+        "React",
+        "React Native",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "Vite",
+        "Tailwind CSS",
+        "Redux / Zustand",
+        "Node.js",
+        "Express",
+        "NestJS",
+        "Symfony",
+        "Laravel",
+        "PHP",
+        "Python",
+        "REST API",
+        "GraphQL",
+        "MySQL",
+        "PostgreSQL",
+        "Supabase",
+        "Prisma",
+        "TypeORM",
+        "Docker",
+        "Git",
+        "GitHub",
+        "GitLab",
+        "CI/CD",
+        "Nginx",
+        "AWS",
+        "GCP",
+        "Cloudflare",
+        "Figma",
+        "Jira",
+        "Bruno",
+        "Intégration IA / LLM"
+      ],
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "ETNA"
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "DevPhantom"
+      },
+      "telephone": "+33767318426"
+    },
+    {
+      "@type": "ContactPage",
+      "@id": "https://arphandrame.fr/classique/contact#contactpage",
+      "url": "https://arphandrame.fr/classique/contact",
+      "inLanguage": "fr",
+      "isPartOf": {
+        "@id": "https://arphandrame.fr/#website"
+      },
+      "breadcrumb": {
+        "@id": "https://arphandrame.fr/classique/contact#breadcrumb"
+      },
+      "name": "Contact · Arphan Drame",
       "mainEntity": {
-        "@id": "https://arphandrame.fr/#person",
-        "@type": "Person",
-        "name": "Arphan Drame",
-        "email": "mailto:arphandrame0@gmail.com",
-        "telephone": "+33767318426"
+        "@id": "https://arphandrame.fr/#person"
       }
     },
     {
       "@type": "BreadcrumbList",
+      "@id": "https://arphandrame.fr/classique/contact#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
