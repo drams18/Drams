@@ -1,7 +1,7 @@
 /* ══════════════════════════════════════════════════════
    UNIVERSEAUDIO.JS : ambiance et bruitages, synthétisés (WebAudio)
 
-   OFF par défaut. Chaque univers décrit son ambiance (`audio` dans son thème) :
+   ON par défaut, volume réglable (setVolume, 0 à 1). Chaque univers décrit son ambiance (`audio` dans son thème) :
      track  morceau en boucle (fichier dans sounds/aventure/), facultatif :
             s'il manque ou ne se lit pas, l'ambiance synthétisée prend le relais
      pad    nappe d'oscillateurs (notes, forme d'onde, filtre)
@@ -31,6 +31,7 @@ const SFX = {
 export class UniverseAudio {
   constructor() {
     this.enabled = false;
+    this.volume = 1;
     this.ctx = null;
     this.master = null;
     this.spec = null;
@@ -57,18 +58,26 @@ export class UniverseAudio {
     try {
       this.ctx = new AC();
       this.master = this.ctx.createGain();
-      this.master.gain.value = 0.9;
+      this.master.gain.value = this.volume;
       this.master.connect(this.ctx.destination);
     } catch (e) { this.ctx = null; return false; }
     if (this.spec) this._startAmbient();
     return true;
   }
 
-  // À appeler depuis un geste (clic sur le bouton Son).
+  // Activé au chargement (réglage par défaut) : le contexte audio attend le
+  // premier geste du visiteur, les navigateurs le refusent avant.
   setEnabled(on) {
     this.enabled = !!on;
+    const ua = navigator.userActivation;
+    if (on && ua && !ua.hasBeenActive) return;
     if (on) { this._ensure(); if (this.ctx && !this._ambient && this.spec) this._startAmbient(); }
     else this._stopAmbient();
+  }
+
+  setVolume(v) {
+    this.volume = Math.min(1, Math.max(0, +v || 0));
+    if (this.master) this.master.gain.setTargetAtTime(this.volume, this.ctx.currentTime, 0.03);
   }
 
   setUniverse(spec) {

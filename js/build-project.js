@@ -51,6 +51,11 @@
 
   const STORAGE_KEY = 'drame.buildproject';
 
+  // Univers du mode aventure en cours (js/universe-theme.js) : le canvas en
+  // reprend la palette et la police. null = DA comics / néon d'origine.
+  const THEME = window.UniverseTheme || null;
+  const themed = (ctx) => (THEME ? THEME.wrap(ctx) : ctx);
+
   // Libellé affiché quand une étape n'a reçu aucune sélection.
   const NO_CHOICE = 'Aucun choix';
 
@@ -234,7 +239,7 @@
   class BuildProject {
     constructor() {
       this.canvas = document.getElementById('bpCanvas');
-      this.ctx    = this.canvas.getContext('2d', { alpha: false });
+      this.ctx    = themed(this.canvas.getContext('2d', { alpha: false }));
       this.ctx.imageSmoothingEnabled = false;
       this._loop  = this._loop.bind(this);   // pas de closure allouée par frame
       this._grad  = Object.create(null);     // dégradés dépendant de la taille
@@ -282,8 +287,8 @@
       this._buildStep(state.step, true);
       requestAnimationFrame(this._loop);
 
-      // La musique reprend l'ambiance du portfolio (démarre au 1er geste,
-      // exactement comme dans le jeu, géré par js/audio.js).
+      // La musique reprend l'ambiance du portfolio, ou le morceau de l'univers
+      // en cours (démarre au 1er geste, géré par js/audio.js).
       if (window.AudioManager) window.AudioManager.playMusic();
     }
 
@@ -962,18 +967,18 @@
         ctx.fillRect((i * 137.5) % w, (i * 71.3) % skyH, 1.5, 1.5);
       }
 
-      // Fils de toile, diagonales très ténues
+      // Fils de toile, diagonales très ténues (DA comics uniquement)
       ctx.save();
       ctx.strokeStyle = 'rgba(255,255,255,0.05)';
       ctx.lineWidth = 1;
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < (THEME ? 0 : 5); i++) {
         const gx = ((i * 261) % (w + 200)) - 100;
         ctx.beginPath(); ctx.moveTo(gx, -20); ctx.lineTo(gx + skyH * 0.7, skyH); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(gx + 140, -20); ctx.lineTo(gx + 140 - skyH * 0.7, skyH); ctx.stroke();
       }
       ctx.restore();
 
-      const ht = getHalftone(ctx);
+      const ht = THEME ? null : getHalftone(ctx);
       if (ht) { ctx.fillStyle = ht; ctx.fillRect(0, 0, w, skyH); }
 
       // Skyline urbaine dense (2 couches de parallaxe)
@@ -1000,7 +1005,7 @@
         const buf = document.createElement('canvas');
         buf.width  = (S1 - S0 + 1) * step;
         buf.height = bufH;
-        const g = buf.getContext('2d');
+        const g = themed(buf.getContext('2d'));
         const b = bufH;
         for (let seed = S0; seed <= S1; seed++) {
           const bx = (seed - S0) * step;
@@ -1167,13 +1172,13 @@
       ctx.save();
       ctx.strokeStyle = 'rgba(255,255,255,' + (0.08 + 0.08 * glow).toFixed(3) + ')';
       ctx.lineWidth = 1;
-      for (let s = -2; s <= 2; s++) {
+      for (let s = -2; !THEME && s <= 2; s++) {
         ctx.beginPath();
         ctx.moveTo(cx, oy + 4);
         ctx.lineTo(cx + s * (ow / 4), oy + oh - 4);
         ctx.stroke();
       }
-      for (let r = oh * 0.32; r < oh; r += oh * 0.34) {
+      for (let r = oh * 0.32; !THEME && r < oh; r += oh * 0.34) {
         ctx.beginPath();
         ctx.moveTo(cx - r * 0.85, oy + 4 + r * 0.5);
         ctx.quadraticCurveTo(cx, oy + 4 + r, cx + r * 0.85, oy + 4 + r * 0.5);
@@ -1239,7 +1244,16 @@
         ctx.strokeStyle = '#ff2bb0';
         ctx.lineWidth = 2;
         ctx.stroke();
-        drawSpider(ctx, bcx, bcy, 11, '#ff2bb0');
+        if (THEME) {
+          // Univers du mode aventure : une simple coche, pas d'araignée.
+          ctx.beginPath();
+          ctx.moveTo(bcx - 4.5, bcy);
+          ctx.lineTo(bcx - 1, bcy + 3.5);
+          ctx.lineTo(bcx + 4.5, bcy - 3.5);
+          ctx.stroke();
+        } else {
+          drawSpider(ctx, bcx, bcy, 11, '#ff2bb0');
+        }
       }
 
       // ── Légende de la porte : hiérarchie verticale stricte ──
@@ -1321,10 +1335,12 @@
         ctx.strokeStyle = accent;
         ctx.lineWidth = 2;
         ctx.strokeRect(cx - lw / 2 - 2, top - 2, lw + 4, actionH + 4);
-        ctx.fillStyle = 'rgba(255,18,61,0.55)';
-        ctx.fillText(label, cx - 0.8, ly);
-        ctx.fillStyle = 'rgba(25,232,255,0.55)';
-        ctx.fillText(label, cx + 0.8, ly);
+        if (!THEME) {   // dédoublement chromatique : DA comics uniquement
+          ctx.fillStyle = 'rgba(255,18,61,0.55)';
+          ctx.fillText(label, cx - 0.8, ly);
+          ctx.fillStyle = 'rgba(25,232,255,0.55)';
+          ctx.fillText(label, cx + 0.8, ly);
+        }
         ctx.fillStyle = '#fff';
         ctx.fillText(label, cx, ly);
         ctx.restore();

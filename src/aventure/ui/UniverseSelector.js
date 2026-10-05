@@ -13,6 +13,7 @@ import { Level } from '../world/Level.js';
 import { Character, STATES } from '../player/Character.js';
 import { CharacterAnimator } from '../player/CharacterAnimator.js';
 import { CharacterRenderer } from '../player/CharacterRenderer.js';
+import { volumeControl } from './VolumeControl.js';
 
 const PREVIEW_H = 400;      // unités monde visibles dans une miniature
 
@@ -81,7 +82,7 @@ class Preview {
 }
 
 export class UniverseSelector {
-  // opts : { universes, portfolio, save, onChoose(id), onSound(), onContact(), classicHref }
+  // opts : { universes, portfolio, save, onChoose(id), onSound(), onVolume(v), onContact(), classicHref }
   constructor(root, opts) {
     this.o = opts;
     this.reduced = false;
@@ -92,6 +93,7 @@ export class UniverseSelector {
     this.previews = [];
 
     this.sound = h('button.adv-btn.adv-btn--ghost', { type: 'button', onclick: () => opts.onSound() });
+    this.volume = volumeControl('adv-vol--bar', (v) => opts.onVolume(v));
     this.cards = h('div.adv-sel__cards');
     for (const u of opts.universes) {
       const canvas = h('canvas.adv-card__view', { 'aria-hidden': 'true' });
@@ -130,6 +132,7 @@ export class UniverseSelector {
       h('footer.adv-sel__foot', null,
         h('a.adv-btn.adv-btn--ghost', { href: opts.classicHref }, 'Mode classique'),
         this.sound,
+        this.volume.el,
         h('a.adv-btn.adv-btn--ghost', { href: 'assets/CV.pdf', target: '_blank', rel: 'noopener' }, 'CV'),
         h('button.adv-btn.adv-btn--ghost', { type: 'button', onclick: () => opts.onContact() }, 'Contact')));
     root.appendChild(this.el);
@@ -138,7 +141,11 @@ export class UniverseSelector {
     document.addEventListener('visibilitychange', () => { if (!document.hidden && !this.el.hidden) this._start(); });
   }
 
-  setSound(on) { this.sound.textContent = on ? 'Son : activé' : 'Son : coupé'; this.sound.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  setSound(on, volume) {
+    this.sound.textContent = on ? 'Son : activé' : 'Son : coupé';
+    this.sound.setAttribute('aria-pressed', on ? 'true' : 'false');
+    this.volume.set(on, volume);
+  }
 
   show() {
     const last = this.o.save.data.universe;

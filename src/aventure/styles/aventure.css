@@ -395,6 +395,21 @@ html, body { margin: 0; height: 100%; background: #0b0d14; overflow: hidden; }
 .adv-pause__item--main { background: var(--u-primary); color: var(--u-on-primary) !important; }
 .adv-pause__item--main:hover { background: var(--u-primary); filter: brightness(1.1); }
 .adv-pause__item--danger { color: var(--u-muted) !important; }
+/* Jauge de volume : pause et écran de sélection */
+.adv-vol { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px; color: var(--u-muted); font-size: 0.86rem; font-weight: 600; }
+.adv-vol--pause { grid-column: 1 / -1; }
+.adv-vol--bar { border: 1.5px solid var(--u-line); border-radius: var(--u-radius); }
+.adv-vol__val { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; color: var(--u-text); }
+.adv-vol__range {
+  flex: 1; min-width: 96px; height: 24px; margin: 0; padding: 0; background: none; cursor: pointer;
+  -webkit-appearance: none; appearance: none; --k: 80%;
+}
+.adv-vol__range::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--u-primary) var(--k), var(--u-line) var(--k)); }
+.adv-vol__range::-moz-range-track { height: 6px; border-radius: 3px; background: var(--u-line); }
+.adv-vol__range::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--u-primary); }
+.adv-vol__range::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -5px; border: 2px solid var(--u-primary); border-radius: 50%; background: var(--u-text); }
+.adv-vol__range::-moz-range-thumb { width: 12px; height: 12px; border: 2px solid var(--u-primary); border-radius: 50%; background: var(--u-text); }
+.adv-vol__range:focus-visible { outline: 2px solid var(--u-text); outline-offset: 2px; }
 .adv-pause__panel { display: grid; gap: 12px; align-content: start; min-width: 0; padding: 16px; border: 1.5px solid var(--u-line); border-radius: var(--u-radius); background: var(--u-surface-2); }
 .adv-pause__h { font-size: 1.1rem; }
 .adv-pause__map, .adv-pause__skills { display: grid; gap: 6px; }

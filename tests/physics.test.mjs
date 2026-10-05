@@ -112,7 +112,7 @@ function simulate(hz, seconds, script) {
   const v2 = migrate({ v: 1, visited: ['profile', 'projets', 'inconnu'], tokens: ['react', 'docker'], complete: true, tuto: true, x: 840 });
   assert.deepEqual(v2, {
     version: 2, universe: 'ville', visitedLocations: ['profile', 'projets'], collectedSkills: ['react', 'docker'],
-    viewedProjects: [], missionComplete: true, playerPosition: null, settings: { sound: false, reducedMotion: false },
+    viewedProjects: [], missionComplete: true, playerPosition: null, settings: { sound: true, volume: 0.8, reducedMotion: false },
   });
   assert.equal(migrate(null).version, 2);
   assert.equal(migrate('nimporte').universe, null);
@@ -126,11 +126,18 @@ function simulate(hz, seconds, script) {
   assert.equal(JSON.parse(store.getItem(SAVE_KEY)).version, 2, 'v1 réécrite en v2');
   save.setUniverse('hero'); save.collect('react'); save.collect('react'); save.setPosition(512.4, -430);
   save.setSetting('sound', true);
+  save.setVolume(0.35);
   const again = new SaveManager(store, mem());
   assert.equal(again.data.universe, 'hero');
   assert.deepEqual(again.data.collectedSkills, ['react']);
   assert.deepEqual(again.data.playerPosition, { x: 512, y: -430 });
   assert.equal(store.getItem('drame.portfolio.sound'), 'on');
+  assert.equal(again.data.settings.volume, 0.35);
+  assert.equal(store.getItem('drame.portfolio.volume'), '0.35');
+  // Sauvegarde d'avant la jauge : le son coupé n'était qu'un défaut, il repasse à activé.
+  assert.deepEqual(migrate({ version: 2, settings: { sound: false } }).settings, { sound: true, volume: 0.8, reducedMotion: false });
+  assert.equal(migrate({ version: 2, settings: { sound: false, volume: 0.5 } }).settings.sound, false, 'coupé par choix : respecté');
+  assert.equal(migrate({ version: 2, settings: { volume: 7 } }).settings.volume, 1);
   again.setUniverse('club');
   assert.equal(again.data.playerPosition, null, 'position remise à zéro au changement d\'univers');
   assert.deepEqual(again.data.visitedLocations, ['contact'], 'progression conservée');

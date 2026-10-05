@@ -21,6 +21,7 @@
                                        'coin' | 'talk' | 'stamp' | 'fanfare'
      setEnabled(bool) / toggle() / isEnabled()
      setMusicVolume(0..1) / setSfxVolume(0..1)
+     setVolume(0..1) / getVolume()   jauge générale (partagée avec le mode aventure)
      onChange(fn)        notifié quand SOUND ON/OFF change
    ══════════════════════════════════════════════════════ */
 
@@ -32,6 +33,10 @@
   // On mémorise, le temps de la session, la position de lecture + le fait que
   // l'app veut de la musique : la navigation ne coupe donc plus le fond sonore.
   const MUSIC_KEY = 'drame.portfolio.music';
+  // Jauge générale, écrite aussi par le mode aventure (SaveManager.js).
+  // DEFAULT_VOLUME = position d'origine : les niveaux de CONFIG s'y entendent tels quels.
+  const VOLUME_KEY = 'drame.portfolio.volume';
+  const DEFAULT_VOLUME = 0.8;
 
   // ── Configuration, tout se règle ici ────────────────
   const CONFIG = {
@@ -69,6 +74,14 @@
     return v < 0 ? 0 : v > 1 ? 1 : v;
   }
 
+  // Venu du mode aventure : la musique est le morceau de l'univers en cours
+  // (js/universe-theme.js), au même niveau que dans le jeu.
+  const universe = global.UniverseTheme;
+  if (universe && universe.track) {
+    CONFIG.musicSrc = universe.track;
+    CONFIG.musicVolume = universe.trackGain * DEFAULT_VOLUME;
+  }
+
   function now() {
     return (global.performance && performance.now)
       ? performance.now()
@@ -79,12 +92,14 @@
     constructor(cfg) {
       this.cfg = cfg;
       this._enabled   = this._loadPref();
+      this._volume    = this._loadVolume();
       this._unlocked  = false;
 
       // Reprise de la musique après une navigation dans la même session.
       const session = this._loadMusicState();
       this._musicWanted = !!(session && session.wanted); // l'app veut-elle de la musique ?
-      this._resumePos   = session && session.pos > 0 ? session.pos : 0;
+      // La position ne vaut que pour le même morceau.
+      this._resumePos   = session && session.pos > 0 && session.src === cfg.musicSrc ? session.pos : 0;
       this._lastSave    = 0;
 
       this._music     = null;
@@ -103,6 +118,27 @@
       } catch (e) {
         return true;   // localStorage indisponible → son actif par défaut
       }
+    }
+
+    _loadVolume() {
+      try {
+        const v = global.localStorage.getItem(VOLUME_KEY);
+        return v === null || isNaN(Number(v)) ? DEFAULT_VOLUME : clamp01(v);
+      } catch (e) {
+        return DEFAULT_VOLUME;
+      }
+    }
+
+    // Niveau réel d'un son : son niveau de base × la jauge.
+    _level(base) { return clamp01(base * this._volume / DEFAULT_VOLUME); }
+
+    getVolume() { return this._volume; }
+
+    setVolume(v) {
+      this._volume = clamp01(v);
+      try { global.localStorage.setItem(VOLUME_KEY, String(this._volume)); } catch (e) { /* noop */ }
+      this.setMusicVolume(this.cfg.musicVolume);
+      this.setSfxVolume(this.cfg.sfxVolume);
     }
 
     _savePref() {
@@ -127,6 +163,7 @@
         global.sessionStorage.setItem(MUSIC_KEY, JSON.stringify({
           wanted: this._musicWanted,
           pos: pos,
+          src: this.cfg.musicSrc,
         }));
       } catch (e) { /* stockage indisponible : on ignore proprement */ }
     }
@@ -185,7 +222,7 @@
       // l'objet sans télécharger la musique ; le fichier n'est récupéré
       // qu'au premier play() réel.
       a.preload = 'none';
-      a.volume  = clamp01(this.cfg.musicVolume);
+      a.volume  = this._level(this.cfg.musicVolume);
       a.addEventListener('error', () => { /* musique absente : silencieux */ });
 
       // Reprend la lecture là où la page précédente s'était arrêtée.
@@ -238,7 +275,7 @@
 
     setMusicVolume(v) {
       this.cfg.musicVolume = clamp01(v);
-      if (this._music) this._music.volume = this.cfg.musicVolume;
+      if (this._music) this._music.volume = this._level(this.cfg.musicVolume);
     }
 
     // ── SFX ────────────────────────────────────────────
@@ -248,7 +285,7 @@
 
         const def = this.cfg.sfx[name];
         const src = this.cfg.sfxDir + def.file;
-        const vol = clamp01(def.volume == null ? this.cfg.sfxVolume : def.volume);
+        const vol = this._level(def.volume == null ? this.cfg.sfxVolume : def.volume);
 
         this._available[name] = true;
         this._poolIdx[name]   = 0;
@@ -273,7 +310,7 @@
       this.cfg.sfxVolume = base;
       Object.keys(this._pools).forEach(name => {
         const def = this.cfg.sfx[name] || {};
-        const vol = clamp01(def.volume == null ? base : def.volume);
+        const vol = this._level(def.volume == null ? base : def.volume);
         this._pools[name].forEach(el => { el.volume = vol; });
       });
     }
@@ -331,7 +368,7 @@
         osc.type = n.type || 'square';
         osc.frequency.setValueAtTime(n.f, start);
         if (n.to) osc.frequency.exponentialRampToValueAtTime(n.to, start + n.d);
-        gain.gain.setValueAtTime(n.v, start);
+        gain.gain.setValueAtTime(Math.max(0.0002, n.v * this._volume / DEFAULT_VOLUME), start);
         gain.gain.exponentialRampToValueAtTime(0.0001, start + n.d);
         osc.connect(gain);
         gain.connect(ac.destination);
@@ -395,6 +432,33 @@
         manager.toggle();
         if (willEnable) manager.play('click');   // retour audio seulement à l'activation
       });
+    }
+
+    // Jauge de volume : zéro coupe le son, la remonter le rallume.
+    const range = global.document.getElementById('sound-volume');
+    if (range) {
+      const show = () => {
+        const pct = manager.isEnabled() ? Math.round(manager.getVolume() * 100) : 0;
+        range.value = String(pct);
+        range.style.setProperty('--k', pct + '%');
+        range.setAttribute('aria-valuetext', pct + ' %');
+      };
+      show();
+      manager.onChange(() => {
+        if (manager.isEnabled() && manager.getVolume() === 0) manager.setVolume(DEFAULT_VOLUME);
+        show();
+      });
+      range.addEventListener('input', () => {
+        manager.unlock();
+        const v = range.value / 100;
+        if (v > 0) manager.setVolume(v);
+        manager.setEnabled(v > 0);
+        show();
+      });
+      // Les flèches règlent la jauge, pas le personnage ; à la souris, la
+      // jauge rend le clavier au jeu dès qu'on la relâche.
+      range.addEventListener('keydown', (e) => e.stopPropagation());
+      range.addEventListener('pointerup', () => range.blur());
     }
 
     // Retour discret sur les liens secondaires de l'accueil (navigation).

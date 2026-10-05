@@ -2,7 +2,7 @@
    PAUSEMENU.JS : le menu de pause
 
    REPRENDRE · CARTE · PROGRESSION · COMPÉTENCES · CV · TARIFS · CONTACT ·
-   COMMANDES · SON · CHANGER D'UNIVERS · MODE CLASSIQUE · RECOMMENCER
+   COMMANDES · SON (+ jauge de volume) · CHANGER D'UNIVERS · MODE CLASSIQUE · RECOMMENCER
 
    Carte, progression, compétences et commandes s'affichent dans le volet
    de droite ; les autres entrées agissent directement.
@@ -10,14 +10,16 @@
 
 import { h, clear, focusFirst, trapTab } from './dom.js';
 import { keyList } from './Briefing.js';
+import { volumeControl } from './VolumeControl.js';
 
 export class PauseMenu {
   /* opts : { portfolio, save, vocabulary(), level(), onResume(), onGoto(loc), onSkill(id), onContact(),
-              onSound(), onMotion(), onUniverse(), onClassic(e), onRestart() } */
+              onSound(), onVolume(v), onMotion(), onUniverse(), onClassic(e), onRestart() } */
   constructor(root, opts) {
     this.o = opts;
     this.panel = h('div.adv-pause__panel', { 'aria-live': 'polite' });
     this.sound = h('button.adv-pause__item', { type: 'button', onclick: () => { opts.onSound(); } });
+    this.volume = volumeControl('adv-vol--pause', (v) => opts.onVolume(v));
     this.restart = h('button.adv-pause__item.adv-pause__item--danger', { type: 'button', onclick: () => this._restart() }, 'RECOMMENCER');
     this.skillsBtn = h('button.adv-pause__item', { type: 'button', onclick: () => this._view('skills') });
     this.classic = h('a.adv-pause__item', { href: '/classique', onclick: (e) => opts.onClassic(e) }, 'MODE CLASSIQUE');
@@ -33,6 +35,7 @@ export class PauseMenu {
       h('button.adv-pause__item', { type: 'button', onclick: () => opts.onContact() }, 'CONTACT'),
       h('button.adv-pause__item', { type: 'button', onclick: () => this._view('keys') }, 'COMMANDES'),
       this.sound,
+      this.volume.el,
       h('button.adv-pause__item', { type: 'button', onclick: () => opts.onUniverse() }, 'CHANGER D\'UNIVERS'),
       this.classic,
       this.restart);
@@ -47,7 +50,11 @@ export class PauseMenu {
 
   get isOpen() { return !this.el.hidden; }
 
-  setSound(on) { this.sound.textContent = on ? 'SON : ACTIVÉ' : 'SON : COUPÉ'; this.sound.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  setSound(on, volume) {
+    this.sound.textContent = on ? 'SON : ACTIVÉ' : 'SON : COUPÉ';
+    this.sound.setAttribute('aria-pressed', on ? 'true' : 'false');
+    this.volume.set(on, volume);
+  }
 
   open(view) {
     this.skillsBtn.textContent = this.o.vocabulary().skills;

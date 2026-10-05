@@ -25,6 +25,9 @@
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/bp-universe.css">
+  <!-- Univers du mode aventure en cours : appliqué avant le premier affichage -->
+  <script src="js/universe-theme.js"></script>
   <style>
     /* ── Page « Construisez votre projet », extension du jeu ── */
     .hidden { display: none !important; }
@@ -445,10 +448,14 @@
   </style>
 </head>
 <body>
-  <button id="btn-sound" type="button" class="sound-toggle" aria-pressed="true"
-          aria-label="Activer ou couper tous les sons">
-    <span class="sound-toggle__label">SOUND ON</span>
-  </button>
+  <div class="sound-box">
+    <input id="sound-volume" class="sound-volume" type="range" min="0" max="100" step="5" value="80"
+           aria-label="Volume du son">
+    <button id="btn-sound" type="button" class="sound-toggle" aria-pressed="true"
+            aria-label="Activer ou couper tous les sons">
+      <span class="sound-toggle__label">SOUND ON</span>
+    </button>
+  </div>
 
   <canvas id="bpCanvas"></canvas>
 

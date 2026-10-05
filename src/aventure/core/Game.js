@@ -18,7 +18,7 @@
 import { GameLoop } from './GameLoop.js';
 import { Camera } from './Camera.js';
 import { Input, isTouchUI } from './Input.js';
-import { SaveManager, LOCATION_IDS } from './SaveManager.js';
+import { SaveManager, LOCATION_IDS, DEFAULT_VOLUME } from './SaveManager.js';
 import { Character } from '../player/Character.js';
 import { CharacterController } from '../player/CharacterController.js';
 import { CharacterAnimator } from '../player/CharacterAnimator.js';
@@ -89,6 +89,7 @@ export class Game {
     this._buildUI(ui);
     this._bind();
     this._applyMotion();
+    this.audio.setVolume(this.save.data.settings.volume);
     this._applySound(this.save.data.settings.sound, false);
   }
 
@@ -121,6 +122,7 @@ export class Game {
       onSkill: (id) => this.openWindow('skills', { skill: id }),
       onContact: () => this.openWindow('contact'),
       onSound: () => this.toggleSound(),
+      onVolume: (v) => this.setVolume(v),
       onMotion: () => { this.save.setSetting('reducedMotion', !this.save.data.settings.reducedMotion); this._applyMotion(); },
       onUniverse: () => this.showSelector(true),
       onClassic: (e) => this.toClassic(e),
@@ -141,6 +143,7 @@ export class Game {
       classicHref: '/classique',
       onChoose: (id) => this.startUniverse(id, { briefing: true }),
       onSound: () => this.toggleSound(),
+      onVolume: (v) => this.setVolume(v),
       onContact: () => { if (window.ContactWidget) window.ContactWidget.open({ subject: 'Prise de contact · Portfolio' }); },
     });
 
@@ -215,13 +218,25 @@ export class Game {
   _applySound(on, persist = true) {
     if (persist) this.save.setSetting('sound', on);
     this.audio.setEnabled(on);
-    this.selector.setSound(on);
-    this.pause.setSound(on);
+    const v = this.save.data.settings.volume;
+    this.selector.setSound(on, v);
+    this.pause.setSound(on, v);
   }
 
   toggleSound() {
-    this._applySound(!this.save.data.settings.sound);
+    const on = !this.save.data.settings.sound;
+    // Réactivé avec la jauge à zéro : on remonte le volume, sinon rien ne s'entend.
+    if (on && this.save.data.settings.volume === 0) this.setVolume(DEFAULT_VOLUME);
+    else this._applySound(on);
     this.audio.sfx('ui');
+  }
+
+  // Jauge de volume (0 à 1), commune aux trois univers. Zéro coupe le son.
+  setVolume(v) {
+    this.save.setVolume(v);
+    v = this.save.data.settings.volume;
+    this.audio.setVolume(v);
+    this._applySound(v > 0);
   }
 
   // ── Déroulé ──────────────────────────────────────────
@@ -358,6 +373,7 @@ export class Game {
     this.hud.setVocabulary(v);
     this._syncHud();
     this.audio.setUniverse(u.audio);
+    this.save.syncTheme(u);
     this._setHash('#aventure/' + id);
   }
 
@@ -569,6 +585,7 @@ export class Game {
     this.input.enabled = false;
     this._savePosition();
     this.save.syncSound();          // le mini-jeu suit le choix de son fait ici
+    this.save.syncTheme(this.universe); // et l'habillage de l'univers en cours
     this.audio.sfx('transition');
     this.camera.shake(0.5);
     await this.fx.cover();

@@ -1,0 +1,159 @@
+/* ══════════════════════════════════════════════════════
+   BP-UNIVERSE.CSS : « Construisez votre projet » aux couleurs de l'univers
+   du mode aventure en cours (VILLE, HAUTE VOLTIGE, LE PALAIS).
+
+   Actif seulement quand js/universe-theme.js a posé data-universe sur <html>
+   (avec les variables --u-*). Sinon la page garde sa DA comics / néon
+   (style.css + styles de la page), que cette feuille ne touche pas.
+
+   Même hiérarchie que le mode aventure :
+     --u-primary  ce qui s'actionne   ·   --u-accent  ce qui se découvre
+   ══════════════════════════════════════════════════════ */
+
+@import '@fontsource-variable/inter';
+
+/* Les primitives néon (css/tokens.css) pointent vers la palette de l'univers. */
+html[data-universe] {
+  --ink: var(--u-bg);
+  --ink-2: var(--u-surface-2);
+  --panel: var(--u-surface);
+  --panel-2: var(--u-surface-2);
+  --edge: var(--u-line);
+  --stroke: var(--u-line);
+  --red: var(--u-primary);
+  --magenta: var(--u-primary);
+  --violet: var(--u-accent);
+  --cyan: var(--u-accent);
+  --paper: var(--u-text);
+  --red-deep: var(--u-primary);
+  --halftone: none;
+  --web-corner: none;
+  --pixel-font: var(--u-display);
+  --bp-shadow: 0 14px 40px rgba(0, 0, 0, 0.42);
+}
+html[data-universe] body { background: var(--u-bg); color: var(--u-text); font-family: var(--body-font); }
+html[data-universe] body::after { display: none; }            /* plus de trame scanline */
+html[data-universe] :focus-visible { outline: 2px solid var(--u-text); }
+
+/* ── Boutons du haut, jauge ─────────────────────────── */
+html[data-universe] .game-home-btn,
+html[data-universe] .sound-toggle {
+  font-size: 13px; font-weight: 700; letter-spacing: var(--u-display-spacing);
+  color: var(--u-text); background: var(--u-surface);
+  border: 1.5px solid var(--u-line); border-radius: var(--u-radius);
+  box-shadow: none; text-shadow: none;
+}
+html[data-universe] .game-home-btn:hover,
+html[data-universe] .sound-toggle:hover { background: var(--u-surface-2); border-color: var(--u-primary); box-shadow: none; }
+html[data-universe] .game-home-btn:active,
+html[data-universe] .sound-toggle:active { box-shadow: none; }
+html[data-universe] .sound-toggle--off { color: var(--u-muted); }
+html[data-universe] .sound-volume::-webkit-slider-runnable-track { border: 0; border-radius: 3px; background: linear-gradient(90deg, var(--u-primary) var(--k), var(--u-line) var(--k)); }
+html[data-universe] .sound-volume::-moz-range-track { border: 0; border-radius: 3px; background: var(--u-line); }
+html[data-universe] .sound-volume::-moz-range-progress { border-radius: 3px; background: var(--u-primary); }
+html[data-universe] .sound-volume::-webkit-slider-thumb { width: 16px; height: 16px; margin-top: -5px; border: 2px solid var(--u-primary); border-radius: 50%; background: var(--u-text); }
+html[data-universe] .sound-volume::-moz-range-thumb { width: 12px; height: 12px; border: 2px solid var(--u-primary); border-radius: 50%; background: var(--u-text); }
+
+/* ── HUD de l'étape ─────────────────────────────────── */
+html[data-universe] .bp-hud {
+  background: var(--u-surface); border: 1.5px solid var(--u-line); border-radius: var(--u-radius);
+  box-shadow: var(--bp-shadow); padding: 10px 16px 12px;
+}
+html[data-universe] .bp-progress__label { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--u-accent); text-shadow: none; }
+html[data-universe] .bp-progress__track { border: 0; border-radius: 3px; background: var(--u-line); }
+html[data-universe] .bp-progress__fill { background: var(--u-accent); }
+html[data-universe] .bp-hud__title {
+  font-size: 18px; line-height: 1.3; font-weight: var(--u-display-weight); font-style: var(--u-display-style);
+  letter-spacing: var(--u-display-spacing); color: var(--u-text); text-shadow: none;
+}
+html[data-universe] .bp-hud__help { font-size: 13.5px; color: var(--u-muted); }
+html[data-universe] .bp-quit { color: var(--u-muted); border-bottom-color: var(--u-muted); }
+html[data-universe] .bp-quit:hover { color: var(--u-text); border-bottom-color: var(--u-text); }
+
+/* ── Actions principales ────────────────────────────── */
+html[data-universe] .bp-hud__next,
+html[data-universe] .bp-btn--primary,
+html[data-universe] .mbtn-enter {
+  background: var(--u-primary); color: var(--u-on-primary);
+  border: 1.5px solid var(--u-primary); border-radius: var(--u-radius);
+  box-shadow: none; animation: none;
+}
+html[data-universe] .bp-hud__next { font-size: 14px; font-weight: 700; letter-spacing: var(--u-display-spacing); padding: 10px 18px; }
+html[data-universe] .bp-hud__next:active,
+html[data-universe] .bp-btn:active { box-shadow: none; }
+html[data-universe] .bp-btn { font-size: 14px; font-weight: 700; letter-spacing: var(--u-display-spacing); border-width: 1.5px; border-radius: var(--u-radius); }
+html[data-universe] .bp-btn--ghost { background: transparent; border-color: var(--u-line); color: var(--u-text); }
+html[data-universe] .bp-btn--ghost:hover { background: var(--u-surface-2); border-color: var(--u-primary); }
+
+/* ── Voile entre les étapes ─────────────────────────── */
+html[data-universe] #bp-fade { background: var(--u-bg); }
+
+/* ── Panneaux : récapitulatif, formulaire, confirmation ── */
+html[data-universe] .bp-panel { background: color-mix(in srgb, var(--u-bg) 88%, transparent); }
+html[data-universe] .bp-panel__card {
+  background: var(--u-surface); border: 1.5px solid var(--u-line); border-radius: var(--u-radius);
+  box-shadow: var(--bp-shadow); padding: 24px 22px;
+}
+html[data-universe] .bp-panel__card::before,
+html[data-universe] .bp-panel__card::after { display: none; }
+html[data-universe] .bp-panel__title {
+  font-size: 22px; font-weight: var(--u-display-weight); font-style: var(--u-display-style);
+  letter-spacing: var(--u-display-spacing); color: var(--u-text); text-shadow: none;
+}
+html[data-universe] .bp-panel__intro,
+html[data-universe] .bp-form-status,
+html[data-universe] .bp-panel__exit { color: var(--u-muted); }
+html[data-universe] .bp-form-status--error { color: #ff8a80; }
+html[data-universe] .bp-panel__exit:hover { color: var(--u-text); }
+html[data-universe] .bp-done-text { color: var(--u-text); }
+
+html[data-universe] .bp-recap-row { border-bottom-color: var(--u-line); }
+html[data-universe] .bp-recap-row dt { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: var(--u-accent); }
+html[data-universe] .bp-recap-row dd { color: var(--u-text); }
+html[data-universe] .bp-recap-edit-btn { font-size: 12px; color: var(--u-text); border: 1.5px solid var(--u-line); border-radius: var(--u-radius); }
+html[data-universe] .bp-recap-edit-btn:hover,
+html[data-universe] .bp-recap-edit-btn.is-active { background: var(--u-surface-2); border-color: var(--u-primary); color: var(--u-text); }
+html[data-universe] .bp-choice-chip { color: var(--u-text); background: transparent; border-color: var(--u-line); border-radius: var(--u-radius); }
+html[data-universe] .bp-choice-chip:hover { background: var(--u-surface-2); border-color: var(--u-primary); color: var(--u-text); }
+html[data-universe] .bp-choice-chip.is-on { background: var(--u-primary); border-color: var(--u-primary); color: var(--u-on-primary); }
+
+html[data-universe] .bp-field__label { color: var(--u-text); }
+html[data-universe] .bp-input {
+  color: var(--u-text); background: var(--u-surface-2);
+  border: 1.5px solid var(--u-line); border-radius: var(--u-radius);
+}
+html[data-universe] .bp-input:focus { border-color: var(--u-primary); background: var(--u-surface-2); }
+
+/* ── Toast, contrôles tactiles ──────────────────────── */
+html[data-universe] .toast {
+  font-size: 13px; font-weight: 600; letter-spacing: 0; color: var(--u-text);
+  background: var(--u-surface); border: 1.5px solid var(--u-line); border-radius: var(--u-radius); box-shadow: var(--bp-shadow);
+}
+html[data-universe] #mobile-btns { background: var(--u-surface); border-top: 1.5px solid var(--u-line); }
+html[data-universe] .mbtn { font-weight: 700; color: var(--u-text); background: var(--u-surface-2); border: 1.5px solid var(--u-line); border-radius: var(--u-radius); box-shadow: none; }
+html[data-universe] .mbtn:active { background: var(--u-line); }
+html[data-universe] .mbtn__arrow { color: var(--u-primary); }
+html[data-universe] .mbtn-enter, html[data-universe] .mbtn-close { font-size: 13px; letter-spacing: var(--u-display-spacing); }
+html[data-universe] .mbtn-enter::after { display: none; }
+
+/* ── Signatures d'univers (les mêmes que dans l'aventure) ── */
+html[data-universe='hero'] .bp-hud__title,
+html[data-universe='hero'] .bp-panel__title,
+html[data-universe='hero'] .bp-btn,
+html[data-universe='hero'] .bp-hud__next { text-transform: uppercase; }
+html[data-universe='club'] .bp-hud__title,
+html[data-universe='club'] .bp-panel__title,
+html[data-universe='club'] .bp-btn,
+html[data-universe='club'] .bp-hud__next,
+html[data-universe='club'] .game-home-btn,
+html[data-universe='club'] .sound-toggle { text-transform: uppercase; }
+html[data-universe='club'] .bp-btn, html[data-universe='club'] .bp-hud__next { font-size: 12.5px; }
+html[data-universe='club'] .bp-hud, html[data-universe='club'] .bp-panel__card { border-width: 1px; border-color: var(--u-primary); }
+
+@media (max-width: 720px) {
+  html[data-universe] .bp-hud__title { font-size: 15px; }
+  html[data-universe] .bp-hud__help { font-size: 12.5px; }
+}
+@media (max-width: 600px) {
+  html[data-universe] .game-home-btn, html[data-universe] .sound-toggle { font-size: 12px; }
+}
