@@ -2,7 +2,7 @@
    SITE.CSS : Socle du site « classique » : écran d'accueil (index),
    mode classique, page 404.
    Style web professionnel et sobre, volontairement DISTINCT du mode
-   aventure (qui garde sa DA comics / néon / pixel dans style.css).
+   aventure (habillé par l'univers choisi : src/aventure/styles/aventure.css).
 
    Deux thèmes selon l'heure locale (js/theme.js) :
      [data-theme="day"]   clair

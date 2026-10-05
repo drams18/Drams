@@ -1,0 +1,98 @@
+/* ══════════════════════════════════════════════════════
+   CONSTRUIRE.CSS : ce que « Construisez votre projet » ajoute à l'interface
+   du mode aventure (src/aventure/styles/aventure.css, chargée avant).
+   Aucune couleur ici : tout vient des variables --u-* de l'univers.
+   ══════════════════════════════════════════════════════ */
+
+/* ── Haut : retour · étape · son ────────────────────── */
+.bp-hud input, .bp-hud label { pointer-events: auto; }
+.bp-top {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 540px) minmax(0, 1fr); gap: 10px; align-items: start;
+  padding: max(var(--pad), env(safe-area-inset-top)) max(var(--pad), env(safe-area-inset-right)) 0 max(var(--pad), env(safe-area-inset-left));
+}
+.bp-top__left { display: flex; justify-content: flex-start; }
+.bp-top__right { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.bp-top .adv-btn--ghost, .bp-top .adv-vol--bar { background: var(--u-surface); }
+.bp-top .adv-vol__range { min-width: 72px; width: 84px; flex: none; }
+.bp-top .adv-vol__label { display: none; }
+
+.bp-step {
+  padding: 12px 18px 14px; text-align: center;
+  border: 1.5px solid var(--u-line); border-radius: var(--u-radius);
+  background: var(--u-surface); backdrop-filter: blur(8px);
+}
+.bp-step.is-in { animation: bp-step 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes bp-step { from { opacity: 0.3; transform: translateY(-6px); } }
+.bp-step__k span { white-space: nowrap; }
+.bp-step__k { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; color: var(--u-accent); }
+.bp-step__bar { display: block; width: min(220px, 38vw); height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--u-accent) calc(var(--k) * 100%), var(--u-line) 0); }
+.bp-step__title {
+  margin: 8px 0 4px !important;
+  font-family: var(--u-display); font-weight: var(--u-display-weight); font-style: var(--u-display-style);
+  font-size: clamp(1.1rem, 2.3vw, 1.45rem); letter-spacing: var(--u-display-spacing); line-height: 1.15;
+}
+.bp-step__help { font-size: 0.92rem; color: var(--u-muted); }
+.bp-step__next { margin-top: 10px; }
+
+/* L'invite prend toute la largeur utile (libellés plus longs que dans l'aventure)
+   et garde sa précision, le sous-titre de la porte, en simple texte. */
+.bp-hud .adv-hud__prompt { left: 12px; right: 12px; max-width: none; transform: none; }
+.bp-hud .adv-hud__prompt-main { text-align: left; }
+.bp-hud .adv-hud__prompt-more { color: var(--u-muted); text-align: center; }
+/* Le toast passe sous la carte de l'étape. */
+.bp-hud .adv-toast { top: auto; bottom: 150px; }
+
+/* ── Écrans : récapitulatif, formulaire, confirmation ── */
+.bp-panel { display: flex; }
+.bp-panel__card { margin: auto; width: min(620px, 100%); }
+.bp-panel__card .adv-brief__title { margin-bottom: 14px !important; }
+.bp-panel__card .adv-actions { margin-top: 6px; }
+.bp-panel__card .adv-form { max-width: none; margin-top: 12px; }
+.bp-panel__card .adv-form__status { min-height: 1.5em; margin-top: 8px !important; }
+.bp-panel__exit { display: inline-block; margin-top: 10px; font-size: 0.92rem; color: var(--u-muted) !important; }
+.bp-panel__exit:hover { color: var(--u-text) !important; }
+
+.bp-recap { margin-bottom: 18px !important; }
+.bp-recap__row { display: grid; gap: 4px; padding: 12px 0; border-bottom: 1.5px solid var(--u-line); }
+.bp-recap__head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.bp-recap dt { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--u-accent); }
+.bp-recap dd { font-size: 1.04rem; }
+.bp-recap__choices { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 8px; }
+.bp-chip {
+  min-height: 36px; padding: 4px 12px; border: 1.5px solid var(--u-line); border-radius: calc(var(--u-radius) * 0.7);
+  background: var(--u-surface-2); font-size: 0.84rem; font-weight: 650; letter-spacing: 0.03em;
+}
+.bp-chip:hover { border-color: var(--u-primary); }
+.bp-chip.is-on { background: var(--u-primary); border-color: var(--u-primary); color: var(--u-on-primary); }
+
+/* ── Écrans étroits ─────────────────────────────────── */
+@media (max-width: 1040px) {
+  .bp-top { grid-template-columns: auto minmax(0, 1fr); }
+  .bp-step { grid-column: 1 / -1; grid-row: 2; justify-self: center; width: min(540px, 100%); }
+}
+@media (max-width: 640px) {
+  .adv .bp-top .adv-btn { min-height: 40px; padding: 0 10px; font-size: 0.8rem; }
+  .bp-top { gap: 8px; }
+  .bp-top__right { gap: 6px; }
+  .bp-top .adv-vol--bar { min-height: 40px; padding: 0 10px; }
+  .bp-top .adv-vol__val { display: none; }
+  .bp-top .adv-vol__range { min-width: 56px; width: 64px; }
+  .bp-top__right { flex-wrap: nowrap; }
+  .bp-step { padding: 9px 12px 11px; }
+  .bp-step__help { font-size: 0.86rem; }
+  .bp-panel { padding: 0; }
+  .bp-panel__card { min-height: 100%; border-radius: 0; border-width: 0; }
+}
+/* Paysage bas (téléphone couché) : la carte se réduit à la question. */
+@media (max-height: 480px) {
+  .bp-top { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .bp-step { grid-column: auto; grid-row: auto; padding: 6px 12px 8px; }
+  .bp-step__help { display: none; }
+  .bp-step__title { margin: 4px 0 0 !important; font-size: 1rem; }
+  .bp-hud .adv-toast { bottom: 110px; }
+}
+/* Tactile, téléphone couché : le bouton CHOISIR s'allume et l'enseigne porte déjà
+   le libellé ; l'invite masquerait le personnage. */
+@media (hover: none) and (pointer: coarse) and (max-height: 480px) {
+  .bp-hud .adv-hud__prompt { display: none; }
+}

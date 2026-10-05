@@ -11,7 +11,8 @@
    }
 
    Le son est activé par défaut ; `volume` (0 à 1) est la jauge commune aux
-   trois univers et au mini-jeu « Construisez votre projet ».
+   trois univers et au mini-jeu « Construisez votre projet », qui lit
+   cette même sauvegarde (univers, son, volume).
 
    Même clé localStorage que la v1 (`drame.aventure.save`) : une ancienne
    partie { v: 1, visited, tokens, complete, tuto, x } est migrée à la
@@ -21,9 +22,6 @@
 
 export const SAVE_KEY = 'drame.aventure.save';
 export const SESSION_KEY = 'drame.aventure.session';
-export const SOUND_KEY = 'drame.portfolio.sound';   // préférence lue par js/audio.js (construire-projet)
-export const VOLUME_KEY = 'drame.portfolio.volume'; // jauge de volume, lue par js/audio.js
-export const THEME_KEY = 'drame.aventure.theme';    // habillage de l'univers, lu par js/universe-theme.js
 export const DEFAULT_VOLUME = 0.8;
 
 export const LOCATION_IDS = ['profile', 'parcours', 'contact', 'projets'];
@@ -129,32 +127,11 @@ export class SaveManager {
   setSetting(name, value) {
     this.data.settings[name] = !!value;
     this.write();
-    if (name === 'sound') this.syncSound();
   }
 
   setVolume(v) {
     this.data.settings.volume = volume(v);
     this.write();
-    this.syncSound();
-  }
-
-  // Reporte le choix de son sur la préférence du site (lue par construire-projet).
-  syncSound() {
-    try {
-      this._storage.setItem(SOUND_KEY, this.data.settings.sound ? 'on' : 'off');
-      this._storage.setItem(VOLUME_KEY, String(this.data.settings.volume));
-    } catch (e) { /* noop */ }
-  }
-
-  // Habillage de l'univers en cours : « Construisez votre projet » le reprend jusqu'au bout.
-  syncTheme(u) {
-    const f = u.fonts;
-    const theme = {
-      id: u.id, palette: u.palette,
-      fonts: { display: f.display, weight: f.weight, style: f.style || 'normal', spacing: f.spacing || '0', radius: f.radius || '12px' },
-      track: u.audio.track || null, trackGain: u.audio.trackGain || 0.5,
-    };
-    try { this._storage.setItem(THEME_KEY, JSON.stringify(theme)); } catch (e) { /* noop */ }
   }
 
   completeMission() {

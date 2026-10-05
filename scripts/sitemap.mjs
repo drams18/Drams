@@ -31,7 +31,7 @@ const URLS = [
   ['aventure',               ['aventure.html', 'js/museum.js']],
   ['tarifs',                 ['tarifs.html']],
   ['devis',                  ['devis.html', 'js/devis.js']],
-  ['construire-projet',      ['construire-projet.html', 'js/build-project.js']],
+  ['construire-projet',      ['construire-projet.html', 'src/construire']],
   ['assets/CV.pdf',          ['assets/CV.pdf']],
 ];
 

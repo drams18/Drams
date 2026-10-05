@@ -15,6 +15,7 @@ const SEAL = '#d95a70';        // cramoisi clair : sceaux
 const WOOD = '#4b3526';
 const CEIL = -340;
 const DOOR_W = 50, DOOR_H = 86;
+const PORTAL_LINES = ['CONSTRUISEZ', 'VOTRE PROJET'];   // remplacé par `portal.lines` dans le mini-jeu
 const GRAIN = 512;           // px : taille de la tuile de bruit
 
 export class ClubRenderer extends BaseRenderer {
@@ -138,7 +139,7 @@ export class ClubRenderer extends BaseRenderer {
 
     const p = level.portal;
     if (this.visible(cam, p.x, p.w)) {
-      this.blit(ctx, this.sprite('portal', p.w, p.h, (g) => this._bakeDoors(g, p)), p.x, -p.h);
+      this.blit(ctx, this.sprite('portal:' + (p.lines || ''), p.w, p.h, (g) => this._bakeDoors(g, p)), p.x, -p.h);
       // Lanterne de la grande porte : cramoisie, puis dorée une fois la visite terminée.
       const on = this.reduced || Math.sin(t * (p.boost ? 5 : 2)) > -0.2;
       ctx.fillStyle = !on ? '#2a2132' : p.boost ? '#ffd9a0' : SEAL;
@@ -215,14 +216,16 @@ export class ClubRenderer extends BaseRenderer {
 
   // Salle visitée : un sceau cramoisi, de travers.
   _stamp(ctx, l) {
-    const s = this.sprite('stamp', 70, 30, (g) => {
-      g.strokeStyle = SEAL; g.lineWidth = 2.5; g.strokeRect(2, 2, 66, 26);
-      this.label(g, 'VU', 35, 16, 16, SEAL, 800, 'center', 3);
+    const text = this.universe.vocabulary.stamp || 'VU';     // « CHOISI » dans le mini-jeu
+    const w = text.length > 2 ? 104 : 70;
+    const s = this.sprite('stamp', w, 30, (g) => {
+      g.strokeStyle = SEAL; g.lineWidth = 2.5; g.strokeRect(2, 2, w - 4, 26);
+      this.label(g, text, w / 2, 16, 16, SEAL, 800, 'center', 3);
     });
     ctx.save();
-    ctx.translate(l.x + l.w - 46, l.baseY - l.h + 94);       // sous le libellé, sans le recouvrir
+    ctx.translate(l.x + l.w - 11 - w / 2, l.baseY - l.h + 94);       // sous le libellé, sans le recouvrir
     ctx.rotate(-0.16);
-    ctx.drawImage(s.c, -35, -15, 70, 30);
+    ctx.drawImage(s.c, -w / 2, -15, w, 30);
     ctx.restore();
   }
 
@@ -285,9 +288,10 @@ export class ClubRenderer extends BaseRenderer {
 
   // Libellé gravé + sous-titre en clair.
   _stencil(g, cx, y, loc) {
-    this.label(g, loc.label, cx, y, 20, BONE, 700, 'center', 3);
+    const hint = this.universe.vocabulary.hints[loc.id], maxW = loc.w - 20;
+    this.label(g, loc.label, cx, y, this.fit(g, loc.label, 20, maxW, 700, 3), BONE, 700, 'center', 3);
     g.fillStyle = GOLD; g.fillRect(cx - 34, y + 15, 68, 2);
-    this.label(g, this.universe.vocabulary.hints[loc.id], cx, y + 30, 11, '#b9ad98', 500, 'center', 0.5);
+    if (hint) this.label(g, hint, cx, y + 30, this.fit(g, hint, 11, maxW, 500, 0.5, 8), '#b9ad98', 500, 'center', 0.5);
   }
 
   _doorFrame(g, cx, base, color = WOOD) {
@@ -354,8 +358,9 @@ export class ClubRenderer extends BaseRenderer {
     g.fillStyle = '#2a2132'; g.fillRect(0, 0, w, h);
     g.fillStyle = GOLD; g.fillRect(0, 0, w, 12); g.fillRect(0, h - 10, w, 10);
     g.fillStyle = INK; g.fillRect(0, 8, w, 1.5);
-    this.label(g, 'CONSTRUISEZ', cx, 40, 19, BONE, 700, 'center', 2.5);
-    this.label(g, 'VOTRE PROJET', cx, 64, 19, BONE, 700, 'center', 2.5);
+    const [a, b] = p.lines || PORTAL_LINES;
+    this.label(g, a, cx, 40, 19, BONE, 700, 'center', 2.5);
+    this.label(g, b, cx, 64, 19, BONE, 700, 'center', 2.5);
     g.fillStyle = INK; g.fillRect(cx - 62, h - 164, 124, 154);
     g.fillStyle = '#5a4030'; g.fillRect(cx - 56, h - 158, 54, 148); g.fillRect(cx + 2, h - 158, 54, 148);
     g.strokeStyle = 'rgba(217, 181, 106, 0.6)'; g.lineWidth = 1.5;

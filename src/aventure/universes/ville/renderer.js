@@ -14,6 +14,7 @@ const TONES = [
 ];
 const INK = '#232941';
 const DOOR_W = 46, DOOR_H = 82;
+const PORTAL_LINES = ['CONSTRUISEZ', 'VOTRE PROJET'];   // remplacé par `portal.lines` dans le mini-jeu
 
 export class VilleRenderer extends BaseRenderer {
   drawSky(ctx) {
@@ -97,7 +98,7 @@ export class VilleRenderer extends BaseRenderer {
 
     const p = level.portal;
     if (this.visible(cam, p.x, p.w)) {
-      this.blit(ctx, this.sprite('portal', p.w, p.h, (g) => this._bakeSite(g, p)), p.x, -p.h);
+      this.blit(ctx, this.sprite('portal:' + (p.lines || ''), p.w, p.h, (g) => this._bakeSite(g, p)), p.x, -p.h);
       // Projecteurs du chantier : allumés une fois la visite terminée.
       const pulse = p.boost ? 0.75 + 0.25 * Math.sin(t * 3) : 0.35;
       const halo = this.glow('site-glow', 90, 'rgba(255, 180, 84, 0.55)');
@@ -227,10 +228,12 @@ export class VilleRenderer extends BaseRenderer {
 
   _sign(g, cx, y, loc, w = 170) {
     const hint = this.universe.vocabulary.hints[loc.id];
+    // Libellé long : l'enseigne s'élargit jusqu'aux bords du lieu, puis le texte rétrécit.
+    w = Math.max(w, Math.min(loc.w - 12, this.textWidth(g, loc.label, 19, 750, 1.5) + 30));
     g.fillStyle = INK;
     g.beginPath(); g.roundRect(cx - w / 2, y, w, hint ? 46 : 34, 8); g.fill();
-    this.label(g, loc.label, cx, y + (hint ? 17 : 18), 19, '#fff3d6', 750, 'center', 1.5);
-    if (hint) this.label(g, hint, cx, y + 35, 11, '#aab1c6', 500);
+    this.label(g, loc.label, cx, y + (hint ? 17 : 18), this.fit(g, loc.label, 19, w - 24, 750, 1.5), '#fff3d6', 750, 'center', 1.5);
+    if (hint) this.label(g, hint, cx, y + 35, this.fit(g, hint, 11, w - 16, 500, 0, 8), '#aab1c6', 500);
   }
 
   _doorFrame(g, cx, baseY) {
@@ -313,8 +316,9 @@ export class VilleRenderer extends BaseRenderer {
     // Palissade + panneau
     g.fillStyle = INK; g.fillRect(0, h - 120, w, 120);
     g.fillStyle = '#ffb454'; g.beginPath(); g.roundRect(18, h - 206, w - 36, 74, 8); g.fill();
-    this.label(g, 'CONSTRUISEZ', cx, h - 182, 21, '#1b1407', 800, 'center', 1);
-    this.label(g, 'VOTRE PROJET', cx, h - 156, 21, '#1b1407', 800, 'center', 1);
+    const [a, b] = p.lines || PORTAL_LINES;
+    this.label(g, a, cx, h - 182, 21, '#1b1407', 800, 'center', 1);
+    this.label(g, b, cx, h - 156, 21, '#1b1407', 800, 'center', 1);
     this._doorFrame(g, cx, h);
   }
 }

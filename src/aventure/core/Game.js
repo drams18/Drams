@@ -373,7 +373,6 @@ export class Game {
     this.hud.setVocabulary(v);
     this._syncHud();
     this.audio.setUniverse(u.audio);
-    this.save.syncTheme(u);
     this._setHash('#aventure/' + id);
   }
 
@@ -584,8 +583,6 @@ export class Game {
     this.state = 'leaving';
     this.input.enabled = false;
     this._savePosition();
-    this.save.syncSound();          // le mini-jeu suit le choix de son fait ici
-    this.save.syncTheme(this.universe); // et l'habillage de l'univers en cours
     this.audio.sfx('transition');
     this.camera.shake(0.5);
     await this.fx.cover();

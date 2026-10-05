@@ -18,9 +18,9 @@ const PAGES = ['index', 'classique', 'classique/projets', 'classique/parcours', 
   'classique/contact', 'aventure', 'tarifs', 'devis', 'construire-projet', 'avis', '404'];
 
 // Copiés tels quels : scripts non-modules, médias, config Cloudflare.
-// css/ et style.css aussi, car les préchargements (classic.js, select.js)
-// les visent par leur chemin d'origine.
-const STATIC = ['js', 'css', 'style.css', 'assets', 'sounds',
+// css/ aussi, car les préchargements (classic.js, select.js) le visent par
+// son chemin d'origine.
+const STATIC = ['js', 'css', 'assets', 'sounds',
   '_headers', '_redirects', 'robots.txt', 'sitemap.xml'];
 
 function copyStatic() {

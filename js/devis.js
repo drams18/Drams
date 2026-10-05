@@ -9,7 +9,7 @@
 
    Même contenu, même e-mail et même mémoire de session
    (sessionStorage « drame.buildproject ») que le mini-jeu du mode
-   aventure (js/build-project.js) : un projet commencé dans l'un se
+   aventure (src/construire/steps.js) : un projet commencé dans l'un se
    retrouve dans l'autre. Choix unique → étape suivante automatique ;
    Entrée valide l'étape.
    ══════════════════════════════════════════════════════ */
@@ -22,7 +22,7 @@
   var CONTACT_EMAIL = 'arphandrame0@gmail.com';
   var UNKNOWN = '__unknown__';
 
-  // Valeurs (value) identiques à js/build-project.js : ce sont elles qui
+  // Valeurs (value) identiques à src/construire/steps.js : ce sont elles qui
   // partent dans l'e-mail et dans la session partagée.
   var STEPS = [
     {

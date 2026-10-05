@@ -131,9 +131,7 @@ function simulate(hz, seconds, script) {
   assert.equal(again.data.universe, 'hero');
   assert.deepEqual(again.data.collectedSkills, ['react']);
   assert.deepEqual(again.data.playerPosition, { x: 512, y: -430 });
-  assert.equal(store.getItem('drame.portfolio.sound'), 'on');
   assert.equal(again.data.settings.volume, 0.35);
-  assert.equal(store.getItem('drame.portfolio.volume'), '0.35');
   // Sauvegarde d'avant la jauge : le son coupé n'était qu'un défaut, il repasse à activé.
   assert.deepEqual(migrate({ version: 2, settings: { sound: false } }).settings, { sound: true, volume: 0.8, reducedMotion: false });
   assert.equal(migrate({ version: 2, settings: { sound: false, volume: 0.5 } }).settings.sound, false, 'coupé par choix : respecté');
@@ -147,34 +145,46 @@ function simulate(hz, seconds, script) {
   assert.deepEqual(again.data.visitedLocations, []);
 }
 
-// Habillage repris par « Construisez votre projet » (js/universe-theme.js) :
-// la copie de secours suit les univers, et la page a toujours un univers.
+// « Construisez votre projet » : réponses, récapitulatif, décor par univers.
 {
-  const { readFileSync } = await import('node:fs');
-  const vm = await import('node:vm');
-  const code = readFileSync(new URL('../js/universe-theme.js', import.meta.url), 'utf8');
-  const run = (items) => {
-    const style = {};
-    const window = {
-      localStorage: { getItem: (k) => (k in items ? items[k] : null) },
-      document: { documentElement: { dataset: {}, style: { setProperty: (k, v) => { style[k] = v; } } } },
-    };
-    vm.runInNewContext(code, { window });
-    return { window, style };
-  };
-  const first = run({});
-  assert.equal(first.window.UniverseTheme.id, 'ville', 'sans univers choisi : VILLE, jamais l\'ancien thème');
-  assert.equal(first.window.UniverseTheme.track, '/sounds/aventure/ville.mp3');
-  assert.equal(run({ 'drame.aventure.save': JSON.stringify({ version: 2, universe: 'club' }) }).window.UniverseTheme.id, 'club');
-  const stored = run({ 'drame.aventure.theme': JSON.stringify({ id: 'hero', palette: first.window.UniverseThemeBuiltin.hero.palette, fonts: first.window.UniverseThemeBuiltin.hero.fonts, track: '/sounds/aventure/hero.mp3' }) });
-  assert.equal(stored.window.document.documentElement.dataset.universe, 'hero');
-  assert.equal(stored.style['--u-primary'], '#ff4d4d');
+  const { STEPS, Answers, doorId, STORAGE_KEY } = await import('../src/construire/steps.js');
+  const { createRoom } = await import('../src/construire/rooms.js');
+  const mem = () => { const m = new Map(); return { getItem: k => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)), removeItem: k => m.delete(k) }; };
+  const store = mem();
+  const a = new Answers(store);
+  assert.equal(a.empty, true);
+  assert.equal(a.pick(STEPS[0], 'Site web'), true);
+  assert.equal(a.pick(STEPS[0], 'Site web'), false, 'déjà choisi');
+  assert.equal(a.toggle('Réservation'), true);
+  assert.equal(a.toggle('Paiement en ligne'), true);
+  assert.equal(a.toggle('Réservation'), false);
+  assert.equal(a.recap(STEPS[3]), 'Paiement en ligne');
+  assert.equal(a.recap(STEPS[4]), 'Aucun choix');
+  assert.equal(new Answers(store).data.projectType, 'Site web', 'réponses gardées pour la session');
+  a.setUnknown();
+  assert.equal(a.recap(STEPS[3]), 'Je ne sais pas');
+  assert.ok(a.summary().includes('Type : Site web') && a.summary().includes('Budget : Aucun choix'));
+  a.clear();
+  assert.equal(store.getItem(STORAGE_KEY), null);
+
+  // Mêmes valeurs que le formulaire de devis (js/devis.js) : la session est partagée.
+  const devis = (await import('node:fs')).readFileSync(new URL('../js/devis.js', import.meta.url), 'utf8');
+  for (const step of STEPS) for (const d of step.doors) if (!d.special) assert.ok(devis.includes(`'${d.value.replace(/'/g, "\\'")}'`), `valeur absente du devis : ${d.value}`);
+
   for (const id of ['ville', 'hero', 'club']) {
-    const t = await import(`../src/aventure/universes/${id}/theme.js`);
-    const b = JSON.parse(JSON.stringify(first.window.UniverseThemeBuiltin[id]));
-    assert.deepEqual(b.palette, t.palette, `palette ${id}`);
-    assert.deepEqual(b.fonts, { display: t.fonts.display, weight: t.fonts.weight, style: t.fonts.style || 'normal', spacing: t.fonts.spacing, radius: t.fonts.radius }, `typographie ${id}`);
-    assert.equal(t.audio.track, `/sounds/aventure/${id}.mp3`);
+    const u = (await import(`../src/aventure/universes/${id}/index.js`)).default;
+    const styles = new Set(u.createLevel().locations.map(l => l.style));
+    STEPS.forEach((step, i) => {
+      const room = createRoom(id, step, i);
+      assert.equal(room.locations.length, step.doors.length);
+      assert.equal(room.locations[0].id, doorId(i, 0));
+      assert.ok(room.locations.every(l => styles.has(l.style)), `${id} : les lieux sont ceux de l'univers`);
+      assert.equal(room.portal.style, u.createLevel().portal.style);
+      const xs = [room.portal, ...room.locations];
+      for (let k = 1; k < xs.length; k++) assert.ok(xs[k].x >= xs[k - 1].x + xs[k - 1].w, `${id} étape ${i} : lieux disjoints`);
+      assert.ok(room.spawn.x > room.portal.x + room.portal.w && room.spawn.x < room.locations[0].x);
+      assert.ok(room.width > xs[xs.length - 1].x + xs[xs.length - 1].w);
+    });
   }
 }
 

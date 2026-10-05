@@ -39,9 +39,10 @@ https://arphandrame.fr/
 - **Deux styles distincts** : l'accueil, le mode classique, les tarifs, le devis et la 404 sont un
   site web sobre et professionnel (`css/site.css` : thèmes clair/sombre, police Inter ;
   `css/classic.css`, `css/annexe.css`). Le mode aventure a sa propre interface, habillée par
-  l'univers choisi (`src/aventure/styles/aventure.css`) ; le mini-jeu `construire-projet` garde la
-  DA comics / néon / pixel (`css/tokens.css`, `style.css`).
-- **Devis ⇄ mini-jeu** : `js/devis.js` et `js/build-project.js` posent les mêmes questions, envoient
+  l'univers choisi (`src/aventure/styles/aventure.css`) ; le mini-jeu `construire-projet`
+  (`src/construire/`) tourne sur le même moteur, dans l'univers choisi par le visiteur : même décor,
+  même personnage, même musique, chaque porte est une réponse.
+- **Devis ⇄ mini-jeu** : `js/devis.js` et `src/construire/steps.js` posent les mêmes questions, envoient
   le même e-mail et partagent la même session. Depuis les tarifs, « Construisez votre projet » mène au
   mini-jeu pour un visiteur du mode aventure, au formulaire pour les autres.
 - **Formulaires** : `js/contact-form.js` (EmailJS chargé à la demande).

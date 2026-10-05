@@ -154,6 +154,19 @@ export class BaseRenderer {
     if ('letterSpacing' in g) g.letterSpacing = '0px';
   }
 
+  // Largeur d'un libellé (à la cuisson uniquement : jamais dans la boucle).
+  textWidth(g, text, size, weight = 700, spacing = 0) {
+    g.font = `${weight} ${size}px ${this.font}`;
+    return g.measureText(text).width + spacing * text.length;
+  }
+
+  // Corps de police qui fait tenir `text` dans `maxW` (jamais sous `min`) :
+  // les libellés longs de « Construisez votre projet » rétrécissent au lieu de déborder.
+  fit(g, text, size, maxW, weight = 700, spacing = 0, min = 11) {
+    const w = this.textWidth(g, text, size, weight, spacing);
+    return w <= maxW ? size : Math.max(min, Math.floor(size * maxW / w * 2) / 2);
+  }
+
   // Halo circulaire cuit (remplace shadowBlur dans la boucle).
   glow(key, radius, color) {
     return this.sprite(key, radius * 2, radius * 2, (g) => {

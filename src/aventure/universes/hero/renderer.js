@@ -9,6 +9,7 @@ import { BaseRenderer, rng, hash } from '../BaseRenderer.js';
 const NEON = ['#3fc8ff', '#ffd27a', '#ff4d4d', '#7fa8ff'];
 const INK = '#050d22';
 const DOOR_W = 48, DOOR_H = 84;
+const PORTAL_LINES = ['CONSTRUISEZ', 'VOTRE PROJET'];   // remplacé par `portal.lines` dans le mini-jeu
 
 export class HeroRenderer extends BaseRenderer {
   constructor(universe) {
@@ -150,7 +151,7 @@ export class HeroRenderer extends BaseRenderer {
       ctx.globalAlpha = (p.boost ? 0.85 : 0.4) + (this.reduced ? 0 : 0.15 * Math.sin(t * 3.4));
       this.blit(ctx, halo, p.doorX - 150, -260);
       ctx.globalAlpha = 1;
-      this.blit(ctx, this.sprite('portal', p.w, p.h, (g) => this._bakeGate(g, p)), p.x, -p.h);
+      this.blit(ctx, this.sprite('portal:' + (p.lines || ''), p.w, p.h, (g) => this._bakeGate(g, p)), p.x, -p.h);
       // Anneaux d'énergie dans l'arche.
       if (!this.reduced) {
         ctx.strokeStyle = '#ff4d4d'; ctx.lineWidth = 2;
@@ -227,13 +228,16 @@ export class HeroRenderer extends BaseRenderer {
 
   _plate(g, cx, y, loc, w) {
     const hint = this.universe.vocabulary.hints[loc.id];
+    // Libellé long : la plaque s'élargit jusqu'aux bords du lieu, puis le texte rétrécit.
+    w = Math.max(w, Math.min(loc.w - 8, this.textWidth(g, loc.label, 19, 900, 1) + 34));
+    const size = this.fit(g, loc.label, 19, w - 26, 900, 1);
     g.fillStyle = INK; g.fillRect(cx - w / 2, y, w, 48);
     g.strokeStyle = '#3fc8ff'; g.lineWidth = 2; g.strokeRect(cx - w / 2 + 1, y + 1, w - 2, 46);
     g.save();
     g.transform(1, 0, -0.14, 1, 0, 0);
-    this.label(g, loc.label, cx + (y + 18) * 0.14, y + 18, 19, '#f4f7ff', 900, 'center', 1);
+    this.label(g, loc.label, cx + (y + 18) * 0.14, y + 18, size, '#f4f7ff', 900, 'center', 1);
     g.restore();
-    this.label(g, hint, cx, y + 37, 11, '#9fb2d8', 600);
+    if (hint) this.label(g, hint, cx, y + 37, this.fit(g, hint, 11, w - 14, 600, 0, 8), '#9fb2d8', 600);
   }
 
   _doorFrame(g, cx, base) {
@@ -298,7 +302,8 @@ export class HeroRenderer extends BaseRenderer {
     g.beginPath(); g.moveTo(cx - 58, h); g.lineTo(cx - 58, h - 150); g.arc(cx, h - 150, 58, Math.PI, 0); g.lineTo(cx + 58, h); g.stroke();
     g.fillStyle = INK; g.fillRect(8, 18, w - 16, 62);
     g.strokeStyle = '#ff4d4d'; g.lineWidth = 2; g.strokeRect(9, 19, w - 18, 60);
-    this.label(g, 'CONSTRUISEZ', cx, 38, 19, '#f4f7ff', 900, 'center', 1);
-    this.label(g, 'VOTRE PROJET', cx, 62, 19, '#f4f7ff', 900, 'center', 1);
+    const [a, b] = p.lines || PORTAL_LINES;
+    this.label(g, a, cx, 38, 19, '#f4f7ff', 900, 'center', 1);
+    this.label(g, b, cx, 62, 19, '#f4f7ff', 900, 'center', 1);
   }
 }
