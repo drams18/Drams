@@ -9,7 +9,8 @@
    `slug` = identifiant stable utilisé dans les liens (#projets/skywalk).
 
    Données réelles. Ne pas exagérer les expériences :
-     • SkyWalk = projet de groupe (équipe de 7).
+     • SkyWalk = projet PERSONNEL : démarré à plusieurs à l'ETNA, repris et
+       poursuivi seul (l'essentiel du travail). Ne pas écrire « équipe de 7 ».
      • Crowdin (clone) = projet scolaire ETNA en binôme.
      • Pool Party Experience = projet EN COURS.
      • Wild Kédougou / Prospectly / ISLAAH / OneDay = projets PERSONNELS.
@@ -421,11 +422,11 @@ const SECTIONS = {
         date: '01/2025',
         title: 'SkyWalk',
         type: 'Plateforme Web',
-        category: 'Scolaire',
+        category: 'Personnel',
         pick: true,
-        tech: ['React', 'TypeScript', 'Vite', 'Tailwind', 'React Query', 'NestJS', 'PostgreSQL', 'TypeORM', 'JWT', 'Docker', 'Nginx', 'GitLab CI'],
-        role: 'Projet réalisé en équipe de 7 (ETNA, Grand Projet d\'Étude). J\'ai principalement contribué au backend et à la base de données : modération du forum (mots interdits, système d\'avertissement utilisateur), migrations PostgreSQL, recherche full-text PostgreSQL, enrichissement des données pays, participation à l\'architecture technique et à la documentation / au diagramme d\'architecture.',
-        desc: 'Plateforme web destinée à accompagner les personnes dans leurs projets d\'expatriation : checklist personnalisée, sources gouvernementales officielles, comparaison du coût de la vie et des villes, forum modéré, réseau d\'experts, messagerie privée, coffre-fort documentaire, dashboard personnalisable et administration.',
+        tech: ['React', 'TypeScript', 'Vite', 'Tailwind', 'React Query', 'i18next', 'NestJS', 'PostgreSQL', 'TypeORM', 'JWT', 'OpenAI API', 'Jest', 'Vitest', 'Playwright', 'Docker', 'Nginx', 'GitHub Actions', 'GitLab CI'],
+        role: 'Projet personnel que je mène seul sur toute la chaîne. Démarré à plusieurs à l\'ETNA, je l\'ai repris et poursuivi seul, avec l\'aide ponctuelle de camarades, et j\'en ai réalisé l\'essentiel : conception et architecture du monorepo, frontend React, API REST NestJS, modèle de données et migrations PostgreSQL, authentification JWT, fonctionnalités métier, tests unitaires et de bout en bout, documentation, conteneurisation Docker et pipeline d\'intégration continue.',
+        desc: 'Plateforme web full-stack qui accompagne un projet d\'expatriation de bout en bout, en français et en anglais. Partir à l\'étranger oblige à croiser des informations dispersées (visa, démarches, budget, emploi) : SkyWalk les réunit. Après un onboarding, l\'utilisateur crée son projet et obtient une checklist personnalisée avec suivi des démarches et rappels d\'échéance, explore les destinations sur une carte du monde, compare le coût de la vie entre villes, consulte des offres d\'emploi et échange avec la communauté : forum, messagerie privée, buddies et experts vérifiés. Côté technique : API REST NestJS documentée avec Swagger, recherche full-text PostgreSQL, forum modéré par filtre local et modération OpenAI, liens gouvernementaux officiels trouvés par recherche web, classés par un LLM puis validés par un administrateur, coffre-fort documentaire chiffré, dashboard à widgets réorganisables, back-office d\'administration et données externes (Adzuna, REST Countries, OCDE).',
         links: [
           { label: 'Accéder', url: 'https://skywalk-chi.vercel.app/' },
         ],

@@ -1,0 +1,49 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=block">
+<style>
+/* Post Instagram N°001 · 1080×1350 · gabarit B (titre + image) · 001-portfolio.png = capture de classique.html?theme=night&capture en 1280×724 @2x · couleurs = tokens de css/site.css */
+:root{--void:#0a0a0d;--surface:#131318;--surface-2:#1a1a20;--line:#25252d;--line-2:#34343e;--muted:#a1a1aa;--text:#f4f4f5;--indigo:#6366f1;--indigo-hi:#8b8ff8}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:var(--void)}
+.post{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--void);color:var(--text);font-family:Archivo,Arial,sans-serif}
+.post>*{position:absolute}
+.m{font:500 20px/1.4 "Geist Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{left:72px;top:140px;font:800 136px/1 Archivo,sans-serif;font-stretch:125%;text-transform:uppercase;letter-spacing:-.025em}
+h1 em{font:italic 400 156px/.8 "Instrument Serif",serif;text-transform:none;letter-spacing:-.01em;color:var(--indigo-hi)}
+.who{left:72px;top:580px;font:400 30px/1.3 Archivo,sans-serif;color:var(--text)}
+.who span{color:var(--muted)}
+.list{left:72px;top:716px;display:grid;gap:22px}
+.list div{display:flex;gap:18px;color:var(--text)}
+.list b{font-weight:500;color:var(--muted)}
+.pitch{left:72px;top:912px;width:340px;font:400 30px/1.3 Archivo,sans-serif;color:var(--text)}
+.pitch span{color:var(--muted)}
+.glow{left:420px;top:560px;width:820px;height:820px;border-radius:50%;background:radial-gradient(closest-side,rgba(99,102,241,.5),rgba(99,102,241,0))}
+.win{left:432px;top:716px;width:700px;height:452px;transform:rotate(-5deg);transform-origin:left top;background:var(--surface-2);border:1px solid var(--line-2);border-radius:20px;box-shadow:0 40px 80px -20px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.win>*{position:absolute}
+.bar{left:0;top:0;right:0;height:56px;border-bottom:1px solid var(--line);background:var(--surface)}
+.dots{left:22px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--muted);box-shadow:22px 0 0 var(--line-2),44px 0 0 var(--line-2)}
+.url{left:110px;top:12px;height:32px;padding:0 18px;border-radius:999px;background:var(--void);border:1px solid var(--line);font:500 15px/30px "Geist Mono",monospace;letter-spacing:.04em;color:var(--muted)}
+.shot{left:0;top:56px;width:700px;height:396px;display:block}
+.rule{left:72px;right:72px;top:1214px;height:1px;background:var(--line)}
+.grain{inset:0;opacity:.14;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")}
+</style></head><body>
+<div class="post">
+  <div class="glow"></div>
+  <h1>Sites,<br>applis,<br><em>solutions web.</em></h1>
+  <p class="who">Arphan Drame <span>· développeur web freelance</span></p>
+  <div class="list m">
+    <div><b>01</b>Sites web</div>
+    <div><b>02</b>Applications</div>
+    <div><b>03</b>Solutions web</div>
+  </div>
+  <p class="pitch"><span>Un projet en tête ?</span><br>Je l'accélère avec la solution web qu'il lui faut.</p>
+  <div class="win">
+    <div class="bar"></div><div class="dots"></div><div class="url">arphandrame.fr</div>
+    <img class="shot" src="001-portfolio.png" alt="">
+  </div>
+  <div class="rule"></div>
+  <div class="m" style="left:72px;top:1238px">Arphan Drame</div>
+  <div class="m" style="right:72px;top:1238px;color:var(--text)">arphandrame.fr →</div>
+  <div class="grain"></div>
+</div>
+</body></html>

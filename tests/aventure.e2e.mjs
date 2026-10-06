@@ -116,7 +116,7 @@ ok('galerie : clavier →', await p.eval('document.querySelector(".adv-gal__titl
 await p.press('ArrowLeft'); await p.sleep(150); await p.press('ArrowLeft'); await p.sleep(200);
 ok('galerie : clavier ←', await p.eval('document.querySelector(".adv-gal__title").textContent') === 'SkyWalk');
 ok('fragment #projets/skywalk', await p.eval('location.hash') === '#projets/skywalk');
-ok('projet : image, rôle, technologies, lien live', await p.eval(`(() => { const s = document.querySelector('.adv-gal__stage'); const img = s.querySelector('img'); return img.naturalWidth > 0 && s.textContent.includes('équipe de 7') && s.querySelectorAll('.adv-chips li').length === 12 && !!s.querySelector('a[href="https://skywalk-chi.vercel.app/"]'); })()`));
+ok('projet : image, rôle, technologies, lien live', await p.eval(`(() => { const s = document.querySelector('.adv-gal__stage'); const img = s.querySelector('img'); return img.naturalWidth > 0 && s.textContent.includes('Projet personnel') && s.querySelectorAll('.adv-chips li').length === 18 && !!s.querySelector('a[href="https://skywalk-chi.vercel.app/"]'); })()`));
 await shot('d3-gallery');
 const box = await p.eval('(() => { const r = document.querySelector(".adv-gal__info").getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + 60 }; })()');
 await p.swipe(box.x + 90, box.y, box.x - 90, box.y); await p.sleep(250);

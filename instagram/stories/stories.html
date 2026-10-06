@@ -1,0 +1,195 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=block">
+<style>
+/* Stories à la une · 1080×1920 · même identité que le post N°001 (tokens de css/site.css).
+   6 écrans : projets ×3, échange offert, méthode, contact. stories.html?s=1…6 n'affiche qu'un écran
+   (c'est ce que photographie render.sh), sans paramètre ils sont tous empilés.
+   Zone utile : y 250 → 1620, le reste est couvert par l'interface Instagram. */
+:root{--void:#0a0a0d;--surface:#131318;--surface-2:#1a1a20;--line:#25252d;--line-2:#34343e;--muted:#a1a1aa;--text:#f4f4f5;--indigo:#6366f1;--indigo-hi:#8b8ff8;--indigo-deep:#4f46e5;
+  --chrome:linear-gradient(160deg,#f4f4f5 0%,#a1a1aa 38%,#34343e 62%,#d4d4d8 100%)}
+*{box-sizing:border-box;margin:0}
+html,body{background:var(--void)}
+body.one{width:1080px;height:1920px;overflow:hidden}
+body.one .story{display:none}
+body.one .story.on{display:block}
+.story{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--void);color:var(--text);font-family:Archivo,Arial,sans-serif}
+.story.inv{background:var(--text);color:var(--void);--muted:#52525b;--line:#d4d4d8;--line-2:#d4d4d8;--indigo-hi:var(--indigo-deep);--surface:#fff}
+.in{position:absolute;left:72px;right:72px;top:250px;bottom:300px;display:flex;flex-direction:column}
+.m{font:500 20px/1.4 "Geist Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.top{display:flex;justify-content:space-between}
+h1{margin-top:44px;font:800 108px/1 Archivo,sans-serif;font-stretch:125%;text-transform:uppercase;letter-spacing:-.025em}
+h1 em{display:inline-block;font:italic 400 132px/.86 "Instrument Serif",serif;text-transform:none;letter-spacing:-.01em;color:var(--indigo-hi)}
+.sub{margin-top:36px;font:400 34px/1.3 Archivo,sans-serif;color:var(--muted);max-width:900px}
+.sub b{font-weight:400;color:var(--text)}
+.inv .sub b{color:var(--void)}
+.foot{margin-top:auto;border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between}
+.foot .m:last-child{color:var(--text)}
+.inv .foot .m:last-child{color:var(--void)}
+.glow{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(99,102,241,.45),rgba(99,102,241,0))}
+.grain{position:absolute;inset:0;opacity:.14;mix-blend-mode:overlay;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")}
+.inv .grain{opacity:.08}
+/* fenêtre navigateur */
+.win{position:relative;margin-top:40px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:20px;box-shadow:0 40px 80px -20px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden}
+.bar{position:relative;height:56px;border-bottom:1px solid var(--line);background:var(--surface)}
+.bar::before{content:"";position:absolute;left:22px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--muted);box-shadow:22px 0 0 var(--line-2),44px 0 0 var(--line-2)}
+.url{position:absolute;left:110px;top:12px;height:32px;padding:0 18px;border-radius:999px;background:var(--void);border:1px solid var(--line);font:500 15px/30px "Geist Mono",monospace;letter-spacing:.04em;color:var(--muted)}
+.win img{display:block;width:100%}
+/* scores */
+.scores{margin-top:36px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:flex-end}
+.num{font:800 150px/.8 Archivo,sans-serif;font-stretch:125%;letter-spacing:-.04em;background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent}
+.num+.m{margin-top:22px}
+.pills{display:grid;gap:12px;justify-items:end}
+.pill{border:1px solid var(--line-2);border-radius:999px;background:var(--surface);padding:13px 28px;font:500 28px/1 Archivo,sans-serif}
+.pill b{font-weight:800;margin-left:10px}
+/* téléphone */
+.duo{margin-top:48px;display:flex;justify-content:space-between;flex:1;min-height:0}
+.duo .sub{margin-top:0;max-width:440px}
+.facts{margin-top:44px;display:grid;gap:26px}
+.facts div{display:grid;gap:4px}
+.facts span{font:400 30px/1.25 Archivo,sans-serif;color:var(--text)}
+.ph{width:412px;height:880px;margin-right:8px;padding:6px;border-radius:64px;background:var(--chrome);box-shadow:0 50px 90px -20px #000;transform:rotate(4deg);transform-origin:center top}
+.ph img{display:block;width:100%;height:100%;object-fit:cover;border-radius:58px}
+/* lignes de rôle */
+.rows{margin-top:44px;display:grid}
+.rows div{display:grid;grid-template-columns:230px 1fr;align-items:baseline;padding:18px 0;border-top:1px solid var(--line)}
+.rows span{font:400 30px/1.25 Archivo,sans-serif}
+/* liste (échange offert) */
+.chk{margin-top:64px;display:grid;list-style:none;padding:0}
+.chk li{display:grid;grid-template-columns:64px 1fr;align-items:baseline;padding:26px 0;border-top:1px solid var(--line);font:500 38px/1.2 Archivo,sans-serif}
+.chk li:last-child{border-bottom:1px solid var(--line)}
+.cta{margin-top:56px;height:120px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:20px;background:var(--void);color:var(--text);font:500 36px/1 Archivo,sans-serif}
+.cta b{font-weight:800}
+.cta svg,.chan svg{width:40px;height:40px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square}
+.story:not(.inv) .cta{background:var(--text);color:var(--void)}
+/* étapes */
+.steps{margin-top:60px;display:grid;gap:20px}
+.step{display:grid;grid-template-columns:76px 1fr;align-items:baseline;padding:34px 36px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.step h2{font:700 40px/1.15 Archivo,sans-serif;font-stretch:110%}
+.step p{grid-column:2;margin-top:10px;font:400 30px/1.3 Archivo,sans-serif;color:var(--muted)}
+.note{margin-top:44px;font:400 30px/1.3 Archivo,sans-serif;color:var(--muted)}
+.note b{font-weight:400;color:var(--text)}
+/* canaux de contact */
+.chans{margin-top:64px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:0 40px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.chan{display:grid;grid-template-columns:76px 1fr;align-items:center;padding:36px 0;color:var(--muted)}
+.chan+.chan{border-top:1px solid var(--line)}
+.chan strong{display:block;margin-top:6px;font:700 44px/1.1 Archivo,sans-serif;font-stretch:110%;color:var(--text)}
+</style></head><body>
+
+<!-- 1 · PROJETS 01 : arphandrame.fr. Scores = Lighthouse mobile de arphandrame.fr/classique, mesurés le 06.10.2026. -->
+<section class="story">
+  <div class="glow" style="left:240px;top:640px;width:1100px;height:1100px"></div>
+  <div class="in">
+    <div class="top m"><span>Projets · 01 / 03</span><span>Site web</span></div>
+    <h1>Mon site,<br><em>mesuré.</em></h1>
+    <p class="sub">Je l'ai construit comme je construirais le tien : <b>rapide, lisible, facile à trouver.</b></p>
+    <div class="win"><div class="bar"><div class="url">arphandrame.fr</div></div><img src="../001/001-portfolio.png" alt=""></div>
+    <div class="scores">
+      <div><div class="num">97</div><div class="m">Performance mobile · Lighthouse</div></div>
+      <div class="pills"><div class="pill">Accessibilité<b>100</b></div><div class="pill">SEO<b>100</b></div></div>
+    </div>
+    <div class="foot"><span class="m">Arphan Drame</span><span class="m">arphandrame.fr →</span></div>
+  </div>
+  <div class="grain"></div>
+</section>
+
+<!-- 2 · PROJETS 02 : ISLAAH, projet personnel publié sur l'App Store. -->
+<section class="story">
+  <div class="glow" style="left:380px;top:560px;width:1000px;height:1000px"></div>
+  <div class="in">
+    <div class="top m"><span>Projets · 02 / 03</span><span>Application mobile</span></div>
+    <h1>De l'idée à<br><em>l'App Store.</em></h1>
+    <div class="duo">
+      <div>
+        <p class="sub"><b>ISLAAH</b>, une appli pour tester sa connaissance du Coran. Pensée, dessinée et développée seul.</p>
+        <div class="facts">
+          <div><i class="m">Cadre</i><span>Projet personnel</span></div>
+          <div><i class="m">Mon rôle</i><span>L'appli, l'API,<br>la mise en ligne</span></div>
+          <div><i class="m">Technos</i><span>React Native, Symfony</span></div>
+          <div><i class="m">Statut</i><span>Sur l'App Store</span></div>
+        </div>
+      </div>
+      <div class="ph"><img src="../../assets/img/_raw/islaah-home-logged-in.png" alt=""></div>
+    </div>
+    <div class="foot"><span class="m">Arphan Drame</span><span class="m">arphandrame.fr →</span></div>
+  </div>
+  <div class="grain"></div>
+</section>
+
+<!-- 3 · PROJETS 03 : SkyWalk, projet personnel (démarré à plusieurs à l'ETNA, repris seul). -->
+<section class="story">
+  <div class="glow" style="left:-260px;top:700px;width:1100px;height:1100px"></div>
+  <div class="in">
+    <div class="top m"><span>Projets · 03 / 03</span><span>Plateforme web</span></div>
+    <h1>SkyWalk,<br><em>du back au front.</em></h1>
+    <p class="sub">Une plateforme pour préparer son expatriation. <b>Un projet personnel, mené sur toute la chaîne.</b></p>
+    <div class="win"><div class="bar"><div class="url">skywalk-chi.vercel.app</div></div><img src="../../assets/img/_raw/skywalk-home-logged-out.png" alt=""></div>
+    <div class="rows">
+      <div><i class="m">Cadre</i><span>Projet personnel</span></div>
+      <div><i class="m">Mon rôle</i><span>Conception et développement full-stack</span></div>
+      <div><i class="m">Technos</i><span>NestJS, PostgreSQL, React</span></div>
+    </div>
+    <div class="foot"><span class="m">Arphan Drame</span><span class="m">arphandrame.fr →</span></div>
+  </div>
+  <div class="grain"></div>
+</section>
+
+<!-- 4 · ÉCHANGE OFFERT (à la place de l'audit) : écran inversé Bone. -->
+<section class="story inv">
+  <div class="in">
+    <div class="top m"><span>Premier échange</span><span>Offert</span></div>
+    <h1 style="font-size:98px">On en parle,<br><em>c'est offert.</em></h1>
+    <p class="sub">Un premier échange pour poser ton projet à plat. <b>Sans engagement.</b></p>
+    <ul class="chk">
+      <li><i class="m">01</i>Ton idée, ton besoin, tes contraintes</li>
+      <li><i class="m">02</i>Ce que tu as déjà : site, appli, outils</li>
+      <li><i class="m">03</i>La solution web qui colle à ton projet</li>
+      <li><i class="m">04</i>Une idée claire du budget</li>
+    </ul>
+    <p class="note">Pas encore de site ? Pas grave, on part de ton idée.</p>
+    <div class="cta"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Écris <b>PROJET</b> en message privé</span></div>
+    <div class="foot"><span class="m">Arphan Drame</span><span class="m">arphandrame.fr →</span></div>
+  </div>
+  <div class="grain"></div>
+</section>
+
+<!-- 5 · MÉTHODE -->
+<section class="story">
+  <div class="glow" style="left:300px;top:-360px;width:1100px;height:1100px;opacity:.7"></div>
+  <div class="in">
+    <div class="top m"><span>Méthode</span><span>4 étapes</span></div>
+    <h1>Ton projet,<br><em>étape par étape.</em></h1>
+    <div class="steps">
+      <div class="step"><i class="m">01</i><h2>On échange, c'est offert</h2><p>Tu m'expliques ton idée, je te dis ce qui est faisable et comment.</p></div>
+      <div class="step"><i class="m">02</i><h2>Je maquette</h2><p>Tu vois ton projet avant qu'il existe, et tu valides.</p></div>
+      <div class="step"><i class="m">03</i><h2>Je développe</h2><p>Du sur-mesure, pensé pour ton activité.</p></div>
+      <div class="step"><i class="m">04</i><h2>Mise en ligne</h2><p>Ton projet est en ligne, prêt à servir.</p></div>
+    </div>
+    <p class="note">Mes tarifs sont affichés : <b>arphandrame.fr/tarifs</b></p>
+    <div class="foot"><span class="m">Arphan Drame</span><span class="m">arphandrame.fr →</span></div>
+  </div>
+  <div class="grain"></div>
+</section>
+
+<!-- 6 · CONTACT -->
+<section class="story">
+  <div class="glow" style="left:-300px;top:900px;width:1200px;height:1200px"></div>
+  <div class="in">
+    <div class="top m"><span>Contact</span><span>Île-de-France</span></div>
+    <h1>Un projet ?<br><em>Parlons-en.</em></h1>
+    <p class="sub"><b>Arphan Drame</b>, développeur web freelance. Sites, applis, solutions web sur mesure.</p>
+    <div class="chans">
+      <div class="chan"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg><div><i class="m">Message privé</i><strong>Ici, sur Instagram</strong></div></div>
+      <div class="chan"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3 3 3 14 0 17M12 3.5c-3 3-3 14 0 17"/></svg><div><i class="m">Site et devis</i><strong>arphandrame.fr</strong></div></div>
+      <div class="chan"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4c-9 1-16-6-15-15z"/></svg><div><i class="m">Téléphone</i><strong>07 67 31 84 26</strong></div></div>
+    </div>
+    <div class="cta"><span>Premier échange <b>offert</b></span></div>
+    <div class="foot"><span class="m">Arphan Drame</span><span class="m">arphandrame.fr →</span></div>
+  </div>
+  <div class="grain"></div>
+</section>
+
+<script>
+var s=+new URLSearchParams(location.search).get('s');
+if(s){document.body.className='one';document.querySelectorAll('.story')[s-1].classList.add('on')}
+</script>
+</body></html>

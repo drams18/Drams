@@ -606,7 +606,7 @@ function profilPage() {
         </ol>
         <p class="pf-feat__more">
           <a class="text-link" href="${L.page('projets')}">Voir les ${plural(projects.length, 'projet', 'projets')}${icon('arrow')}</a>
-          <span>${byCat.Professionnel.length} professionnels chez ${esc(company)}, ${byCat.Personnel.length} personnels, ${byCat.Scolaire.length} scolaires</span>
+          <span>${byCat.Professionnel.length} professionnels chez ${esc(company)}, ${byCat.Personnel.length} personnels, ${plural(byCat.Scolaire.length, 'scolaire', 'scolaires')}</span>
         </p>
       </div>
     </section>
@@ -730,7 +730,7 @@ function projetsPage() {
     </section>`;
   return shell(page, {
     title: `Projets web et mobiles · ${displayName}, ${bio.title}`,
-    description: `${plural(projects.length, 'projet', 'projets')} d'${displayName} : ${byCat.Professionnel.length} professionnels réalisés en équipe chez ${company}, ${byCat.Personnel.length} personnels et ${byCat.Scolaire.length} scolaires. Technologies, rôle et disponibilité de chaque projet.`,
+    description: `${plural(projects.length, 'projet', 'projets')} d'${displayName} : ${byCat.Professionnel.length} professionnels réalisés en équipe chez ${company}, ${byCat.Personnel.length} personnels et ${plural(byCat.Scolaire.length, 'scolaire', 'scolaires')}. Technologies, rôle et disponibilité de chaque projet.`,
     jsonld: {
       '@type': 'CollectionPage',
       name: `Projets · ${displayName}`,
