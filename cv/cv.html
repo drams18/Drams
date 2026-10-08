@@ -7,11 +7,13 @@
 <!-- Source du CV. Export PDF : npm run cv (voir scripts/cv.mjs).
      Le contenu doit rester aligné sur js/museum.js. -->
 <style>
-  @font-face {
-    font-family: 'Inter';
-    font-weight: 100 900;
-    src: url('../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2');
-  }
+  /* Graisses statiques : Chrome incorpore la police variable en Type 3,
+     moins bien lue par certains ATS. */
+  @font-face { font-family: 'Inter'; font-weight: 400; src: url('../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 500; src: url('../node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 600; src: url('../node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 700; src: url('../node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 800; src: url('../node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2') format('woff2'); }
   @page { size: A4; margin: 0; }
   :root {
     --accent: #2f6f7a;
@@ -39,16 +41,18 @@
     width: 25mm; height: 25mm; flex: none;
     border-radius: 50%; background: #cfdade; object-fit: cover; object-position: top;
   }
-  h1 { font-size: 23pt; font-weight: 750; letter-spacing: -.01em; line-height: 1.1; }
+  h1 { font-size: 23pt; font-weight: 800; letter-spacing: -.01em; line-height: 1.1; }
   .role { font-size: 12pt; font-weight: 600; color: var(--accent); margin-top: 1mm; }
   .seek { font-size: 9pt; font-weight: 600; margin-top: 1mm; }
   .contact { display: flex; flex-wrap: wrap; gap: .6mm 3mm; margin-top: 1.8mm; font-size: 8pt; color: var(--soft); }
-  .contact a { color: var(--ink); border-bottom: .2mm solid var(--rule); }
+  .contact a { color: var(--ink); }
+  /* Tous les liens se reconnaissent au même soulignement, en-tête compris. */
+  .contact a, main a { border-bottom: .25mm solid var(--accent); }
 
   main { padding: 5mm 13mm 0; }
   section { margin-bottom: 3.9mm; }
   h2 {
-    font-size: 9.5pt; font-weight: 750; letter-spacing: .09em; text-transform: uppercase;
+    font-size: 9.5pt; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
     color: var(--accent); border-bottom: .3mm solid var(--rule);
     padding-bottom: .7mm; margin-bottom: 1.5mm;
   }
@@ -56,23 +60,28 @@
 
   .item { margin-bottom: 2mm; break-inside: avoid; }
   .item:last-child { margin-bottom: 0; }
-  .head { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
   h3 { font-size: 9.6pt; font-weight: 700; }
   h3 span { font-weight: 500; color: var(--soft); }
-  .date { flex: none; font-size: 8.3pt; font-weight: 600; color: var(--soft); white-space: nowrap; }
+  /* Dates à la suite du texte : alignées à droite, certains ATS les
+     détachent de leur poste. */
+  .org { font-weight: 600; }
+  .org span { color: var(--soft); }
   .sub { font-size: 8.3pt; color: var(--soft); }
   .sub a { color: var(--accent); font-weight: 600; }
-  ul { list-style: none; margin-top: .6mm; }
-  li { position: relative; padding-left: 3.4mm; margin-bottom: .2mm; }
-  li::before { content: ''; position: absolute; left: .3mm; top: .58em; width: 1.1mm; height: 1.1mm; border-radius: 50%; background: var(--accent); }
-  b { font-weight: 650; }
+  /* Pas de position: relative sur les li : Chrome écrirait leur texte en fin
+     de PDF, détaché de son poste (lecture ATS dans l'ordre du flux). */
+  ul { list-style: disc; margin-top: .6mm; padding-left: 3.4mm; }
+  li { margin-bottom: .2mm; }
+  li::marker { color: var(--accent); }
+  b { font-weight: 600; }
   .stack { font-size: 8.4pt; color: var(--soft); margin-top: .5mm; }
   .stack b { color: var(--ink); }
 
-  .edu .head { margin-bottom: .3mm; }
-  .edu h3 { font-size: 8.9pt; }
+  /* Compétences : libellé et valeurs sur la même ligne de texte, sans colonnes. */
+  .edu h3 { font-size: 8.9pt; margin-bottom: .3mm; }
 
-  .skills { display: grid; grid-template-columns: 31mm 1fr; gap: .4mm 3mm; }
+  .skills div { margin-bottom: .4mm; }
+  .skills dt, .skills dd { display: inline; }
   .skills dt { font-weight: 700; }
 </style>
 </head>
@@ -103,17 +112,15 @@
   <section>
     <h2>Expérience professionnelle</h2>
     <div class="item">
-      <div class="head">
-        <h3>Développeur Web Full Stack en alternance <span>· DevPhantom</span></h3>
-        <span class="date">01/2024 - 10/2026</span>
-      </div>
+      <h3>Développeur Web Full Stack en alternance</h3>
+      <p class="org">DevPhantom <span>· 01/2024 - 10/2026</span></p>
       <p class="sub">Équipe d'environ 4 personnes · projets clients et produits internes · méthode Agile, Jira</p>
       <ul>
         <li>Du rendez-vous client à la livraison : compréhension du besoin, définition de la solution, création ou reprise de projets.</li>
         <li><b>Allsab-MS</b>, intranet en production (<a href="https://allsab-ms.com/">allsab-ms.com</a>) : authentification, gestion des rôles, espace administrateur, gestion des factures, des techniciens et des déplacements (PHP, Symfony, MySQL).</li>
         <li><b>GEXP</b> et <b>Hexagon</b>, plateformes de gestion interne : développement de CRUD, génération de rapports, exports PDF, Excel et CSV, fonctionnalités de communication interne (PHP, Symfony, JavaScript, MySQL).</li>
         <li><b>Infinitia</b>, plateforme de gestion de flottes automobiles créée à partir de zéro : conception de la base de données, développement du backend et préparation de l'architecture (Symfony, Node.js, NestJS, MySQL).</li>
-        <li><b>BADN</b> et <b>Ilamiria</b>, applications mobiles internes en React Native : développement backend Node.js sur BADN, Ilamiria publiée sur l'App Store.</li>
+        <li><b>BADN</b> et <b>Ilamiria</b>, applications mobiles internes en React Native : développement backend Node.js sur BADN, Ilamiria publiée sur l'App Store (<a href="https://apps.apple.com/fr/app/ilamiria/id6749936753">apps.apple.com/fr/app/ilamiria/id6749936753</a>).</li>
       </ul>
     </div>
   </section>
@@ -121,10 +128,7 @@
   <section>
     <h2>Projets personnels</h2>
     <div class="item">
-      <div class="head">
-        <h3>SkyWalk <span>· Plateforme web d'aide à l'expatriation</span></h3>
-        <span class="date">2025 - 2026</span>
-      </div>
+      <h3>SkyWalk <span>· Plateforme web d'aide à l'expatriation · 2025 - 2026</span></h3>
       <p class="sub">Démarré à plusieurs à l'ETNA, repris et poursuivi seul · <a href="https://skywalk-chi.vercel.app/">skywalk-chi.vercel.app</a></p>
       <ul>
         <li>Architecture du monorepo, frontend React / TypeScript bilingue, API REST NestJS documentée (Swagger), authentification JWT.</li>
@@ -133,22 +137,16 @@
       </ul>
     </div>
     <div class="item">
-      <div class="head">
-        <h3>Wild Kédougou Experience <span>· Plateforme de réservation touristique</span></h3>
-        <span class="date">2026</span>
-      </div>
-      <p class="sub">Conception et développement complets · <a href="https://wild-kedougou-experience.hitmind-pro.workers.dev/">en ligne</a></p>
+      <h3>Wild Kédougou Experience <span>· Plateforme de réservation touristique · 2026</span></h3>
+      <p class="sub">Conception et développement complets · en ligne : <a href="https://wild-kedougou-experience.hitmind-pro.workers.dev/">wild-kedougou-experience.hitmind-pro.workers.dev</a></p>
       <ul>
         <li>Réservation avec gestion des disponibilités, synchronisation Google Calendar et notifications e-mail (Brevo).</li>
         <li>React / TypeScript / Tailwind CSS, backend serverless Supabase et Cloudflare Workers, PWA, SEO et données structurées.</li>
       </ul>
     </div>
     <div class="item">
-      <div class="head">
-        <h3>ISLAAH <span>· Application mobile de quiz autour du Coran</span></h3>
-        <span class="date">2025</span>
-      </div>
-      <p class="sub">Conception et développement complets · <a href="https://apps.apple.com/us/app/islaah/id6758726142">disponible sur l'App Store</a></p>
+      <h3>ISLAAH <span>· Application mobile de quiz autour du Coran · 2025</span></h3>
+      <p class="sub">Conception et développement complets · disponible sur l'App Store : <a href="https://apps.apple.com/us/app/islaah/id6758726142">apps.apple.com/us/app/islaah/id6758726142</a></p>
       <ul>
         <li>Application React Native (Expo) : écoute de récitations, modes de quiz, suivi de progression et système de rangs.</li>
         <li>API REST Symfony / MySQL, mise en production sur Railway et Cloudflare, publication sur l'App Store.</li>
@@ -158,22 +156,22 @@
 
   <section class="edu">
     <h2>Formation</h2>
-    <div class="head"><h3>Master Architecte de Systèmes d'Information <span>· ETNA, en alternance</span></h3><span class="date">2024 - 2026</span></div>
-    <div class="head"><h3>Bachelor Concepteur Développeur d'Applications Web <span>· ETNA</span></h3><span class="date">2023 - 2024</span></div>
-    <div class="head"><h3>Formation Développeur Web Full Stack <span>· Doranco</span></h3><span class="date">01/2023 - 06/2023</span></div>
-    <div class="head"><h3>BTS Systèmes Numériques <span>· option Électronique et Communication</span></h3><span class="date">2022</span></div>
+    <h3>Master Architecte de Systèmes d'Information <span>· ETNA, en alternance · 2024 - 2026</span></h3>
+    <h3>Bachelor Concepteur Développeur d'Applications Web <span>· ETNA · 2023 - 2024</span></h3>
+    <h3>Formation Développeur Web Full Stack <span>· Doranco · 01/2023 - 06/2023</span></h3>
+    <h3>BTS Systèmes Numériques <span>· option Électronique et Communication · 2022</span></h3>
   </section>
 
   <section>
     <h2>Compétences et langues</h2>
     <dl class="skills">
-      <dt>Backend</dt><dd>PHP, Symfony, Node.js, NestJS, Laravel, API REST, JWT</dd>
-      <dt>Frontend</dt><dd>JavaScript, TypeScript, React, React Native (Expo), Tailwind CSS, Vite, HTML, CSS</dd>
-      <dt>Bases de données</dt><dd>MySQL, PostgreSQL, Supabase, Doctrine, TypeORM</dd>
-      <dt>Tests et DevOps</dt><dd>Jest, Vitest, Playwright, Docker, Nginx, CI/CD (GitHub Actions, GitLab CI), Cloudflare, Railway</dd>
-      <dt>Outils</dt><dd>Git, GitHub, GitLab, Jira, Figma, intégration d'API IA / LLM</dd>
-      <dt>Langues</dt><dd>Français (natif), Anglais (B2), Espagnol (A2), Arabe littéraire (A2)</dd>
-      <dt>Centres d'intérêt</dt><dd>Basket-ball, pop culture, jeux vidéo</dd>
+      <div><dt>Backend :</dt> <dd>PHP, Symfony, Node.js, NestJS, Laravel, API REST, JWT</dd></div>
+      <div><dt>Frontend :</dt> <dd>JavaScript, TypeScript, React, React Native (Expo), Tailwind CSS, Vite, HTML, CSS</dd></div>
+      <div><dt>Bases de données :</dt> <dd>MySQL, PostgreSQL, Supabase, Doctrine, TypeORM</dd></div>
+      <div><dt>Tests et DevOps :</dt> <dd>Jest, Vitest, Playwright, Docker, Nginx, CI/CD (GitHub Actions, GitLab CI), Cloudflare, Railway</dd></div>
+      <div><dt>Outils :</dt> <dd>Git, GitHub, GitLab, Jira, Figma, intégration d'API IA / LLM</dd></div>
+      <div><dt>Langues :</dt> <dd>Français (natif), Anglais (B2), Espagnol (A2), Arabe littéraire (A2)</dd></div>
+      <div><dt>Centres d'intérêt :</dt> <dd>Basket-ball, pop culture, jeux vidéo</dd></div>
     </dl>
   </section>
 
