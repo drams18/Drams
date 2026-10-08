@@ -26,14 +26,14 @@
   html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body {
     width: 210mm; height: 297mm; overflow: hidden;
-    font: 400 8.8pt/1.4 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    font: 400 8.8pt/1.35 'Inter', 'Helvetica Neue', Arial, sans-serif;
     color: var(--ink);
   }
   a { color: inherit; text-decoration: none; }
 
   header {
     display: flex; align-items: center; gap: 7mm;
-    padding: 6.5mm 13mm 5.5mm;
+    padding: 5.5mm 13mm 4.5mm;
     background: var(--band);
     border-bottom: 1.2mm solid var(--accent);
   }
@@ -49,8 +49,8 @@
   /* Tous les liens se reconnaissent au même soulignement, en-tête compris. */
   .contact a, main a { border-bottom: .25mm solid var(--accent); }
 
-  main { padding: 5mm 13mm 0; }
-  section { margin-bottom: 3.9mm; }
+  main { padding: 4.2mm 13mm 0; }
+  section { margin-bottom: 3.2mm; }
   h2 {
     font-size: 9.5pt; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
     color: var(--accent); border-bottom: .3mm solid var(--rule);
@@ -94,7 +94,7 @@
     <p class="role">Développeur Web Full Stack</p>
     <p class="seek">Recherche un CDI · Disponible dès octobre 2026 · Paris, Île-de-France</p>
     <p class="contact">
-      <span>07 67 31 84 26</span>
+      <span>+33 7 67 31 84 26</span>
       <a href="mailto:arphandrame0@gmail.com">arphandrame0@gmail.com</a>
       <a href="https://arphandrame.fr">arphandrame.fr</a>
       <a href="https://github.com/drams18">github.com/drams18</a>
@@ -113,8 +113,8 @@
     <h2>Expérience professionnelle</h2>
     <div class="item">
       <h3>Développeur Web Full Stack en alternance</h3>
-      <p class="org">DevPhantom <span>· 01/2024 - 10/2026</span></p>
-      <p class="sub">Équipe d'environ 4 personnes · projets clients et produits internes · méthode Agile, Jira</p>
+      <p class="org">DevPhantom <span>· Saint-Mandé (94) · 01/2024 - 10/2026</span></p>
+      <p class="sub">Équipe d'environ 4 personnes · projets clients et produits internes · méthode Agile (Scrum), Jira</p>
       <ul>
         <li>Du rendez-vous client à la livraison : compréhension du besoin, définition de la solution, création ou reprise de projets.</li>
         <li><b>Allsab-MS</b>, intranet en production (<a href="https://allsab-ms.com/">allsab-ms.com</a>) : authentification, gestion des rôles, espace administrateur, gestion des factures, des techniciens et des déplacements (PHP, Symfony, MySQL).</li>
@@ -131,9 +131,9 @@
       <h3>SkyWalk <span>· Plateforme web d'aide à l'expatriation · 2025 - 2026</span></h3>
       <p class="sub">Démarré à plusieurs à l'ETNA, repris et poursuivi seul · <a href="https://skywalk-chi.vercel.app/">skywalk-chi.vercel.app</a></p>
       <ul>
-        <li>Architecture du monorepo, frontend React / TypeScript bilingue, API REST NestJS documentée (Swagger), authentification JWT.</li>
-        <li>Modèle de données et migrations PostgreSQL, recherche full-text, modération du forum via l'API OpenAI, API externes (Adzuna, OCDE).</li>
-        <li>Tests unitaires et de bout en bout (Jest, Vitest, Playwright), Docker / Nginx, intégration continue GitHub Actions.</li>
+        <li>Architecture du monorepo, frontend React / TypeScript bilingue, API REST NestJS documentée (Swagger, environ 200 routes), authentification JWT.</li>
+        <li>Modèle de données de 49 entités et migrations PostgreSQL, recherche full-text, modération du forum via l'API OpenAI, API externes (Adzuna, OCDE).</li>
+        <li>Plus de 3 000 tests unitaires (Jest, Vitest) et tests de bout en bout (Playwright), couverture de lignes de 87 % côté frontend et 73 % côté backend, Docker / Nginx, intégration continue GitHub Actions (11 jobs).</li>
       </ul>
     </div>
     <div class="item">
@@ -145,8 +145,8 @@
       </ul>
     </div>
     <div class="item">
-      <h3>ISLAAH <span>· Application mobile de quiz autour du Coran · 2025</span></h3>
-      <p class="sub">Conception et développement complets · disponible sur l'App Store : <a href="https://apps.apple.com/us/app/islaah/id6758726142">apps.apple.com/us/app/islaah/id6758726142</a></p>
+      <h3>ISLAAH <span>· Application mobile de quiz autour du Coran · 2025 - 2026</span></h3>
+      <p class="sub">Conception et développement complets · disponible sur l'App Store : <a href="https://apps.apple.com/fr/app/islaah/id6758726142">apps.apple.com/fr/app/islaah/id6758726142</a></p>
       <ul>
         <li>Application React Native (Expo) : écoute de récitations, modes de quiz, suivi de progression et système de rangs.</li>
         <li>API REST Symfony / MySQL, mise en production sur Railway et Cloudflare, publication sur l'App Store.</li>
@@ -156,21 +156,27 @@
 
   <section class="edu">
     <h2>Formation</h2>
-    <h3>Master Architecte de Systèmes d'Information <span>· ETNA, en alternance · 2024 - 2026</span></h3>
-    <h3>Bachelor Concepteur Développeur d'Applications Web <span>· ETNA · 2023 - 2024</span></h3>
+    <h3>Master Architecte de Systèmes d'Information (Bac+5) <span>· ETNA, en alternance · 2024 - 2026 · obtenu en 10/2026</span></h3>
+    <h3>Bachelor Concepteur Développeur d'Applications Web (Bac+3) <span>· ETNA · 2023 - 2024</span></h3>
     <h3>Formation Développeur Web Full Stack <span>· Doranco · 01/2023 - 06/2023</span></h3>
-    <h3>BTS Systèmes Numériques <span>· option Électronique et Communication · 2022</span></h3>
+    <h3>BTS Systèmes Numériques (Bac+2) <span>· option Électronique et Communication · 2022</span></h3>
   </section>
 
   <section>
-    <h2>Compétences et langues</h2>
+    <h2>Compétences</h2>
     <dl class="skills">
-      <div><dt>Backend :</dt> <dd>PHP, Symfony, Node.js, NestJS, Laravel, API REST, JWT</dd></div>
-      <div><dt>Frontend :</dt> <dd>JavaScript, TypeScript, React, React Native (Expo), Tailwind CSS, Vite, HTML, CSS</dd></div>
-      <div><dt>Bases de données :</dt> <dd>MySQL, PostgreSQL, Supabase, Doctrine, TypeORM</dd></div>
+      <div><dt>Backend :</dt> <dd>PHP, Symfony, Node.js, NestJS, Laravel, API REST, JWT, POO, MVC</dd></div>
+      <div><dt>Frontend :</dt> <dd>JavaScript, TypeScript, React, React Native (Expo), Tailwind CSS, Vite, HTML5, CSS3</dd></div>
+      <div><dt>Bases de données :</dt> <dd>SQL, MySQL, PostgreSQL, Supabase, Doctrine, TypeORM</dd></div>
       <div><dt>Tests et DevOps :</dt> <dd>Jest, Vitest, Playwright, Docker, Nginx, CI/CD (GitHub Actions, GitLab CI), Cloudflare, Railway</dd></div>
-      <div><dt>Outils :</dt> <dd>Git, GitHub, GitLab, Jira, Figma, intégration d'API IA / LLM</dd></div>
-      <div><dt>Langues :</dt> <dd>Français (natif), Anglais (B2), Espagnol (A2), Arabe littéraire (A2)</dd></div>
+      <div><dt>Outils :</dt> <dd>Git, GitHub, GitLab, Linux, Jira, Agile / Scrum, Figma, intégration d'API IA / LLM</dd></div>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Langues</h2>
+    <dl class="skills">
+      <div><dd>Français (natif), Anglais (B2), Espagnol (A2), Arabe littéraire (A2)</dd></div>
       <div><dt>Centres d'intérêt :</dt> <dd>Basket-ball, pop culture, jeux vidéo</dd></div>
     </dl>
   </section>
