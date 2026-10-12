@@ -142,7 +142,7 @@ ok('explorer à nouveau → jeu', await state() === 'play');
 // ── E. Pause ──
 await p.press('Escape'); await p.sleep(250);
 ok('Échap → pause', await state() === 'paused');
-ok('pause : 12 entrées', await p.eval('[...document.querySelectorAll(".adv-pause__item")].map(e => e.textContent).join("|")') === 'REPRENDRE|CARTE|PROGRESSION|COMPÉTENCES|CV|TARIFS|CONTACT|COMMANDES|SON : ACTIVÉ|CHANGER D\'UNIVERS|MODE CLASSIQUE|RECOMMENCER');
+ok('pause : 13 entrées', await p.eval('[...document.querySelectorAll(".adv-pause__item")].map(e => e.textContent).join("|")') === 'REPRENDRE|CARTE|PROGRESSION|COMPÉTENCES|CV|TARIFS|CONTACT|COMMANDES|SON : ACTIVÉ|CHANGER D\'UNIVERS|MODE CLASSIQUE|COOKIES|RECOMMENCER');
 await shot('e1-pause');
 await p.eval('[...document.querySelectorAll(".adv-pause__item")].find(e => e.textContent.startsWith("SON")).click()'); await p.sleep(200);
 ok('son désactivable', await p.eval(`${G}.save.data.settings.sound === false && document.querySelector('.adv-pause .adv-vol__range').value === '0'`));

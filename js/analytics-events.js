@@ -75,4 +75,18 @@
     c.site_mode = siteMode();
     send('contact_click', c);
   }, true);
+
+  // La « mesure améliorée » de GA4 (réglage de la propriété, à désactiver :
+  // docs/analytics-ga4.md) écoute les clics sur document et envoie l'adresse
+  // complète des liens sortants. Celle d'un lien de contact contient le
+  // destinataire, l'objet et parfois un texte tiré de la recherche du
+  // visiteur. Tant que la mesure est active, ces clics s'arrêtent donc ici,
+  // juste sous document : le lien s'ouvre normalement, ses propres écouteurs
+  // ont déjà tourné, et notre contact_click (ci-dessus, en capture) est parti.
+  doc.documentElement.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest && e.target.closest('a[href]');
+    if (!a || !global.Analytics || !global.Analytics.isActive()) return;
+    var c = contactOf(a);
+    if (c && c.method !== 'linkedin') e.stopPropagation();
+  });
 })(window);
