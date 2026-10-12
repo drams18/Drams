@@ -96,3 +96,8 @@
 @media (hover: none) and (pointer: coarse) and (max-height: 480px) {
   .bp-hud .adv-hud__prompt { display: none; }
 }
+
+/* Bouton « cookies » (js/consent.js) : au-dessus des boutons tactiles. */
+@media (hover: none) and (pointer: coarse) {
+  body { --ck-lift: 88px; }
+}

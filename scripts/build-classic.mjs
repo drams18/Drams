@@ -400,6 +400,7 @@ function footer(L) {
         <a href="/tarifs">Tarifs</a>
         <a href="${L.up}assets/CV.pdf" target="_blank" rel="noopener">CV</a>
         <a href="/avis" data-review-entry hidden>Avis Google</a>
+        <a href="#cookies" role="button" data-consent-open>Cookies</a>
       </nav>
     </div>
   </footer>`;
@@ -508,6 +509,9 @@ ${worlds(page, L)}${scrolls ? footer(L) : ''}
   <script src="${L.up}js/deeplink.js"></script>${scripts ? `\n  ${scripts.replaceAll('{up}', L.up)}` : ''}
   <script src="${L.up}js/classic.js"></script>
   <script type="module" src="${L.up}src/classic-app.js"></script>
+  <script src="${L.up}js/consent.js" defer></script>
+  <script src="${L.up}js/analytics.js" defer></script>
+  <script src="${L.up}js/analytics-events.js" defer></script>
 </body>
 </html>
 `;

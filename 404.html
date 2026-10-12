@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="night">
+<html lang="fr" data-theme="night" data-analytics-path="/404">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Page introuvable · Arphan Drame</title>
   <meta name="robots" content="noindex">
   <!-- Cloudflare Pages sert cette page pour toute URL inconnue (même
-       /a/b/c) : chemins ABSOLUS depuis la racine du site. -->
+       /a/b/c) : chemins ABSOLUS depuis la racine du site.
+       data-analytics-path : l'adresse saisie n'est pas transmise à la mesure
+       d'audience (js/analytics.js), seulement « /404 ». -->
   <script src="/js/theme.js"></script>
   <link rel="icon" href="/assets/img/favicon.png">
   <link rel="stylesheet" href="/css/tokens.css">
@@ -33,5 +35,8 @@
       </div>
     </div>
   </main>
+  <script src="/js/consent.js" defer></script>
+  <script src="/js/analytics.js" defer></script>
+  <script src="/js/analytics-events.js" defer></script>
 </body>
 </html>

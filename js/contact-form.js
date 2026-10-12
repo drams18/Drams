@@ -11,6 +11,11 @@
      warm(form)      précharge le SDK au 1er focus dans le formulaire
      sendForm(form)  Promise, envoie le formulaire (champs from_name,
                      from_email, message attendus par le template)
+
+   Suivi (js/analytics-events.js) : deux événements DOM sur document,
+   detail { type: 'contact' | 'devis' }, sans aucune donnée du formulaire.
+     lead:start   première saisie dans un formulaire préparé par warm()
+     lead:sent    EmailJS a confirmé l'envoi (jamais au simple clic)
    ══════════════════════════════════════════════════════ */
 (function (global) {
   'use strict';
@@ -21,6 +26,16 @@
   var TEMPLATE_ID = 'template_pili6gr';
 
   var loading = null;
+
+  // Formulaire de devis (devis.html, construire-projet) ou de contact.
+  function kind(form) {
+    return form && form.elements && form.elements.client_email ? 'devis' : 'contact';
+  }
+  function emit(name, form) {
+    try {
+      global.document.dispatchEvent(new CustomEvent(name, { detail: { type: kind(form) } }));
+    } catch (e) { /* le suivi ne doit jamais gêner un envoi */ }
+  }
 
   function load() {
     if (loading) return loading;
@@ -52,12 +67,25 @@
     var go = function () { load().catch(function () {}); };
     form.addEventListener('focusin', go, { once: true });
     form.addEventListener('pointerdown', go, { once: true, passive: true });
+    form.addEventListener('input', function () { emit('lead:start', form); }, { once: true });
   }
 
+  // Un envoi déjà en cours pour ce formulaire (double clic, double appel)
+  // est réutilisé : un seul e-mail, un seul « lead:sent ».
   function sendForm(form) {
-    return load().then(function (emailjs) {
+    if (form && form.__sending) return form.__sending;
+    var sending = load().then(function (emailjs) {
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form);
+    }).then(function (res) {
+      emit('lead:sent', form);
+      return res;
     });
+    if (form) {
+      var done = function () { form.__sending = null; };
+      form.__sending = sending;
+      sending.then(done, done);
+    }
+    return sending;
   }
 
   global.ContactForm = { warm: warm, sendForm: sendForm, load: load };

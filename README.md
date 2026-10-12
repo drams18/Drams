@@ -46,6 +46,8 @@ https://arphandrame.fr/
   le même e-mail et partagent la même session. Depuis les tarifs, « Construisez votre projet » mène au
   mini-jeu pour un visiteur du mode aventure, au formulaire pour les autres.
 - **Formulaires** : `js/contact-form.js` (EmailJS chargé à la demande).
+- **Mesure d'audience** : Google Analytics 4, chargé seulement après accord (`js/consent.js`,
+  `js/analytics.js`, `js/analytics-events.js`). Détails, réglages GA4 et tests : `docs/analytics-ga4.md`.
 
 Aucun framework : HTML / CSS / JS vanilla. **Vite** assemble le site dans `dist/` (Cloudflare Pages :
 commande `npm run build`, dossier `dist`) ; les scripts classiques `js/*.js` et les médias y sont

@@ -297,6 +297,7 @@ html:not(.js) .topbar, .no-app .topbar, .topbar.is-scrolled {
     background: var(--bg); border-top: 1px solid var(--line); pointer-events: auto;
   }
   .worlds__door { position: static; translate: none; flex-direction: row; gap: 2px; width: auto; height: var(--dock); padding: 0 8px; }
+  .page--world { --ck-lift: var(--dock); }     /* bouton « cookies » (js/consent.js) au-dessus de la barre */
   .worlds__door--next { flex-direction: row-reverse; margin-left: auto; }
   .worlds__door .ico { padding: 6px; border: 0; background: none; backdrop-filter: none; }
   .worlds__l { display: block; font-size: 14px; letter-spacing: 0; color: var(--text-2); text-shadow: none; }

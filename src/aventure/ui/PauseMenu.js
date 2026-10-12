@@ -2,7 +2,7 @@
    PAUSEMENU.JS : le menu de pause
 
    REPRENDRE · CARTE · PROGRESSION · COMPÉTENCES · CV · TARIFS · CONTACT ·
-   COMMANDES · SON (+ jauge de volume) · CHANGER D'UNIVERS · MODE CLASSIQUE · RECOMMENCER
+   COMMANDES · SON (+ jauge de volume) · CHANGER D'UNIVERS · MODE CLASSIQUE · COOKIES · RECOMMENCER
 
    Carte, progression, compétences et commandes s'affichent dans le volet
    de droite ; les autres entrées agissent directement.
@@ -38,6 +38,8 @@ export class PauseMenu {
       this.volume.el,
       h('button.adv-pause__item', { type: 'button', onclick: () => opts.onUniverse() }, 'CHANGER D\'UNIVERS'),
       this.classic,
+      // Préférences de cookies : ouvertes par js/consent.js ([data-consent-open]).
+      h('button.adv-pause__item', { type: 'button', 'data-consent-open': true }, 'COOKIES'),
       this.restart);
 
     this.title = h('h2.adv-pause__title', { id: 'adv-pause-title' }, 'PAUSE');

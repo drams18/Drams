@@ -28,8 +28,10 @@ export async function launch({ width = 1280, height = 800, mobile = false, touch
   const pending = new Map();
   const errors = [];
   const logs = [];
+  const handlers = new Map();      // événements du protocole suivis par un test (page.on)
   ws.onmessage = (m) => {
     const msg = JSON.parse(m.data);
+    if (msg.method && handlers.has(msg.method)) handlers.get(msg.method).forEach(fn => fn(msg.params));
     if (msg.id && pending.has(msg.id)) {
       const { res, rej } = pending.get(msg.id);
       pending.delete(msg.id);
@@ -65,6 +67,7 @@ export async function launch({ width = 1280, height = 800, mobile = false, touch
 
   const page = {
     errors, logs, send, sleep,
+    on(method, fn) { handlers.set(method, [...(handlers.get(method) || []), fn]); },
     async goto(url, wait = 700) { await send('Page.navigate', { url }); await sleep(wait); },
     async eval(expr) {
       const r = await send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true });
