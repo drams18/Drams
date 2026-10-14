@@ -710,8 +710,9 @@ const techRank = (p) => { const i = (SECTIONS.projets.techOrder || []).indexOf(p
 const projectsShown = [...projects].sort((a, b) => techRank(a) - techRank(b));
 
 // Filtres par technologie : les compétences utilisées dans au moins un
-// projet, les plus fréquentes d'abord.
-const techFilters = allSkills.filter(s => s.used.length)
+// projet, les plus fréquentes d'abord (sauf les outils d'hébergement de code).
+const NO_FILTER = new Set(['github', 'gitlab']);
+const techFilters = allSkills.filter(s => s.used.length && !NO_FILTER.has(s.slug))
   .sort((a, b) => b.used.length - a.used.length || families.indexOf(a.fam) - families.indexOf(b.fam) || a.i - b.i);
 
 function projetsPage() {
