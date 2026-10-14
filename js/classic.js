@@ -41,18 +41,6 @@
     });
   }
 
-  // ── Légende repliable : se referme en cliquant ailleurs ou avec Échap ──
-  doc.addEventListener('pointerdown', function (e) {
-    doc.querySelectorAll('.legend[open]').forEach(function (d) { if (!d.contains(e.target)) d.open = false; });
-  });
-  doc.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    doc.querySelectorAll('.legend[open]').forEach(function (d) {
-      d.open = false;
-      if (d.contains(doc.activeElement)) d.querySelector('summary').focus();
-    });
-  });
-
   // ── Barre du haut : légère en haut de page, plus présente ensuite ──
   var topbar = doc.querySelector('.topbar');
   var ticking = false;

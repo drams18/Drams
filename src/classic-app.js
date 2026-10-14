@@ -7,9 +7,9 @@
    Il charge SEULEMENT l'expérience de la page courante (import
    dynamique → un fichier par page, GSAP uniquement sur le Profil) :
      profil       src/classic/profile.js    entrée cinématique, profondeur
-     projets      src/classic/projects.js   espace de bulles + fiche
+     projets      src/classic/projects.js   filtres + fiche du projet
      parcours     src/classic/timeline.js   frise horizontale
-     competences  src/classic/skills.js     écosystème (globe)
+     competences  src/classic/skills.js     détail d'une compétence
      contact      (aucune)                  CSS + js/classic.js
    ══════════════════════════════════════════════════════ */
 const root = document.documentElement;
@@ -18,9 +18,9 @@ const page = document.body.dataset.page;
 
 const VIEWS = {
   profil: () => import('./classic/profile.js').then((m) => m.initProfile(app)),
-  projets: () => import('./classic/projects.js').then((m) => m.initProjects(app)),
+  projets: () => import('./classic/projects.js').then((m) => m.initProjects()),
   parcours: () => import('./classic/timeline.js').then((m) => m.initTimeline(app)),
-  competences: () => import('./classic/skills.js').then((m) => m.initSkills(app)),
+  competences: () => import('./classic/skills.js').then((m) => m.initSkills()),
 };
 
 function ready() {

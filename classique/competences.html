@@ -201,7 +201,7 @@
 }
   </script>
   </head>
-<body class="page page--competences page--world" data-page="competences" data-route="profil">
+<body class="page page--competences page--doc page--doors" data-page="competences" data-route="profil">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
@@ -217,12 +217,9 @@
     <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
-    <symbol id="i-orbit" viewBox="0 0 24 24"><circle cx="8" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16.5" cy="7" r="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
-    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
     <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 3 10.5l7 3 3 7zM10 13.5 21 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
-    <symbol id="i-center" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>
 
   <a class="skip" href="#main">Aller au contenu</a>
@@ -259,232 +256,182 @@
 
   <main id="main" class="world world--competences vt-stage" tabindex="-1">
     <div class="world__bg" aria-hidden="true"><i></i></div>
-    <section class="eco" aria-labelledby="competences-title">
-      <div class="world-ui">
+    <section class="eco wrap" aria-labelledby="competences-title">
+      
       <header class="world-head">
         <p class="world-head__k"><span>04</span>Compétences</p>
-        <h1 class="sr-only" id="competences-title">Compétences en développement web</h1>
-        
-        <details class="legend js-only">
-          <summary>Légende<svg class="ico legend__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
-          <div class="legend__in">
-            <div class="legend__g"><p class="legend__t">Famille</p><ul><li><i class="fam-dot" data-fam="front"></i>Frontend</li><li><i class="fam-dot" data-fam="back"></i>Backend</li><li><i class="fam-dot" data-fam="data"></i>Bases de données</li><li><i class="fam-dot" data-fam="ops"></i>DevOps / Infrastructure</li><li><i class="fam-dot" data-fam="tools"></i>Outils / conception</li><li><i class="fam-dot" data-fam="ai"></i>IA / LLM</li></ul></div>
-            <div class="legend__g"><p class="legend__t">Taille</p><ul><li><i class="lg-size lg-size--l"></i>Utilisée dans beaucoup de projets</li><li><i class="lg-size lg-size--s"></i>Utilisée dans peu de projets</li><li><i class="lg-size lg-size--decl"></i>Hors des projets présentés</li></ul></div>
-          </div>
-        </details>
-        <div class="eco-bar js-only" role="toolbar" aria-label="Affichage des compétences">
-          <div class="seg-group" role="group" aria-label="Vue">
-            <button type="button" class="seg" data-view="space" aria-pressed="true"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-orbit"/></svg>Écosystème</button>
-            <button type="button" class="seg" data-view="list" aria-pressed="false"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-list"/></svg>Liste</button>
-          </div>
-        </div>
+        <h1 class="world-head__t" id="competences-title">Les technologies que j’utilise</h1>
+        <p class="world-head__lead">Classées par famille. Le nombre indique dans combien des projets présentés ici je l’ai utilisée : cliquez dessus pour voir lesquels.</p>
       </header>
-      </div>
-      <div class="eco-space js-only" data-keys></div>
-      <div class="eco-list">
-        <p class="eco-list__note">19 compétences sur 37 apparaissent dans au moins un projet présenté.</p>
-        <div class="eco-fam-list" data-keys>
+      <div class="fams">
           <section class="fam" data-fam="front" aria-labelledby="fam-front">
-            <h2 class="fam__t" id="fam-front"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">Frontend</span><span class="fam__n">6/8 dans les projets</span></h2>
+            <h2 class="fam__t" id="fam-front"><span class="fam__dot" aria-hidden="true"></span>Frontend</h2>
             <ul class="fam__list">
-              <li class="sk" id="react" data-skill="react" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" data-logo="../assets/img/logos/react.svg" style="--w:0.500;--logo:url('../assets/img/logos/react.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">React</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 3 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+              <li class="sk" id="react" data-skill="react" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" data-logo="../assets/img/logos/react.svg" style="--logo:url('../assets/img/logos/react.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">React</span><span class="sk__n">3<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="react-native" data-skill="react-native" data-fam="front" data-count="3" data-projects="ilamiria badn islaah" data-logo="../assets/img/logos/react.svg" style="--w:0.500;--logo:url('../assets/img/logos/react.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">React Native</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 3 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#ilamiria" data-project="ilamiria" data-cat="Professionnel">Ilamiria</a></li><li><a href="/classique/projets#badn" data-project="badn" data-cat="Professionnel">BADN</a></li><li><a href="/classique/projets#islaah" data-project="islaah" data-cat="Personnel">ISLAAH</a></li></ul>
+              <li class="sk" id="react-native" data-skill="react-native" data-fam="front" data-count="3" data-projects="ilamiria badn islaah" data-logo="../assets/img/logos/react.svg" style="--logo:url('../assets/img/logos/react.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">React Native</span><span class="sk__n">3<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#ilamiria" data-project="ilamiria" data-cat="Professionnel">Ilamiria</a></li><li><a href="/classique/projets#badn" data-project="badn" data-cat="Professionnel">BADN</a></li><li><a href="/classique/projets#islaah" data-project="islaah" data-cat="Personnel">ISLAAH</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="typescript" data-skill="typescript" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" data-logo="../assets/img/logos/typescript.svg" style="--w:0.500;--logo:url('../assets/img/logos/typescript.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">TypeScript</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 3 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+              <li class="sk" id="typescript" data-skill="typescript" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" data-logo="../assets/img/logos/typescript.svg" style="--logo:url('../assets/img/logos/typescript.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">TypeScript</span><span class="sk__n">3<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="vite" data-skill="vite" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" data-logo="../assets/img/logos/vite.svg" style="--w:0.500;--logo:url('../assets/img/logos/vite.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Vite</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 3 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+              <li class="sk" id="vite" data-skill="vite" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" data-logo="../assets/img/logos/vite.svg" style="--logo:url('../assets/img/logos/vite.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Vite</span><span class="sk__n">3<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="tailwind-css" data-skill="tailwind-css" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" data-logo="../assets/img/logos/tailwindcss.svg" style="--w:0.500;--logo:url('../assets/img/logos/tailwindcss.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Tailwind CSS</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 3 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+              <li class="sk" id="tailwind-css" data-skill="tailwind-css" data-fam="front" data-count="3" data-projects="wild-kedougou oneday skywalk" data-logo="../assets/img/logos/tailwindcss.svg" style="--logo:url('../assets/img/logos/tailwindcss.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Tailwind CSS</span><span class="sk__n">3<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="javascript" data-skill="javascript" data-fam="front" data-count="2" data-projects="hexagon prospectly" data-logo="../assets/img/logos/javascript.svg" style="--w:0.333;--logo:url('../assets/img/logos/javascript.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">JavaScript</span><span class="sk__dots" aria-hidden="true"><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 2 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#hexagon" data-project="hexagon" data-cat="Professionnel">Hexagon</a></li><li><a href="/classique/projets#prospectly" data-project="prospectly" data-cat="Personnel">Plateforme de recherche de prospects</a></li></ul>
-              </li>
-              <li class="sk sk--decl" id="next-js" data-skill="next-js" data-fam="front" data-count="0" data-projects="" data-logo="../assets/img/logos/nextdotjs.svg" style="--w:0.000;--logo:url('../assets/img/logos/nextdotjs.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Next.js</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="redux-zustand" data-skill="redux-zustand" data-fam="front" data-count="0" data-projects="" data-logo="../assets/img/logos/redux.svg" style="--w:0.000;--logo:url('../assets/img/logos/redux.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Redux / Zustand</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
+              <li class="sk" id="javascript" data-skill="javascript" data-fam="front" data-count="2" data-projects="hexagon prospectly" data-logo="../assets/img/logos/javascript.svg" style="--logo:url('../assets/img/logos/javascript.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">JavaScript</span><span class="sk__n">2<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#hexagon" data-project="hexagon" data-cat="Professionnel">Hexagon</a></li><li><a href="/classique/projets#prospectly" data-project="prospectly" data-cat="Personnel">Plateforme de recherche de prospects</a></li></ul>
+                </div>
               </li>
             </ul>
+            <div class="fam__also"><p class="fam__also-l">Aussi pratiqué</p><ul><li id="next-js" data-skill="next-js">Next.js</li><li id="redux-zustand" data-skill="redux-zustand">Redux / Zustand</li></ul></div>
           </section>
           <section class="fam" data-fam="back" aria-labelledby="fam-back">
-            <h2 class="fam__t" id="fam-back"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">Backend</span><span class="fam__n">4/9 dans les projets</span></h2>
+            <h2 class="fam__t" id="fam-back"><span class="fam__dot" aria-hidden="true"></span>Backend</h2>
             <ul class="fam__list">
-              <li class="sk" id="symfony" data-skill="symfony" data-fam="back" data-count="6" data-projects="infinitia allsab-ms hexagon gexp islaah crowdin" data-logo="../assets/img/logos/symfony.svg" style="--w:1.000;--logo:url('../assets/img/logos/symfony.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Symfony</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 6 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#infinitia" data-project="infinitia" data-cat="Professionnel">Infinitia</a></li><li><a href="/classique/projets#allsab-ms" data-project="allsab-ms" data-cat="Professionnel">Allsab-MS</a></li><li><a href="/classique/projets#hexagon" data-project="hexagon" data-cat="Professionnel">Hexagon</a></li><li><a href="/classique/projets#gexp" data-project="gexp" data-cat="Professionnel">GEXP</a></li><li><a href="/classique/projets#islaah" data-project="islaah" data-cat="Personnel">ISLAAH</a></li><li><a href="/classique/projets#crowdin" data-project="crowdin" data-cat="Scolaire">Crowdin (clone)</a></li></ul>
+              <li class="sk" id="symfony" data-skill="symfony" data-fam="back" data-count="6" data-projects="infinitia allsab-ms hexagon gexp islaah crowdin" data-logo="../assets/img/logos/symfony.svg" style="--logo:url('../assets/img/logos/symfony.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Symfony</span><span class="sk__n">6<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#infinitia" data-project="infinitia" data-cat="Professionnel">Infinitia</a></li><li><a href="/classique/projets#allsab-ms" data-project="allsab-ms" data-cat="Professionnel">Allsab-MS</a></li><li><a href="/classique/projets#hexagon" data-project="hexagon" data-cat="Professionnel">Hexagon</a></li><li><a href="/classique/projets#gexp" data-project="gexp" data-cat="Professionnel">GEXP</a></li><li><a href="/classique/projets#islaah" data-project="islaah" data-cat="Personnel">ISLAAH</a></li><li><a href="/classique/projets#crowdin" data-project="crowdin" data-cat="Scolaire">Crowdin (clone)</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="php" data-skill="php" data-fam="back" data-count="5" data-projects="allsab-ms hexagon gexp pool-party crowdin" data-logo="../assets/img/logos/php.svg" style="--w:0.833;--logo:url('../assets/img/logos/php.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">PHP</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 5 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#allsab-ms" data-project="allsab-ms" data-cat="Professionnel">Allsab-MS</a></li><li><a href="/classique/projets#hexagon" data-project="hexagon" data-cat="Professionnel">Hexagon</a></li><li><a href="/classique/projets#gexp" data-project="gexp" data-cat="Professionnel">GEXP</a></li><li><a href="/classique/projets#pool-party" data-project="pool-party" data-cat="Personnel">Pool Party Experience</a></li><li><a href="/classique/projets#crowdin" data-project="crowdin" data-cat="Scolaire">Crowdin (clone)</a></li></ul>
+              <li class="sk" id="php" data-skill="php" data-fam="back" data-count="5" data-projects="allsab-ms hexagon gexp pool-party crowdin" data-logo="../assets/img/logos/php.svg" style="--logo:url('../assets/img/logos/php.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">PHP</span><span class="sk__n">5<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#allsab-ms" data-project="allsab-ms" data-cat="Professionnel">Allsab-MS</a></li><li><a href="/classique/projets#hexagon" data-project="hexagon" data-cat="Professionnel">Hexagon</a></li><li><a href="/classique/projets#gexp" data-project="gexp" data-cat="Professionnel">GEXP</a></li><li><a href="/classique/projets#pool-party" data-project="pool-party" data-cat="Personnel">Pool Party Experience</a></li><li><a href="/classique/projets#crowdin" data-project="crowdin" data-cat="Scolaire">Crowdin (clone)</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="node-js" data-skill="node-js" data-fam="back" data-count="3" data-projects="infinitia badn prospectly" data-logo="../assets/img/logos/nodedotjs.svg" style="--w:0.500;--logo:url('../assets/img/logos/nodedotjs.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Node.js</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 3 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#infinitia" data-project="infinitia" data-cat="Professionnel">Infinitia</a></li><li><a href="/classique/projets#badn" data-project="badn" data-cat="Professionnel">BADN</a></li><li><a href="/classique/projets#prospectly" data-project="prospectly" data-cat="Personnel">Plateforme de recherche de prospects</a></li></ul>
+              <li class="sk" id="node-js" data-skill="node-js" data-fam="back" data-count="3" data-projects="infinitia badn prospectly" data-logo="../assets/img/logos/nodedotjs.svg" style="--logo:url('../assets/img/logos/nodedotjs.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Node.js</span><span class="sk__n">3<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#infinitia" data-project="infinitia" data-cat="Professionnel">Infinitia</a></li><li><a href="/classique/projets#badn" data-project="badn" data-cat="Professionnel">BADN</a></li><li><a href="/classique/projets#prospectly" data-project="prospectly" data-cat="Personnel">Plateforme de recherche de prospects</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="nestjs" data-skill="nestjs" data-fam="back" data-count="2" data-projects="infinitia skywalk" data-logo="../assets/img/logos/nestjs.svg" style="--w:0.333;--logo:url('../assets/img/logos/nestjs.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">NestJS</span><span class="sk__dots" aria-hidden="true"><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 2 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#infinitia" data-project="infinitia" data-cat="Professionnel">Infinitia</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
-              </li>
-              <li class="sk sk--decl" id="express" data-skill="express" data-fam="back" data-count="0" data-projects="" data-logo="../assets/img/logos/express.svg" style="--w:0.000;--logo:url('../assets/img/logos/express.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Express</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="laravel" data-skill="laravel" data-fam="back" data-count="0" data-projects="" data-logo="../assets/img/logos/laravel.svg" style="--w:0.000;--logo:url('../assets/img/logos/laravel.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Laravel</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="python" data-skill="python" data-fam="back" data-count="0" data-projects="" data-logo="../assets/img/logos/python.svg" style="--w:0.000;--logo:url('../assets/img/logos/python.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Python</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="rest-api" data-skill="rest-api" data-fam="back" data-count="0" data-projects="" data-logo="../assets/img/logos/api.svg" style="--w:0.000;--logo:url('../assets/img/logos/api.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">REST API</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="graphql" data-skill="graphql" data-fam="back" data-count="0" data-projects="" data-logo="../assets/img/logos/graphql.svg" style="--w:0.000;--logo:url('../assets/img/logos/graphql.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">GraphQL</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
+              <li class="sk" id="nestjs" data-skill="nestjs" data-fam="back" data-count="2" data-projects="infinitia skywalk" data-logo="../assets/img/logos/nestjs.svg" style="--logo:url('../assets/img/logos/nestjs.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">NestJS</span><span class="sk__n">2<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#infinitia" data-project="infinitia" data-cat="Professionnel">Infinitia</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+                </div>
               </li>
             </ul>
+            <div class="fam__also"><p class="fam__also-l">Aussi pratiqué</p><ul><li id="express" data-skill="express">Express</li><li id="laravel" data-skill="laravel">Laravel</li><li id="python" data-skill="python">Python</li><li id="rest-api" data-skill="rest-api">REST API</li><li id="graphql" data-skill="graphql">GraphQL</li></ul></div>
           </section>
           <section class="fam" data-fam="data" aria-labelledby="fam-data">
-            <h2 class="fam__t" id="fam-data"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">Bases de données</span><span class="fam__n">4/5 dans les projets</span></h2>
+            <h2 class="fam__t" id="fam-data"><span class="fam__dot" aria-hidden="true"></span>Bases de données</h2>
             <ul class="fam__list">
-              <li class="sk" id="mysql" data-skill="mysql" data-fam="data" data-count="5" data-projects="infinitia allsab-ms hexagon gexp islaah" data-logo="../assets/img/logos/mysql.svg" style="--w:0.833;--logo:url('../assets/img/logos/mysql.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">MySQL</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 5 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#infinitia" data-project="infinitia" data-cat="Professionnel">Infinitia</a></li><li><a href="/classique/projets#allsab-ms" data-project="allsab-ms" data-cat="Professionnel">Allsab-MS</a></li><li><a href="/classique/projets#hexagon" data-project="hexagon" data-cat="Professionnel">Hexagon</a></li><li><a href="/classique/projets#gexp" data-project="gexp" data-cat="Professionnel">GEXP</a></li><li><a href="/classique/projets#islaah" data-project="islaah" data-cat="Personnel">ISLAAH</a></li></ul>
+              <li class="sk" id="mysql" data-skill="mysql" data-fam="data" data-count="5" data-projects="infinitia allsab-ms hexagon gexp islaah" data-logo="../assets/img/logos/mysql.svg" style="--logo:url('../assets/img/logos/mysql.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">MySQL</span><span class="sk__n">5<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#infinitia" data-project="infinitia" data-cat="Professionnel">Infinitia</a></li><li><a href="/classique/projets#allsab-ms" data-project="allsab-ms" data-cat="Professionnel">Allsab-MS</a></li><li><a href="/classique/projets#hexagon" data-project="hexagon" data-cat="Professionnel">Hexagon</a></li><li><a href="/classique/projets#gexp" data-project="gexp" data-cat="Professionnel">GEXP</a></li><li><a href="/classique/projets#islaah" data-project="islaah" data-cat="Personnel">ISLAAH</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="postgresql" data-skill="postgresql" data-fam="data" data-count="3" data-projects="oneday skywalk crowdin" data-logo="../assets/img/logos/postgresql.svg" style="--w:0.500;--logo:url('../assets/img/logos/postgresql.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">PostgreSQL</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 3 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li><li><a href="/classique/projets#crowdin" data-project="crowdin" data-cat="Scolaire">Crowdin (clone)</a></li></ul>
+              <li class="sk" id="postgresql" data-skill="postgresql" data-fam="data" data-count="3" data-projects="oneday skywalk crowdin" data-logo="../assets/img/logos/postgresql.svg" style="--logo:url('../assets/img/logos/postgresql.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">PostgreSQL</span><span class="sk__n">3<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li><li><a href="/classique/projets#crowdin" data-project="crowdin" data-cat="Scolaire">Crowdin (clone)</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="supabase" data-skill="supabase" data-fam="data" data-count="2" data-projects="wild-kedougou oneday" data-logo="../assets/img/logos/supabase.svg" style="--w:0.333;--logo:url('../assets/img/logos/supabase.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Supabase</span><span class="sk__dots" aria-hidden="true"><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 2 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li></ul>
+              <li class="sk" id="supabase" data-skill="supabase" data-fam="data" data-count="2" data-projects="wild-kedougou oneday" data-logo="../assets/img/logos/supabase.svg" style="--logo:url('../assets/img/logos/supabase.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Supabase</span><span class="sk__n">2<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="typeorm" data-skill="typeorm" data-fam="data" data-count="1" data-projects="skywalk" data-logo="../assets/img/logos/typeorm.svg" style="--w:0.167;--logo:url('../assets/img/logos/typeorm.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">TypeORM</span><span class="sk__dots" aria-hidden="true"><i></i></span></button>
-                <p class="sk__used">Utilisée dans 1 projet : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
-              </li>
-              <li class="sk sk--decl" id="prisma" data-skill="prisma" data-fam="data" data-count="0" data-projects="" data-logo="../assets/img/logos/prisma.svg" style="--w:0.000;--logo:url('../assets/img/logos/prisma.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Prisma</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
+              <li class="sk" id="typeorm" data-skill="typeorm" data-fam="data" data-count="1" data-projects="skywalk" data-logo="../assets/img/logos/typeorm.svg" style="--logo:url('../assets/img/logos/typeorm.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">TypeORM</span><span class="sk__n">1<span class="sk__u"> projet</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+                </div>
               </li>
             </ul>
+            <div class="fam__also"><p class="fam__also-l">Aussi pratiqué</p><ul><li id="prisma" data-skill="prisma">Prisma</li></ul></div>
           </section>
           <section class="fam" data-fam="ops" aria-labelledby="fam-ops">
-            <h2 class="fam__t" id="fam-ops"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">DevOps / Infrastructure</span><span class="fam__n">5/9 dans les projets</span></h2>
+            <h2 class="fam__t" id="fam-ops"><span class="fam__dot" aria-hidden="true"></span>DevOps / Infrastructure</h2>
             <ul class="fam__list">
-              <li class="sk" id="cloudflare" data-skill="cloudflare" data-fam="ops" data-count="3" data-projects="wild-kedougou islaah oneday" data-logo="../assets/img/logos/cloudflare.svg" style="--w:0.500;--logo:url('../assets/img/logos/cloudflare.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Cloudflare</span><span class="sk__dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 3 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#islaah" data-project="islaah" data-cat="Personnel">ISLAAH</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li></ul>
+              <li class="sk" id="cloudflare" data-skill="cloudflare" data-fam="ops" data-count="3" data-projects="wild-kedougou islaah oneday" data-logo="../assets/img/logos/cloudflare.svg" style="--logo:url('../assets/img/logos/cloudflare.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Cloudflare</span><span class="sk__n">3<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#wild-kedougou" data-project="wild-kedougou" data-cat="Personnel">Wild Kédougou Experience</a></li><li><a href="/classique/projets#islaah" data-project="islaah" data-cat="Personnel">ISLAAH</a></li><li><a href="/classique/projets#oneday" data-project="oneday" data-cat="Personnel">OneDay</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="docker" data-skill="docker" data-fam="ops" data-count="2" data-projects="skywalk crowdin" data-logo="../assets/img/logos/docker.svg" style="--w:0.333;--logo:url('../assets/img/logos/docker.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Docker</span><span class="sk__dots" aria-hidden="true"><i></i><i></i></span></button>
-                <p class="sk__used">Utilisée dans 2 projets : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li><li><a href="/classique/projets#crowdin" data-project="crowdin" data-cat="Scolaire">Crowdin (clone)</a></li></ul>
+              <li class="sk" id="docker" data-skill="docker" data-fam="ops" data-count="2" data-projects="skywalk crowdin" data-logo="../assets/img/logos/docker.svg" style="--logo:url('../assets/img/logos/docker.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Docker</span><span class="sk__n">2<span class="sk__u"> projets</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li><li><a href="/classique/projets#crowdin" data-project="crowdin" data-cat="Scolaire">Crowdin (clone)</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="github" data-skill="github" data-fam="ops" data-count="1" data-projects="skywalk" data-logo="../assets/img/logos/github.svg" style="--w:0.167;--logo:url('../assets/img/logos/github.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">GitHub</span><span class="sk__dots" aria-hidden="true"><i></i></span></button>
-                <p class="sk__used">Utilisée dans 1 projet : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+              <li class="sk" id="github" data-skill="github" data-fam="ops" data-count="1" data-projects="skywalk" data-logo="../assets/img/logos/github.svg" style="--logo:url('../assets/img/logos/github.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">GitHub</span><span class="sk__n">1<span class="sk__u"> projet</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="gitlab" data-skill="gitlab" data-fam="ops" data-count="1" data-projects="skywalk" data-logo="../assets/img/logos/gitlab.svg" style="--w:0.167;--logo:url('../assets/img/logos/gitlab.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">GitLab</span><span class="sk__dots" aria-hidden="true"><i></i></span></button>
-                <p class="sk__used">Utilisée dans 1 projet : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+              <li class="sk" id="gitlab" data-skill="gitlab" data-fam="ops" data-count="1" data-projects="skywalk" data-logo="../assets/img/logos/gitlab.svg" style="--logo:url('../assets/img/logos/gitlab.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">GitLab</span><span class="sk__n">1<span class="sk__u"> projet</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+                </div>
               </li>
-              <li class="sk" id="nginx" data-skill="nginx" data-fam="ops" data-count="1" data-projects="skywalk" data-logo="../assets/img/logos/nginx.svg" style="--w:0.167;--logo:url('../assets/img/logos/nginx.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Nginx</span><span class="sk__dots" aria-hidden="true"><i></i></span></button>
-                <p class="sk__used">Utilisée dans 1 projet : </p>
-                <ul class="sk__projects"><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
-              </li>
-              <li class="sk sk--decl" id="git" data-skill="git" data-fam="ops" data-count="0" data-projects="" data-logo="../assets/img/logos/git.svg" style="--w:0.000;--logo:url('../assets/img/logos/git.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Git</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="ci-cd" data-skill="ci-cd" data-fam="ops" data-count="0" data-projects="" data-logo="../assets/img/logos/cicd.svg" style="--w:0.000;--logo:url('../assets/img/logos/cicd.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">CI/CD</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="aws" data-skill="aws" data-fam="ops" data-count="0" data-projects="" data-logo="../assets/img/logos/amazonwebservices.svg" style="--w:0.000;--logo:url('../assets/img/logos/amazonwebservices.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">AWS</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="gcp" data-skill="gcp" data-fam="ops" data-count="0" data-projects="" data-logo="../assets/img/logos/googlecloud.svg" style="--w:0.000;--logo:url('../assets/img/logos/googlecloud.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">GCP</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
+              <li class="sk" id="nginx" data-skill="nginx" data-fam="ops" data-count="1" data-projects="skywalk" data-logo="../assets/img/logos/nginx.svg" style="--logo:url('../assets/img/logos/nginx.svg')">
+                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Nginx</span><span class="sk__n">1<span class="sk__u"> projet</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects"><li><a href="/classique/projets#skywalk" data-project="skywalk" data-cat="Personnel">SkyWalk</a></li></ul>
+                </div>
               </li>
             </ul>
+            <div class="fam__also"><p class="fam__also-l">Aussi pratiqué</p><ul><li id="git" data-skill="git">Git</li><li id="ci-cd" data-skill="ci-cd">CI/CD</li><li id="aws" data-skill="aws">AWS</li><li id="gcp" data-skill="gcp">GCP</li></ul></div>
           </section>
           <section class="fam" data-fam="tools" aria-labelledby="fam-tools">
-            <h2 class="fam__t" id="fam-tools"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">Outils / conception</span></h2>
-            <ul class="fam__list">
-              <li class="sk sk--decl" id="figma" data-skill="figma" data-fam="tools" data-count="0" data-projects="" data-logo="../assets/img/logos/figma.svg" style="--w:0.000;--logo:url('../assets/img/logos/figma.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Figma</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="jira" data-skill="jira" data-fam="tools" data-count="0" data-projects="" data-logo="../assets/img/logos/jira.svg" style="--w:0.000;--logo:url('../assets/img/logos/jira.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Jira</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="bruno" data-skill="bruno" data-fam="tools" data-count="0" data-projects="" data-logo="../assets/img/logos/bruno.svg" style="--w:0.000;--logo:url('../assets/img/logos/bruno.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Bruno</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="api-rest" data-skill="api-rest" data-fam="tools" data-count="0" data-projects="" data-logo="../assets/img/logos/api.svg" style="--w:0.000;--logo:url('../assets/img/logos/api.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">API REST</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-            </ul>
+            <h2 class="fam__t" id="fam-tools"><span class="fam__dot" aria-hidden="true"></span>Outils / conception</h2>
+            <div class="fam__also"><ul><li id="figma" data-skill="figma">Figma</li><li id="jira" data-skill="jira">Jira</li><li id="bruno" data-skill="bruno">Bruno</li><li id="api-rest" data-skill="api-rest">API REST</li></ul></div>
           </section>
           <section class="fam" data-fam="ai" aria-labelledby="fam-ai">
-            <h2 class="fam__t" id="fam-ai"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">IA / LLM</span></h2>
-            <ul class="fam__list">
-              <li class="sk sk--decl" id="integration-ia-llm" data-skill="integration-ia-llm" data-fam="ai" data-count="0" data-projects="" data-logo="../assets/img/logos/ai.svg" style="--w:0.000;--logo:url('../assets/img/logos/ai.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Intégration IA / LLM</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-              <li class="sk sk--decl" id="modeles-locaux-api-ia-selon-les-projets" data-skill="modeles-locaux-api-ia-selon-les-projets" data-fam="ai" data-count="0" data-projects="" data-logo="../assets/img/logos/chip.svg" style="--w:0.000;--logo:url('../assets/img/logos/chip.svg')">
-                <button type="button" class="sk__btn"><i class="sk__logo" aria-hidden="true"></i><span class="sk__name">Modèles locaux &amp; API IA selon les projets</span><span class="sk__dots" aria-hidden="true"></span></button>
-                <p class="sk__used">Hors des projets présentés ici</p>
-              </li>
-            </ul>
+            <h2 class="fam__t" id="fam-ai"><span class="fam__dot" aria-hidden="true"></span>IA / LLM</h2>
+            <div class="fam__also"><ul><li id="integration-ia-llm" data-skill="integration-ia-llm">Intégration IA / LLM</li><li id="modeles-locaux-api-ia-selon-les-projets" data-skill="modeles-locaux-api-ia-selon-les-projets">Modèles locaux &amp; API IA selon les projets</li></ul></div>
           </section>
-        </div>
       </div>
       <aside class="eco-panel" aria-label="Détail" hidden>
-        <div class="eco-panel__in" aria-live="polite"></div>
+        <div class="eco-panel__in"></div>
       </aside>
       <script type="application/json" id="eco-projects">[{"slug":"infinitia","title":"Infinitia","cat":"Professionnel","type":"Plateforme Web","skills":["symfony","node-js","nestjs","mysql"]},{"slug":"allsab-ms","title":"Allsab-MS","cat":"Professionnel","type":"Intranet","skills":["php","symfony","mysql"]},{"slug":"hexagon","title":"Hexagon","cat":"Professionnel","type":"Plateforme Web","skills":["php","symfony","javascript","mysql"]},{"slug":"gexp","title":"GEXP","cat":"Professionnel","type":"Plateforme Web","skills":["php","symfony","mysql"]},{"slug":"ilamiria","title":"Ilamiria","cat":"Professionnel","type":"Application Mobile","skills":["react-native"]},{"slug":"badn","title":"BADN","cat":"Professionnel","type":"Application Mobile","skills":["react-native","node-js"]},{"slug":"wild-kedougou","title":"Wild Kédougou Experience","cat":"Personnel","type":"Plateforme de réservation","skills":["react","typescript","vite","tailwind-css","supabase","cloudflare"]},{"slug":"pool-party","title":"Pool Party Experience","cat":"Personnel","type":"Site vitrine WordPress","skills":["php"]},{"slug":"islaah","title":"ISLAAH","cat":"Personnel","type":"Application Mobile","skills":["react-native","symfony","mysql","cloudflare"]},{"slug":"prospectly","title":"Plateforme de recherche de prospects","cat":"Personnel","type":"Projet personnel","skills":["node-js","javascript"]},{"slug":"oneday","title":"OneDay","cat":"Personnel","type":"PWA de planification","skills":["react","typescript","vite","tailwind-css","supabase","postgresql","cloudflare"]},{"slug":"skywalk","title":"SkyWalk","cat":"Personnel","type":"Plateforme Web","skills":["react","typescript","vite","tailwind-css","nestjs","postgresql","typeorm","docker","nginx","github","gitlab"]},{"slug":"crowdin","title":"Crowdin (clone)","cat":"Scolaire","type":"Plateforme de localisation","skills":["symfony","php","postgresql","docker"]}]</script>
     </section>
@@ -498,6 +445,20 @@
       <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg><span class="worlds__l">Contact</span>
     </a>
   </nav>
+  <div class="wrap review-slot" data-review-slot hidden></div>
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <p>Arphan Drame · Développeur Web Full Stack · Paris</p>
+      <nav class="footer__links" aria-label="Autres pages">
+        <a href="/">Choisir un mode</a>
+        <a href="/aventure#ville" data-switch-adventure>Mode aventure</a>
+        <a href="/tarifs">Tarifs</a>
+        <a href="../assets/CV.pdf" target="_blank" rel="noopener">CV</a>
+        <a href="/avis" data-review-entry hidden>Avis Google</a>
+        <a href="#cookies" role="button" data-consent-open>Cookies</a>
+      </nav>
+    </div>
+  </footer>
 
   <script src="../js/seeking.js"></script>
   <script src="../js/deeplink.js"></script>

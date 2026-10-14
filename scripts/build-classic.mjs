@@ -138,7 +138,6 @@ const LOGO = {
 };
 const logoOf = (item) => LOGO[item] && existsSync(join(ROOT, `assets/img/logos/${LOGO[item]}.svg`))
   ? `assets/img/logos/${LOGO[item]}.svg` : null;
-const maxUse = Math.max(1, ...allSkills.map(s => s.used.length));
 const mainStack = allSkills.filter(s => s.used.length >= 2).sort((a, b) => b.used.length - a.used.length);
 const skillOfTech = (t) => allSkills.find(s => techMatches(s.item, t)) || null;
 const projectSkills = (p) => [...new Set((p.tech || []).map(skillOfTech).filter(Boolean).map(s => s.slug))];
@@ -157,9 +156,6 @@ const statusBadge = (p) => {
   const s = statusOf(p);
   return `<span class="status status--${s.tone}"><span class="status__dot" aria-hidden="true"></span>${esc(s.label)}</span>`;
 };
-
-// Taille de la bulle : mis en avant (pick) › professionnel › autre.
-const tierOf = (p) => p.pick ? 'l' : p.category === 'Professionnel' ? 'm' : 's';
 
 // Cadre du projet, lu dans les données : jamais « solo » pour un travail d'équipe.
 function contextOf(p) {
@@ -335,12 +331,9 @@ const SPRITE = `
     <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
-    <symbol id="i-orbit" viewBox="0 0 24 24"><circle cx="8" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16.5" cy="7" r="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
-    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
     <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 3 10.5l7 3 3 7zM10 13.5 21 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
-    <symbol id="i-center" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>`;
 
 function topbar(page, L) {
@@ -457,7 +450,10 @@ const HEAD_SCRIPT = `
     })(document.documentElement, window);
   </script>`;
 
-function shell(page, { title, description, ogDescription, jsonld, personExtra, body, scripts = '', scrolls = false }) {
+// scrolls : la page défile (document) et porte le pied de page ;
+// doors   : les portes précédente / suivante restent visibles (pages qui
+//           défilent sans portes dans leur contenu).
+function shell(page, { title, description, ogDescription, jsonld, personExtra, body, scripts = '', scrolls = false, doors = false }) {
   const L = linker(page);
   const others = PAGES.filter(p => p !== page).map(p => L.page(p.key));
   const url = SITE_URL + page.path;
@@ -495,7 +491,7 @@ function shell(page, { title, description, ogDescription, jsonld, personExtra, b
   <script type="speculationrules">
   {"prerender": [{"source": "list", "urls": ${JSON.stringify(others)}, "eagerness": "moderate"}]}
   </script>${ld(jsonld)}</head>
-<body class="page page--${page.key}${scrolls ? ' page--doc' : ' page--world'}" data-page="${page.key}" data-route="${page.route}">${SPRITE}
+<body class="page page--${page.key}${scrolls ? ' page--doc' : ' page--world'}${doors ? ' page--doors' : ''}" data-page="${page.key}" data-route="${page.route}">${SPRITE}
 
   <a class="skip" href="#main">Aller au contenu</a>
 ${topbar(page, L)}
@@ -517,24 +513,13 @@ ${worlds(page, L)}${scrolls ? footer(L) : ''}
 `;
 }
 
-function worldHead(page, title, lead, extra = '', { quiet = false, count = '' } = {}) {
+function worldHead(page, title, lead, extra = '', { quiet = false } = {}) {
   return `
       <header class="world-head">
-        <p class="world-head__k"><span>${page.n}</span>${esc(page.label)}${count ? `<em class="world-head__n" data-count>${esc(count)}</em>` : ''}</p>
+        <p class="world-head__k"><span>${page.n}</span>${esc(page.label)}</p>
         <h1 class="${quiet ? 'sr-only' : 'world-head__t'}" id="${page.key}-title">${esc(title)}</h1>
         ${lead ? `<p class="world-head__lead">${lead}</p>` : ''}${extra}
       </header>`;
-}
-
-// Légende repliable d'un espace : [{ title, items: [html] }].
-function legend(groups) {
-  return `
-        <details class="legend js-only">
-          <summary>Légende${icon('chevron', 'ico legend__chev')}</summary>
-          <div class="legend__in">${groups.map(g => `
-            <div class="legend__g"><p class="legend__t">${esc(g.title)}</p><ul>${g.items.map(i => `<li>${i}</li>`).join('')}</ul></div>`).join('')}
-          </div>
-        </details>`;
 }
 
 // ══════════════════════════════════════════════════════
@@ -681,56 +666,61 @@ function techList(p, L) {
   }).join('')}</ul>`;
 }
 
-function projectItem(p, L) {
+// Une carte par projet. Avec JS, la carte ouvre la fiche (src/classic/
+// projects.js), qui lit son contenu dans le bloc « détail » ; sans JS, ce
+// bloc est affiché sous la carte : la page reste un document complet.
+function projectCard(p, L) {
   const ctx = contextOf(p);
   const img = projectImage(p);
   const shots = img ? projectShots(p).map(s => ({ ...s, src: L.up + s.src })) : [];
   const st = statusOf(p);
+  const tech = p.tech || [];
   const links = (p.links || []).map(l =>
     `<a class="btn btn--sm" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external', 'ico ico--xs')}</a>`).join('');
   return `
-          <li class="pj-item" id="${p.slug}" data-slug="${p.slug}"
-              data-cat="${esc(p.category)}" data-tier="${tierOf(p)}" data-status="${st.tone}"
-              data-name="${esc(bubbleName(p))}" data-skills="${projectSkills(p).join(' ')}"${img ? ` data-img="${L.up}${esc(img)}" data-shots="${esc(JSON.stringify(shots))}"` : ''}${p.device ? ` data-device="${esc(p.device)}"` : ''}${p.pick ? ' data-pick' : ''}>
+          <li class="pj-card" id="${p.slug}" data-slug="${p.slug}"
+              data-cat="${esc(p.category)}" data-status="${st.tone}" data-type="${esc(p.type)}"${ctx ? ` data-ctx="${esc(ctx)}"` : ''}
+              data-name="${esc(bubbleName(p))}" data-skills="${projectSkills(p).join(' ')}"${img ? ` data-img="${L.up}${esc(img)}" data-shots="${esc(JSON.stringify(shots))}"` : ''}${p.device ? ` data-device="${esc(p.device)}"` : ''}>
             <article aria-labelledby="p-${p.slug}">
-              <div class="pj-item__head">
-                <span class="pj-item__orb" aria-hidden="true"></span>
-                <h2 class="pj-item__title" id="p-${p.slug}">${esc(p.title)}</h2>
-                <p class="pj-item__meta"><span class="chip-cat">${esc(p.category)}</span><span>${esc(p.type)}</span>${ctx ? `<span>${esc(ctx)}</span>` : ''}</p>
-                <p class="pj-item__status">${statusBadge(p)}</p>
+              ${projectCover(p, L)}
+              <div class="pj-card__body">
+                <p class="pj-card__meta"><span class="chip-cat">${esc(p.category)}</span><span>${esc(p.type)}</span></p>
+                <h2 class="pj-card__title" id="p-${p.slug}">${esc(p.title)}</h2>
+                <p class="pj-card__lead">${esc(p.desc.split(/(?<=\.)\s+/)[0])}</p>
+                <ul class="tags pj-card__tags" aria-label="Technologies principales">${tech.slice(0, 3).map(t => `<li>${esc(t)}</li>`).join('')}${tech.length > 3 ? `<li>+${tech.length - 3}</li>` : ''}</ul>
+                <p class="pj-card__foot">${statusBadge(p)}</p>
               </div>
-              <div class="pj-item__body">
-                ${projectCover(p, L)}
-                <p class="pj-item__desc">${esc(p.desc)}</p>
+              <div class="pj-card__more">
+                ${ctx ? `<p class="pj-card__ctx">${esc(ctx)}</p>` : ''}
+                <p class="pj-card__desc">${esc(p.desc)}</p>
                 ${techList(p, L)}
-                ${p.role ? `<div class="pj-item__role"><h3 class="mini-title">Mon rôle</h3><p>${esc(p.role)}</p></div>` : ''}
-                ${links ? `<div class="pj-item__links">${links}</div>` : ''}
+                ${p.role ? `<div class="pj-card__role"><h3 class="mini-title">Mon rôle</h3><p>${esc(p.role)}</p></div>` : ''}
+                ${links ? `<div class="pj-card__links">${links}</div>` : ''}
               </div>
             </article>
           </li>`;
 }
 
+// Ordre d'affichage : les projets mis en avant (pick) d'abord, puis les
+// autres, chacun dans l'ordre des données.
+const projectsShown = [...projects.filter(p => p.pick), ...projects.filter(p => !p.pick)];
+
 function projetsPage() {
   const page = PAGE.projets;
+  const filters = [
+    { key: '', label: 'Tous', n: projects.length },
+    ...CATEGORIES.filter(c => byCat[c].length).map(c => ({ key: c, label: byCat[c].length > 1 ? `${c}s` : c, n: byCat[c].length })),
+  ];
+  const lead = `${byCat.Professionnel.length} réalisés en équipe chez ${esc(company)}, ${byCat.Personnel.length} personnels, ${plural(byCat.Scolaire.length, 'scolaire', 'scolaires')}. Ouvrez un projet pour voir ses captures, sa stack et mon rôle.`;
   const body = (L) => `
-    <section class="pj" aria-labelledby="projets-title">
-      <div class="world-ui">${worldHead(page, 'Projets de développement web', '', legend([
-        { title: 'Catégorie', items: CATEGORIES.map(c => `<i class="cat-dot" data-cat="${c}"></i>${c}`) },
-        { title: 'État', items: ['<i class="lg-dot lg-dot--on"></i>Disponible', '<i class="lg-dot lg-dot--wip"></i>En développement', '<i class="lg-dot lg-dot--off"></i>Projet privé'] },
-        { title: 'Taille', items: ['<i class="lg-size lg-size--l"></i>À ne pas rater', '<i class="lg-size lg-size--m"></i>Professionnel', '<i class="lg-size lg-size--s"></i>Autre'] },
-      ]), { quiet: true, count: plural(projects.length, 'projet', 'projets') })}
-        <div class="pj-bar js-only" role="toolbar" aria-label="Affichage des projets">
-          <div class="seg-group" role="group" aria-label="Vue">
-            <button type="button" class="seg" data-view="space" aria-pressed="true">${icon('orbit')}Espace</button>
-            <button type="button" class="seg" data-view="list" aria-pressed="false">${icon('list')}Liste</button>
-          </div>
-        </div>
+    <section class="pj wrap" aria-labelledby="projets-title">
+      ${worldHead(page, `${projects.length} projets web et mobiles`, lead)}
+      <div class="pj-filters js-only" role="group" aria-label="Filtrer les projets">${filters.map((f, i) => `
+        <button type="button" class="seg" data-filter="${esc(f.key)}" aria-pressed="${i ? 'false' : 'true'}">${esc(f.label)}<span>${f.n}</span></button>`).join('')}
       </div>
-      <div class="pj-space js-only" data-keys></div>
-      <div class="pj-list">
-        <ol class="pj-index" aria-label="Tous les projets" data-keys>${projects.map(p => projectItem(p, L)).join('')}
-        </ol>
-      </div>
+      <p class="pj-status sr-only" aria-live="polite"></p>
+      <ol class="pj-grid" aria-label="Projets">${projectsShown.map(p => projectCard(p, L)).join('')}
+      </ol>
     </section>`;
   return shell(page, {
     title: `Projets web et mobiles · ${displayName}, ${bio.title}`,
@@ -753,6 +743,8 @@ function projetsPage() {
       },
     },
     body,
+    scrolls: true,
+    doors: true,
   });
 }
 
@@ -911,53 +903,46 @@ function parcoursPage() {
 // ══════════════════════════════════════════════════════
 // 04 · COMPÉTENCES
 // ══════════════════════════════════════════════════════
+// Une famille par carte. Les technologies utilisées dans les projets sont
+// des pastilles (logo, nom, nombre de projets) : un clic ouvre le détail
+// (src/classic/skills.js). Les autres tiennent sur une ligne discrète.
 function competencesPage() {
   const page = PAGE.competences;
-  const usedCount = allSkills.filter(s => s.used.length).length;
   const body = (L) => {
+    const chip = (s, f) => {
+      const n = s.used.length;
+      const logo = logoOf(s.item);
+      return `
+              <li class="sk" id="${s.slug}" data-skill="${s.slug}" data-fam="${f.key}" data-count="${n}" data-projects="${s.used.map(p => p.slug).join(' ')}"${logo ? ` data-logo="${L.up}${logo}" style="--logo:url('${L.up}${logo}')"` : ''}>
+                <button type="button" class="sk__btn">${logo ? '<i class="sk__logo" aria-hidden="true"></i>' : ''}<span class="sk__name">${esc(s.item)}</span><span class="sk__n">${n}<span class="sk__u"> ${n > 1 ? 'projets' : 'projet'}</span></span></button>
+                <div class="sk__used">
+                  <p>Utilisée dans :</p>
+                  <ul class="sk__projects">${s.used.map(p => `<li><a href="${L.page('projets', p.slug)}" data-project="${p.slug}" data-cat="${esc(p.category)}">${esc(p.title)}</a></li>`).join('')}</ul>
+                </div>
+              </li>`;
+    };
     const rows = families.map(f => {
-      const sorted = [...f.skills].sort((a, b) => b.used.length - a.used.length || a.i - b.i);
-      const used = f.skills.filter(s => s.used.length).length;
+      const used = f.skills.filter(s => s.used.length).sort((a, b) => b.used.length - a.used.length || a.i - b.i);
+      const other = f.skills.filter(s => !s.used.length);
+      const others = other.map(s => `<li id="${s.slug}" data-skill="${s.slug}">${esc(s.item)}</li>`).join('');
       return `
           <section class="fam" data-fam="${f.key}" aria-labelledby="fam-${f.key}">
-            <h2 class="fam__t" id="fam-${f.key}"><span class="fam__dot" aria-hidden="true"></span><span class="fam__l">${esc(f.label)}</span>${used ? `<span class="fam__n">${used}/${f.skills.length} dans les projets</span>` : ''}</h2>
-            <ul class="fam__list">${sorted.map(s => {
-              const n = s.used.length;
-              const logo = logoOf(s.item);
-              return `
-              <li class="sk${n ? '' : ' sk--decl'}" id="${s.slug}" data-skill="${s.slug}" data-fam="${f.key}" data-count="${n}" data-projects="${s.used.map(p => p.slug).join(' ')}"${logo ? ` data-logo="${L.up}${logo}"` : ''} style="--w:${(n / maxUse).toFixed(3)}${logo ? `;--logo:url('${L.up}${logo}')` : ''}">
-                <button type="button" class="sk__btn">${logo ? '<i class="sk__logo" aria-hidden="true"></i>' : ''}<span class="sk__name">${esc(s.item)}</span><span class="sk__dots" aria-hidden="true">${'<i></i>'.repeat(n)}</span></button>
-                <p class="sk__used">${n ? `Utilisée dans ${plural(n, 'projet', 'projets')} : ` : 'Hors des projets présentés ici'}</p>${n ? `
-                <ul class="sk__projects">${s.used.map(p => `<li><a href="${L.page('projets', p.slug)}" data-project="${p.slug}" data-cat="${esc(p.category)}">${esc(p.title)}</a></li>`).join('')}</ul>` : ''}
-              </li>`;
-            }).join('')}
-            </ul>
+            <h2 class="fam__t" id="fam-${f.key}"><span class="fam__dot" aria-hidden="true"></span>${esc(f.label)}</h2>${used.length ? `
+            <ul class="fam__list">${used.map(s => chip(s, f)).join('')}
+            </ul>` : ''}${other.length ? `
+            <div class="fam__also">${used.length ? '<p class="fam__also-l">Aussi pratiqué</p>' : ''}<ul>${others}</ul></div>` : ''}
           </section>`;
     }).join('');
     // Projets (slug, titre, catégorie, compétences) : de quoi relier une
     // compétence à ses projets et l'inverse, sans quitter la page.
     const data = JSON.stringify(projects.map(p => ({ slug: p.slug, title: p.title, cat: p.category, type: p.type, skills: projectSkills(p) }))).replace(/</g, '\\u003c');
     return `
-    <section class="eco" aria-labelledby="competences-title">
-      <div class="world-ui">${worldHead(page, 'Compétences en développement web', '', legend([
-        { title: 'Famille', items: families.map(f => `<i class="fam-dot" data-fam="${f.key}"></i>${esc(f.label)}`) },
-        { title: 'Taille', items: ['<i class="lg-size lg-size--l"></i>Utilisée dans beaucoup de projets', '<i class="lg-size lg-size--s"></i>Utilisée dans peu de projets', '<i class="lg-size lg-size--decl"></i>Hors des projets présentés'] },
-      ]) + `
-        <div class="eco-bar js-only" role="toolbar" aria-label="Affichage des compétences">
-          <div class="seg-group" role="group" aria-label="Vue">
-            <button type="button" class="seg" data-view="space" aria-pressed="true">${icon('orbit')}Écosystème</button>
-            <button type="button" class="seg" data-view="list" aria-pressed="false">${icon('list')}Liste</button>
-          </div>
-        </div>`, { quiet: true })}
-      </div>
-      <div class="eco-space js-only" data-keys></div>
-      <div class="eco-list">
-        <p class="eco-list__note">${usedCount} compétences sur ${allSkills.length} apparaissent dans au moins un projet présenté.</p>
-        <div class="eco-fam-list" data-keys>${rows}
-        </div>
+    <section class="eco wrap" aria-labelledby="competences-title">
+      ${worldHead(page, 'Les technologies que j’utilise', 'Classées par famille. Le nombre indique dans combien des projets présentés ici je l’ai utilisée : cliquez dessus pour voir lesquels.')}
+      <div class="fams">${rows}
       </div>
       <aside class="eco-panel" aria-label="Détail" hidden>
-        <div class="eco-panel__in" aria-live="polite"></div>
+        <div class="eco-panel__in"></div>
       </aside>
       <script type="application/json" id="eco-projects">${data}</script>
     </section>`;
@@ -967,6 +952,8 @@ function competencesPage() {
     description: `Compétences techniques d'${displayName} : ${mainStack.slice(0, 6).map(s => s.item).join(', ')}… classées par famille et reliées aux projets qui les utilisent.`,
     jsonld: { '@type': 'ProfilePage', name: `Compétences · ${displayName}`, mainEntity: PERSON_REF },
     body,
+    scrolls: true,
+    doors: true,
   });
 }
 
