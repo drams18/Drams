@@ -1047,8 +1047,8 @@ html:not(.js) .fam__list, .no-app .fam__list { flex-direction: column; align-ite
 }
 
 /* Les bulles : même matière que celles des projets (couleur = canal) */
-.ct-orbs { --d: clamp(104px, 10.5vw, 132px); display: grid; grid-template-columns: repeat(6, minmax(0, 178px)); justify-content: center; gap: 22px 0; width: 100%; max-width: 1068px; }
-.ct-orbs li { display: flex; justify-content: center; min-width: 0; }
+.ct-orbs { --d: clamp(100px, 9.6vw, 128px); --per: 7; --gx: 0px; display: flex; flex-wrap: wrap; justify-content: center; gap: 22px var(--gx); width: 100%; max-width: 1162px; }
+.ct-orbs li { display: flex; justify-content: center; min-width: 0; flex: 0 0 calc((100% - (var(--per) - 1) * var(--gx)) / var(--per)); }
 .ct-orb {
   --cat: var(--accent);
   display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 0; max-width: 100%;
@@ -1058,6 +1058,7 @@ html:not(.js) .fam__list, .no-app .fam__list { flex-direction: column; align-ite
 .ct-orb[data-orb="phone"]    { --cat: var(--f-data); }
 .ct-orb[data-orb="linkedin"] { --cat: var(--f-front); }
 .ct-orb[data-orb="github"]   { --cat: var(--f-tools); }
+.ct-orb[data-orb="instagram"] { --cat: var(--c-perso); }
 .ct-orb[data-orb="cv"]       { --cat: var(--c-award); }
 .ct-orb__core {
   position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
@@ -1092,7 +1093,7 @@ html:not(.js) .fam__list, .no-app .fam__list { flex-direction: column; align-ite
 .ct-project { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 18px; font-size: 14.5px; color: var(--muted); }
 .ct-project .text-link { font-size: 14.5px; }
 @media (max-width: 1080px) {
-  .ct-orbs { --d: clamp(92px, 25vw, 124px); grid-template-columns: repeat(3, minmax(0, 190px)); max-width: 600px; gap: 22px 8px; }
+  .ct-orbs { --d: clamp(92px, 25vw, 124px); --per: 4; --gx: 8px; max-width: 780px; }
 }
 @media (max-width: 520px) {
   .ct-stage { gap: clamp(22px, 4.5vh, 40px); }
@@ -1100,7 +1101,7 @@ html:not(.js) .fam__list, .no-app .fam__list { flex-direction: column; align-ite
   .ct-ctx { gap: 4px 14px; letter-spacing: .08em; font-size: 11.5px; }
   .ct-ctx .pulse { margin-right: 0; }
   .ct-ctx span + span:not(.pulse)::before { content: none; }
-  .ct-orbs { gap: 18px 4px; }
+  .ct-orbs { --per: 3; --gx: 4px; row-gap: 18px; max-width: 600px; }
   .ct-orb { gap: 0; }
   .ct-orb__core { gap: 6px; }
   .ct-orb__l { font-size: 13px; }
@@ -1108,7 +1109,7 @@ html:not(.js) .fam__list, .no-app .fam__list { flex-direction: column; align-ite
   .ct-project { flex-direction: column; gap: 2px; font-size: 14px; }
 }
 @media (max-height: 560px) and (min-width: 700px) {      /* téléphone à l'horizontale */
-  .ct-orbs { --d: 88px; grid-template-columns: repeat(6, minmax(0, 120px)); max-width: none; }
+  .ct-orbs { --d: 84px; --per: 7; --gx: 0px; max-width: 800px; }
   .ct-orb__s { display: none; }
   .ct-title { font-size: 40px; }
 }

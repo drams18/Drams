@@ -324,6 +324,7 @@ const SPRITE = `
     <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z" fill="currentColor"/></symbol>
     <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M4 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 9h3v12H3zM9 9h3v1.7c.5-.9 1.7-1.9 3.5-1.9 3.2 0 3.5 2.1 3.5 4.8V21h-3v-6.5c0-1.5 0-3.3-2-3.3s-2.3 1.6-2.3 3.2V21H9z" fill="currentColor"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
@@ -568,7 +569,7 @@ function profilPage() {
   const doors = [
     { key: 'parcours', q: 'Quel a été son parcours\u202f?', hint: `${firstYear} → ${lastYear - 1} · ${plural(dated.length, 'étape', 'étapes')}` },
     { key: 'competences', q: 'Quel est son univers technique\u202f?', hint: `${plural(allSkills.length, 'compétence', 'compétences')} · ${families.length} familles` },
-    { key: 'contact', q: 'Comment le contacter\u202f?', hint: bio.seeking || 'E-mail, téléphone, formulaire' },
+    { key: 'contact', q: 'Comment le contacter\u202f?', hint: bio.seeking || 'E-mail, téléphone, message direct' },
   ];
 
   // Titre de la page = nom + métier : le <h1> enveloppe ces deux lignes du
@@ -976,13 +977,13 @@ function contactPage() {
           </a></li>`;
     const links = contact.links.map(l => {
       const cv = /cv/i.test(l.label);
-      const id = /github/i.test(l.label) ? 'github' : /linkedin/i.test(l.label) ? 'linkedin' : cv ? 'download' : 'external';
+      const id = /github|linkedin|instagram/i.test(l.label) ? l.label.toLowerCase() : cv ? 'download' : 'external';
       const href = /^https?:/.test(l.url) ? l.url : L.up + l.url;
       const handle = l.url.replace(/\/+$/, '').split('/').pop();
       return { key: cv ? 'cv' : id, ic: id, label: cv ? 'CV' : l.label, sub: cv ? 'PDF' : handle, href, attrs: ' target="_blank" rel="noopener"' };
     });
     const orbs = [
-      { key: 'message', ic: 'send', label: 'Message', sub: 'Formulaire', href: '#message', attrs: ' data-open-message aria-haspopup="dialog"' },
+      { key: 'message', ic: 'send', label: 'Message', sub: 'Message direct', href: '#message', attrs: ' data-open-message aria-haspopup="dialog"' },
       { key: 'mail', ic: 'mail', label: 'E-mail', sub: contact.email, href: `mailto:${contact.email}`, attrs: ` data-copy="${esc(contact.email)}" data-copied="Adresse copiée"` },
       { key: 'phone', ic: 'phone', label: 'Téléphone', sub: contact.phone, href: `tel:${tel}`, attrs: ` data-copy="${esc(contact.phone)}" data-copied="Numéro copié"` },
       ...links,
@@ -1027,7 +1028,7 @@ function contactPage() {
   };
   return shell(page, {
     title: `Contact · ${displayName}, ${bio.title} à ${bio.location}`,
-    description: `Contacter ${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. E-mail, téléphone, LinkedIn, GitHub, CV et formulaire de contact.`,
+    description: `Contacter ${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. E-mail, téléphone, LinkedIn, Instagram, GitHub, CV et message direct.`,
     jsonld: { '@type': 'ContactPage', name: `Contact · ${displayName}`, mainEntity: PERSON_REF },
     // Le téléphone n'est affiché que sur cette page : il n'est déclaré qu'ici.
     personExtra: { telephone: `+33${tel.replace(/^0/, '')}` },
