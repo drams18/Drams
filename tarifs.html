@@ -10,7 +10,7 @@
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Arphan Drame · Portfolio">
   <meta property="og:title" content="Tarifs · Arphan Drame, Développeur Web Full Stack">
-  <meta property="og:description" content="Tarifs particuliers et professionnels, recherche rapide, devis personnalisé.">
+  <meta property="og:description" content="Tarifs professionnels : sites, e-commerce, applications, maintenance. Recherche rapide, devis personnalisé.">
   <meta property="og:url" content="https://arphandrame.fr/tarifs">
   <meta property="og:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta property="og:image:width" content="1200">
@@ -18,9 +18,9 @@
   <meta property="og:image:alt" content="Arphan Drame, Développeur Web Full Stack · Paris">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Tarifs · Arphan Drame, Développeur Web Full Stack">
-  <meta name="twitter:description" content="Tarifs particuliers et professionnels, recherche rapide, devis personnalisé.">
+  <meta name="twitter:description" content="Tarifs professionnels : sites, e-commerce, applications, maintenance. Recherche rapide, devis personnalisé.">
   <meta name="twitter:image" content="https://arphandrame.fr/assets/img/og.jpg">
-  <meta name="description" content="Grille tarifaire d'Arphan Drame, développeur web freelance en Île-de-France. Tarifs particuliers et professionnels, recherche rapide, devis personnalisé.">
+  <meta name="description" content="Grille tarifaire d'Arphan Drame, développeur web freelance en Île-de-France. Tarifs professionnels : sites, e-commerce, applications, maintenance. Recherche rapide, devis personnalisé.">
   <meta name="theme-color" content="#0a0a0d">
   <!-- Activité freelance : même nom, même métier, même zone que la fiche Google.
        Ni note ni avis ici : ils n'existent que sur Google. -->
@@ -56,10 +56,9 @@
        mode classique (barre du haut, fond d'ambiance, thèmes jour/nuit :
        css/site.css + css/classic.css + css/annexe.css).
 
-       Une seule question par écran :
-         1. Profil       → Particuliers / Professionnels
-         2. Besoin       → « Je veux un site », « J'ai un problème »…
-         3. Prestations  → nom + prix ; le détail s'ouvre au clic,
+       Tarifs professionnels uniquement. Une seule question par écran :
+         1. Besoin       → « Site internet », « Application et API »…
+         2. Prestations  → nom + prix ; le détail s'ouvre au clic,
                            la suite de la liste à la demande
 
        En plus, à tout moment :
@@ -69,8 +68,9 @@
            construire-projet.html pour un visiteur du mode aventure)
 
        Routage par hash :
-         #choix | #particuliers | #professionnels
-         #particuliers/<categorie> | #professionnels/<categorie>
+         (vide) | #choix → besoins ; #<categorie> → prestations
+         Anciennes adresses #professionnels/… et #particuliers/…
+         redirigées vers la catégorie équivalente (table LEGACY).
        ══════════════════════════════════════════════════════ -->
 </head>
 <body>
@@ -118,7 +118,7 @@
       <header class="page-head">
         <nav class="crumbs" id="crumbs" aria-label="Fil d'Ariane"></nav>
         <h1 class="page-title" id="pageTitle" tabindex="-1">Mes tarifs</h1>
-        <p class="page-sub" id="pageSub">Pour qui est ce projet ?</p>
+        <p class="page-sub" id="pageSub">Quel est votre besoin ?</p>
       </header>
 
       <div class="search" role="search">
@@ -201,251 +201,182 @@
     // Prestations visibles d'emblée ; le reste s'affiche à la demande.
     var LIMIT = 5;
 
-    var PROFILES = {
-      particuliers:   { label: 'Particuliers',   title: 'Tarifs particuliers' },
-      professionnels: { label: 'Professionnels', title: 'Tarifs professionnels' }
+    /* ── Catégories (ordre d'affichage) ─────────────────── */
+    var CATEGORIES = [
+      { id: 'site',    label: 'Site internet',             hint: 'Vitrine, WordPress, refonte, SEO' },
+      { id: 'vendre',  label: 'Vendre en ligne',           hint: 'Shopify, e-commerce, paiement' },
+      { id: 'app',     label: 'Application et API',        hint: 'Web, mobile, SaaS, backend' },
+      { id: 'modules', label: 'Modules & fonctionnalités', hint: 'Réservation, espace client, IA' },
+      { id: 'infra',   label: 'Infra, DevOps & qualité',   hint: 'Déploiement, hébergement, tests' },
+      { id: 'suivi',   label: 'Maintenance et renfort',    hint: 'Suivi mensuel, dépannage, régie' }
+    ];
+
+    /* Anciennes adresses (#professionnels/site-pro, #particuliers/probleme…)
+       → catégorie actuelle ; absente de la table → écran d'accueil. */
+    var LEGACY = {
+      'site-pro': 'site', 'vendre-pro': 'vendre', 'app-pro': 'app',
+      'modules-pro': 'modules', 'infra-pro': 'infra', 'suivi-pro': 'suivi',
+      existant: 'site', probleme: 'suivi'
     };
 
-    /* ── Catégories par profil (ordre d'affichage) ──────── */
-    var CATEGORIES = {
-      particuliers: [
-        { id: 'site',           label: 'Je veux un site',        hint: 'Créer un site de zéro' },
-        { id: 'vendre',         label: 'Je veux vendre en ligne', hint: 'Boutique en ligne' },
-        { id: 'existant',       label: "J'ai déjà un site",      hint: 'Refonte, mise en ligne, SEO, évolutions' },
-        { id: 'probleme',       label: "J'ai un problème",       hint: 'Bug, dépannage, correction' },
-        { id: 'accompagnement', label: 'Je veux être accompagné', hint: 'Formation, projet étudiant' },
-        { id: 'creation',       label: 'CV, logo et visuels',    hint: 'Identité et documents' }
-      ],
-      professionnels: [
-        { id: 'site-pro',    label: 'Site internet',            hint: 'Vitrine, WordPress' },
-        { id: 'vendre-pro',  label: 'Vendre en ligne',          hint: 'E-commerce, Shopify' },
-        { id: 'app-pro',     label: 'Application et API',       hint: 'Web, mobile, SaaS, backend' },
-        { id: 'modules-pro', label: 'Modules & fonctionnalités', hint: 'Réservation, espace client, IA' },
-        { id: 'infra-pro',   label: 'Infra, DevOps & qualité',  hint: 'Déploiement, CI/CD, tests' },
-        { id: 'suivi-pro',   label: 'Maintenance et renfort',   hint: 'Suivi mensuel, régie' }
-      ]
-    };
+    function categoryById(id) {
+      for (var i = 0; i < CATEGORIES.length; i++) if (CATEGORIES[i].id === id) return CATEGORIES[i];
+      return null;
+    }
 
-    /* ── Prestations, prix repris à l'identique de la grille ─
+    /* ── Prestations, tarifs professionnels ────────────────
        from   : true → préfixe « à partir de »
        unit   : suffixe éventuel (« / h », « / mois », « / jour »)
        cats   : catégories d'appartenance (multiples possibles)
        kw     : mots-clés / synonymes pour la recherche         */
     var SERVICES = [
-      /* ---------- PARTICULIERS ---------- */
-      { profile: 'particuliers', name: 'Landing page', price: '150 €', from: true,
-        desc: 'Page unique orientée conversion.',
+      /* ---------- SITE INTERNET ---------- */
+      { name: 'Landing page', price: '450 €', from: true,
+        desc: 'Page unique orientée conversion, pour une offre ou une campagne.',
         cats: ['site'],
         kw: 'landing page atterrissage one page onepage pub publicite campagne promo conversion site web' },
-      { profile: 'particuliers', name: 'Site vitrine codé sur mesure', price: '300 €', from: true,
-        desc: 'Site rapide, responsive, 100 % sur mesure.',
+      { name: 'Site vitrine', price: '900 €', from: true,
+        desc: 'Présence pro complète codée sur mesure : plusieurs pages, formulaire de contact, SEO de base.',
         cats: ['site'],
-        kw: 'site vitrine web internet presentation entreprise sur mesure code html css javascript presence en ligne' },
-      { profile: 'particuliers', name: 'Site WordPress', price: '250 €', from: true,
-        desc: 'Site administrable, thème et extensions configurés.',
+        kw: 'site vitrine web internet presence entreprise sur mesure code seo referencement pages corporate professionnel formulaire contact' },
+      { name: 'Site WordPress', price: '800 €', from: true,
+        desc: 'Site administrable, thème et extensions configurés, formation à la prise en main.',
         cats: ['site', 'vendre'],
-        kw: 'wordpress wp cms blog administrable woocommerce elementor theme extension site web boutique' },
-      { profile: 'particuliers', name: 'Site Shopify', price: '350 €', from: true,
-        desc: 'Boutique en ligne prête à vendre.',
-        cats: ['site', 'vendre'],
-        kw: 'shopify boutique magasin ecommerce e-commerce commerce vendre vente panier paiement store dropshipping site' },
-      { profile: 'particuliers', name: 'Portfolio', price: '200 €', from: true,
-        desc: 'Vitrine en ligne de vos travaux.',
-        cats: ['site', 'creation'],
-        kw: 'portfolio book projets travaux vitrine artiste freelance photographe site web' },
-      { profile: 'particuliers', name: "Refonte / modification d'un site", price: '150 €', from: true,
-        desc: "Nouveau design ou évolutions d'un site existant.",
-        cats: ['existant'],
-        kw: 'refonte modification modifier refaire redesign relooking moderniser evolution mise a jour changement ameliorer site existant' },
-      { profile: 'particuliers', name: 'Mise en ligne / configuration', price: '90 €', from: true,
-        desc: 'Domaine, hébergement, HTTPS et déploiement.',
-        cats: ['existant'],
-        kw: 'mise en ligne hebergement domaine nom de domaine https ssl deploiement publier ovh dns configuration mettre en ligne' },
-      { profile: 'particuliers', name: 'Dépannage / correction', price: '30 €', unit: '/ h', from: true,
-        desc: 'Résolution de bugs et petits correctifs.',
-        cats: ['probleme'],
-        kw: 'depannage correction bug erreur probleme reparer panne corriger plante casse fix soucis' },
-      { profile: 'particuliers', name: 'CV professionnel', price: '90 €', from: true,
-        desc: 'CV mis en page, propre et lisible.',
-        cats: ['creation'],
-        kw: 'cv curriculum vitae resume mise en page document emploi candidature recrutement' },
-      { profile: 'particuliers', name: 'CV interactif / en ligne', price: '150 €', from: true,
-        desc: 'CV web animé avec lien partageable.',
-        cats: ['creation'],
-        kw: 'cv interactif en ligne web anime partageable lien digital curriculum vitae' },
-      { profile: 'particuliers', name: 'Création / retouche de logo', price: '90 €', from: true,
-        desc: "Logo simple ou reprise d'un existant.",
-        cats: ['creation'],
-        kw: 'logo identite identite visuelle graphisme marque charte branding icone retouche creation dessin' },
-      { profile: 'particuliers', name: 'Bannière / visuel web', price: '60 €', from: true,
-        desc: 'Visuels pour réseaux sociaux ou site.',
-        cats: ['creation'],
-        kw: 'banniere visuel image reseaux sociaux instagram facebook linkedin cover header social media illustration graphisme' },
-      { profile: 'particuliers', name: 'Initiation au développement web', price: '30 €', unit: '/ h', from: true,
-        desc: 'Bases HTML, CSS et JavaScript en direct.',
-        cats: ['accompagnement'],
-        kw: 'initiation formation cours apprendre debutant html css javascript coaching prof professeur lecon developpement web' },
-      { profile: 'particuliers', name: 'Accompagnement projet étudiant', price: '90 €', from: true,
-        desc: 'Aide au cadrage et à la réalisation.',
-        cats: ['accompagnement'],
-        kw: 'etudiant projet ecole universite fac memoire soutenance cadrage aide tutorat scolaire devoir' },
-      { profile: 'particuliers', name: 'Aide au développement web', price: '30 €', unit: '/ h', from: true,
-        desc: 'WordPress, Shopify, HTML, CSS, JavaScript : assistance et résolution de problèmes.',
-        cats: ['probleme', 'accompagnement'],
-        kw: 'aide assistance developpement web wordpress shopify html css javascript probleme support depannage conseil accompagnement' },
-      { profile: 'particuliers', name: 'Optimisation SEO de base + données structurées', price: '120 €', from: true,
-        desc: 'Balises, métadonnées, sitemap et données structurées (Schema.org).',
-        cats: ['site', 'existant'],
-        kw: 'seo referencement google balises meta title description sitemap schema donnees structurees rich snippets visibilite recherche indexation' },
-      { profile: 'particuliers', name: 'Optimisation vitesse / PageSpeed', price: '30 €', unit: '/ h', from: true,
-        desc: 'Images, cache, chargement : amélioration du score PageSpeed.',
-        cats: ['existant', 'probleme'],
-        kw: 'vitesse performance pagespeed lighthouse rapidite lent optimisation cache images lazy chargement core web vitals fluidite' },
-      { profile: 'particuliers', name: 'Passage en PWA (site installable)', price: '300 €', from: true,
-        desc: 'Site installable sur mobile, icône et mode hors-ligne léger.',
-        cats: ['site', 'existant'],
-        kw: 'pwa progressive web app installable hors ligne offline mobile icone ecran accueil manifest service worker application' },
-      { profile: 'particuliers', name: 'Formulaire de contact / prise de RDV', price: '90 €', from: true,
-        desc: 'Formulaire avec notifications e-mail automatiques.',
-        cats: ['site', 'existant'],
-        kw: 'formulaire contact prise de rendez vous rdv reservation email notification message envoi emailjs brevo devis' },
-      { profile: 'particuliers', name: 'Mise en place newsletter / emailing', price: '90 €', from: true,
-        desc: 'Configuration Brevo ou Mailchimp, formulaire d\'inscription.',
-        cats: ['site', 'existant'],
-        kw: 'newsletter emailing email infolettre brevo mailchimp inscription abonnes campagne mail liste diffusion' },
-      { profile: 'particuliers', name: 'Nom de domaine + e-mails professionnels', price: '60 €', from: true,
-        desc: 'Achat du domaine, DNS et adresses e-mail à votre nom.',
-        cats: ['existant'],
-        kw: 'nom de domaine dns email professionnel adresse mail ovh gandi configuration mx zone hebergement' },
-      { profile: 'particuliers', name: "Migration / changement d'hébergement", price: '90 €', from: true,
-        desc: 'Transfert du site et de la base vers un nouvel hébergeur.',
-        cats: ['existant'],
-        kw: 'migration transfert hebergement demenagement changer hebergeur ovh o2switch deplacer site base de donnees dns' },
-      { profile: 'particuliers', name: "Sécurisation + sauvegardes d'un site", price: '90 €', from: true,
-        desc: 'HTTPS, mises à jour, sauvegardes automatiques (WordPress).',
-        cats: ['existant', 'probleme'],
-        kw: 'securite securisation sauvegarde backup https ssl mises a jour wordpress piratage malware protection restauration' },
-      { profile: 'particuliers', name: "Intégration d'une maquette Figma en site", price: '200 €', from: true,
-        desc: 'Votre maquette Figma transformée en site responsive.',
+        kw: 'wordpress wp cms blog woocommerce elementor administrable theme extension formation site web boutique' },
+      { name: "Intégration d'une maquette Figma", price: '400 €', from: true,
+        desc: 'Votre maquette Figma transformée en site responsive, fidèle au design.',
         cats: ['site'],
         kw: 'figma maquette design integration integrateur html css responsive zeplin xd photoshop psd vers site pixel perfect' },
-      { profile: 'particuliers', name: 'Petites automatisations', price: '30 €', unit: '/ h', from: true,
-        desc: 'Google Sheets, agenda, connecteurs entre vos outils.',
-        cats: ['existant', 'probleme'],
-        kw: 'automatisation automatiser google sheets agenda calendrier connecteur zapier make integration api script taches repetitives' },
-      { profile: 'particuliers', name: 'Chatbot / FAQ IA simple', price: '500 €', from: true,
-        desc: 'Assistant qui répond aux questions courantes sur votre site.',
-        cats: ['site', 'existant'],
-        kw: 'chatbot bot ia intelligence artificielle llm assistant faq questions reponses support conversation gpt widget' },
-      { profile: 'particuliers', name: 'Forfait entretien (petites retouches)', price: '75 €', unit: '/ mois', from: true,
-        desc: 'Petites modifications de contenu et suivi au mois.',
-        cats: ['existant', 'probleme'],
-        kw: 'entretien forfait mensuel maintenance retouche modification contenu suivi mise a jour abonnement mois petites demandes' },
-      { profile: 'particuliers', name: 'Accompagnement montée en compétences', price: '30 €', unit: '/ h', from: true,
-        desc: 'React, Git, projet perso guidé pas à pas.',
-        cats: ['accompagnement'],
-        kw: 'accompagnement montee en competences react git javascript mentorat coaching projet personnel guide code review progresser' },
+      { name: 'Refonte de site', price: '600 €', from: true,
+        desc: "Nouveau design ou évolutions d'un site existant.",
+        cats: ['site'],
+        kw: 'refonte modification modifier refaire redesign relooking moderniser evolution mise a jour changement ameliorer site existant' },
+      { name: 'SEO technique + données structurées', price: '300 €', from: true,
+        desc: 'Balises, métadonnées, sitemap et données structurées (Schema.org).',
+        cats: ['site'],
+        kw: 'seo referencement google balises meta title description sitemap schema donnees structurees rich snippets visibilite recherche indexation' },
+      { name: 'Optimisation performance / PageSpeed', price: '350 €', from: true,
+        desc: 'Audit puis corrections : images, cache, chargement, Core Web Vitals.',
+        cats: ['site'],
+        kw: 'vitesse performance pagespeed lighthouse rapidite lent optimisation cache images lazy chargement core web vitals fluidite audit' },
 
-      /* ---------- PROFESSIONNELS ---------- */
-      { profile: 'professionnels', name: 'Site vitrine', price: '600 €', from: true,
-        desc: 'Présence pro complète, plusieurs pages, SEO de base.',
-        cats: ['site-pro'],
-        kw: 'site vitrine web internet presence entreprise seo referencement pages corporate professionnel' },
-      { profile: 'professionnels', name: 'Site WordPress', price: '500 €', from: true,
-        desc: 'CMS sur mesure, formation à la prise en main.',
-        cats: ['site-pro', 'vendre-pro'],
-        kw: 'wordpress wp cms blog woocommerce administrable formation site web boutique' },
-      { profile: 'professionnels', name: 'E-commerce', price: '900 €', from: true,
-        desc: 'Boutique complète, paiement et gestion des commandes.',
-        cats: ['vendre-pro'],
-        kw: 'ecommerce e-commerce boutique magasin vendre vente commerce paiement commandes panier stock catalogue en ligne' },
-      { profile: 'professionnels', name: 'Shopify', price: '700 €', from: true,
-        desc: 'Boutique Shopify personnalisée et optimisée.',
-        cats: ['vendre-pro'],
-        kw: 'shopify boutique magasin ecommerce vendre vente store theme liquid optimisation en ligne' },
-      { profile: 'professionnels', name: 'Application web', price: '1 200 €', from: true,
-        desc: 'App métier, tableau de bord, espace utilisateur.',
-        cats: ['app-pro'],
-        kw: 'application app web appli metier tableau de bord dashboard espace utilisateur outil logiciel plateforme intranet' },
-      { profile: 'professionnels', name: 'SaaS', price: '2 500 €', from: true,
-        desc: 'Produit multi-utilisateurs, abonnements, back-office.',
-        cats: ['app-pro'],
-        kw: 'saas abonnement subscription multi utilisateurs back office produit plateforme logiciel cloud application' },
-      { profile: 'professionnels', name: 'Application mobile', price: '3 500 €', from: true,
-        desc: 'iOS et Android, publication sur les stores.',
-        cats: ['app-pro'],
-        kw: 'application mobile app appli ios android react native store play store app store smartphone tablette' },
-      { profile: 'professionnels', name: 'API / backend', price: '1 500 €', from: true,
-        desc: 'API sécurisée, base de données, documentation.',
-        cats: ['app-pro'],
-        kw: 'api backend serveur base de donnees database rest documentation integration web service' },
-      { profile: 'professionnels', name: 'Maintenance', price: '150 €', unit: '/ mois', from: true,
-        desc: 'Suivi mensuel, correctifs et évolutions.',
-        cats: ['suivi-pro'],
-        kw: 'maintenance suivi entretien mises a jour correctifs evolutions mensuel tma support contrat infogerance' },
-      { profile: 'professionnels', name: 'Développement à la journée', price: '350 €', unit: '/ jour', from: true,
-        desc: 'Renfort ponctuel intégré à votre équipe.',
-        cats: ['suivi-pro'],
-        kw: 'regie renfort journee jour freelance equipe ponctuel prestation tjm consultant developpeur' },
-
-      { profile: 'professionnels', name: 'Intégration de service tiers', price: '450 €', from: true,
+      /* ---------- VENDRE EN LIGNE ---------- */
+      { name: 'Boutique Shopify', price: '1 000 €', from: true,
+        desc: 'Boutique Shopify personnalisée et optimisée, prête à vendre.',
+        cats: ['vendre'],
+        kw: 'shopify boutique magasin ecommerce e-commerce vendre vente store theme liquid optimisation en ligne panier paiement' },
+      { name: 'E-commerce (WooCommerce ou sur mesure)', price: '1 500 €', from: true,
+        desc: 'Boutique complète : catalogue, paiement et gestion des commandes.',
+        cats: ['vendre'],
+        kw: 'ecommerce e-commerce woocommerce boutique magasin vendre vente commerce paiement commandes panier stock catalogue en ligne sur mesure' },
+      { name: 'Intégration de service tiers', price: '450 €', from: true,
         desc: 'Paiement, CRM, agenda, emailing : connexion à vos outils.',
-        cats: ['modules-pro', 'vendre-pro'],
-        kw: 'integration service tiers api externe paiement stripe paypal crm hubspot agenda google calendar emailing brevo mailchimp webhook connexion outil' },
-      { profile: 'professionnels', name: 'Système de réservation / prise de RDV', price: '900 €', from: true,
-        desc: 'Créneaux, disponibilités, confirmations e-mail et calendrier.',
-        cats: ['modules-pro', 'site-pro'],
-        kw: 'reservation prise de rendez vous rdv booking creneaux disponibilites agenda calendrier planning confirmation email calendly' },
-      { profile: 'professionnels', name: 'Tableau de bord & reporting', price: '800 €', from: true,
-        desc: 'Indicateurs, filtres et exports PDF, Excel et CSV.',
-        cats: ['modules-pro'],
-        kw: 'tableau de bord dashboard reporting rapport statistiques indicateurs kpi graphiques export pdf excel csv donnees analyse' },
-      { profile: 'professionnels', name: 'Espace client / back-office / intranet', price: '1 000 €', from: true,
-        desc: 'Zone privée pour gérer contenus, utilisateurs et données.',
-        cats: ['modules-pro'],
-        kw: 'espace client back office intranet administration zone privee gestion utilisateurs contenus crud portail interne extranet' },
-      { profile: 'professionnels', name: 'Module authentification & gestion des rôles', price: '500 €', from: true,
-        desc: 'Connexion sécurisée, rôles, permissions, JWT ou SSO.',
-        cats: ['modules-pro'],
-        kw: 'authentification auth connexion login inscription jwt sso oauth roles permissions droits acces securite session mot de passe' },
-      { profile: 'professionnels', name: "Création d'un chatbot", price: '500 €', from: true,
-        desc: 'Assistant intégré à votre site, entraîné sur vos contenus : FAQ, support, prise de contact.',
-        cats: ['modules-pro', 'site-pro'],
-        kw: 'chatbot bot ia intelligence artificielle llm assistant virtuel faq questions reponses support client conversation gpt widget chat agent conversationnel' },
-      { profile: 'professionnels', name: 'Intégration IA / LLM', price: '900 €', from: true,
-        desc: 'Chatbot avancé, RAG, résumé, classification : API ou modèle local.',
-        cats: ['modules-pro'],
-        kw: 'ia intelligence artificielle llm gpt openai chatbot rag resume classification extraction embeddings vecteur assistant modele local prompt' },
-      { profile: 'professionnels', name: 'Collecte de données / scraping cadré', price: '450 €', from: true,
-        desc: 'Extraction structurée de données publiques, dans un cadre légal.',
-        cats: ['modules-pro'],
-        kw: 'scraping collecte donnees extraction crawl parsing web data mining automatisation puppeteer playwright api structuree veille' },
+        cats: ['vendre', 'modules'],
+        kw: 'integration service tiers api externe paiement stripe paypal crm hubspot agenda google calendar emailing newsletter brevo mailchimp webhook connexion outil' },
 
-      { profile: 'professionnels', name: 'Mise en place Docker + CI/CD', price: '500 €', from: true,
-        desc: 'Conteneurisation et pipeline de déploiement automatisé.',
-        cats: ['infra-pro'],
-        kw: 'docker conteneur container ci cd pipeline gitlab github actions integration continue deploiement automatise build image devops' },
-      { profile: 'professionnels', name: 'Déploiement & infrastructure', price: '350 €', from: true,
-        desc: 'VPS, Nginx, Cloudflare, nom de domaine et certificat SSL.',
-        cats: ['infra-pro'],
-        kw: 'deploiement infrastructure serveur vps nginx cloudflare dns nom de domaine ssl https mise en production hebergement cloud aws gcp' },
-      { profile: 'professionnels', name: 'Migration de base de données', price: '400 €', from: true,
-        desc: 'Schéma, données et scripts de migration versionnés.',
-        cats: ['infra-pro'],
-        kw: 'migration base de donnees database schema donnees postgresql mysql prisma typeorm script versionne import export transfert' },
-      { profile: 'professionnels', name: 'Mise en place de tests automatisés', price: '500 €', from: true,
-        desc: 'Tests unitaires et end-to-end (Jest, Cypress, Playwright).',
-        cats: ['infra-pro', 'suivi-pro'],
-        kw: 'tests automatises test unitaire end to end e2e jest cypress playwright vitest recette qualite couverture non regression ci' },
-      { profile: 'professionnels', name: 'Publication sur les stores', price: '300 €', from: true,
-        desc: 'App Store et Play Store : comptes, fiches, build et envoi.',
-        cats: ['infra-pro'],
-        kw: 'publication store app store play store apple google fiche build ipa aab testflight review compte developpeur application mobile' },
-
-      { profile: 'professionnels', name: "Passage d'une app web en PWA / mobile", price: '600 €', from: true,
+      /* ---------- APPLICATION ET API ---------- */
+      { name: 'Application web', price: '2 500 €', from: true,
+        desc: 'App métier, tableau de bord, espace utilisateur.',
+        cats: ['app'],
+        kw: 'application app web appli metier tableau de bord dashboard espace utilisateur outil logiciel plateforme intranet' },
+      { name: 'API / backend', price: '1 500 €', from: true,
+        desc: 'API sécurisée, base de données, documentation.',
+        cats: ['app'],
+        kw: 'api backend serveur base de donnees database rest documentation integration web service' },
+      { name: 'SaaS', price: '5 000 €', from: true,
+        desc: 'Produit multi-utilisateurs, abonnements, back-office.',
+        cats: ['app'],
+        kw: 'saas abonnement subscription multi utilisateurs back office produit plateforme logiciel cloud application' },
+      { name: 'Application mobile', price: '4 000 €', from: true,
+        desc: 'iOS et Android, publication sur les stores.',
+        cats: ['app'],
+        kw: 'application mobile app appli ios android react native store play store app store smartphone tablette' },
+      { name: "Passage d'une app web en PWA / mobile", price: '600 €', from: true,
         desc: 'App web installable ou portée en application mobile.',
-        cats: ['app-pro'],
-        kw: 'pwa progressive web app installable mobile portage react native wrapper application web hors ligne notification push store' }
+        cats: ['app'],
+        kw: 'pwa progressive web app installable hors ligne offline mobile portage react native wrapper application web notification push store' },
+
+      /* ---------- MODULES & FONCTIONNALITÉS ---------- */
+      { name: 'Système de réservation / prise de RDV', price: '900 €', from: true,
+        desc: 'Créneaux, disponibilités, confirmations e-mail et calendrier.',
+        cats: ['modules', 'site'],
+        kw: 'reservation prise de rendez vous rdv booking creneaux disponibilites agenda calendrier planning confirmation email calendly' },
+      { name: 'Tableau de bord & reporting', price: '800 €', from: true,
+        desc: 'Indicateurs, filtres et exports PDF, Excel et CSV.',
+        cats: ['modules'],
+        kw: 'tableau de bord dashboard reporting rapport statistiques indicateurs kpi graphiques export pdf excel csv donnees analyse' },
+      { name: 'Espace client / back-office / intranet', price: '1 200 €', from: true,
+        desc: 'Zone privée pour gérer contenus, utilisateurs et données.',
+        cats: ['modules'],
+        kw: 'espace client back office intranet administration zone privee gestion utilisateurs contenus crud portail interne extranet' },
+      { name: 'Authentification & gestion des rôles', price: '600 €', from: true,
+        desc: 'Connexion sécurisée, rôles, permissions, JWT ou SSO.',
+        cats: ['modules'],
+        kw: 'authentification auth connexion login inscription jwt sso oauth roles permissions droits acces securite session mot de passe' },
+      { name: "Création d'un chatbot", price: '600 €', from: true,
+        desc: 'Assistant intégré à votre site, entraîné sur vos contenus : FAQ, support, prise de contact.',
+        cats: ['modules', 'site'],
+        kw: 'chatbot bot ia intelligence artificielle llm assistant virtuel faq questions reponses support client conversation gpt widget chat agent conversationnel' },
+      { name: 'Intégration IA / LLM', price: '1 200 €', from: true,
+        desc: 'Chatbot avancé, RAG, résumé, classification : API ou modèle local.',
+        cats: ['modules'],
+        kw: 'ia intelligence artificielle llm gpt openai chatbot rag resume classification extraction embeddings vecteur assistant modele local prompt' },
+      { name: 'Collecte de données / scraping cadré', price: '450 €', from: true,
+        desc: 'Extraction structurée de données publiques, dans un cadre légal.',
+        cats: ['modules'],
+        kw: 'scraping collecte donnees extraction crawl parsing web data mining automatisation puppeteer playwright api structuree veille' },
+      { name: 'Automatisation de processus', price: '400 €', from: true,
+        desc: 'Google Sheets, agenda, connecteurs entre vos outils : fini les tâches répétitives.',
+        cats: ['modules'],
+        kw: 'automatisation automatiser processus google sheets agenda calendrier connecteur zapier make n8n integration api script taches repetitives workflow' },
+
+      /* ---------- INFRA, DEVOPS & QUALITÉ ---------- */
+      { name: 'Mise en place Docker + CI/CD', price: '600 €', from: true,
+        desc: 'Conteneurisation et pipeline de déploiement automatisé.',
+        cats: ['infra'],
+        kw: 'docker conteneur container ci cd pipeline gitlab github actions integration continue deploiement automatise build image devops' },
+      { name: 'Déploiement & infrastructure', price: '400 €', from: true,
+        desc: 'VPS, Nginx, Cloudflare, nom de domaine et certificat SSL.',
+        cats: ['infra'],
+        kw: 'deploiement infrastructure serveur vps nginx cloudflare dns nom de domaine ssl https mise en ligne mise en production hebergement cloud aws gcp' },
+      { name: 'Migration de base de données', price: '500 €', from: true,
+        desc: 'Schéma, données et scripts de migration versionnés.',
+        cats: ['infra'],
+        kw: 'migration base de donnees database schema donnees postgresql mysql prisma typeorm doctrine script versionne import export transfert' },
+      { name: 'Mise en place de tests automatisés', price: '600 €', from: true,
+        desc: 'Tests unitaires et end-to-end (Jest, Cypress, Playwright).',
+        cats: ['infra', 'suivi'],
+        kw: 'tests automatises test unitaire end to end e2e jest cypress playwright vitest recette qualite couverture non regression ci' },
+      { name: 'Publication sur les stores', price: '350 €', from: true,
+        desc: 'App Store et Play Store : comptes, fiches, build et envoi.',
+        cats: ['infra'],
+        kw: 'publication store app store play store apple google fiche build ipa aab testflight review compte developpeur application mobile' },
+      { name: "Changement d'hébergement", price: '250 €', from: true,
+        desc: 'Transfert du site et de la base vers un nouvel hébergeur.',
+        cats: ['infra'],
+        kw: 'migration transfert hebergement demenagement changer hebergeur ovh o2switch deplacer site base de donnees dns' },
+      { name: 'Sécurisation + sauvegardes', price: '250 €', from: true,
+        desc: 'HTTPS, mises à jour, sauvegardes automatiques et plan de restauration.',
+        cats: ['infra', 'suivi'],
+        kw: 'securite securisation sauvegarde backup https ssl mises a jour wordpress piratage malware protection restauration' },
+      { name: 'Nom de domaine + e-mails pro', price: '150 €', from: true,
+        desc: 'Achat du domaine, DNS et adresses e-mail à votre nom.',
+        cats: ['infra'],
+        kw: 'nom de domaine dns email professionnel adresse mail ovh gandi google workspace configuration mx zone hebergement' },
+
+      /* ---------- MAINTENANCE ET RENFORT ---------- */
+      { name: 'Maintenance', price: '150 €', unit: '/ mois', from: true,
+        desc: 'Suivi mensuel, mises à jour, correctifs et petites évolutions.',
+        cats: ['suivi'],
+        kw: 'maintenance suivi entretien mises a jour correctifs evolutions mensuel abonnement tma support contrat infogerance retouches' },
+      { name: 'Intervention / dépannage', price: '60 €', unit: '/ h', from: true,
+        desc: 'Bug, erreur, site en panne : diagnostic et correction.',
+        cats: ['suivi'],
+        kw: 'depannage intervention correction bug erreur probleme reparer panne corriger plante casse fix soucis assistance aide wordpress shopify' },
+      { name: 'Développement à la journée', price: '400 €', unit: '/ jour', from: true,
+        desc: 'Renfort ponctuel intégré à votre équipe.',
+        cats: ['suivi'],
+        kw: 'regie renfort journee jour freelance equipe ponctuel prestation tjm consultant developpeur' }
     ];
 
     /* ── Synonymes appliqués aux mots de la requête ─────── */
@@ -526,13 +457,12 @@
     /* Index de recherche pré-calculé pour chaque prestation. */
     SERVICES.forEach(function (s) {
       var catLabels = s.cats.map(function (cid) {
-        var list = CATEGORIES[s.profile] || [];
-        for (var i = 0; i < list.length; i++) if (list[i].id === cid) return list[i].label;
-        return '';
+        var cat = categoryById(cid);
+        return cat ? cat.label : '';
       }).join(' ');
       s._name = norm(s.name);
       s._cat  = norm(catLabels);
-      s._hay  = norm([s.name, s.desc || '', s.kw, catLabels, PROFILES[s.profile].label].join(' '));
+      s._hay  = norm([s.name, s.desc || '', s.kw, catLabels].join(' '));
       s._words = s._hay.split(' ');
     });
 
@@ -607,10 +537,12 @@
 
     function plural(n, word) { return n + ' ' + word + (n > 1 ? 's' : ''); }
 
-    function inCategory(profile, catId) {
-      return SERVICES.filter(function (s) {
-        return s.profile === profile && s.cats.indexOf(catId) !== -1;
-      });
+    /* Prestations dont c'est la catégorie principale (cats[0]) d'abord,
+       puis celles qui y figurent aussi ; ordre de SERVICES conservé. */
+    function inCategory(catId) {
+      var list = SERVICES.filter(function (s) { return s.cats.indexOf(catId) !== -1; });
+      return list.filter(function (s) { return s.cats[0] === catId; })
+        .concat(list.filter(function (s) { return s.cats[0] !== catId; }));
     }
 
     /* Carte de choix (profil, besoin) : un vrai lien vers l'écran suivant. */
@@ -676,7 +608,7 @@
     }
 
     /* Une ligne d'aide sous chaque écran. */
-    function helpLine(profile) {
+    function helpLine() {
       var p = el('p', 'help-line');
       p.appendChild(el('span', null, 'Vous hésitez ?'));
 
@@ -689,8 +621,7 @@
       var devis = el('button', 'inline-link', 'Demander un devis');
       devis.type = 'button';
       devis.setAttribute('data-contact-cta', '');
-      devis.setAttribute('data-contact-subject',
-        'Demande de devis personnalisé' + (profile ? ' · ' + PROFILES[profile].label : ''));
+      devis.setAttribute('data-contact-subject', 'Demande de devis personnalisé');
       p.appendChild(devis);
       return p;
     }
@@ -698,39 +629,26 @@
     /* ── Vues : { title, sub, crumbs, body } ───────────── */
     var ROOT = { label: 'Tarifs', hash: 'choix' };
 
-    function viewProfile() {
+    function viewCategories() {
       var grid = el('div', 'pick-grid');
-      grid.appendChild(pick('particuliers', 'Particuliers',
-        'Site, dépannage, CV, visuels, accompagnement.', 'pick--lg pick--perso'));
-      grid.appendChild(pick('professionnels', 'Professionnels',
-        'Site, e-commerce, application, maintenance.', 'pick--lg pick--pro'));
-      return {
-        title: 'Mes tarifs', sub: 'Pour qui est ce projet ?', docTitle: 'Tarifs',
-        crumbs: [], body: [grid, helpLine(null)]
-      };
-    }
-
-    function viewCategories(profile) {
-      var grid = el('div', 'pick-grid');
-      CATEGORIES[profile].forEach(function (cat) {
-        grid.appendChild(pick(profile + '/' + cat.id, cat.label, cat.hint));
+      CATEGORIES.forEach(function (cat) {
+        grid.appendChild(pick(cat.id, cat.label, cat.hint));
       });
       return {
-        title: PROFILES[profile].title, sub: 'Quel est votre besoin ?', docTitle: PROFILES[profile].title,
-        crumbs: [ROOT, { label: PROFILES[profile].label }],
-        body: [grid, helpLine(profile)]
+        title: 'Mes tarifs', sub: 'Quel est votre besoin ?', docTitle: 'Tarifs',
+        crumbs: [], body: [grid, helpLine()]
       };
     }
 
-    function viewServices(profile, catId) {
-      var cat = CATEGORIES[profile].filter(function (c) { return c.id === catId; })[0];
-      var list = inCategory(profile, catId);
+    function viewServices(catId) {
+      var cat = categoryById(catId);
+      var list = inCategory(catId);
       return {
         title: cat.label,
         sub: plural(list.length, 'prestation') + '. Touchez une ligne pour le détail.',
-        docTitle: cat.label + ' · ' + PROFILES[profile].title,
-        crumbs: [ROOT, { label: PROFILES[profile].label, hash: profile }, { label: cat.label }],
-        body: [servicePanel(list), helpLine(profile)]
+        docTitle: cat.label + ' · Tarifs',
+        crumbs: [ROOT, { label: cat.label }],
+        body: [servicePanel(list), helpLine()]
       };
     }
 
@@ -755,16 +673,12 @@
         });
         nr.appendChild(btn);
         view.sub = 'Aucune prestation pour « ' + q + ' ».';
-        view.body = [nr, helpLine(null)];
+        view.body = [nr, helpLine()];
         return view;
       }
 
       view.sub = plural(results.length, 'résultat') + ' pour « ' + q + ' ».';
-      view.body = [];
-      ['particuliers', 'professionnels'].forEach(function (prof) {
-        var group = results.filter(function (s) { return s.profile === prof; });
-        if (group.length) view.body.push(servicePanel(group, PROFILES[prof].label));
-      });
+      view.body = [servicePanel(results)];
       return view;
     }
 
@@ -779,15 +693,15 @@
     }
 
     /* ── Routage par hash ──────────────────────────────── */
+    /* Catégorie demandée par le hash, ou null (écran d'accueil). Une
+       ancienne adresse est réécrite sur place, sans entrée d'historique. */
     function parseHash() {
       var parts = (location.hash || '').replace(/^#/, '').split('/').filter(Boolean);
-      var profile = PROFILES[parts[0]] ? parts[0] : null;
-      var category = null;
-      if (profile && parts[1]) {
-        var ok = CATEGORIES[profile].some(function (c) { return c.id === parts[1]; });
-        if (ok) category = parts[1];
-      }
-      return { profile: profile, category: category };
+      if (categoryById(parts[0])) return parts[0];
+      if (parts[0] !== 'particuliers' && parts[0] !== 'professionnels') return null;
+      var id = parts[1] && LEGACY[parts[1]] || (categoryById(parts[1]) ? parts[1] : null);
+      history.replaceState(null, '', location.pathname + location.search + (id ? '#' + id : ''));
+      return id;
     }
 
     function searchActive() { return tokens(input.value).length > 0; }
@@ -829,15 +743,15 @@
 
     function render(moved) {
       var isSearch = searchActive();
-      var r = parseHash();
+      var category = parseHash();
       var view = isSearch ? viewSearch(input.value)
-        : !r.profile ? viewProfile()
-        : !r.category ? viewCategories(r.profile)
-        : viewServices(r.profile, r.category);
+        : !category ? viewCategories()
+        : viewServices(category);
 
       // En recherche, le fil ramène à l'écran d'où l'on vient.
-      if (isSearch && r.profile) {
-        view.crumbs = [ROOT, { label: PROFILES[r.profile].label, hash: r.profile }, { label: 'Recherche' }];
+      if (isSearch && category) {
+        var cat = categoryById(category);
+        view.crumbs = [ROOT, { label: cat.label, hash: category }, { label: 'Recherche' }];
       }
 
       titleEl.textContent = view.title;
