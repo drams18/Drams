@@ -483,7 +483,7 @@ function shell(page, { title, description, ogDescription, jsonld, personExtra, b
   <meta name="twitter:title" content="${esc(title)}">
   <meta name="twitter:description" content="${esc(ogDescription || description)}">
   <meta name="twitter:image" content="${SITE_URL}assets/img/og.jpg">
-  <meta name="theme-color" content="#0a0a0d">
+  <meta name="theme-color" content="#070c14">
   <script src="${L.up}js/theme.js"></script>${HEAD_SCRIPT}
   <link rel="icon" href="${L.up}assets/img/favicon.png" sizes="96x96">
   <link rel="icon" href="${L.up}assets/img/favicon.svg" type="image/svg+xml">

@@ -18,41 +18,40 @@
 /* ── Tons (jour / nuit) ─────────────────────────────── */
 :root,
 [data-theme="night"] {
-  /* Catégories de projets : bleu / rose / violet, adoucis */
-  --c-pro:    #7aa2f7;
-  --c-perso:  #ee8fc4;
-  --c-school: #b19cf5;
-  --c-award:  #e6b85c;   /* diplômes, certifications (frise du parcours) */
-  /* Familles de compétences : tons pastel, une teinte chacune */
-  --f-front: #7dc8f0;
-  --f-back:  #b7a6f4;
-  --f-data:  #6fd6c2;
-  --f-ops:   #e9c46a;
-  --f-test:  #f19a9a;
-  --f-tools: #aeb8c8;
-  --f-ai:    #e3a3ea;
-  --wip:     #f2b84b;
-  --dot:     rgba(255,255,255,.07);
-  --scrim:   rgba(10,10,13,.92);
+  /* Catégories de projets et familles : les gemmes du sceau, adoucies */
+  --c-pro:    #6aaaf0;
+  --c-perso:  #ef7a76;
+  --c-school: #b585ea;
+  --c-award:  #ffd442;   /* diplômes, certifications (frise du parcours) */
+  --f-front: #6aaaf0;
+  --f-back:  #b585ea;
+  --f-data:  #62d078;
+  --f-ops:   #ffd442;
+  --f-test:  #ef7a76;
+  --f-tools: #c8cfdc;
+  --f-ai:    #8f86e0;
+  --wip:     #ffa148;
+  --dot:     rgba(200,207,220,.08);
+  --scrim:   rgba(7,12,20,.93);
   --ease-out: cubic-bezier(.16,1,.3,1);
   --gut: clamp(20px, 5.5vw, 88px);
   --top: 72px;
 }
 [data-theme="day"] {
-  --c-pro:    #2f5fd0;
-  --c-perso:  #c73d86;
-  --c-school: #6d4fd6;
-  --c-award:  #a66a00;
-  --f-front: #0b76b3;
-  --f-back:  #6c4fd1;
-  --f-data:  #0f8a78;
-  --f-ops:   #b07a0c;
-  --f-test:  #c9384a;
-  --f-tools: #5b6678;
-  --f-ai:    #a63db3;
-  --wip:     #b7791f;
-  --dot:     rgba(9,9,11,.08);
-  --scrim:   rgba(255,255,255,.94);
+  --c-pro:    #205b9e;
+  --c-perso:  #b8322e;
+  --c-school: #6a3699;
+  --c-award:  #8a6d10;
+  --f-front: #205b9e;
+  --f-back:  #6a3699;
+  --f-data:  #29863b;
+  --f-ops:   #8a6d10;
+  --f-test:  #b8322e;
+  --f-tools: #525d60;
+  --f-ai:    #383089;
+  --wip:     #ae5e13;
+  --dot:     rgba(47,79,122,.1);
+  --scrim:   rgba(246,248,251,.95);
 }
 
 [data-cat="Professionnel"] { --cat: var(--c-pro); }

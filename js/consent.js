@@ -105,9 +105,9 @@
   function injectStyles() {
     if (doc.getElementById(STYLE_ID)) return;
     var css = [
-      '.ck,.ck-dlg,.ck-fab{--ck-bg:var(--surface,#131318);--ck-bg-2:var(--surface-2,#1a1a20);',
-      '--ck-line:var(--line-2,#34343e);--ck-text:var(--text,#f4f4f5);--ck-text-2:var(--text-2,#d4d4d8);',
-      '--ck-muted:var(--muted,#a1a1aa);--ck-accent:var(--accent,#8b8ff8);',
+      '.ck,.ck-dlg,.ck-fab{--ck-bg:var(--surface,#0e1724);--ck-bg-2:var(--surface-2,#142238);',
+      '--ck-line:var(--line-2,#2a3d58);--ck-text:var(--text,#f4f8fb);--ck-text-2:var(--text-2,#c8cfdc);',
+      '--ck-muted:var(--muted,#8f9db0);--ck-accent:var(--accent,#ff9a3c);',
       "font-family:var(--font,'Inter Variable',Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);",
       'font-size:14.5px;line-height:1.55;color:var(--ck-text-2);text-align:left;letter-spacing:normal;}',
       '.ck *,.ck-dlg *{box-sizing:border-box;}',

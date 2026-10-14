@@ -29,7 +29,7 @@
   function apply(theme) {
     root.setAttribute('data-theme', theme);
     var meta = global.document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'day' ? '#ffffff' : '#0a0a0d');
+    if (meta) meta.setAttribute('content', theme === 'day' ? '#f6f8fb' : '#070c14');
     var btns = global.document.querySelectorAll('[data-theme-toggle]');
     for (var i = 0; i < btns.length; i++) {
       btns[i].setAttribute('aria-pressed', theme === 'night' ? 'true' : 'false');

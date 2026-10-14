@@ -115,7 +115,7 @@ h1, h2 { margin: 0; }
 }
 .mode__cta .ico { width: 16px; height: 16px; transition: transform .25s var(--ease); }
 .mode:hover .mode__cta, .mode:focus-visible .mode__cta, .mode.is-current .mode__cta {
-  color: var(--bg); background: var(--text); border-color: var(--text);
+  color: var(--primary-ink); background: var(--primary-bg); border-color: var(--primary-line);
 }
 .mode:hover .mode__cta .ico, .mode:focus-visible .mode__cta .ico { transform: translateX(3px); }
 .mode__last {

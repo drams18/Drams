@@ -14,48 +14,58 @@
 
 :root,
 [data-theme="night"] {
-  --bg:        #0a0a0d;
-  --bg-alt:    #0e0e12;
-  --surface:   #131318;
-  --surface-2: #1a1a20;
-  --line:      #25252d;
-  --line-2:    #34343e;
-  --text:      #f4f4f5;
-  --text-2:    #d4d4d8;
-  --muted:     #a1a1aa;
-  --accent:    #8b8ff8;
-  --accent-2:  #b7b9fb;
-  --grid:      rgba(255,255,255,.045);
-  --glow:      rgba(99,102,241,.28);
-  --shadow:    0 1px 2px rgba(0,0,0,.4), 0 12px 32px -12px rgba(0,0,0,.6);
+  /* Palette du sceau A.D (assets/img/logo.svg) : disque bleu nuit,
+     métal argenté, orange de la flamme du Ciel en accent. */
+  --bg:        #070c14;
+  --bg-alt:    #0a111c;
+  --surface:   #0e1724;
+  --surface-2: #142238;
+  --line:      #1c2a3e;
+  --line-2:    #2a3d58;
+  --text:      #f4f8fb;
+  --text-2:    #c8cfdc;
+  --muted:     #8f9db0;
+  --accent:    #ff9a3c;
+  --accent-2:  #ffb877;
+  --grid:      rgba(200,207,220,.05);
+  --glow:      rgba(255,143,37,.22);
+  --shadow:    0 1px 2px rgba(0,0,0,.45), 0 12px 32px -12px rgba(0,0,0,.7);
   --ok:        #34d399;
   --err:       #fb7185;
-  /* Catégories de projets */
-  --c-pro:     #60a5fa;
-  --c-perso:   #f472b6;
-  --c-school:  #a78bfa;
+  /* Catégories de projets : couleurs des gemmes */
+  --c-pro:     #6aaaf0;
+  --c-perso:   #ef7a76;
+  --c-school:  #b585ea;
+  /* Bouton principal : métal argenté */
+  --primary-bg:   linear-gradient(180deg, #f4fcf5, #c8cfdc);
+  --primary-line: #c8cfdc;
+  --primary-ink:  #070c14;
   color-scheme: dark;
 }
 [data-theme="day"] {
-  --bg:        #ffffff;
-  --bg-alt:    #fafafa;
+  --bg:        #f6f8fb;
+  --bg-alt:    #eef2f7;
   --surface:   #ffffff;
-  --surface-2: #f4f4f5;
-  --line:      #e4e4e7;
-  --line-2:    #d4d4d8;
-  --text:      #09090b;
-  --text-2:    #3f3f46;
-  --muted:     #6b6b76;
-  --accent:    #4f46e5;
-  --accent-2:  #4338ca;
-  --grid:      rgba(9,9,11,.05);
-  --glow:      rgba(99,102,241,.16);
-  --shadow:    0 1px 2px rgba(9,9,11,.05), 0 12px 32px -14px rgba(9,9,11,.18);
+  --surface-2: #eaeff5;
+  --line:      #dbe2ea;
+  --line-2:    #c8cfdc;
+  --text:      #070c14;
+  --text-2:    #2a3647;
+  --muted:     #5a6878;
+  --accent:    #b45309;
+  --accent-2:  #9a4507;
+  --grid:      rgba(47,79,122,.06);
+  --glow:      rgba(255,143,37,.16);
+  --shadow:    0 1px 2px rgba(7,12,20,.06), 0 12px 32px -14px rgba(20,34,56,.22);
   --ok:        #059669;
   --err:       #e11d48;
-  --c-pro:     #2563eb;
-  --c-perso:   #db2777;
-  --c-school:  #7c3aed;
+  --c-pro:     #205b9e;
+  --c-perso:   #b8322e;
+  --c-school:  #6a3699;
+  /* Bouton principal : bleu nuit du disque */
+  --primary-bg:   linear-gradient(180deg, #2f4f7a, #142238);
+  --primary-line: #142238;
+  --primary-ink:  #f4f8fb;
   color-scheme: light;
 }
 
@@ -107,9 +117,9 @@ img, svg { display: block; }
 .btn:hover { border-color: var(--muted); transform: translateY(-1px); }
 .btn:active { transform: translateY(0); }
 .btn--primary {
-  color: var(--bg); background: var(--text); border-color: var(--text);
+  color: var(--primary-ink); background: var(--primary-bg); border-color: var(--primary-line);
 }
-.btn--primary:hover { border-color: var(--text); box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--text) 45%, transparent); }
+.btn--primary:hover { border-color: var(--primary-line); box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--primary-line) 55%, transparent); }
 .btn--primary .ico { transition: transform .2s var(--ease); }
 .btn--primary:hover .ico { transform: translateX(3px); }
 .btn--ghost { background: transparent; }

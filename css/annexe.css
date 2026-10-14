@@ -22,8 +22,8 @@
   border-left: 1.8px solid currentColor; border-bottom: 1.8px solid currentColor;
   transform: rotate(45deg);
 }
-.btn-cta { color: var(--bg); background: var(--text); border-color: var(--text); }
-.btn-cta:hover { border-color: var(--text); }
+.btn-cta { color: var(--primary-ink); background: var(--primary-bg); border-color: var(--primary-line); }
+.btn-cta:hover { border-color: var(--primary-line); }
 
 .fallback { max-width: 600px; margin: 0 auto; padding: 20px; text-align: center; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
 .fallback a { color: var(--accent); }
