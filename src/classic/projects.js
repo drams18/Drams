@@ -2,15 +2,17 @@
    PROJECTS.JS : Page Projets : grille de cartes + fiche
 
    Lit les cartes générées (.pj-card, scripts/build-classic.mjs) :
-     • filtres par catégorie (Tous, Professionnels, Personnels, Scolaire) ;
+     • filtres par technologie (plusieurs à la fois), cartes classées du
+       plus technique au moins technique (ordre du HTML) ;
      • une carte ouvre la fiche du projet (<dialog>) : la fiche s'ouvre
        depuis la carte, ses captures y défilent (galerie), ← → passent
        au projet voisin parmi ceux affichés ;
      • les cartes déjà ouvertes portent la mention « Vu » (le temps de
        la visite).
 
-   Liens : #<projet> ouvre la fiche · #tech/<compétence> n'affiche que les
-   projets qui utilisent cette technologie (lien depuis Compétences).
+   Liens : #<projet> ouvre la fiche · #tech/<compétence>[,<compétence>…]
+   n'affiche que les projets qui utilisent ces technologies (lien depuis
+   Compétences).
    ══════════════════════════════════════════════════════ */
 const doc = document;
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)');
@@ -66,64 +68,82 @@ export function initProjects() {
     btn.addEventListener('click', () => openProject(d.slug, { from: d.li }));
   });
 
-  // ── Filtres ───────────────────────────────────────────
-  // Catégorie (boutons) ou technologie (#tech/<slug>) : un seul à la fois.
-  const filterBtns = [...sec.querySelectorAll('[data-filter]')];
-  let cat = '';
-  let tech = null;                 // { slug, label }
-  let techChip = null;
+  // ── Filtres par technologie ───────────────────────────
+  // Plusieurs technologies à la fois : restent les projets qui les utilisent
+  // toutes. Chaque pastille annonce combien de projets resteraient si on
+  // l'ajoutait ; celles qui n'en laisseraient aucun s'estompent.
+  const bar = sec.querySelector('.pj-tf');
+  const chips = bar ? [...bar.querySelectorAll('.tf')] : [];
+  const chipOf = Object.fromEntries(chips.map((b) => [b.dataset.tech, b]));
+  const reset = bar && bar.querySelector('.pj-tf__reset');
+  const state = bar && bar.querySelector('.pj-tf__state');
+  const picked = new Set();
   const visible = () => data.filter((d) => !d.li.hidden);
+  const uses = (d, keys) => [...keys].every((k) => d.skills.includes(k));
+  const nameOf = (k) => chipOf[k].querySelector('.tf__l').textContent;
 
   function apply({ animate = true } = {}) {
-    const before = new Set(visible());
-    data.forEach((d) => {
-      d.li.hidden = tech ? !d.skills.includes(tech.slug) : !!cat && d.cat !== cat;
-    });
-    filterBtns.forEach((b) => b.setAttribute('aria-pressed', String(!tech && b.dataset.filter === cat)));
+    // FLIP : la place de chaque carte avant le filtre…
+    const before = new Map(visible().map((d) => [d, d.li.getBoundingClientRect()]));
+    data.forEach((d) => { d.li.hidden = !uses(d, picked); });
     const shown = visible();
-    if (live) live.textContent = plural(shown.length, 'projet affiché', 'projets affichés');
+    chips.forEach((b) => {
+      const k = b.dataset.tech, on = picked.has(k);
+      const n = on ? shown.length : shown.filter((d) => d.skills.includes(k)).length;
+      b.setAttribute('aria-pressed', String(on));
+      b.querySelector('.tf__n').textContent = n;
+      b.disabled = !on && !n;
+      b.setAttribute('aria-label', on ? `${nameOf(k)}, filtre actif : retirer` : `${nameOf(k)}, ${plural(n, 'projet', 'projets')}`);
+    });
+    if (bar) {
+      bar.classList.toggle('is-on', picked.size > 0);
+      reset.hidden = !picked.size;
+      state.textContent = picked.size ? `${shown.length} sur ${data.length}` : '';
+      // Téléphone (une ligne qui défile) : les filtres actifs passent en
+      // tête, on y revient.
+      const list = bar.querySelector('.pj-tf__list');
+      if (list.scrollWidth > list.clientWidth) list.scrollTo({ left: 0, behavior: animate && !REDUCE.matches ? 'smooth' : 'auto' });
+    }
+    if (live) {
+      live.textContent = picked.size
+        ? `${plural(shown.length, 'projet affiché', 'projets affichés')} avec ${[...picked].map(nameOf).join(' et ')}`
+        : plural(shown.length, 'projet affiché', 'projets affichés');
+    }
     if (!animate || REDUCE.matches) return;
-    // Les cartes qui apparaissent arrivent en douceur, en léger décalé.
-    shown.filter((d) => !before.has(d) || before.size !== shown.length).forEach((d, k) => {
-      d.li.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }],
-        { duration: 420, delay: Math.min(k, 8) * 35, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
+    // … puis chaque carte glisse de son ancienne place à la nouvelle ;
+    // celles qui apparaissent arrivent en douceur, en léger décalé.
+    let k = 0;
+    shown.forEach((d) => {
+      const was = before.get(d);
+      if (was) {
+        const now = d.li.getBoundingClientRect();
+        const dx = was.left - now.left, dy = was.top - now.top;
+        if (dx || dy) d.li.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: 620, easing: 'cubic-bezier(.16,1,.3,1)' });
+      } else {
+        d.li.animate([{ opacity: 0, transform: 'translateY(18px) scale(.97)' }, { opacity: 1, transform: 'none' }],
+          { duration: 480, delay: 90 + Math.min(k++, 8) * 40, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
+      }
     });
   }
 
-  filterBtns.forEach((b) => b.addEventListener('click', () => {
-    if (!tech && b.dataset.filter === cat) return;
-    cat = b.dataset.filter;
-    clearTech({ silent: true });
+  const clearHash = () => { if (/^#tech\//.test(location.hash)) history.replaceState(null, '', location.pathname + location.search); };
+  function toggle(k) {
+    if (picked.has(k)) picked.delete(k); else picked.add(k);
+    clearHash();
     apply();
-  }));
+  }
+  chips.forEach((b) => b.addEventListener('click', () => toggle(b.dataset.tech)));
+  if (reset) reset.addEventListener('click', () => { picked.clear(); clearHash(); apply(); chips[0].focus(); });
 
-  function setTech(slug) {
-    const set = data.filter((d) => d.skills.includes(slug));
-    const tag = sec.querySelector(`.tag-link[data-skill="${CSS.escape(slug)}"]`);
-    if (!set.length || !tag) return false;
-    tech = { slug, label: tag.textContent };
-    cat = '';
-    if (!techChip) {
-      techChip = doc.createElement('p');
-      techChip.className = 'pj-tech';
-      sec.querySelector('.pj-filters').after(techChip);
-    }
-    techChip.dataset.fam = tag.dataset.fam || 'other';
-    techChip.innerHTML = `<span>Projets avec <strong>${esc(tech.label)}</strong> · ${set.length}</span><button type="button" aria-label="Retirer le filtre ${esc(tech.label)}">${icon('close')}</button>`;
-    techChip.querySelector('button').addEventListener('click', () => { clearTech(); apply(); filterBtns[0].focus(); });
-    apply();
-    return true;
-  }
-  function clearTech({ silent = false } = {}) {
-    if (!tech) return;
-    tech = null;
-    if (techChip) { techChip.remove(); techChip = null; }
-    if (/^#tech\//.test(location.hash)) history.replaceState(null, '', location.pathname + location.search);
-    if (!silent) apply();
-  }
+  // #tech/<slug>[,<slug>…] (lien depuis Compétences) : pré-sélection.
   function techFromHash() {
     const m = location.hash.match(/^#tech\/(.+)$/);
-    return m ? setTech(decodeURIComponent(m[1])) : false;
+    const keys = m ? decodeURIComponent(m[1]).split(',').filter((k) => chipOf[k]) : [];
+    if (!keys.length) return false;
+    picked.clear();
+    (data.some((d) => uses(d, keys)) ? keys : keys.slice(0, 1)).forEach((k) => picked.add(k));
+    apply();
+    return true;
   }
 
   // ── Fiche du projet ───────────────────────────────────
@@ -371,7 +391,7 @@ export function initProjects() {
     if (bySlug[slug]) { if (!dlg.open) pushed = !!(history.state && history.state.pj); openProject(slug, { fromHash: true }); }
     else if (dlg.open) closeProject({ fromPop: true });
   });
-  window.addEventListener('hashchange', () => { if (!dlg.open && !techFromHash() && tech) clearTech(); });
+  window.addEventListener('hashchange', () => { if (!dlg.open) techFromHash(); });
 
   // Route suivie par le bouton « Mode aventure » (js/classic.js).
   function route(r) { doc.dispatchEvent(new CustomEvent('classic:route', { detail: r })); }

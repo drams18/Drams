@@ -212,6 +212,13 @@ const SECTIONS = {
     //            `alt` = légende. La première sert de couverture (bulle,
     //            info-bulle, liste). npm run images les convertit en webp.
     //   device → 'mobile' : captures de téléphone (cadre portrait)
+    // Ordre de la page Projets (mode classique) : du plus technique au moins
+    // technique (étendue de la stack, intégrations, mise en production).
+    // Un slug absent d'ici passe en fin de liste.
+    techOrder: [
+      'skywalk', 'oneday', 'wild-kedougou', 'islaah', 'crowdin', 'infinitia', 'allsab-ms',
+      'badn', 'gexp', 'hexagon', 'prospectly', 'ilamiria', 'pool-party',
+    ],
     items: [
       {
         short: 'INFINITIA',

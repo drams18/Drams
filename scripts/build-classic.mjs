@@ -704,23 +704,37 @@ function projectCard(p, L) {
           </li>`;
 }
 
-// Ordre d'affichage : les projets mis en avant (pick) d'abord, puis les
-// autres, chacun dans l'ordre des données.
-const projectsShown = [...projects.filter(p => p.pick), ...projects.filter(p => !p.pick)];
+// Ordre d'affichage : du plus technique au moins technique (techOrder,
+// museum.js) ; un projet absent de la liste garde sa place en fin.
+const techRank = (p) => { const i = (SECTIONS.projets.techOrder || []).indexOf(p.slug); return i < 0 ? Infinity : i; };
+const projectsShown = [...projects].sort((a, b) => techRank(a) - techRank(b));
+
+// Filtres par technologie : les compétences utilisées dans au moins un
+// projet, les plus fréquentes d'abord.
+const techFilters = allSkills.filter(s => s.used.length)
+  .sort((a, b) => b.used.length - a.used.length || families.indexOf(a.fam) - families.indexOf(b.fam) || a.i - b.i);
 
 function projetsPage() {
   const page = PAGE.projets;
-  const filters = [
-    { key: '', label: 'Tous', n: projects.length },
-    ...CATEGORIES.filter(c => byCat[c].length).map(c => ({ key: c, label: byCat[c].length > 1 ? `${c}s` : c, n: byCat[c].length })),
-  ];
   const lead = `${byCat.Professionnel.length} réalisés en équipe chez ${esc(company)}, ${byCat.Personnel.length} personnels, ${plural(byCat.Scolaire.length, 'scolaire', 'scolaires')}. Ouvrez un projet pour voir ses captures, sa stack et mon rôle.`;
+  const chip = (s, L) => {
+    const logo = logoOf(s.item);
+    return `
+          <li><button type="button" class="tf" data-tech="${s.slug}" data-fam="${s.fam.key}" aria-pressed="false"${logo ? ` style="--logo:url('${L.up}${logo}')"` : ''}>${logo ? '<i class="tf__logo" aria-hidden="true"></i>' : '<i class="tf__dot" aria-hidden="true"></i>'}<span class="tf__l">${esc(s.item)}</span><span class="tf__n">${s.used.length}</span>${icon('close', 'ico tf__x')}</button></li>`;
+  };
   const body = (L) => `
     <section class="pj wrap" aria-labelledby="projets-title">
       ${worldHead(page, `${projects.length} projets web et mobiles`, lead)}
-      <div class="pj-filters js-only" role="group" aria-label="Filtrer les projets">${filters.map((f, i) => `
-        <button type="button" class="seg" data-filter="${esc(f.key)}" aria-pressed="${i ? 'false' : 'true'}">${esc(f.label)}<span>${f.n}</span></button>`).join('')}
+      <div class="pj-tf js-only" role="group" aria-labelledby="pj-tf-k">
+        <div class="pj-tf__head">
+          <p class="pj-tf__k" id="pj-tf-k">Filtrer<span class="pj-tf__kx"> par technologie</span></p>
+          <p class="pj-tf__state" aria-hidden="true"></p>
+          <button type="button" class="pj-tf__reset" hidden>Tout effacer${icon('close')}</button>
+        </div>
+        <ul class="pj-tf__list">${techFilters.map(s => chip(s, L)).join('')}
+        </ul>
       </div>
+      <p class="pj-sort"><span class="pj-sort__bars" aria-hidden="true"><i></i><i></i><i></i></span>Classés du plus technique au moins technique</p>
       <p class="pj-status sr-only" aria-live="polite"></p>
       <ol class="pj-grid" aria-label="Projets">${projectsShown.map(p => projectCard(p, L)).join('')}
       </ol>
@@ -734,7 +748,7 @@ function projetsPage() {
       about: PERSON_REF,
       mainEntity: {
         '@type': 'ItemList',
-        itemListElement: projects.map((p, i) => ({
+        itemListElement: projectsShown.map((p, i) => ({
           '@type': 'ListItem', position: i + 1,
           item: {
             '@type': 'CreativeWork', name: p.title, description: p.desc, genre: p.type,
