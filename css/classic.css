@@ -182,10 +182,11 @@ html:not(.js) .topbar, .no-app .topbar, .topbar.is-scrolled {
 }
 .topbar__inner { display: flex; align-items: center; gap: 28px; min-height: var(--top); padding: 0 var(--gut); }
 .brand {
-  display: inline-block; font-size: 15px; font-weight: 700; letter-spacing: .04em; line-height: 1;
+  display: inline-flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; letter-spacing: .04em; line-height: 1;
   color: var(--text); text-decoration: none; white-space: nowrap;
 }
-.page:not(.page--profil) .brand { view-transition-name: name; }
+.brand__logo { flex: none; width: 28px; height: 28px; border-radius: 50%; view-transition-name: brand-logo; }
+.page:not(.page--profil) .brand__name { view-transition-name: name; }
 .topbar__where { display: none; }
 .nav { position: relative; display: flex; gap: 2px; margin: 0 auto; }
 .nav a {

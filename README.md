@@ -28,6 +28,7 @@ https://arphandrame.fr/
   npm run content   # régénère seulement le HTML depuis js/museum.js
   npm run build     # content + build Vite → dist/ (ce que sert Cloudflare Pages)
   npm run capture   # (après build) régénère les miniatures de l'accueil + og.jpg
+  npm run logo      # régénère assets/img/logo.svg + favicon.svg (scripts/logo.mjs)
   ```
 
 - **Liens profonds communs** (`js/deeplink.js`) : `#profil`, `#parcours/<slug>`,
@@ -46,6 +47,18 @@ https://arphandrame.fr/
   le même e-mail et partagent la même session. Depuis les tarifs, « Construisez votre projet » mène au
   mini-jeu pour un visiteur du mode aventure, au formulaire pour les autres.
 - **Formulaires** : `js/contact-form.js` (EmailJS chargé à la demande).
+- **Logo** : `scripts/logo.mjs` dessine le sceau « A.D » (`assets/img/logo.svg`) et sa version
+  simplifiée (`assets/img/favicon.svg` : favicon et barre du haut). Les nuages de la bande sont
+  calqués sur une illustration, avec l'accord de son auteur (contours : `scripts/logo-nuages.json`).
+  Après `npm run logo`, refaire les PNG depuis `favicon.svg` (macOS, Chrome) :
+
+  ```sh
+  CH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  "$CH" --headless=new --window-size=800,800 --default-background-color=00000000 \
+    --screenshot=/tmp/fav.png "file://$PWD/assets/img/favicon.svg"
+  sips -z 96 96 /tmp/fav.png --out assets/img/favicon.png
+  # apple-touch-icon.png : 180 px, même rendu posé sur un fond #070c14 (iOS n'aime pas la transparence)
+  ```
 - **Mesure d'audience** : Google Analytics 4, chargé seulement après accord (`js/consent.js`,
   `js/analytics.js`, `js/analytics-events.js`). Détails, réglages GA4 et tests : `docs/analytics-ga4.md`.
 

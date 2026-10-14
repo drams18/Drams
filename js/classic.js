@@ -91,7 +91,7 @@
   window.addEventListener('pageswap', function (e) {
     if (!e.viewTransition) return;
     var name = doc.querySelector('.pf-name');
-    var brand = doc.querySelector('.brand');
+    var brand = doc.querySelector('.brand__name');
     if (!name || !brand) return;
     var r = name.getBoundingClientRect();
     if (r.bottom < 60 || r.top > innerHeight) {
@@ -103,7 +103,7 @@
   window.addEventListener('pagereveal', function (e) {
     if (!e.viewTransition) return;
     var name = doc.querySelector('.pf-name');
-    var brand = doc.querySelector('.brand');
+    var brand = doc.querySelector('.brand__name');
     if (!name || !brand) return;
     var r = name.getBoundingClientRect();
     if (r.bottom < 60 || r.top > innerHeight) {
@@ -118,7 +118,7 @@
   // Retour arrière depuis le cache : la page revient telle qu'elle était.
   window.addEventListener('pageshow', function (e) {
     if (e.persisted) {
-      var n = doc.querySelector('.pf-name'), b = doc.querySelector('.brand');
+      var n = doc.querySelector('.pf-name'), b = doc.querySelector('.brand__name');
       if (n) n.style.viewTransitionName = '';
       if (b) b.style.viewTransitionName = '';
       setNav(false);

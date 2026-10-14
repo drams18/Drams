@@ -345,7 +345,7 @@ function topbar(page, L) {
   return `
   <header class="topbar">
     <div class="topbar__inner">
-      <a class="brand" href="${L.up || './'}" aria-label="${esc(displayName)}, accueil"><span>A. DRAME</span></a>
+      <a class="brand" href="${L.up || './'}" aria-label="${esc(displayName)}, accueil"><img class="brand__logo" src="${L.up}assets/img/favicon.svg" alt="" width="28" height="28"><span class="brand__name">A. DRAME</span></a>
       <span class="topbar__where" aria-hidden="true"><b>${page.n}</b>${page.label}</span>
       <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
         ${nav}
@@ -484,7 +484,9 @@ function shell(page, { title, description, ogDescription, jsonld, personExtra, b
   <meta name="twitter:image" content="${SITE_URL}assets/img/og.jpg">
   <meta name="theme-color" content="#0a0a0d">
   <script src="${L.up}js/theme.js"></script>${HEAD_SCRIPT}
-  <link rel="icon" href="${L.up}assets/img/favicon.png">
+  <link rel="icon" href="${L.up}assets/img/favicon.png" sizes="96x96">
+  <link rel="icon" href="${L.up}assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="${L.up}assets/img/apple-touch-icon.png">
   <link rel="stylesheet" href="${L.up}css/tokens.css">
   <link rel="stylesheet" href="${L.up}css/site.css">
   <link rel="stylesheet" href="${L.up}css/classic.css">

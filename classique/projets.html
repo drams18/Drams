@@ -69,7 +69,9 @@
       if (document.prerendering) document.addEventListener('prerenderingchange', arm, { once: true }); else arm();
     })(document.documentElement, window);
   </script>
-  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="icon" href="../assets/img/favicon.png" sizes="96x96">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
   <link rel="stylesheet" href="../css/tokens.css">
   <link rel="stylesheet" href="../css/site.css">
   <link rel="stylesheet" href="../css/classic.css">
@@ -434,7 +436,7 @@
 
   <header class="topbar">
     <div class="topbar__inner">
-      <a class="brand" href="../" aria-label="Arphan Drame, accueil"><span>A. DRAME</span></a>
+      <a class="brand" href="../" aria-label="Arphan Drame, accueil"><img class="brand__logo" src="../assets/img/favicon.svg" alt="" width="28" height="28"><span class="brand__name">A. DRAME</span></a>
       <span class="topbar__where" aria-hidden="true"><b>02</b>Projets</span>
       <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
         <a href="/classique" data-page-link="profil"><span>Profil</span></a>

@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "capture": "node scripts/capture.mjs",
     "cv": "node scripts/cv.mjs",
+    "logo": "node scripts/logo.mjs",
     "test": "node tests/physics.test.mjs && node tests/portfolio.test.mjs && node tests/reviews.test.mjs && node tests/consent.test.mjs && node tests/analytics.test.mjs",
     "test:e2e": "node tests/aventure.e2e.mjs",
     "test:analytics": "node tests/analytics.e2e.mjs"

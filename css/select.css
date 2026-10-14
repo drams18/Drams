@@ -32,7 +32,8 @@ h1, h2 { margin: 0; }
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   width: 100%; max-width: 1120px; margin: 0 auto; padding: 18px 24px;
 }
-.sel-brand { font-size: 15px; font-weight: 700; letter-spacing: .02em; color: var(--text); }
+.sel-brand { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; letter-spacing: .02em; color: var(--text); }
+.sel-brand__logo { flex: none; width: 28px; height: 28px; border-radius: 50%; }
 .sel-quick { display: flex; align-items: center; gap: 4px; }
 .sel-quick a, .sel-quick button:not(.icon-btn) {
   display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 8px 12px; cursor: pointer;
