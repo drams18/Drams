@@ -125,9 +125,9 @@ export class UniverseSelector {
 
     this.el = h('section.adv-sel', { hidden: true, 'aria-labelledby': 'adv-sel-title' },
       h('header.adv-sel__head', null,
-        h('p.adv-sel__kicker', null, 'PORTFOLIO · MODE AVENTURE'),
+        h('p.adv-sel__kicker', null, 'ARPHAN DRAME · MODE AVENTURE'),
         h('h1.adv-sel__title', { id: 'adv-sel-title' }, 'Choisissez votre expérience'),
-        h('p.adv-sel__lead', null, 'Trois univers, un même portfolio : profil, parcours, compétences et projets.')),
+        h('p.adv-sel__lead', null, 'Trois univers, un même contenu : profil, parcours, compétences et projets.')),
       this.cards,
       h('footer.adv-sel__foot', null,
         h('a.adv-btn.adv-btn--ghost', { href: opts.classicHref }, 'Mode classique'),

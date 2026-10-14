@@ -230,8 +230,8 @@ export class BuildGame {
 
     this.level = new Level(createRoom(u.id, step, index), this.skin, null, NPC_LINES);
     const portal = this.level.portal;
-    portal.lines = index === 0 ? ['RETOUR', 'AU PORTFOLIO'] : ['ÉTAPE', 'PRÉCÉDENTE'];
-    portal.label = index === 0 ? 'Revenir au portfolio' : 'Étape précédente';
+    portal.lines = index === 0 ? ['RETOUR', 'À L\'ACCUEIL'] : ['ÉTAPE', 'PRÉCÉDENTE'];
+    portal.label = index === 0 ? 'Revenir à l\'accueil' : 'Étape précédente';
     this.level.locations.forEach((l, i) => {
       l.door = step.doors[i];
       l.visited = this.answers.isSelected(step, l.door);   // tampon « choisi » du renderer

@@ -144,7 +144,7 @@ export class Game {
       onChoose: (id) => this.startUniverse(id, { briefing: true }),
       onSound: () => this.toggleSound(),
       onVolume: (v) => this.setVolume(v),
-      onContact: () => { if (window.ContactWidget) window.ContactWidget.open({ subject: 'Prise de contact · Portfolio' }); },
+      onContact: () => { if (window.ContactWidget) window.ContactWidget.open({ subject: 'Prise de contact' }); },
     });
 
     this.briefing = new Briefing(ui, {

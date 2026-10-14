@@ -294,7 +294,7 @@
     var actions = el('div', 'step__actions');
     if (i > 0) actions.appendChild(button('btn btn--ghost btn-back', 'Étape précédente', function () { returnToRecap = false; go('etape-' + i); }));
     else {
-      var home = el('a', 'btn btn--ghost btn-back', 'Revenir au portfolio');
+      var home = el('a', 'btn btn--ghost btn-back', 'Revenir à l\'accueil');
       home.href = homeHref();
       actions.appendChild(home);
     }
@@ -475,7 +475,7 @@
     sec.appendChild(check);
     sec.appendChild(el('h1', 'step__title', 'Projet transmis'));
     sec.appendChild(el('p', 'step__help', 'Merci pour votre demande. Je reviendrai vers vous rapidement.'));
-    var back = el('a', 'btn btn--primary', 'Retour au portfolio');
+    var back = el('a', 'btn btn--primary', 'Retour à l\'accueil');
     back.href = homeHref();
     sec.appendChild(back);
     history.replaceState(null, '', location.pathname);

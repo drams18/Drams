@@ -77,7 +77,7 @@ export class BuildUI {
     this.help.textContent = step.help;
     // Écran étroit : libellé court, le son et la jauge tiennent sur la même ligne.
     const narrow = window.innerWidth < 640;
-    this.back.textContent = index === 0 ? (narrow ? '← Portfolio' : 'Revenir au portfolio') : (narrow ? '← Précédent' : 'Étape précédente');
+    this.back.textContent = index === 0 ? (narrow ? '← Accueil' : 'Revenir à l\'accueil') : (narrow ? '← Précédent' : 'Étape précédente');
     this.next.textContent = (index === STEPS.length - 1 ? 'Voir le récapitulatif' : 'Valider l\'étape') + (enterKey ? ' · Entrée' : '');
     this.step.classList.remove('is-in');
     void this.step.offsetWidth;
@@ -126,7 +126,7 @@ export class BuildUI {
       root.appendChild(el);
       return el;
     };
-    const exit = () => h('a.bp-panel__exit', { href: on.home }, 'Revenir au portfolio');
+    const exit = () => h('a.bp-panel__exit', { href: on.home }, 'Revenir à l\'accueil');
 
     // Récapitulatif
     this.recapList = h('dl.bp-recap');
@@ -165,7 +165,7 @@ export class BuildUI {
     // Confirmation
     this.done = panel('bp-done-title', 'Projet transmis',
       h('p.adv-brief__text', null, 'Merci pour votre demande. Je reviendrai vers vous rapidement.'),
-      h('div.adv-actions', null, h('a.adv-btn', { href: on.home }, 'Retour au portfolio')));
+      h('div.adv-actions', null, h('a.adv-btn', { href: on.home }, 'Retour à l\'accueil')));
   }
 
   // phase : 'recap' | 'form' | 'done' | null (retour au jeu)

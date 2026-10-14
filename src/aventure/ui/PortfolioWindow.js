@@ -32,7 +32,7 @@ export class PortfolioWindow {
 
     this.kicker = h('p.adv-win__kicker');
     this.title = h('h2.adv-win__title', { id: 'adv-win-title' });
-    this.tabs = h('nav.adv-win__tabs', { 'aria-label': 'Sections du portfolio' });
+    this.tabs = h('nav.adv-win__tabs', { 'aria-label': 'Sections du site' });
     this.body = h('div.adv-win__body', { tabindex: '-1' });
     this.closeBtn = h('button.adv-btn.adv-btn--ghost.adv-win__close', { type: 'button', onclick: () => this.close() }, 'Fermer');
     this.card = h('div.adv-win__card', null,

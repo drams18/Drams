@@ -103,7 +103,7 @@ export class PauseMenu {
           row(v.projects + ' consultés', save.data.viewedProjects.length, p.projects.length)),
         h('p.adv-muted', null, save.data.missionComplete
           ? 'Les quatre lieux sont visités. Tout reste consultable.'
-          : 'Rien n\'est verrouillé : tout le portfolio est accessible depuis la carte.'));
+          : 'Rien n\'est verrouillé : tout le contenu est accessible depuis la carte.'));
     } else if (name === 'skills') {
       this.panel.append(h('h3.adv-pause__h', null, v.skills),
         h('ul.adv-pause__skills', null, p.skills.map(s => h('li', null,

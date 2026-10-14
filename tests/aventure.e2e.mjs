@@ -286,7 +286,7 @@ ok('aventure → construire-projet', (await p.eval('location.pathname')).replace
 const B = 'window.__construire';
 ok('construire-projet : même moteur, univers en cours', await p.eval(`${B}.state === 'play' && ${B}.universe.id === 'ville' && document.getElementById('adv').dataset.universe === 'ville' && ${B}.renderer instanceof ${B}.universe.Renderer`));
 ok('construire-projet : son et volume de l\'aventure', await p.eval(`${B}.save.data.settings.sound === true && ${B}.audio.volume === 0.8 && ${B}.audio.spec.track === '/sounds/aventure/ville.mp3' && document.querySelector('.bp-top .adv-vol__range').value === '80'`));
-ok('construire-projet : une porte par réponse, portail de retour', await p.eval(`${B}.level.locations.length === 7 && ${B}.level.locations[0].label === 'SITE WEB' && ${B}.level.portal.lines.join(' ') === 'RETOUR AU PORTFOLIO'`));
+ok('construire-projet : une porte par réponse, portail de retour', await p.eval(`${B}.level.locations.length === 7 && ${B}.level.locations[0].label === 'SITE WEB' && ${B}.level.portal.lines.join(' ') === "RETOUR À L'ACCUEIL"`));
 ok('construire-projet : étape affichée', await p.eval('document.querySelector(".bp-step__title").textContent === "Que voulez-vous créer ?" && document.querySelector(".bp-step__next").hidden'));
 const bx0 = await p.eval(`${B}.player.x`);
 await p.down('ArrowRight'); await p.sleep(500); await p.up('ArrowRight');

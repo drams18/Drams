@@ -347,7 +347,7 @@ function topbar(page, L) {
     <div class="topbar__inner">
       <a class="brand" href="${L.up || './'}" aria-label="${esc(displayName)}, accueil"><img class="brand__logo" src="${L.up}assets/img/favicon.svg" alt="" width="28" height="28"><span class="brand__name">A. DRAME</span></a>
       <span class="topbar__where" aria-hidden="true"><b>${page.n}</b>${page.label}</span>
-      <nav class="nav" id="site-nav" aria-label="Pages du portfolio">
+      <nav class="nav" id="site-nav" aria-label="Pages du site">
         ${nav}
       </nav>
       <div class="topbar__actions">
@@ -470,7 +470,7 @@ function shell(page, { title, description, ogDescription, jsonld, personExtra, b
   <link rel="canonical" href="${url}">
   <meta property="og:type" content="${page.key === 'profil' ? 'profile' : 'website'}">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:site_name" content="${esc(displayName)} · Portfolio">
+  <meta property="og:site_name" content="${esc(displayName)}">
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(ogDescription || description)}">
   <meta property="og:url" content="${url}">
@@ -637,7 +637,7 @@ function profilPage() {
 
   return shell(page, {
     title: `${displayName} · ${bio.title} à ${bio.location}`,
-    description: `Portfolio d'${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. Projets, parcours, compétences et contact.`,
+    description: `${displayName}, ${bio.title} à ${bio.location}. ${bio.seeking}. Projets, parcours, compétences et contact.`,
     ogDescription: `${bio.seeking}. ${profile.positioning}`,
     jsonld: { '@type': 'ProfilePage', name: `Profil · ${displayName}`, mainEntity: PERSON_REF },
     body,
@@ -1061,7 +1061,7 @@ const WEBSITE_ID = `${SITE_URL}#website`;
 const PERSON_REF = { '@id': PERSON_ID };
 
 const website = () => ({
-  '@type': 'WebSite', '@id': WEBSITE_ID, name: `${displayName} · Portfolio`, url: SITE_URL, inLanguage: 'fr',
+  '@type': 'WebSite', '@id': WEBSITE_ID, name: displayName, url: SITE_URL, inLanguage: 'fr',
   author: PERSON_REF, publisher: PERSON_REF,
 });
 
@@ -1105,7 +1105,7 @@ function breadcrumb(page) {
     '@type': 'BreadcrumbList',
     '@id': `${SITE_URL}${page.path}#breadcrumb`,
     itemListElement: [PAGE.profil, page].map((p, i) => ({
-      '@type': 'ListItem', position: i + 1, name: p === PAGE.profil ? 'Portfolio' : p.label, item: SITE_URL + p.path,
+      '@type': 'ListItem', position: i + 1, name: p === PAGE.profil ? 'Accueil' : p.label, item: SITE_URL + p.path,
     })),
   };
 }
