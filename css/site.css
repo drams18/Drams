@@ -14,8 +14,8 @@
 
 :root,
 [data-theme="night"] {
-  /* Palette du sceau A.D (assets/img/logo.svg) : disque bleu nuit,
-     métal argenté, orange de la flamme du Ciel en accent. */
+  /* Palette du logo (assets/img/logo.svg) : bleu nuit,
+     métal argenté, orange de la pierre du Ciel en accent. */
   --bg:        #070c14;
   --bg-alt:    #0a111c;
   --surface:   #0e1724;

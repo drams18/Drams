@@ -28,7 +28,7 @@ https://arphandrame.fr/
   npm run content   # régénère seulement le HTML depuis js/museum.js
   npm run build     # content + build Vite → dist/ (ce que sert Cloudflare Pages)
   npm run capture   # (après build) régénère les miniatures de l'accueil + og.jpg
-  npm run logo      # régénère assets/img/logo.svg + favicon.svg (scripts/logo.mjs)
+  npm run logo      # régénère le logo, le favicon et leurs PNG (scripts/logo.mjs)
   ```
 
 - **Liens profonds communs** (`js/deeplink.js`) : `#profil`, `#parcours/<slug>`,
@@ -47,18 +47,13 @@ https://arphandrame.fr/
   le même e-mail et partagent la même session. Depuis les tarifs, « Construisez votre projet » mène au
   mini-jeu pour un visiteur du mode aventure, au formulaire pour les autres.
 - **Formulaires** : `js/contact-form.js` (EmailJS chargé à la demande).
-- **Logo** : `scripts/logo.mjs` dessine le sceau « A.D » (`assets/img/logo.svg`) et sa version
-  simplifiée (`assets/img/favicon.svg` : favicon et barre du haut). Les nuages de la bande sont
-  calqués sur une illustration, avec l'accord de son auteur (contours : `scripts/logo-nuages.json`).
-  Après `npm run logo`, refaire les PNG depuis `favicon.svg` (macOS, Chrome) :
-
-  ```sh
-  CH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-  "$CH" --headless=new --window-size=800,800 --default-background-color=00000000 \
-    --screenshot=/tmp/fav.png "file://$PWD/assets/img/favicon.svg"
-  sips -z 96 96 /tmp/fav.png --out assets/img/favicon.png
-  # apple-touch-icon.png : 180 px, même rendu posé sur un fond #070c14 (iOS n'aime pas la transparence)
-  ```
+- **Logo** : `scripts/logo.mjs` dessine trois anneaux d'argent entrelacés, centres aux sommets d'un
+  triangle équilatéral invisible (même distance pour les trois paires) : bande aux nuages gravés
+  (illustration de l'auteur du site, contours : `scripts/logo-nuages.json`) et anneau intérieur aux
+  sept pierres. `npm run logo` produit `assets/img/logo.svg` (logo complet, barre du haut),
+  `favicon.svg` (sans les nuages, pour l'onglet), `logo-1024.png` (haute définition, fond
+  transparent), `favicon.png` (96 px) et `apple-touch-icon.png` (180 px sur #070c14). Les PNG
+  demandent Google Chrome et `sips` (macOS).
 - **Mesure d'audience** : Google Analytics 4, chargé seulement après accord (`js/consent.js`,
   `js/analytics.js`, `js/analytics-events.js`). Détails, réglages GA4 et tests : `docs/analytics-ga4.md`.
 

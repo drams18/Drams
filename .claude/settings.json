@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Edit(./backend/**)",
+      "Edit(./frontend/**)",
+      "Edit(./docs/**)",
+      "Edit(./infra/**)",
+      "Edit(./scripts/**)",
+      "Edit(./.github/**)",
+      "Edit(./README.md)",
+      "Edit(./CLAUDE.md)",
+      "Edit(./docker-compose.yml)",
+      "Edit(./.env.example)",
+      "Edit(./.gitignore)",
+      "Bash(./mvnw:*)",
+      "Bash(cd backend && ./mvnw:*)",
+      "Bash(npm ci)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)",
+      "Bash(npx ng:*)",
+      "Bash(npx playwright:*)",
+      "Bash(npx vitest:*)",
+      "Bash(docker compose:*)",
+      "Bash(docker ps:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker build:*)",
+      "Bash(docker info:*)",
+      "Bash(terraform fmt:*)",
+      "Bash(terraform validate:*)",
+      "Bash(terraform init -backend=false:*)",
+      "Bash(kubectl kustomize:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git switch:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(curl -s http://localhost:*)",
+      "Bash(curl -sf http://localhost:*)",
+      "Bash(scripts/smoke-test.sh:*)",
+      "Bash(scripts/seed-demo.sh:*)",
+      "Bash(scripts/backup.sh:*)",
+      "Bash(npx prettier:*)",
+      "Bash(npx eslint:*)",
+      "Bash(docker images:*)",
+      "Bash(docker run --rm:*)",
+      "Bash(cd frontend && npm run:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(terraform plan:*)",
+      "Bash(kubectl apply:*)",
+      "Bash(kubectl delete:*)",
+      "Bash(docker compose down -v:*)",
+      "Bash(rm -rf:*)",
+      "Bash(scripts/restore.sh:*)",
+      "Bash(docker push:*)",
+      "Bash(terraform init:*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./**/.env)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./infra/terraform/**/*.tfvars)",
+      "Bash(terraform apply:*)",
+      "Bash(terraform destroy:*)",
+      "Bash(aws:*)",
+      "Bash(eksctl:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-secrets.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

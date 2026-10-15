@@ -346,7 +346,7 @@ function topbar(page, L) {
   return `
   <header class="topbar">
     <div class="topbar__inner">
-      <a class="brand" href="${L.up || './'}" aria-label="${esc(displayName)}, accueil"><img class="brand__logo" src="${L.up}assets/img/favicon.svg" alt="" width="28" height="28"><span class="brand__name">A. DRAME</span></a>
+      <a class="brand" href="${L.up || './'}" aria-label="${esc(displayName)}, accueil"><img class="brand__logo" src="${L.up}assets/img/logo.svg" alt="" width="28" height="28"><span class="brand__name">A. DRAME</span></a>
       <span class="topbar__where" aria-hidden="true"><b>${page.n}</b>${page.label}</span>
       <nav class="nav" id="site-nav" aria-label="Pages du site">
         ${nav}

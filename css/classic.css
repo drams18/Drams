@@ -184,7 +184,7 @@ html:not(.js) .topbar, .no-app .topbar, .topbar.is-scrolled {
   display: inline-flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; letter-spacing: .04em; line-height: 1;
   color: var(--text); text-decoration: none; white-space: nowrap;
 }
-.brand__logo { flex: none; width: 28px; height: 28px; border-radius: 50%; view-transition-name: brand-logo; }
+.brand__logo { flex: none; width: 28px; height: 28px; view-transition-name: brand-logo; }
 .page:not(.page--profil) .brand__name { view-transition-name: name; }
 .topbar__where { display: none; }
 .nav { position: relative; display: flex; gap: 2px; margin: 0 auto; }
