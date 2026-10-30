@@ -41,15 +41,15 @@
     },
     {
       key: 'clientType', recapLabel: 'Profil',
-      title: 'Pour qui est ce projet ?',
-      help: 'Cela m\'aide à adapter ma proposition. Choisissez « Je ne sais pas » si vous hésitez.',
+      title: 'Quelle est votre activité ?',
+      help: 'Cela m\'aide à adapter ma proposition. Mes prestations sont réservées aux professionnels et aux associations.',
       options: [
-        { value: 'Particulier',    label: 'Particulier',    hint: 'Un projet personnel' },
-        { value: 'Professionnel',  label: 'Professionnel',  hint: 'Entreprise, indépendant, commerçant' },
+        { value: 'Commerce',       label: 'Commerce',       hint: 'Boutique, restaurant, salon, institut' },
+        { value: 'Artisan',        label: 'Artisan',        hint: 'Bâtiment, réparation, fabrication' },
+        { value: 'Indépendant',    label: 'Indépendant',    hint: 'Freelance, profession libérale, coach' },
+        { value: 'Entreprise',     label: 'Entreprise',     hint: 'PME, société, start-up' },
         { value: 'Association',    label: 'Association',    hint: 'Structure à but non lucratif' },
-        { value: 'Étudiant',       label: 'Étudiant',       hint: 'Projet d\'études ou personnel' },
-        { value: 'Autre',          label: 'Autre',          hint: 'Une autre situation', soft: true },
-        { value: 'Je ne sais pas', label: 'Je ne sais pas', hint: 'On en parlera ensemble', soft: true },
+        { value: 'Autre',          label: 'Autre',          hint: 'Une autre activité professionnelle', soft: true },
       ],
     },
     {

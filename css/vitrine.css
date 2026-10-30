@@ -477,6 +477,7 @@ details[open] > summary .faq__chev { transform: rotate(180deg); }
 }
 .free__t { font-size: 21px; font-weight: 800; }
 .free__txt p { margin-top: 4px; color: var(--text-2); }
+.free__txt .free__note { margin-top: 8px; font-size: 14px; color: var(--text-3, var(--text-2)); }
 .free__btns { display: flex; flex-wrap: wrap; gap: 10px; }
 .free__btns a[href^="https://wa.me"] .ico { color: var(--wa); }
 @media (min-width: 900px) { .free { grid-template-columns: auto minmax(0, 1fr) auto; } }

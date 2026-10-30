@@ -278,7 +278,7 @@ function footer() {
       </nav>
     </div>
     <div class="wrap foot__legal">
-      <p>© ${new Date().getFullYear()} ${esc(NAME)} · Entrepreneur individuel · SIRET ${esc(biz.siret)} · ${esc(biz.vat)}</p>
+      <p>© ${new Date().getFullYear()} ${esc(NAME)} · Entrepreneur individuel · SIRET ${esc(biz.siret)} · ${esc(biz.vat)} · ${PRO_ONLY}</p>
     </div>
   </footer>`;
 }
@@ -287,6 +287,10 @@ function footer() {
 const BUSINESS_ID = `${SITE_URL}#business`;
 const PERSON_ID   = `${SITE_URL}#person`;
 const WEBSITE_ID  = `${SITE_URL}#website`;
+// Pas de vente aux particuliers (choix d'Arphan, 30/10/2026) : pas de
+// médiateur de la consommation à désigner.
+const PRO_ONLY = 'Prestations réservées aux professionnels';
+const PRO_WHO = 'commerces, artisans, indépendants, entreprises et associations';
 const SAME_AS = [IG_URL, LINKEDIN, GITHUB, TIKTOK, GOOGLE_PROFILE].filter(Boolean);
 
 function clean(v) {
@@ -315,6 +319,7 @@ const business = () => ({
   email: contact.email,
   address: { '@type': 'PostalAddress', streetAddress: biz.street, postalCode: biz.postalCode, addressLocality: biz.city, addressRegion: AREA, addressCountry: 'FR' },
   areaServed: { '@type': 'AdministrativeArea', name: AREA },
+  audience: { '@type': 'BusinessAudience', name: `Professionnels : ${PRO_WHO}` },
   priceRange: biz.priceRange,
   founder: { '@id': PERSON_ID },
   sameAs: SAME_AS,
@@ -516,6 +521,8 @@ const FAQ = [
     a: `Ça dépend de votre besoin. Une fiche Google commence à ${offer('fiche-google').svc.price}, une landing page à ${offer('landing-page').svc.price}, un site vitrine à ${offer('site-vitrine').svc.price}. Après un premier échange gratuit, je vous envoie un devis détaillé : le prix est fixé avant de commencer. Le nom de domaine et l’hébergement ont un petit coût annuel, indiqué dans le devis. Je suis en micro-entreprise : TVA non applicable, le prix affiché est celui que vous payez.` },
   { q: 'Combien de temps ça prend ?',
     a: 'Comptez environ une semaine pour une landing page ou un site vitrine, à partir du moment où j’ai vos textes et vos photos. Pour un projet plus grand (réservation, boutique, outil sur mesure), le délai est indiqué dans le devis.' },
+  { q: 'Travaillez-vous avec les particuliers ?',
+    a: `Non. Mes prestations sont réservées aux professionnels : ${PRO_WHO}.` },
   { q: 'Je n’y connais rien, c’est un problème ?',
     a: 'Pas du tout. Je m’occupe de la technique : nom de domaine, hébergement, mise en ligne. Je vous explique chaque étape simplement, sans jargon, et à la livraison je vous montre comment utiliser votre site.' },
   { q: 'Est-ce que le site m’appartient ?',
@@ -840,6 +847,7 @@ function tarifsPage() {
         <div class="free__txt">
           <h2 class="free__t">Premier échange gratuit</h2>
           <p>Vous ne savez pas ce qu’il vous faut ? Expliquez-moi votre activité : je vous conseille gratuitement, sans engagement.</p>
+          <p class="free__note">${PRO_ONLY} : ${PRO_WHO}.</p>
         </div>
         <p class="free__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit${icon('arrow')}</a><a class="btn" href="${esc(WA_HREF)}" target="_blank" rel="noopener">${icon('whatsapp')}WhatsApp</a></p>
       </div>
@@ -1089,8 +1097,8 @@ function legalPage() {
       <p>Les textes, le logo et les illustrations de ce site appartiennent à ${esc(biz.legalName)}, sauf mention contraire. Toute reproduction sans accord écrit est interdite. Les noms et les captures des projets présentés restent la propriété de leurs titulaires respectifs.</p>
       <h2>Données personnelles et cookies</h2>
       <p>Voir la page <a href="/confidentialite">Confidentialité</a>. Vous pouvez modifier votre choix sur les cookies à tout moment : <a href="#cookies" role="button" data-consent-open>gérer les cookies</a>.</p>
-      <h2>Médiation de la consommation</h2>
-      <p>[À COMPLÉTER : nom et site du médiateur de la consommation, obligatoire pour les prestations vendues à des particuliers.]</p>
+      <h2>Clientèle</h2>
+      <p>${PRO_ONLY} : ${PRO_WHO}. Je ne travaille pas avec les particuliers.</p>
     </div>`;
   return [page, shell(page, { main, jsonld: graph(page, { name: page.title, description: page.description }) })];
 }

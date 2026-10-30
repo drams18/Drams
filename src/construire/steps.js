@@ -31,15 +31,15 @@ export const STEPS = [
   {
     key: 'clientType',
     recapLabel: 'Profil',
-    title: 'Pour qui est ce projet ?',
-    help: 'Cela m\'aide à adapter ma proposition. Choisissez « Je ne sais pas » si vous hésitez.',
+    title: 'Quelle est votre activité ?',
+    help: 'Cela m\'aide à adapter ma proposition. Mes prestations sont réservées aux professionnels et aux associations.',
     doors: [
-      { value: 'Particulier', label: 'PARTICULIER', hint: 'Un projet personnel' },
-      { value: 'Professionnel', label: 'PROFESSIONNEL', hint: 'Entreprise, indépendant' },
+      { value: 'Commerce', label: 'COMMERCE', hint: 'Boutique, restaurant, salon' },
+      { value: 'Artisan', label: 'ARTISAN', hint: 'Bâtiment, réparation' },
+      { value: 'Indépendant', label: 'INDÉPENDANT', hint: 'Freelance, libéral' },
+      { value: 'Entreprise', label: 'ENTREPRISE', hint: 'PME, société' },
       { value: 'Association', label: 'ASSOCIATION', hint: 'À but non lucratif' },
-      { value: 'Étudiant', label: 'ÉTUDIANT', hint: 'Projet d\'études' },
-      { value: 'Autre', label: 'AUTRE', hint: 'Une autre situation' },
-      { value: 'Je ne sais pas', label: 'JE NE SAIS PAS', hint: 'On en parlera ensemble' },
+      { value: 'Autre', label: 'AUTRE', hint: 'Une autre activité pro' },
     ],
   },
   {
