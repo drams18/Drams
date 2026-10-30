@@ -1113,7 +1113,7 @@ function privacyPage() {
         <tbody>
           <tr><td>Formulaire de contact</td><td>Nom, e-mail, téléphone (facultatif), message</td><td>Vous répondre</td><td>Mesures précontractuelles prises à votre demande</td><td>3 ans après notre dernier échange</td></tr>
           <tr><td>Demande de devis (formulaire ou mini-jeu)</td><td>Prénom, nom, e-mail, téléphone (facultatif), message, réponses aux questions (type de projet, besoin, budget…)</td><td>Étudier votre projet et vous faire une proposition</td><td>Mesures précontractuelles prises à votre demande</td><td>3 ans après notre dernier échange ; si vous devenez client, durée légale de conservation des documents comptables</td></tr>
-          <tr><td>Mesure d’audience, seulement si vous l’acceptez</td><td>Pages vues, clics sur un moyen de contact, envoi d’un formulaire (jamais son contenu), identifiant de cookie, données techniques du navigateur</td><td>Savoir quelles pages sont utiles</td><td>Votre consentement</td><td>Cookies : 13 mois au plus. Données dans Google Analytics : [À VÉRIFIER dans le réglage du compte]</td></tr>
+          <tr><td>Mesure d’audience, seulement si vous l’acceptez</td><td>Pages vues, clics sur un moyen de contact, envoi d’un formulaire (jamais son contenu), identifiant de cookie, données techniques du navigateur</td><td>Savoir quelles pages sont utiles</td><td>Votre consentement</td><td>Cookies : 13 mois au plus. Données dans Google Analytics : 14 mois au plus</td></tr>
           <tr><td>Fonctionnement du site</td><td>Réglages enregistrés dans votre navigateur (voir plus bas)</td><td>Thème, brouillon de devis, progression du mode aventure, votre choix sur les cookies</td><td>Nécessaires au fonctionnement</td><td>Voir le tableau des cookies</td></tr>
         </tbody>
       </table></div>
@@ -1121,13 +1121,13 @@ function privacyPage() {
 
       <h2>Qui reçoit ces données</h2>
       <ul>
-        <li><strong>EmailJS</strong> : achemine les messages des formulaires jusqu’à ma boîte e-mail.</li>
+        <li><strong>EmailJS</strong> (EmailJS Pte. Ltd., Singapour) : achemine les messages des formulaires jusqu’à ma boîte e-mail.</li>
         <li><strong>Google (Gmail)</strong> : ma messagerie, où les messages sont reçus et conservés.</li>
         <li><strong>Google Analytics</strong> (Google Ireland Ltd) : mesure d’audience, uniquement après votre accord.</li>
         <li><strong>Cloudflare</strong> : hébergement et distribution du site (adresse IP, journaux techniques).</li>
         <li><strong>jsDelivr</strong> : fournit le petit programme d’envoi des formulaires, chargé quand vous commencez à en remplir un.</li>
       </ul>
-      <p>Certains de ces prestataires peuvent traiter des données hors de l’Union européenne, notamment aux États-Unis. Google et Cloudflare adhèrent au cadre de protection des données UE-États-Unis (Data Privacy Framework). Pour EmailJS : [À VÉRIFIER].</p>
+      <p>Certains de ces prestataires peuvent traiter des données hors de l’Union européenne, notamment aux États-Unis. Google et Cloudflare adhèrent au cadre de protection des données UE-États-Unis (Data Privacy Framework). Les serveurs d’EmailJS sont situés aux États-Unis : ce transfert est encadré par les clauses contractuelles types de la Commission européenne.</p>
       <p>Vos données ne sont ni vendues, ni louées, ni utilisées pour de la publicité.</p>
 
       <h2 id="cookies">Cookies et stockage dans votre navigateur</h2>

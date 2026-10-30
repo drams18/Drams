@@ -185,8 +185,7 @@ const SECTIONS = {
     whatsapp: '33767318426',
     whatsappText: 'Bonjour Arphan, je vous contacte depuis votre site au sujet d\'un projet.',
     instagram: 'https://www.instagram.com/nahpra.dev/',
-    // Lien du compte TikTok : vide = rien n'est affiché (à compléter).
-    tiktok: '',
+    tiktok: 'https://www.tiktok.com/@nahpra.dev',
     links: [
       { label: 'GitHub', url: 'https://github.com/drams18', color: '#f0f0f0' },
       { label: 'LinkedIn', url: 'https://www.linkedin.com/in/arphan-drame/', color: '#0a66c2' },
