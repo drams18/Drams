@@ -10,8 +10,18 @@
     "index": true
   },
   {
+    "file": "realisations/immoconnect.html",
+    "path": "realisations/immoconnect",
+    "index": true
+  },
+  {
     "file": "realisations/wild-kedougou.html",
     "path": "realisations/wild-kedougou",
+    "index": true
+  },
+  {
+    "file": "realisations/orlena.html",
+    "path": "realisations/orlena",
     "index": true
   },
   {

@@ -1,4 +1,4 @@
-/* Données portfolio : 13 projets, 8 compétences, projets associés dérivés.
+/* Données portfolio : 15 projets, 8 compétences, projets associés dérivés.
    node tests/portfolio.test.mjs */
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
@@ -8,7 +8,7 @@ const { getPortfolio } = await import('../src/aventure/portfolio/data.js');
 const { techMatches } = await import('../src/aventure/portfolio/Skill.js');
 
 const p = getPortfolio();
-assert.equal(p.projects.length, 13);
+assert.equal(p.projects.length, 15);
 assert.equal(p.skills.length, 8);
 assert.deepEqual(p.skills.map(s => s.name), ['React', 'TypeScript', 'Next.js', 'Node.js', 'NestJS', 'Symfony', 'PostgreSQL', 'Docker']);
 assert.ok(techMatches('Symfony 7', 'Symfony'));

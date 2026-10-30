@@ -235,15 +235,15 @@ const SECTIONS = {
     // restent dans le mode aventure (leurs anciennes adresses /realisations/…
     // sont redirigées dans _redirects).
     groups: [
-      { id: 'sites', title: 'Sites internet', lead: 'Réservation en ligne, comptes, contenus : des sites complets, en ligne.',
-        slugs: ['wild-kedougou', 'skywalk'] },
+      { id: 'sites', title: 'Sites et applications web', lead: 'Réservation, comptes, outils métier : des sites et des applications web complets, en ligne.',
+        slugs: ['immoconnect', 'wild-kedougou', 'orlena', 'skywalk'] },
       { id: 'apps', title: 'Applications mobiles', lead: 'Des applications qu’on installe sur son téléphone, dont deux publiées sur l’App Store.',
         slugs: ['islaah', 'oneday', 'ilamiria'] },
       { id: 'outils', title: 'Outils pour les entreprises', lead: 'Plannings, factures, rapports : des outils de gestion réalisés en équipe pour des entreprises.',
         slugs: ['allsab-ms', 'gexp'] },
     ],
     order: [
-      'wild-kedougou', 'islaah', 'oneday', 'allsab-ms', 'ilamiria', 'badn', 'pool-party',
+      'immoconnect', 'wild-kedougou', 'orlena', 'islaah', 'oneday', 'allsab-ms', 'ilamiria', 'badn', 'pool-party',
       'skywalk', 'gexp', 'hexagon', 'prospectly', 'infinitia', 'crowdin',
     ],
     // Types de projet (plus lus par le site depuis les carrousels par groupe).
@@ -258,6 +258,18 @@ const SECTIONS = {
     // j'ai fait, ce que ça permet. Mêmes faits que `role` / `desc` plus bas,
     // rien d'ajouté (cadre réel : personnel, en équipe, scolaire).
     cases: {
+      immoconnect: {
+        kind: 'interne', label: 'Outil de gestion', frame: 'Pour un client',
+        need: 'Un conseiller immobilier voulait suivre ses biens, ses vendeurs, ses acquéreurs et ses visites au même endroit, depuis son téléphone.',
+        did: 'Conçu et développé seul : l\'application, les e-mails automatiques, la carte des biens et des prospects, le bon de visite à signer sur l\'écran, et la mise en ligne.',
+        result: 'Le conseiller planifie une visite en quelques gestes : l\'acquéreur reçoit la confirmation, un rappel avant le rendez-vous puis une demande d\'avis. Le vendeur consulte les comptes rendus dans son espace.',
+      },
+      orlena: {
+        kind: 'plateforme', label: 'Plateforme web', frame: 'Projet personnel, bénévole',
+        need: 'Permettre aux lycéens de réviser le bac en petits groupes avec des personnes qui maîtrisent les matières, en bibliothèque ou à distance.',
+        did: 'Réalisé seul et bénévolement : le site, le serveur, les comptes lycéens et organisateurs, les notifications et la mise en ligne.',
+        result: 'Le lycéen trouve une séance dans ses matières et s\'inscrit en un clic. L\'organisateur crée ses séances, partage ses documents et voit qui participe. Les écrans se mettent à jour en direct.',
+      },
       'wild-kedougou': {
         kind: 'reservation', label: 'Site de réservation', frame: 'Projet personnel',
         need: 'Présenter une activité touristique au Sénégal et permettre de réserver en ligne, sans échanges de messages.',
@@ -338,6 +350,29 @@ const SECTIONS = {
       },
     },
     items: [
+      {
+        short: 'IMMOCONNECT',
+        slug: 'immoconnect',
+        date: '10/2026',
+        title: 'ImmoConnect',
+        type: 'Application web',
+        category: 'Professionnel',
+        pick: true,
+        tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'React Router', 'Leaflet', 'Hono', 'Cloudflare Workers', 'Cloudflare D1', 'Cloudflare R2', 'Brevo', 'PWA'],
+        role: 'Projet freelance réalisé seul pour un client, conseiller immobilier : conception, interface, API, base de données, e-mails automatiques et mise en ligne.',
+        desc: 'Application web de suivi des visites immobilières, installable sur le téléphone. Le conseiller gère ses biens, vendeurs, acquéreurs, visites, comptes rendus et tâches ; chaque conseiller ne voit que ses propres données. Les acquéreurs, sans compte, reçoivent confirmation, rappel et demande d\'avis par e-mail et répondent par un lien personnel ; les vendeurs consultent les comptes rendus publiés pour eux. Carte des biens et des prospects vendeurs avec le DPE trouvé automatiquement dans la base de l\'ADEME, saisie d\'adresse assistée (Base Adresse Nationale), bon de visite prérempli à signer au doigt ou à imprimer, historique de chaque fiche, rappels envoyés par une tâche planifiée toutes les 5 minutes.',
+        links: [
+          { label: 'Voir l\'application', url: 'https://immoconnect.fr/' },
+        ],
+        device: 'mobile',
+        shots: [
+          { file: 'immoconnect-accueil', alt: 'Accueil du conseiller : visites à venir et chiffres du jour' },
+          { file: 'immoconnect-carte', alt: 'Carte des biens en vente et des prospects, avec la classe DPE' },
+          { file: 'immoconnect-visite', alt: 'Fiche d\'une visite : rappel et demande d\'avis programmés' },
+          { file: 'immoconnect-prospects', alt: 'Prospects vendeurs à suivre jusqu\'au mandat' },
+        ],
+        accent: '#19e8ff',
+      },
       {
         short: 'INFINITIA',
         slug: 'infinitia',
@@ -443,6 +478,29 @@ const SECTIONS = {
           { file: 'badn-profil', alt: 'Profil et paramètres' },
         ],
         accent: '#ff123d',
+      },
+      {
+        short: 'ORLENA',
+        slug: 'orlena',
+        date: '10/2026',
+        title: 'Orlena',
+        type: 'Plateforme web',
+        category: 'Personnel',
+        pick: true,
+        tech: ['React', 'TypeScript', 'Vite', 'Mantine', 'Hono', 'Cloudflare Workers', 'Cloudflare D1', 'Cloudflare R2', 'Durable Objects', 'WebSocket', 'Web Push', 'PWA', 'Vitest'],
+        role: 'Projet personnel et bénévole, réalisé seul : conception, interface React, API sur Cloudflare Workers, base de données, tests et mise en ligne. L\'API, d\'abord écrite en Java / Spring Boot avec PostgreSQL, a été réécrite pour tourner entièrement chez Cloudflare, avec les mêmes adresses et les mêmes règles.',
+        desc: 'Plateforme pour organiser et rejoindre des séances de révision du bac, en bibliothèque, à distance ou en mode hybride, pour que les lycéens profitent des connaissances de personnes qui maîtrisent les matières. Les lycéens (15 ans et plus) s\'inscrivent en un formulaire, filtrent le catalogue et réservent leur place en un clic, ou proposent une séance quand rien n\'est prévu. Les organisateurs, sur invitation, créent leurs séances, partagent des documents PDF et suivent les participants. Fiches de 526 lieux publics issus d\'OpenStreetMap, rappel la veille par notification, écrans mis à jour en direct, application installable et consultable hors ligne, export et suppression des données, administration des comptes, des lieux et des signalements.',
+        links: [
+          { label: 'Voir le projet', url: 'https://orlena.hitmind-pro.workers.dev/' },
+        ],
+        device: 'mobile',
+        shots: [
+          { file: 'orlena-seances', alt: 'Catalogue des séances de révision' },
+          { file: 'orlena-seance', alt: 'Fiche d\'une séance : lieu, horaire, places libres' },
+          { file: 'orlena-lieu', alt: 'Fiche d\'un lieu : affluence en temps réel, horaires, wifi' },
+          { file: 'orlena-mes-seances', alt: 'Mes séances : les inscriptions du lycéen' },
+        ],
+        accent: '#ff2bb0',
       },
       {
         short: 'KÉDOUGOU',
