@@ -1,111 +1,327 @@
 <!DOCTYPE html>
+<!-- GÉNÉRÉ par scripts/build-site.mjs, ne pas éditer : npm run content -->
 <html lang="fr" data-theme="night">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Tarifs · Arphan Drame, Développeur Web Full Stack</title>
+  <title>Tarifs · Site vitrine, landing page, réservation · Arphan Drame</title>
+  <meta name="description" content="Tarifs d’un développeur web freelance en Île-de-France : fiche Google 150 €, landing page 450 €, site vitrine 900 €, réservation en ligne 900 €. Prix affichés, devis gratuit.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://arphandrame.fr/tarifs">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:site_name" content="Arphan Drame">
-  <meta property="og:title" content="Tarifs · Arphan Drame, Développeur Web Full Stack">
-  <meta property="og:description" content="Tarifs professionnels : sites, e-commerce, applications, design, SEO, maintenance. Recherche rapide, devis personnalisé.">
+  <meta property="og:site_name" content="Arphan Drame · Développeur web freelance">
+  <meta property="og:title" content="Tarifs · Site vitrine, landing page, réservation · Arphan Drame">
+  <meta property="og:description" content="Tarifs d’un développeur web freelance en Île-de-France : fiche Google 150 €, landing page 450 €, site vitrine 900 €, réservation en ligne 900 €. Prix affichés, devis gratuit.">
   <meta property="og:url" content="https://arphandrame.fr/tarifs">
   <meta property="og:image" content="https://arphandrame.fr/assets/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Arphan Drame, Développeur Web Full Stack · Paris">
+  <meta property="og:image:alt" content="Arphan Drame, Développeur web freelance en Île-de-France : des sites et des outils qui vous amènent des clients">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Tarifs · Arphan Drame, Développeur Web Full Stack">
-  <meta name="twitter:description" content="Tarifs professionnels : sites, e-commerce, applications, design, SEO, maintenance. Recherche rapide, devis personnalisé.">
+  <meta name="twitter:title" content="Tarifs · Site vitrine, landing page, réservation · Arphan Drame">
+  <meta name="twitter:description" content="Tarifs d’un développeur web freelance en Île-de-France : fiche Google 150 €, landing page 450 €, site vitrine 900 €, réservation en ligne 900 €. Prix affichés, devis gratuit.">
   <meta name="twitter:image" content="https://arphandrame.fr/assets/img/og.jpg">
-  <meta name="description" content="Grille tarifaire d'Arphan Drame, développeur web freelance en Île-de-France. Tarifs professionnels : sites, e-commerce, applications, design, SEO, maintenance. Recherche rapide, devis personnalisé.">
   <meta name="theme-color" content="#070c14">
-  <!-- Activité freelance : même nom, même métier, même zone que la fiche Google.
-       Ni note ni avis ici : ils n'existent que sur Google. -->
+  <script src="/js/theme.js"></script>
+  <link rel="icon" href="/assets/img/favicon.png" sizes="96x96">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="stylesheet" href="/css/site.css">
+  <link rel="stylesheet" href="/css/vitrine.css">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Service",
-  "@id": "https://arphandrame.fr/tarifs#service",
-  "name": "Développement web freelance",
-  "serviceType": "Création de sites et d'applications web",
-  "url": "https://arphandrame.fr/tarifs",
-  "provider": {
-    "@type": "Person",
-    "@id": "https://arphandrame.fr/#person",
-    "name": "Arphan Drame",
-    "url": "https://arphandrame.fr/"
-  },
-  "areaServed": {
-    "@type": "AdministrativeArea",
-    "name": "Île-de-France"
-  }
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://arphandrame.fr/#website",
+      "name": "Arphan Drame",
+      "url": "https://arphandrame.fr/",
+      "inLanguage": "fr",
+      "publisher": {
+        "@id": "https://arphandrame.fr/#business"
+      }
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://arphandrame.fr/#business",
+      "name": "Arphan Drame · Développeur web freelance",
+      "alternateName": "Arphan Drame",
+      "description": "Développeur web freelance en Île-de-France : sites vitrines, landing pages, réservation en ligne, boutiques Shopify, fiches Google et automatisations pour les commerces, artisans et indépendants.",
+      "url": "https://arphandrame.fr/",
+      "image": "https://arphandrame.fr/assets/img/og.jpg",
+      "logo": "https://arphandrame.fr/assets/img/logo-1024.png",
+      "telephone": "+33767318426",
+      "email": "arphandrame0@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "4 rue Firmin Gémier, Hall 9",
+        "postalCode": "75018",
+        "addressLocality": "Paris",
+        "addressRegion": "Île-de-France",
+        "addressCountry": "FR"
+      },
+      "areaServed": {
+        "@type": "AdministrativeArea",
+        "name": "Île-de-France"
+      },
+      "priceRange": "€€",
+      "founder": {
+        "@id": "https://arphandrame.fr/#person"
+      },
+      "sameAs": [
+        "https://www.instagram.com/nahpra.dev/",
+        "https://www.linkedin.com/in/arphan-drame/",
+        "https://github.com/drams18",
+        "https://g.page/r/CYTu5tg8sNymEBM"
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://arphandrame.fr/#person",
+      "name": "Arphan Drame",
+      "jobTitle": "Développeur web freelance",
+      "url": "https://arphandrame.fr/a-propos",
+      "image": "https://arphandrame.fr/assets/img/arphan-drame.webp",
+      "sameAs": [
+        "https://www.instagram.com/nahpra.dev/",
+        "https://www.linkedin.com/in/arphan-drame/",
+        "https://github.com/drams18"
+      ],
+      "knowsLanguage": [
+        "Français",
+        "Anglais",
+        "Espagnol",
+        "Arabe"
+      ],
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "ETNA"
+      }
+    },
+    {
+      "@id": "https://arphandrame.fr/tarifs#page",
+      "url": "https://arphandrame.fr/tarifs",
+      "name": "Tarifs · Site vitrine, landing page, réservation · Arphan Drame",
+      "inLanguage": "fr",
+      "isPartOf": {
+        "@id": "https://arphandrame.fr/#website"
+      },
+      "about": {
+        "@id": "https://arphandrame.fr/#business"
+      },
+      "breadcrumb": {
+        "@id": "https://arphandrame.fr/tarifs#breadcrumb"
+      },
+      "@type": "WebPage",
+      "description": "Tarifs d’un développeur web freelance en Île-de-France : fiche Google 150 €, landing page 450 €, site vitrine 900 €, réservation en ligne 900 €. Prix affichés, devis gratuit."
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://arphandrame.fr/tarifs#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Accueil",
+          "item": "https://arphandrame.fr/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tarifs",
+          "item": "https://arphandrame.fr/tarifs"
+        }
+      ]
+    },
+    {
+      "@type": "OfferCatalog",
+      "@id": "https://arphandrame.fr/tarifs#catalogue",
+      "name": "Offres principales",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "name": "Fiche Google",
+          "description": "Apparaître sur Google Maps quand on cherche votre métier près de chez vous.",
+          "url": "https://arphandrame.fr/tarifs#offre-fiche-google",
+          "priceCurrency": "EUR",
+          "price": "150",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": 150,
+            "priceCurrency": "EUR"
+          },
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Fiche Google Business Profile",
+            "areaServed": "Île-de-France",
+            "provider": {
+              "@id": "https://arphandrame.fr/#business"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Landing page",
+          "description": "Une page claire qui présente votre offre et donne envie de vous contacter.",
+          "url": "https://arphandrame.fr/tarifs#offre-landing-page",
+          "priceCurrency": "EUR",
+          "price": "450",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": 450,
+            "priceCurrency": "EUR"
+          },
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Landing page",
+            "areaServed": "Île-de-France",
+            "provider": {
+              "@id": "https://arphandrame.fr/#business"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Site vitrine",
+          "description": "Votre activité présentée en plusieurs pages, sérieuse et facile à trouver.",
+          "url": "https://arphandrame.fr/tarifs#offre-site-vitrine",
+          "priceCurrency": "EUR",
+          "price": "900",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": 900,
+            "priceCurrency": "EUR"
+          },
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Site vitrine",
+            "areaServed": "Île-de-France",
+            "provider": {
+              "@id": "https://arphandrame.fr/#business"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Réservation en ligne",
+          "description": "Vos clients choisissent un créneau libre et réservent, sans échanges de messages.",
+          "url": "https://arphandrame.fr/tarifs#offre-reservation",
+          "priceCurrency": "EUR",
+          "price": "900",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": 900,
+            "priceCurrency": "EUR"
+          },
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Système de réservation / prise de RDV",
+            "areaServed": "Île-de-France",
+            "provider": {
+              "@id": "https://arphandrame.fr/#business"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Boutique Shopify",
+          "description": "Vendre vos produits en ligne avec une boutique à votre image.",
+          "url": "https://arphandrame.fr/tarifs#offre-boutique",
+          "priceCurrency": "EUR",
+          "price": "1000",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": 1000,
+            "priceCurrency": "EUR"
+          },
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Boutique Shopify",
+            "areaServed": "Île-de-France",
+            "provider": {
+              "@id": "https://arphandrame.fr/#business"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Automatisation",
+          "description": "Moins de tâches répétitives : devis, relances, tableaux et agendas qui se remplissent seuls.",
+          "url": "https://arphandrame.fr/tarifs#offre-automatisation",
+          "priceCurrency": "EUR",
+          "price": "400",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": 400,
+            "priceCurrency": "EUR"
+          },
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Automatisation de processus",
+            "areaServed": "Île-de-France",
+            "provider": {
+              "@id": "https://arphandrame.fr/#business"
+            }
+          }
+        }
+      ]
+    }
+  ]
 }
   </script>
-  <script src="js/theme.js"></script>
-  <script>document.documentElement.classList.add('js');</script>
-  <link rel="icon" href="assets/img/favicon.png" sizes="96x96">
-  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/site.css">
-  <link rel="stylesheet" href="css/classic.css">
-  <link rel="stylesheet" href="css/annexe.css">
-  <!-- ══════════════════════════════════════════════════════
-       TARIFS.HTML : Grille tarifaire, même habillage que les pages du
-       mode classique (barre du haut, fond d'ambiance, thèmes jour/nuit :
-       css/site.css + css/classic.css + css/annexe.css).
-
-       Tarifs professionnels uniquement. Une seule question par écran :
-         1. Besoin       → « Site internet », « Application et API »…
-         2. Prestations  → nom + prix ; le détail s'ouvre au clic,
-                           la suite de la liste à la demande
-
-       En plus, à tout moment :
-         • Recherche temps réel (nom + catégorie + mots-clés/synonymes)
-         • Aucun résultat → proposition de contact (ContactWidget)
-         • Lien « Construisez votre projet » (devis.html, ou le mini-jeu
-           construire-projet.html pour un visiteur du mode aventure)
-
-       Routage par hash :
-         (vide) | #choix → besoins ; #<categorie> → prestations
-         Anciennes adresses #professionnels/… et #particuliers/…
-         redirigées vers la catégorie équivalente (table LEGACY).
-       ══════════════════════════════════════════════════════ -->
 </head>
-<body>
+<body class="p-tarifs" data-keep-mode>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 7.6c-.4 0-.9.4-.9 1.3 0 2.6 3 6.4 6.6 6.9.9.1 1.6-.5 1.7-1.1l.1-.6-2.1-1-.9.9c-1.1-.4-2.5-1.8-2.9-2.9l.9-.9-.9-2.2z" fill="currentColor"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M4 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 9h3v12H3zM9 9h3v1.7c.5-.9 1.7-1.9 3.5-1.9 3.2 0 3.5 2.1 3.5 4.8V21h-3v-6.5c0-1.5 0-3.3-2-3.3s-2.3 1.6-2.3 3.2V21H9z" fill="currentColor"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z" fill="currentColor"/></symbol>
+    <symbol id="i-tiktok" viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.5 2.5 2.3 4 5 4.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="1.8"/></symbol>
-    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8"/></symbol>
-    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9.5h8M8 12.5h5" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-mobile" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10.5 18.5h3" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-page" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-site" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.8"/><circle cx="6.5" cy="6.5" r=".9" fill="currentColor"/><circle cx="9.3" cy="6.5" r=".9" fill="currentColor"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8"/><path d="m9 15 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
   </svg>
 
-  <a class="skip" href="#tarifsMain">Aller au contenu</a>
+  <a class="skip" href="#main">Aller au contenu</a>
 
-  <!-- Même barre que les pages du mode classique -->
   <header class="topbar">
     <div class="topbar__inner">
-      <a class="brand" href="./" aria-label="Arphan Drame, accueil"><img class="brand__logo" src="assets/img/logo.svg" alt="" width="28" height="28"><span class="brand__name">A. DRAME</span></a>
-      <span class="topbar__where" aria-hidden="true">Tarifs</span>
+      <a class="brand" href="/"><img class="brand__logo" src="/assets/img/logo.svg" alt="" width="30" height="30"><span class="brand__txt"><span class="brand__name">Arphan Drame</span><span class="brand__job">Développeur web freelance</span></span></a>
       <nav class="nav" id="site-nav" aria-label="Pages du site">
-        <a href="/classique"><span>Profil</span></a>
-        <a href="/classique/projets"><span>Projets</span></a>
-        <a href="/classique/parcours"><span>Parcours</span></a>
-        <a href="/classique/competences"><span>Compétences</span></a>
-        <a href="/classique/contact"><span>Contact</span></a>
-        <a href="/tarifs" aria-current="page"><span>Tarifs</span><i class="nav__ink" aria-hidden="true"></i></a>
-        <a class="nav__cv" href="assets/CV.pdf" target="_blank" rel="noopener"><span>Voir mon CV</span></a>
+        <a href="/realisations">Réalisations</a>
+        <a href="/tarifs" aria-current="page">Tarifs</a>
+        <a href="/a-propos">À propos</a>
+        <a href="/contact">Contact</a>
+        <a class="nav__extra" href="/aventure" data-switch-adventure><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-gamepad"/></svg>Mode aventure</a>
       </nav>
       <div class="topbar__actions">
-        <a class="topbar__cv" href="assets/CV.pdf" target="_blank" rel="noopener">Voir mon CV</a>
-        <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer d'ambiance">
+        <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer de thème">
           <svg class="ico ico--sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>
           <svg class="ico ico--moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>
         </button>
+        <a class="btn btn--cta btn--sm topbar__cta" href="/devis">Demander un devis</a>
         <button type="button" class="icon-btn nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Ouvrir le menu">
           <svg class="ico" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>
         </button>
@@ -113,885 +329,777 @@
     </div>
   </header>
 
-  <div class="world world--tarifs">
-    <div class="world__bg" aria-hidden="true"><i></i></div>
+  <main id="main" tabindex="-1">
+    <header class="phead wrap">
+      <p class="kicker">Tarifs</p>
+      <h1 class="phead__t">Tarifs : des prix clairs, affichés d’avance</h1>
+      <p class="phead__lead">Les prix sont « à partir de » : le prix final dépend de votre projet et il est fixé dans le devis, avant de commencer. Le premier échange est gratuit.</p>
+    </header>
+    <section class="wrap block" aria-labelledby="top-t">
+      <h2 class="block__t" id="top-t">Les offres les plus demandées</h2>
+        <ul class="offers">
+          <li class="offer" id="offre-fiche-google">
+            <span class="offer__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg></span>
+            <h3 class="offer__t">Fiche Google</h3>
+            <p class="offer__price price"><span class="price__from">à partir de</span> <span class="price__amount">150 €</span></p>
+            <p class="offer__pitch">Apparaître sur Google Maps quand on cherche votre métier près de chez vous.</p>
+            <ul class="offer__inc" aria-label="Compris"><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Création ou reprise de votre fiche</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Horaires, photos, services et zone bien remplis</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Liens vers votre site, votre téléphone et vos réseaux</li></ul>
+            <a class="text-link offer__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          </li>
+          <li class="offer" id="offre-landing-page">
+            <span class="offer__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-page"/></svg></span>
+            <h3 class="offer__t">Landing page</h3>
+            <p class="offer__price price"><span class="price__from">à partir de</span> <span class="price__amount">450 €</span></p>
+            <p class="offer__pitch">Une page claire qui présente votre offre et donne envie de vous contacter.</p>
+            <ul class="offer__inc" aria-label="Compris"><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Une seule page, pensée d’abord pour le téléphone</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Votre offre, vos atouts, vos coordonnées</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Boutons d’appel, WhatsApp ou formulaire</li></ul>
+            <a class="text-link offer__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          </li>
+          <li class="offer" id="offre-site-vitrine">
+            <span class="offer__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-site"/></svg></span>
+            <h3 class="offer__t">Site vitrine</h3>
+            <p class="offer__price price"><span class="price__from">à partir de</span> <span class="price__amount">900 €</span></p>
+            <p class="offer__pitch">Votre activité présentée en plusieurs pages, sérieuse et facile à trouver.</p>
+            <ul class="offer__inc" aria-label="Compris"><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Plusieurs pages : accueil, services, à propos, contact</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Formulaire de contact</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Bases du référencement Google</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Rapide et lisible sur téléphone</li></ul>
+            <a class="text-link offer__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          </li>
+          <li class="offer" id="offre-reservation">
+            <span class="offer__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-calendar"/></svg></span>
+            <h3 class="offer__t">Réservation en ligne</h3>
+            <p class="offer__price price"><span class="price__from">à partir de</span> <span class="price__amount">900 €</span></p>
+            <p class="offer__pitch">Vos clients choisissent un créneau libre et réservent, sans échanges de messages.</p>
+            <ul class="offer__inc" aria-label="Compris"><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Vos créneaux et vos disponibilités</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Confirmation envoyée par e-mail</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Rendez-vous ajoutés à votre agenda</li></ul>
+            <a class="text-link offer__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          </li>
+          <li class="offer" id="offre-boutique">
+            <span class="offer__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bag"/></svg></span>
+            <h3 class="offer__t">Boutique Shopify</h3>
+            <p class="offer__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 000 €</span></p>
+            <p class="offer__pitch">Vendre vos produits en ligne avec une boutique à votre image.</p>
+            <ul class="offer__inc" aria-label="Compris"><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Boutique Shopify personnalisée</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Produits, paiement et commandes configurés</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Prête à vendre</li></ul>
+            <a class="text-link offer__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          </li>
+          <li class="offer" id="offre-automatisation">
+            <span class="offer__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bolt"/></svg></span>
+            <h3 class="offer__t">Automatisation</h3>
+            <p class="offer__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span></p>
+            <p class="offer__pitch">Moins de tâches répétitives : devis, relances, tableaux et agendas qui se remplissent seuls.</p>
+            <ul class="offer__inc" aria-label="Compris"><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Connexion entre vos outils (Google Sheets, agenda…)</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Avec ou sans intelligence artificielle</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Adaptée à votre façon de travailler</li></ul>
+            <a class="text-link offer__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          </li>
+        </ul>
+    </section>
 
-    <div class="page wrap tarifs">
-      <header class="page-head">
-        <nav class="crumbs" id="crumbs" aria-label="Fil d'Ariane"></nav>
-        <h1 class="page-title" id="pageTitle" tabindex="-1">Mes tarifs</h1>
-        <p class="page-sub" id="pageSub">Quel est votre besoin ?</p>
-      </header>
+    <section class="wrap" aria-label="Premier échange gratuit">
+      <div class="free">
+        <span class="free__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg></span>
+        <div class="free__txt">
+          <h2 class="free__t">Premier échange gratuit</h2>
+          <p>Vous ne savez pas ce qu’il vous faut ? Expliquez-moi votre activité : je vous conseille gratuitement, sans engagement.</p>
+        </div>
+        <p class="free__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn" href="https://wa.me/33767318426?text=Bonjour%20Arphan%2C%20je%20vous%20contacte%20depuis%20votre%20site%20au%20sujet%20d'un%20projet." target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>WhatsApp</a></p>
+      </div>
+    </section>
 
-      <div class="search" role="search">
+    <section class="wrap block catalog" aria-labelledby="all-t">
+      <h2 class="block__t" id="all-t">Toutes les prestations</h2>
+      <p class="block__lead">74 prestations, classées par besoin. Touchez une ligne pour voir le détail.</p>
+      <div class="search js-only" role="search">
         <svg class="ico search__ico" aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
         <label class="sr-only" for="tarifSearch">Rechercher une prestation</label>
-        <input id="tarifSearch" class="search__input" type="search" inputmode="search"
-               enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false"
-               placeholder="Rechercher une prestation">
+        <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Rechercher : site, boutique, réservation…">
         <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
       </div>
-      <p class="sr-only" role="status" id="tarifStatus"></p>
+      <p class="search__status" id="tarifStatus" role="status" aria-live="polite"></p>
+      <div class="noresult" id="tarifNone" hidden>
+        <p>Votre besoin est peut-être spécifique : parlons-en.</p>
+        <p class="cta__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn" href="/contact">Me contacter</a></p>
+      </div>
+      <nav class="cat-nav" aria-label="Catégories"><a class="chip" href="#site">Site internet</a><a class="chip" href="#vendre">Vendre en ligne</a><a class="chip" href="#modules">Modules &amp; fonctionnalités</a><a class="chip" href="#visibilite">Visibilité &amp; statistiques</a><a class="chip" href="#design">Design &amp; expérience</a><a class="chip" href="#suivi">Maintenance et renfort</a><a class="chip" href="#creatif">Créatif &amp; interactif</a><a class="chip" href="#conseil">Conseil &amp; pilotage</a><a class="chip" href="#app">Application et API</a><a class="chip" href="#infra">Infra, DevOps &amp; qualité</a></nav>
+      <div class="cats">
+          <section class="cat" id="site" aria-labelledby="cat-site">
+            <h3 class="cat__t" id="cat-site">Site internet<span>Vitrine, WordPress, refonte, accessibilité</span></h3>
+            <ul class="svc-list">
+              <li class="svc-item" data-search="Landing page Page unique orientée conversion, pour une offre ou une campagne. landing page atterrissage one page onepage pub publicite campagne promo conversion site web Site internet">
+                <details class="svc" id="landing-page">
+                  <summary class="svc__head"><span class="svc__name">Landing page</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">450 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Page unique orientée conversion, pour une offre ou une campagne.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Site vitrine Présence pro complète codée sur mesure : plusieurs pages, formulaire de contact, SEO de base. site vitrine web internet presence entreprise sur mesure code seo referencement pages corporate professionnel formulaire contact Site internet">
+                <details class="svc" id="site-vitrine">
+                  <summary class="svc__head"><span class="svc__name">Site vitrine</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">900 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Présence pro complète codée sur mesure : plusieurs pages, formulaire de contact, SEO de base.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Site WordPress Site administrable, thème et extensions configurés, formation à la prise en main. wordpress wp cms blog woocommerce elementor administrable theme extension formation site web boutique Site internet Vendre en ligne">
+                <details class="svc" id="site-wordpress">
+                  <summary class="svc__head"><span class="svc__name">Site WordPress</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">800 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Site administrable, thème et extensions configurés, formation à la prise en main.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Intégration d'une maquette Figma Votre maquette Figma transformée en site responsive, fidèle au design. figma maquette design integration integrateur html css responsive zeplin xd photoshop psd vers site pixel perfect Site internet">
+                <details class="svc" id="integration-d-une-maquette-figma">
+                  <summary class="svc__head"><span class="svc__name">Intégration d'une maquette Figma</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Votre maquette Figma transformée en site responsive, fidèle au design.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Refonte de site Nouveau design ou évolutions d'un site existant. refonte modification modifier refaire redesign relooking moderniser evolution mise a jour changement ameliorer site existant Site internet">
+                <details class="svc" id="refonte-de-site">
+                  <summary class="svc__head"><span class="svc__name">Refonte de site</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Nouveau design ou évolutions d'un site existant.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Optimisation performance / PageSpeed Audit puis corrections : images, cache, chargement, Core Web Vitals. vitesse performance pagespeed lighthouse rapidite lent optimisation cache images lazy chargement core web vitals fluidite audit Site internet Visibilité &amp; statistiques">
+                <details class="svc" id="optimisation-performance-pagespeed">
+                  <summary class="svc__head"><span class="svc__name">Optimisation performance / PageSpeed</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">350 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Audit puis corrections : images, cache, chargement, Core Web Vitals.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Adaptation mobile / responsive Site existant rendu lisible et agréable sur smartphone et tablette. responsive mobile smartphone tablette adaptation adapter affichage ecran telephone site existant illisible Site internet">
+                <details class="svc" id="adaptation-mobile-responsive">
+                  <summary class="svc__head"><span class="svc__name">Adaptation mobile / responsive</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Site existant rendu lisible et agréable sur smartphone et tablette.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Mise en conformité accessibilité Audit RGAA / WCAG puis corrections : contrastes, navigation au clavier, lecteurs d'écran. accessibilite rgaa wcag handicap a11y conformite contraste clavier lecteur ecran malvoyant audit loi Site internet">
+                <details class="svc" id="mise-en-conformite-accessibilite">
+                  <summary class="svc__head"><span class="svc__name">Mise en conformité accessibilité</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">450 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Audit RGAA / WCAG puis corrections : contrastes, navigation au clavier, lecteurs d'écran.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Composant sur mesure Formulaire avancé, carrousel, filtres, tableau interactif : un élément ajouté à votre site. composant element module formulaire carrousel slider filtres tableau interactif galerie onglets accordeon recherche ajout fonctionnalite Site internet Modules &amp; fonctionnalités">
+                <details class="svc" id="composant-sur-mesure">
+                  <summary class="svc__head"><span class="svc__name">Composant sur mesure</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">200 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Formulaire avancé, carrousel, filtres, tableau interactif : un élément ajouté à votre site.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Thème WordPress sur mesure Thème codé à partir de votre maquette, léger et sans constructeur de pages. theme wordpress wp sur mesure personnalise custom php gutenberg blocs maquette leger cms Site internet">
+                <details class="svc" id="theme-wordpress-sur-mesure">
+                  <summary class="svc__head"><span class="svc__name">Thème WordPress sur mesure</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 200 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Thème codé à partir de votre maquette, léger et sans constructeur de pages.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Migration de CMS Passage de Wix, Joomla ou autre vers WordPress ou un site sur mesure, contenus repris. migration cms changer wix joomla drupal squarespace webflow wordpress transfert contenus reprise site existant Site internet">
+                <details class="svc" id="migration-de-cms">
+                  <summary class="svc__head"><span class="svc__name">Migration de CMS</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Passage de Wix, Joomla ou autre vers WordPress ou un site sur mesure, contenus repris.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Formation à la gestion de votre site Séance de prise en main : pages, articles, images, produits et commandes. formation initiation cours apprendre prise en main autonomie gerer site wordpress shopify tutoriel accompagnement Site internet Maintenance et renfort">
+                <details class="svc" id="formation-a-la-gestion-de-votre-site">
+                  <summary class="svc__head"><span class="svc__name">Formation à la gestion de votre site</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">120 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Séance de prise en main : pages, articles, images, produits et commandes.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="SEO technique + données structurées Balises, métadonnées, sitemap et données structurées (Schema.org). seo referencement google balises meta title description sitemap schema donnees structurees rich snippets visibilite recherche indexation Visibilité &amp; statistiques Site internet">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">SEO technique + données structurées</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Balises, métadonnées, sitemap et données structurées (Schema.org).</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Rédaction des textes du site Pages, boutons, messages : des textes clairs qui guident vos visiteurs. redaction textes contenu copywriting ux writing redacteur web pages boutons messages microcopie Design &amp; expérience Site internet">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Rédaction des textes du site</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Pages, boutons, messages : des textes clairs qui guident vos visiteurs.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Animations &amp; micro-interactions Animations d'interface fluides : apparitions, survols, transitions. animation animations micro interactions motion design transitions survol apparition gsap css fluide dynamique Créatif &amp; interactif Site internet">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Animations &amp; micro-interactions</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Animations d'interface fluides : apparitions, survols, transitions.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Portfolio créatif sur mesure Un portfolio original qui met vos réalisations en scène. portfolio book creatif original artiste photographe designer realisations projets galerie sur mesure Créatif &amp; interactif Site internet">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Portfolio créatif sur mesure</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 200 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Un portfolio original qui met vos réalisations en scène.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Système de réservation / prise de RDV Créneaux, disponibilités, confirmations e-mail et calendrier. reservation prise de rendez vous rdv booking creneaux disponibilites agenda calendrier planning confirmation email calendly Modules &amp; fonctionnalités Site internet">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Système de réservation / prise de RDV</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">900 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Créneaux, disponibilités, confirmations e-mail et calendrier.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Création d'un chatbot Assistant intégré à votre site, entraîné sur vos contenus : FAQ, support, prise de contact. chatbot bot ia intelligence artificielle llm assistant virtuel faq questions reponses support client conversation gpt widget chat agent conversationnel Modules &amp; fonctionnalités Site internet">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Création d'un chatbot</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Assistant intégré à votre site, entraîné sur vos contenus : FAQ, support, prise de contact.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Formulaire de contact + envoi d'e-mails Formulaire protégé contre le spam, messages reçus directement par e-mail. formulaire contact email mail envoi message demande devis spam captcha turnstile notification Modules &amp; fonctionnalités Site internet">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Formulaire de contact + envoi d'e-mails</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">150 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Formulaire protégé contre le spam, messages reçus directement par e-mail.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Bandeau cookies + conformité RGPD Recueil du consentement : aucun traceur tant que le visiteur n'a pas accepté. cookies bandeau rgpd consentement cnil gdpr traceurs conformite mentions legales confidentialite Visibilité &amp; statistiques Site internet">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Bandeau cookies + conformité RGPD</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Recueil du consentement : aucun traceur tant que le visiteur n'a pas accepté.</p>
+                </details>
+              </li>
+            </ul>
+          </section>
+          <section class="cat" id="vendre" aria-labelledby="cat-vendre">
+            <h3 class="cat__t" id="cat-vendre">Vendre en ligne<span>Shopify, e-commerce, paiement</span></h3>
+            <ul class="svc-list">
+              <li class="svc-item" data-search="Boutique Shopify Boutique Shopify personnalisée et optimisée, prête à vendre. shopify boutique magasin ecommerce e-commerce vendre vente store theme liquid optimisation en ligne panier paiement Vendre en ligne">
+                <details class="svc" id="boutique-shopify">
+                  <summary class="svc__head"><span class="svc__name">Boutique Shopify</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 000 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Boutique Shopify personnalisée et optimisée, prête à vendre.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="E-commerce (WooCommerce ou sur mesure) Boutique complète : catalogue, paiement et gestion des commandes. ecommerce e-commerce woocommerce boutique magasin vendre vente commerce paiement commandes panier stock catalogue en ligne sur mesure Vendre en ligne">
+                <details class="svc" id="e-commerce-woocommerce-ou-sur-mesure">
+                  <summary class="svc__head"><span class="svc__name">E-commerce (WooCommerce ou sur mesure)</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 500 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Boutique complète : catalogue, paiement et gestion des commandes.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Intégration de service tiers Paiement, CRM, agenda, emailing : connexion à vos outils. integration service tiers api externe paiement stripe paypal crm hubspot agenda google calendar emailing newsletter brevo mailchimp webhook connexion outil Vendre en ligne Modules &amp; fonctionnalités">
+                <details class="svc" id="integration-de-service-tiers">
+                  <summary class="svc__head"><span class="svc__name">Intégration de service tiers</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">450 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Paiement, CRM, agenda, emailing : connexion à vos outils.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Site WordPress Site administrable, thème et extensions configurés, formation à la prise en main. wordpress wp cms blog woocommerce elementor administrable theme extension formation site web boutique Site internet Vendre en ligne">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Site WordPress</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">800 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Site administrable, thème et extensions configurés, formation à la prise en main.</p>
+                </details>
+              </li>
+            </ul>
+          </section>
+          <section class="cat" id="modules" aria-labelledby="cat-modules">
+            <h3 class="cat__t" id="cat-modules">Modules &amp; fonctionnalités<span>Réservation, espace client, IA</span></h3>
+            <ul class="svc-list">
+              <li class="svc-item" data-search="Système de réservation / prise de RDV Créneaux, disponibilités, confirmations e-mail et calendrier. reservation prise de rendez vous rdv booking creneaux disponibilites agenda calendrier planning confirmation email calendly Modules &amp; fonctionnalités Site internet">
+                <details class="svc" id="systeme-de-reservation-prise-de-rdv">
+                  <summary class="svc__head"><span class="svc__name">Système de réservation / prise de RDV</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">900 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Créneaux, disponibilités, confirmations e-mail et calendrier.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Tableau de bord &amp; reporting Indicateurs, filtres et exports PDF, Excel et CSV. tableau de bord dashboard reporting rapport statistiques indicateurs kpi graphiques export pdf excel csv donnees analyse Modules &amp; fonctionnalités">
+                <details class="svc" id="tableau-de-bord-reporting">
+                  <summary class="svc__head"><span class="svc__name">Tableau de bord &amp; reporting</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">800 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Indicateurs, filtres et exports PDF, Excel et CSV.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Espace client / back-office / intranet Zone privée pour gérer contenus, utilisateurs et données. espace client back office intranet administration zone privee gestion utilisateurs contenus crud portail interne extranet Modules &amp; fonctionnalités">
+                <details class="svc" id="espace-client-back-office-intranet">
+                  <summary class="svc__head"><span class="svc__name">Espace client / back-office / intranet</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 200 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Zone privée pour gérer contenus, utilisateurs et données.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Authentification &amp; gestion des rôles Connexion sécurisée, rôles, permissions, JWT ou SSO. authentification auth connexion login inscription jwt sso oauth roles permissions droits acces securite session mot de passe Modules &amp; fonctionnalités">
+                <details class="svc" id="authentification-gestion-des-roles">
+                  <summary class="svc__head"><span class="svc__name">Authentification &amp; gestion des rôles</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Connexion sécurisée, rôles, permissions, JWT ou SSO.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Création d'un chatbot Assistant intégré à votre site, entraîné sur vos contenus : FAQ, support, prise de contact. chatbot bot ia intelligence artificielle llm assistant virtuel faq questions reponses support client conversation gpt widget chat agent conversationnel Modules &amp; fonctionnalités Site internet">
+                <details class="svc" id="creation-d-un-chatbot">
+                  <summary class="svc__head"><span class="svc__name">Création d'un chatbot</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Assistant intégré à votre site, entraîné sur vos contenus : FAQ, support, prise de contact.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Intégration IA / LLM Chatbot avancé, RAG, résumé, classification : API ou modèle local. ia intelligence artificielle llm gpt openai chatbot rag resume classification extraction embeddings vecteur assistant modele local prompt Modules &amp; fonctionnalités">
+                <details class="svc" id="integration-ia-llm">
+                  <summary class="svc__head"><span class="svc__name">Intégration IA / LLM</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 200 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Chatbot avancé, RAG, résumé, classification : API ou modèle local.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Collecte de données / scraping cadré Extraction structurée de données publiques, dans un cadre légal. scraping collecte donnees extraction crawl parsing web data mining automatisation puppeteer playwright api structuree veille Modules &amp; fonctionnalités">
+                <details class="svc" id="collecte-de-donnees-scraping-cadre">
+                  <summary class="svc__head"><span class="svc__name">Collecte de données / scraping cadré</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">450 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Extraction structurée de données publiques, dans un cadre légal.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Automatisation de processus Google Sheets, agenda, connecteurs entre vos outils, avec ou sans IA : fini les tâches répétitives. automatisation automatiser processus google sheets agenda calendrier connecteur zapier make n8n integration api script taches repetitives workflow ia intelligence artificielle Modules &amp; fonctionnalités">
+                <details class="svc" id="automatisation-de-processus">
+                  <summary class="svc__head"><span class="svc__name">Automatisation de processus</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Google Sheets, agenda, connecteurs entre vos outils, avec ou sans IA : fini les tâches répétitives.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Formulaire de contact + envoi d'e-mails Formulaire protégé contre le spam, messages reçus directement par e-mail. formulaire contact email mail envoi message demande devis spam captcha turnstile notification Modules &amp; fonctionnalités Site internet">
+                <details class="svc" id="formulaire-de-contact-envoi-d-e-mails">
+                  <summary class="svc__head"><span class="svc__name">Formulaire de contact + envoi d'e-mails</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">150 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Formulaire protégé contre le spam, messages reçus directement par e-mail.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Import / export de données Reprise ou export de vos données : CSV, Excel, JSON, synchronisation entre outils. import export donnees csv excel json synchronisation reprise transfert fichier tableur base Modules &amp; fonctionnalités">
+                <details class="svc" id="import-export-de-donnees">
+                  <summary class="svc__head"><span class="svc__name">Import / export de données</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Reprise ou export de vos données : CSV, Excel, JSON, synchronisation entre outils.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Composant sur mesure Formulaire avancé, carrousel, filtres, tableau interactif : un élément ajouté à votre site. composant element module formulaire carrousel slider filtres tableau interactif galerie onglets accordeon recherche ajout fonctionnalite Site internet Modules &amp; fonctionnalités">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Composant sur mesure</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">200 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Formulaire avancé, carrousel, filtres, tableau interactif : un élément ajouté à votre site.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Intégration de service tiers Paiement, CRM, agenda, emailing : connexion à vos outils. integration service tiers api externe paiement stripe paypal crm hubspot agenda google calendar emailing newsletter brevo mailchimp webhook connexion outil Vendre en ligne Modules &amp; fonctionnalités">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Intégration de service tiers</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">450 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Paiement, CRM, agenda, emailing : connexion à vos outils.</p>
+                </details>
+              </li>
+            </ul>
+          </section>
+          <section class="cat" id="visibilite" aria-labelledby="cat-visibilite">
+            <h3 class="cat__t" id="cat-visibilite">Visibilité &amp; statistiques<span>SEO, Google, Analytics, cookies</span></h3>
+            <ul class="svc-list">
+              <li class="svc-item" data-search="SEO technique + données structurées Balises, métadonnées, sitemap et données structurées (Schema.org). seo referencement google balises meta title description sitemap schema donnees structurees rich snippets visibilite recherche indexation Visibilité &amp; statistiques Site internet">
+                <details class="svc" id="seo-technique-donnees-structurees">
+                  <summary class="svc__head"><span class="svc__name">SEO technique + données structurées</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Balises, métadonnées, sitemap et données structurées (Schema.org).</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Audit SEO État des lieux technique et contenu, plan d'action priorisé. audit seo referencement google analyse diagnostic positionnement mots cles visibilite plan action Visibilité &amp; statistiques">
+                <details class="svc" id="audit-seo">
+                  <summary class="svc__head"><span class="svc__name">Audit SEO</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">200 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">État des lieux technique et contenu, plan d'action priorisé.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Fiche Google Business Profile Création ou optimisation de votre fiche pour apparaître sur Google Maps. google business profile my business fiche maps carte local referencement local avis commerce Visibilité &amp; statistiques">
+                <details class="svc" id="fiche-google-business-profile">
+                  <summary class="svc__head"><span class="svc__name">Fiche Google Business Profile</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">150 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Création ou optimisation de votre fiche pour apparaître sur Google Maps.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Installation Google Analytics / Matomo Mesure d'audience configurée, dans le respect du consentement. google analytics ga4 matomo statistiques audience mesure trafic visiteurs tag manager gtm suivi Visibilité &amp; statistiques">
+                <details class="svc" id="installation-google-analytics-matomo">
+                  <summary class="svc__head"><span class="svc__name">Installation Google Analytics / Matomo</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">200 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Mesure d'audience configurée, dans le respect du consentement.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Suivi des conversions Formulaires, appels, achats : les actions qui comptent, mesurées. conversions suivi objectifs evenements tracking formulaires achats appels ga4 tag manager publicite roi Visibilité &amp; statistiques">
+                <details class="svc" id="suivi-des-conversions">
+                  <summary class="svc__head"><span class="svc__name">Suivi des conversions</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Formulaires, appels, achats : les actions qui comptent, mesurées.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Tableau de bord des statistiques Rapport clair de votre trafic (Looker Studio), mis à jour automatiquement. tableau de bord statistiques rapport trafic looker studio data studio audience reporting kpi analytics Visibilité &amp; statistiques">
+                <details class="svc" id="tableau-de-bord-des-statistiques">
+                  <summary class="svc__head"><span class="svc__name">Tableau de bord des statistiques</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Rapport clair de votre trafic (Looker Studio), mis à jour automatiquement.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Bandeau cookies + conformité RGPD Recueil du consentement : aucun traceur tant que le visiteur n'a pas accepté. cookies bandeau rgpd consentement cnil gdpr traceurs conformite mentions legales confidentialite Visibilité &amp; statistiques Site internet">
+                <details class="svc" id="bandeau-cookies-conformite-rgpd">
+                  <summary class="svc__head"><span class="svc__name">Bandeau cookies + conformité RGPD</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Recueil du consentement : aucun traceur tant que le visiteur n'a pas accepté.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Optimisation performance / PageSpeed Audit puis corrections : images, cache, chargement, Core Web Vitals. vitesse performance pagespeed lighthouse rapidite lent optimisation cache images lazy chargement core web vitals fluidite audit Site internet Visibilité &amp; statistiques">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Optimisation performance / PageSpeed</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">350 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Audit puis corrections : images, cache, chargement, Core Web Vitals.</p>
+                </details>
+              </li>
+            </ul>
+          </section>
+          <section class="cat" id="design" aria-labelledby="cat-design">
+            <h3 class="cat__t" id="cat-design">Design &amp; expérience<span>Maquettes, UX, identité visuelle</span></h3>
+            <ul class="svc-list">
+              <li class="svc-item" data-search="Maquettes de site ou d'application Maquettes Figma ordinateur et mobile, prêtes à être développées. maquette maquettes design ui interface figma webdesign ecrans desktop mobile graphisme visuel Design &amp; expérience">
+                <details class="svc" id="maquettes-de-site-ou-d-application">
+                  <summary class="svc__head"><span class="svc__name">Maquettes de site ou d'application</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Maquettes Figma ordinateur et mobile, prêtes à être développées.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Wireframes + prototype cliquable Structure des écrans et parcours testable avant le design final. wireframe zoning prototype cliquable maquette basse fidelite parcours ux figma structure ecrans Design &amp; expérience">
+                <details class="svc" id="wireframes-prototype-cliquable">
+                  <summary class="svc__head"><span class="svc__name">Wireframes + prototype cliquable</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Structure des écrans et parcours testable avant le design final.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Design system / charte UI Couleurs, typographies et composants réutilisables, documentés dans Figma. design system charte ui graphique composants bibliotheque couleurs typographie guide style figma coherence Design &amp; expérience">
+                <details class="svc" id="design-system-charte-ui">
+                  <summary class="svc__head"><span class="svc__name">Design system / charte UI</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">800 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Couleurs, typographies et composants réutilisables, documentés dans Figma.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Audit UX Analyse des parcours et recommandations priorisées pour simplifier la navigation. audit ux experience utilisateur ergonomie parcours navigation analyse recommandations conversion utilisabilite Design &amp; expérience">
+                <details class="svc" id="audit-ux">
+                  <summary class="svc__head"><span class="svc__name">Audit UX</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Analyse des parcours et recommandations priorisées pour simplifier la navigation.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Tests utilisateurs Sessions avec de vrais utilisateurs, synthèse des points de friction. tests utilisateurs user testing entretiens ux recherche utilisateur friction utilisabilite retours panel Design &amp; expérience">
+                <details class="svc" id="tests-utilisateurs">
+                  <summary class="svc__head"><span class="svc__name">Tests utilisateurs</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">500 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Sessions avec de vrais utilisateurs, synthèse des points de friction.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Logo + identité visuelle Logo décliné, palette et typographies pour une image cohérente. logo identite visuelle graphisme marque branding charte graphique couleurs typographie visuel image Design &amp; expérience">
+                <details class="svc" id="logo-identite-visuelle">
+                  <summary class="svc__head"><span class="svc__name">Logo + identité visuelle</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Logo décliné, palette et typographies pour une image cohérente.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Rédaction des textes du site Pages, boutons, messages : des textes clairs qui guident vos visiteurs. redaction textes contenu copywriting ux writing redacteur web pages boutons messages microcopie Design &amp; expérience Site internet">
+                <details class="svc" id="redaction-des-textes-du-site">
+                  <summary class="svc__head"><span class="svc__name">Rédaction des textes du site</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Pages, boutons, messages : des textes clairs qui guident vos visiteurs.</p>
+                </details>
+              </li>
+            </ul>
+          </section>
+          <section class="cat" id="suivi" aria-labelledby="cat-suivi">
+            <h3 class="cat__t" id="cat-suivi">Maintenance et renfort<span>Suivi mensuel, dépannage, régie</span></h3>
+            <ul class="svc-list">
+              <li class="svc-item" data-search="Maintenance Suivi mensuel, mises à jour, correctifs et petites évolutions. maintenance suivi entretien mises a jour correctifs evolutions mensuel abonnement tma support contrat infogerance retouches Maintenance et renfort">
+                <details class="svc" id="maintenance">
+                  <summary class="svc__head"><span class="svc__name">Maintenance</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">150 €</span> <span class="price__unit">/ mois</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Suivi mensuel, mises à jour, correctifs et petites évolutions.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Intervention / dépannage Bug, erreur, site en panne : diagnostic et correction. depannage intervention correction bug erreur probleme reparer panne corriger plante casse fix soucis assistance aide wordpress shopify Maintenance et renfort">
+                <details class="svc" id="intervention-depannage">
+                  <summary class="svc__head"><span class="svc__name">Intervention / dépannage</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">60 €</span> <span class="price__unit">/ h</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Bug, erreur, site en panne : diagnostic et correction.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Développement à la journée Renfort ponctuel intégré à votre équipe. regie renfort journee jour freelance equipe ponctuel prestation tjm consultant developpeur Maintenance et renfort">
+                <details class="svc" id="developpement-a-la-journee">
+                  <summary class="svc__head"><span class="svc__name">Développement à la journée</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span> <span class="price__unit">/ jour</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Renfort ponctuel intégré à votre équipe.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Formation à la gestion de votre site Séance de prise en main : pages, articles, images, produits et commandes. formation initiation cours apprendre prise en main autonomie gerer site wordpress shopify tutoriel accompagnement Site internet Maintenance et renfort">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Formation à la gestion de votre site</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">120 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Séance de prise en main : pages, articles, images, produits et commandes.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Mise en place de tests automatisés Tests unitaires et end-to-end (Jest, Cypress, Playwright). tests automatises test unitaire end to end e2e jest cypress playwright vitest recette qualite couverture non regression ci Infra, DevOps &amp; qualité Maintenance et renfort">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Mise en place de tests automatisés</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Tests unitaires et end-to-end (Jest, Cypress, Playwright).</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Sécurisation + sauvegardes HTTPS, mises à jour, sauvegardes automatiques et plan de restauration. securite securisation sauvegarde backup https ssl mises a jour wordpress piratage malware protection restauration Infra, DevOps &amp; qualité Maintenance et renfort">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Sécurisation + sauvegardes</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">HTTPS, mises à jour, sauvegardes automatiques et plan de restauration.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Supervision + alertes Surveillance du site et des erreurs, alerte immédiate en cas de panne. supervision monitoring surveillance alerte panne disponibilite uptime erreurs logs sentry production Infra, DevOps &amp; qualité Maintenance et renfort">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Supervision + alertes</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Surveillance du site et des erreurs, alerte immédiate en cas de panne.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Pilotage de projet Suivi du planning, coordination des intervenants, points réguliers. pilotage gestion de projet chef de projet suivi planning coordination prestataires agile scrum master Conseil &amp; pilotage Maintenance et renfort">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Pilotage de projet</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">350 €</span> <span class="price__unit">/ jour</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Suivi du planning, coordination des intervenants, points réguliers.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Accompagnement / mentorat Montée en compétences d'une équipe ou d'un développeur junior. accompagnement mentorat coaching formation equipe developpeur junior montee en competences tech lead Conseil &amp; pilotage Maintenance et renfort">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Accompagnement / mentorat</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">60 €</span> <span class="price__unit">/ h</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Montée en compétences d'une équipe ou d'un développeur junior.</p>
+                </details>
+              </li>
+            </ul>
+          </section>
+          <section class="cat" id="creatif" aria-labelledby="cat-creatif">
+            <h3 class="cat__t" id="cat-creatif">Créatif &amp; interactif<span>Immersif, 3D, animations, mini-jeux</span></h3>
+            <ul class="svc-list">
+              <li class="svc-item" data-search="Site immersif / interactif Une expérience qui marque : navigation originale, transitions, défilement animé. site immersif interactif experience creatif original storytelling scroll defilement animation transitions marque evenement Créatif &amp; interactif">
+                <details class="svc" id="site-immersif-interactif">
+                  <summary class="svc__head"><span class="svc__name">Site immersif / interactif</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">2 000 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Une expérience qui marque : navigation originale, transitions, défilement animé.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Animations &amp; micro-interactions Animations d'interface fluides : apparitions, survols, transitions. animation animations micro interactions motion design transitions survol apparition gsap css fluide dynamique Créatif &amp; interactif Site internet">
+                <details class="svc" id="animations-micro-interactions">
+                  <summary class="svc__head"><span class="svc__name">Animations &amp; micro-interactions</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Animations d'interface fluides : apparitions, survols, transitions.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Expérience 3D (Three.js / WebGL) Scène ou produit en 3D, manipulable directement dans le navigateur. 3d threejs three js webgl canvas scene produit modele configurateur rotation immersif Créatif &amp; interactif">
+                <details class="svc" id="experience-3d-three-js-webgl">
+                  <summary class="svc__head"><span class="svc__name">Expérience 3D (Three.js / WebGL)</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 500 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Scène ou produit en 3D, manipulable directement dans le navigateur.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Mini-jeu web promotionnel Jeu jouable dans le navigateur, pour une campagne, un événement ou un salon. jeu mini jeu game html5 canvas navigateur gamification promotionnel campagne evenement salon concours Créatif &amp; interactif">
+                <details class="svc" id="mini-jeu-web-promotionnel">
+                  <summary class="svc__head"><span class="svc__name">Mini-jeu web promotionnel</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 200 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Jeu jouable dans le navigateur, pour une campagne, un événement ou un salon.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Portfolio créatif sur mesure Un portfolio original qui met vos réalisations en scène. portfolio book creatif original artiste photographe designer realisations projets galerie sur mesure Créatif &amp; interactif Site internet">
+                <details class="svc" id="portfolio-creatif-sur-mesure">
+                  <summary class="svc__head"><span class="svc__name">Portfolio créatif sur mesure</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 200 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Un portfolio original qui met vos réalisations en scène.</p>
+                </details>
+              </li>
+            </ul>
+          </section>
+          <section class="cat" id="conseil" aria-labelledby="cat-conseil">
+            <h3 class="cat__t" id="cat-conseil">Conseil &amp; pilotage<span>Audit, cadrage, architecture</span></h3>
+            <ul class="svc-list">
+              <li class="svc-item" data-search="Audit technique Code, sécurité, performance et dette technique : rapport et priorités. audit technique code securite performance dette technique analyse diagnostic rapport application existante Conseil &amp; pilotage">
+                <details class="svc" id="audit-technique">
+                  <summary class="svc__head"><span class="svc__name">Audit technique</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">500 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Code, sécurité, performance et dette technique : rapport et priorités.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Conseil en choix technique Stack, hébergement, outils : le bon choix pour votre projet et votre budget. conseil choix technique stack technologie framework hebergement outils recommandation consultant Conseil &amp; pilotage">
+                <details class="svc" id="conseil-en-choix-technique">
+                  <summary class="svc__head"><span class="svc__name">Conseil en choix technique</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Stack, hébergement, outils : le bon choix pour votre projet et votre budget.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Conception d'architecture Structure de l'application, base de données et services, documentée avant le développement. architecture conception logicielle solution schema base de donnees services microservices modelisation uml documentation Conseil &amp; pilotage Application et API">
+                <details class="svc" id="conception-d-architecture">
+                  <summary class="svc__head"><span class="svc__name">Conception d'architecture</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">800 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Structure de l'application, base de données et services, documentée avant le développement.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Revue de code Relecture détaillée, failles et améliorations commentées. revue de code code review relecture qualite bonnes pratiques failles refactoring Conseil &amp; pilotage">
+                <details class="svc" id="revue-de-code">
+                  <summary class="svc__head"><span class="svc__name">Revue de code</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Relecture détaillée, failles et améliorations commentées.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Cadrage de projet Besoins, périmètre, priorités et planning définis avant de démarrer. cadrage projet besoins perimetre priorites planning atelier lancement chef de projet Conseil &amp; pilotage">
+                <details class="svc" id="cadrage-de-projet">
+                  <summary class="svc__head"><span class="svc__name">Cadrage de projet</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Besoins, périmètre, priorités et planning définis avant de démarrer.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Cahier des charges Document complet pour lancer votre projet ou consulter des prestataires. cahier des charges specifications document besoin appel offres prestataires redaction Conseil &amp; pilotage">
+                <details class="svc" id="cahier-des-charges">
+                  <summary class="svc__head"><span class="svc__name">Cahier des charges</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">500 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Document complet pour lancer votre projet ou consulter des prestataires.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Spécifications + user stories Fonctionnalités détaillées et backlog priorisé, prêts pour les développeurs. specifications fonctionnelles techniques user stories backlog product owner agile scrum jira priorisation Conseil &amp; pilotage">
+                <details class="svc" id="specifications-user-stories">
+                  <summary class="svc__head"><span class="svc__name">Spécifications + user stories</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Fonctionnalités détaillées et backlog priorisé, prêts pour les développeurs.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Pilotage de projet Suivi du planning, coordination des intervenants, points réguliers. pilotage gestion de projet chef de projet suivi planning coordination prestataires agile scrum master Conseil &amp; pilotage Maintenance et renfort">
+                <details class="svc" id="pilotage-de-projet">
+                  <summary class="svc__head"><span class="svc__name">Pilotage de projet</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">350 €</span> <span class="price__unit">/ jour</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Suivi du planning, coordination des intervenants, points réguliers.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Accompagnement / mentorat Montée en compétences d'une équipe ou d'un développeur junior. accompagnement mentorat coaching formation equipe developpeur junior montee en competences tech lead Conseil &amp; pilotage Maintenance et renfort">
+                <details class="svc" id="accompagnement-mentorat">
+                  <summary class="svc__head"><span class="svc__name">Accompagnement / mentorat</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">60 €</span> <span class="price__unit">/ h</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Montée en compétences d'une équipe ou d'un développeur junior.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Accompagnement à la digitalisation Petites entreprises et associations : les bons outils en ligne, choisis et mis en place. digitalisation numerique transformation outils en ligne petite entreprise association tpe pme artisan accompagnement Conseil &amp; pilotage">
+                <details class="svc" id="accompagnement-a-la-digitalisation">
+                  <summary class="svc__head"><span class="svc__name">Accompagnement à la digitalisation</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Petites entreprises et associations : les bons outils en ligne, choisis et mis en place.</p>
+                </details>
+              </li>
+            </ul>
+          </section>
+      </div>
+      <h2 class="block__t block__t--sub" id="tech-t">Projets techniques</h2>
+      <p class="block__lead">Pour les entreprises qui ont déjà une équipe ou un logiciel : applications sur mesure, serveur, mise en production.</p>
+      <div class="cats">
+          <section class="cat" id="app" aria-labelledby="cat-app">
+            <h3 class="cat__t" id="cat-app">Application et API<span>Web, mobile, SaaS, backend</span></h3>
+            <ul class="svc-list">
+              <li class="svc-item" data-search="Application web App métier, tableau de bord, espace utilisateur. application app web appli metier tableau de bord dashboard espace utilisateur outil logiciel plateforme intranet Application et API">
+                <details class="svc" id="application-web">
+                  <summary class="svc__head"><span class="svc__name">Application web</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">2 500 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">App métier, tableau de bord, espace utilisateur.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="API / backend API sécurisée, base de données, documentation. api backend serveur base de donnees database rest documentation integration web service Application et API">
+                <details class="svc" id="api-backend">
+                  <summary class="svc__head"><span class="svc__name">API / backend</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 500 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">API sécurisée, base de données, documentation.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="SaaS Produit multi-utilisateurs, abonnements, back-office. saas abonnement subscription multi utilisateurs back office produit plateforme logiciel cloud application Application et API">
+                <details class="svc" id="saas">
+                  <summary class="svc__head"><span class="svc__name">SaaS</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">5 000 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Produit multi-utilisateurs, abonnements, back-office.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Application mobile iOS et Android, publication sur les stores. application mobile app appli ios android react native flutter store play store app store smartphone tablette Application et API">
+                <details class="svc" id="application-mobile">
+                  <summary class="svc__head"><span class="svc__name">Application mobile</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">4 000 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">iOS et Android, publication sur les stores.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Migration / mise à jour d'une application Montée de version d'un framework ou d'un langage, code modernisé et testé. migration mise a jour montee de version upgrade framework angular react spring php node java legacy moderniser application Application et API Infra, DevOps &amp; qualité">
+                <details class="svc" id="migration-mise-a-jour-d-une-application">
+                  <summary class="svc__head"><span class="svc__name">Migration / mise à jour d'une application</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">800 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Montée de version d'un framework ou d'un langage, code modernisé et testé.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Passage d'une app web en PWA / mobile App web installable ou portée en application mobile. pwa progressive web app installable hors ligne offline mobile portage react native wrapper application web notification push store Application et API">
+                <details class="svc" id="passage-d-une-app-web-en-pwa-mobile">
+                  <summary class="svc__head"><span class="svc__name">Passage d'une app web en PWA / mobile</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">App web installable ou portée en application mobile.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Conception d'architecture Structure de l'application, base de données et services, documentée avant le développement. architecture conception logicielle solution schema base de donnees services microservices modelisation uml documentation Conseil &amp; pilotage Application et API">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Conception d'architecture</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">800 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Structure de l'application, base de données et services, documentée avant le développement.</p>
+                </details>
+              </li>
+            </ul>
+          </section>
+          <section class="cat" id="infra" aria-labelledby="cat-infra">
+            <h3 class="cat__t" id="cat-infra">Infra, DevOps &amp; qualité<span>Déploiement, hébergement, tests</span></h3>
+            <ul class="svc-list">
+              <li class="svc-item" data-search="Mise en place Docker + CI/CD Conteneurisation et pipeline de déploiement automatisé. docker conteneur container ci cd pipeline gitlab github actions integration continue deploiement automatise build image devops Infra, DevOps &amp; qualité">
+                <details class="svc" id="mise-en-place-docker-ci-cd">
+                  <summary class="svc__head"><span class="svc__name">Mise en place Docker + CI/CD</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Conteneurisation et pipeline de déploiement automatisé.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Déploiement &amp; infrastructure VPS, Nginx, Cloudflare, nom de domaine et certificat SSL. deploiement infrastructure serveur vps nginx cloudflare dns nom de domaine ssl https mise en ligne mise en production hebergement cloud aws gcp Infra, DevOps &amp; qualité">
+                <details class="svc" id="deploiement-infrastructure">
+                  <summary class="svc__head"><span class="svc__name">Déploiement &amp; infrastructure</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">VPS, Nginx, Cloudflare, nom de domaine et certificat SSL.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Migration de base de données Schéma, données et scripts de migration versionnés. migration base de donnees database schema donnees postgresql mysql prisma typeorm doctrine script versionne import export transfert Infra, DevOps &amp; qualité">
+                <details class="svc" id="migration-de-base-de-donnees">
+                  <summary class="svc__head"><span class="svc__name">Migration de base de données</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">500 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Schéma, données et scripts de migration versionnés.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Mise en place de tests automatisés Tests unitaires et end-to-end (Jest, Cypress, Playwright). tests automatises test unitaire end to end e2e jest cypress playwright vitest recette qualite couverture non regression ci Infra, DevOps &amp; qualité Maintenance et renfort">
+                <details class="svc" id="mise-en-place-de-tests-automatises">
+                  <summary class="svc__head"><span class="svc__name">Mise en place de tests automatisés</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Tests unitaires et end-to-end (Jest, Cypress, Playwright).</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Publication sur les stores App Store et Play Store : comptes, fiches, build et envoi. publication store app store play store apple google fiche build ipa aab testflight review compte developpeur application mobile Infra, DevOps &amp; qualité">
+                <details class="svc" id="publication-sur-les-stores">
+                  <summary class="svc__head"><span class="svc__name">Publication sur les stores</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">350 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">App Store et Play Store : comptes, fiches, build et envoi.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Changement d'hébergement Transfert du site et de la base vers un nouvel hébergeur. migration transfert hebergement demenagement changer hebergeur ovh o2switch deplacer site base de donnees dns Infra, DevOps &amp; qualité">
+                <details class="svc" id="changement-d-hebergement">
+                  <summary class="svc__head"><span class="svc__name">Changement d'hébergement</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Transfert du site et de la base vers un nouvel hébergeur.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Sécurisation + sauvegardes HTTPS, mises à jour, sauvegardes automatiques et plan de restauration. securite securisation sauvegarde backup https ssl mises a jour wordpress piratage malware protection restauration Infra, DevOps &amp; qualité Maintenance et renfort">
+                <details class="svc" id="securisation-sauvegardes">
+                  <summary class="svc__head"><span class="svc__name">Sécurisation + sauvegardes</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">HTTPS, mises à jour, sauvegardes automatiques et plan de restauration.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Nom de domaine + e-mails pro Achat du domaine, DNS et adresses e-mail à votre nom. nom de domaine dns email professionnel adresse mail ovh gandi google workspace configuration mx zone hebergement Infra, DevOps &amp; qualité">
+                <details class="svc" id="nom-de-domaine-e-mails-pro">
+                  <summary class="svc__head"><span class="svc__name">Nom de domaine + e-mails pro</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">150 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Achat du domaine, DNS et adresses e-mail à votre nom.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Supervision + alertes Surveillance du site et des erreurs, alerte immédiate en cas de panne. supervision monitoring surveillance alerte panne disponibilite uptime erreurs logs sentry production Infra, DevOps &amp; qualité Maintenance et renfort">
+                <details class="svc" id="supervision-alertes">
+                  <summary class="svc__head"><span class="svc__name">Supervision + alertes</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Surveillance du site et des erreurs, alerte immédiate en cas de panne.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Recette fonctionnelle Vérification complète avant mise en ligne, rapport de bugs détaillé. recette fonctionnelle tests manuels qa qualite verification validation rapport bugs mise en ligne cahier de recette Infra, DevOps &amp; qualité">
+                <details class="svc" id="recette-fonctionnelle">
+                  <summary class="svc__head"><span class="svc__name">Recette fonctionnelle</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">400 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Vérification complète avant mise en ligne, rapport de bugs détaillé.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Tests multi-navigateurs et appareils Chrome, Safari, Firefox, mobile : affichage et fonctionnement vérifiés. tests compatibilite navigateurs chrome safari firefox edge mobile appareils iphone android affichage qa Infra, DevOps &amp; qualité">
+                <details class="svc" id="tests-multi-navigateurs-et-appareils">
+                  <summary class="svc__head"><span class="svc__name">Tests multi-navigateurs et appareils</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">250 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Chrome, Safari, Firefox, mobile : affichage et fonctionnement vérifiés.</p>
+                </details>
+              </li>
+              <li class="svc-item" data-search="Migration / mise à jour d'une application Montée de version d'un framework ou d'un langage, code modernisé et testé. migration mise a jour montee de version upgrade framework angular react spring php node java legacy moderniser application Application et API Infra, DevOps &amp; qualité">
+                <details class="svc">
+                  <summary class="svc__head"><span class="svc__name">Migration / mise à jour d'une application</span><span class="svc__price price"><span class="price__from">à partir de</span> <span class="price__amount">800 €</span></span><span class="svc__chev" aria-hidden="true"></span></summary>
+                  <p class="svc__desc">Montée de version d'un framework ou d'un langage, code modernisé et testé.</p>
+                </details>
+              </li>
+            </ul>
+          </section>
+      </div>
+      <p class="note">Prix nets : TVA non applicable, article 293 B du CGI. Le prix final dépend de votre projet, il est fixé dans le devis avant de commencer.</p>
+    </section>
 
-      <main id="tarifsMain" class="tarifs-main" tabindex="-1">
-        <noscript>
-          <div class="fallback">
-            <p>La grille interactive nécessite JavaScript.</p>
-            <p>Pour toute demande de tarif ou de devis :
-              <a href="mailto:arphandrame0@gmail.com?subject=Demande%20de%20tarif">arphandrame0@gmail.com</a>
-              ou <a href="/devis">construisez votre projet</a> pas à pas.</p>
-          </div>
-        </noscript>
-      </main>
-      <p class="page-where">Arphan Drame · Développeur web freelance · Île-de-France</p>
+    <section class="sec cta cta--band" aria-label="Vous hésitez entre deux offres ?">
+      <div class="wrap cta__row">
+        <div><h2 class="cta__t">Vous hésitez entre deux offres ?</h2><p>Décrivez votre activité en quelques clics : je vous conseille la solution la plus simple pour votre budget.</p></div>
+        <p class="cta__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn" href="https://wa.me/33767318426?text=Bonjour%20Arphan%2C%20je%20vous%20contacte%20depuis%20votre%20site%20au%20sujet%20d'un%20projet." target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>WhatsApp</a></p>
+      </div>
+    </section>
+  </main>
+
+  <div class="wrap review-slot" data-review-slot hidden></div>
+  <footer class="foot">
+    <div class="wrap foot__grid">
+      <div class="foot__id">
+        <a class="brand" href="/"><img class="brand__logo" src="/assets/img/logo.svg" alt="" width="30" height="30" loading="lazy"><span class="brand__txt"><span class="brand__name">Arphan Drame</span><span class="brand__job">Développeur web freelance · Île-de-France</span></span></a>
+        <p>Des sites et des outils pour les commerces, artisans et indépendants d’Île-de-France.</p>
+        <ul class="foot__socials" aria-label="Réseaux">
+          <li><a class="icon-btn" href="https://www.instagram.com/nahpra.dev/" target="_blank" rel="noopener" aria-label="Instagram @nahpra.dev" title="Instagram @nahpra.dev"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-instagram"/></svg></a></li>
+          <li><a class="icon-btn" href="https://www.linkedin.com/in/arphan-drame/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-linkedin"/></svg></a></li>
+          <li><a class="icon-btn" href="https://github.com/drams18" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-github"/></svg></a></li>
+        </ul>
+      </div>
+      <nav class="foot__col" aria-label="Pages">
+        <p class="foot__t">Pages</p>
+        <a href="/realisations">Réalisations</a>
+        <a href="/tarifs">Tarifs</a>
+        <a href="/a-propos">À propos</a>
+        <a href="/contact">Contact</a>
+        <a href="/devis">Demander un devis</a>
+      </nav>
+      <div class="foot__col foot__col--wide">
+        <p class="foot__t">Contact</p>
+        <a href="tel:+33767318426">07 67 31 84 26</a>
+        <a href="https://wa.me/33767318426?text=Bonjour%20Arphan%2C%20je%20vous%20contacte%20depuis%20votre%20site%20au%20sujet%20d'un%20projet." target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:arphandrame0@gmail.com">arphandrame0@gmail.com</a>
+        <a href="https://www.instagram.com/nahpra.dev/" target="_blank" rel="noopener">Instagram @nahpra.dev</a>
+      </div>
+      <nav class="foot__col" aria-label="Plus">
+        <p class="foot__t">Plus</p>
+        <a href="/aventure" data-switch-adventure>Mode aventure</a>
+        <a href="/assets/CV.pdf" target="_blank" rel="noopener">CV (PDF)</a>
+        <a href="/avis" data-review-entry hidden>Avis Google</a>
+        <a href="/mentions-legales">Mentions légales</a>
+        <a href="/confidentialite">Confidentialité</a>
+        <a href="#cookies" role="button" data-consent-open>Cookies</a>
+      </nav>
     </div>
-  </div>
+    <div class="wrap foot__legal">
+      <p>© 2026 Arphan Drame · Entrepreneur individuel · SIRET 109 307 629 00013 · TVA non applicable, article 293 B du CGI</p>
+    </div>
+  </footer>
 
-  <!-- Composant de contact commun (E-mail / Téléphone), chargé avant
-       le routeur pour que ContactWidget soit prêt à chaque rendu. -->
-  <script src="js/contact.js"></script>
-  <!-- Logo → dernier mode utilisé (classique ou aventure) -->
-  <script src="js/deeplink.js"></script>
-  <script>
-    Deeplink.rewriteHomeLinks(document, false);
-    // « Construisez votre projet » : le mini-jeu pour un visiteur du mode
-    // aventure, le formulaire classique pour tous les autres.
-    window.projectHref = function () {
-      return Deeplink.getMode() === 'aventure' ? '/construire-projet' : '/devis';
-    };
+  <nav class="callbar" aria-label="Me contacter">
+    <a class="callbar__a" href="tel:+33767318426"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg><span>Appeler</span></a>
+    <a class="callbar__a" href="https://wa.me/33767318426?text=Bonjour%20Arphan%2C%20je%20vous%20contacte%20depuis%20votre%20site%20au%20sujet%20d'un%20projet." target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg><span>WhatsApp</span></a>
+    <a class="callbar__a callbar__a--cta" href="/devis"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-doc"/></svg><span>Devis<span class="callbar__long"> gratuit</span></span></a>
+  </nav>
 
-    // Barre du haut : menu mobile et fond au défilement (comme js/classic.js,
-    // qui n'est pas chargé ici : il forcerait le mode « classique »).
-    (function () {
-      var nav = document.getElementById('site-nav');
-      var toggle = document.querySelector('.nav-toggle');
-      var topbar = document.querySelector('.topbar');
-      function setNav(open) {
-        nav.classList.toggle('is-open', open);
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        toggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
-      }
-      toggle.addEventListener('click', function () { setNav(!nav.classList.contains('is-open')); });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && nav.classList.contains('is-open')) { setNav(false); toggle.focus(); }
-      });
-      document.addEventListener('click', function (e) {
-        if (nav.classList.contains('is-open') && !e.target.closest('#site-nav, .nav-toggle')) setNav(false);
-      });
-      function onScroll() { topbar.classList.toggle('is-scrolled', window.scrollY > 24); }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    })();
-  </script>
-
-  <script>
-  /* ══════════════════════════════════════════════════════
-     Données + rendu des vues. Tout est côté client.
-     ══════════════════════════════════════════════════════ */
-  (function () {
-    'use strict';
-
-    var doc = document;
-    var mainEl   = doc.getElementById('tarifsMain');
-    var titleEl  = doc.getElementById('pageTitle');
-    var subEl    = doc.getElementById('pageSub');
-    var crumbsEl = doc.getElementById('crumbs');
-    var statusEl = doc.getElementById('tarifStatus');
-    var input    = doc.getElementById('tarifSearch');
-    var clearBtn = doc.getElementById('tarifSearchClear');
-
-    // Prestations visibles d'emblée ; le reste s'affiche à la demande.
-    var LIMIT = 5;
-
-    /* ── Catégories (ordre d'affichage) ─────────────────── */
-    var CATEGORIES = [
-      { id: 'site',       label: 'Site internet',             hint: 'Vitrine, WordPress, refonte, accessibilité' },
-      { id: 'vendre',     label: 'Vendre en ligne',           hint: 'Shopify, e-commerce, paiement' },
-      { id: 'design',     label: 'Design & expérience',       hint: 'Maquettes, UX, identité visuelle' },
-      { id: 'creatif',    label: 'Créatif & interactif',      hint: 'Immersif, 3D, animations, mini-jeux' },
-      { id: 'app',        label: 'Application et API',        hint: 'Web, mobile, SaaS, backend' },
-      { id: 'modules',    label: 'Modules & fonctionnalités', hint: 'Réservation, espace client, IA' },
-      { id: 'visibilite', label: 'Visibilité & statistiques', hint: 'SEO, Google, Analytics, cookies' },
-      { id: 'infra',      label: 'Infra, DevOps & qualité',   hint: 'Déploiement, hébergement, tests' },
-      { id: 'conseil',    label: 'Conseil & pilotage',        hint: 'Audit, cadrage, architecture' },
-      { id: 'suivi',      label: 'Maintenance et renfort',    hint: 'Suivi mensuel, dépannage, régie' }
-    ];
-
-    /* Anciennes adresses (#professionnels/site-pro, #particuliers/probleme…)
-       → catégorie actuelle ; absente de la table → écran d'accueil. */
-    var LEGACY = {
-      'site-pro': 'site', 'vendre-pro': 'vendre', 'app-pro': 'app',
-      'modules-pro': 'modules', 'infra-pro': 'infra', 'suivi-pro': 'suivi',
-      existant: 'site', probleme: 'suivi'
-    };
-
-    function categoryById(id) {
-      for (var i = 0; i < CATEGORIES.length; i++) if (CATEGORIES[i].id === id) return CATEGORIES[i];
-      return null;
-    }
-
-    /* ── Prestations, tarifs professionnels ────────────────
-       from   : true → préfixe « à partir de »
-       unit   : suffixe éventuel (« / h », « / mois », « / jour »)
-       cats   : catégories d'appartenance (multiples possibles)
-       kw     : mots-clés / synonymes pour la recherche         */
-    var SERVICES = [
-      /* ---------- SITE INTERNET ---------- */
-      { name: 'Landing page', price: '450 €', from: true,
-        desc: 'Page unique orientée conversion, pour une offre ou une campagne.',
-        cats: ['site'],
-        kw: 'landing page atterrissage one page onepage pub publicite campagne promo conversion site web' },
-      { name: 'Site vitrine', price: '900 €', from: true,
-        desc: 'Présence pro complète codée sur mesure : plusieurs pages, formulaire de contact, SEO de base.',
-        cats: ['site'],
-        kw: 'site vitrine web internet presence entreprise sur mesure code seo referencement pages corporate professionnel formulaire contact' },
-      { name: 'Site WordPress', price: '800 €', from: true,
-        desc: 'Site administrable, thème et extensions configurés, formation à la prise en main.',
-        cats: ['site', 'vendre'],
-        kw: 'wordpress wp cms blog woocommerce elementor administrable theme extension formation site web boutique' },
-      { name: "Intégration d'une maquette Figma", price: '400 €', from: true,
-        desc: 'Votre maquette Figma transformée en site responsive, fidèle au design.',
-        cats: ['site'],
-        kw: 'figma maquette design integration integrateur html css responsive zeplin xd photoshop psd vers site pixel perfect' },
-      { name: 'Refonte de site', price: '600 €', from: true,
-        desc: "Nouveau design ou évolutions d'un site existant.",
-        cats: ['site'],
-        kw: 'refonte modification modifier refaire redesign relooking moderniser evolution mise a jour changement ameliorer site existant' },
-      { name: 'SEO technique + données structurées', price: '300 €', from: true,
-        desc: 'Balises, métadonnées, sitemap et données structurées (Schema.org).',
-        cats: ['visibilite', 'site'],
-        kw: 'seo referencement google balises meta title description sitemap schema donnees structurees rich snippets visibilite recherche indexation' },
-      { name: 'Optimisation performance / PageSpeed', price: '350 €', from: true,
-        desc: 'Audit puis corrections : images, cache, chargement, Core Web Vitals.',
-        cats: ['site', 'visibilite'],
-        kw: 'vitesse performance pagespeed lighthouse rapidite lent optimisation cache images lazy chargement core web vitals fluidite audit' },
-      { name: 'Adaptation mobile / responsive', price: '300 €', from: true,
-        desc: 'Site existant rendu lisible et agréable sur smartphone et tablette.',
-        cats: ['site'],
-        kw: 'responsive mobile smartphone tablette adaptation adapter affichage ecran telephone site existant illisible' },
-      { name: 'Mise en conformité accessibilité', price: '450 €', from: true,
-        desc: "Audit RGAA / WCAG puis corrections : contrastes, navigation au clavier, lecteurs d'écran.",
-        cats: ['site'],
-        kw: 'accessibilite rgaa wcag handicap a11y conformite contraste clavier lecteur ecran malvoyant audit loi' },
-      { name: 'Composant sur mesure', price: '200 €', from: true,
-        desc: 'Formulaire avancé, carrousel, filtres, tableau interactif : un élément ajouté à votre site.',
-        cats: ['site', 'modules'],
-        kw: 'composant element module formulaire carrousel slider filtres tableau interactif galerie onglets accordeon recherche ajout fonctionnalite' },
-      { name: 'Thème WordPress sur mesure', price: '1 200 €', from: true,
-        desc: 'Thème codé à partir de votre maquette, léger et sans constructeur de pages.',
-        cats: ['site'],
-        kw: 'theme wordpress wp sur mesure personnalise custom php gutenberg blocs maquette leger cms' },
-      { name: 'Migration de CMS', price: '600 €', from: true,
-        desc: 'Passage de Wix, Joomla ou autre vers WordPress ou un site sur mesure, contenus repris.',
-        cats: ['site'],
-        kw: 'migration cms changer wix joomla drupal squarespace webflow wordpress transfert contenus reprise site existant' },
-      { name: 'Formation à la gestion de votre site', price: '120 €', from: true,
-        desc: 'Séance de prise en main : pages, articles, images, produits et commandes.',
-        cats: ['site', 'suivi'],
-        kw: 'formation initiation cours apprendre prise en main autonomie gerer site wordpress shopify tutoriel accompagnement' },
-
-      /* ---------- VENDRE EN LIGNE ---------- */
-      { name: 'Boutique Shopify', price: '1 000 €', from: true,
-        desc: 'Boutique Shopify personnalisée et optimisée, prête à vendre.',
-        cats: ['vendre'],
-        kw: 'shopify boutique magasin ecommerce e-commerce vendre vente store theme liquid optimisation en ligne panier paiement' },
-      { name: 'E-commerce (WooCommerce ou sur mesure)', price: '1 500 €', from: true,
-        desc: 'Boutique complète : catalogue, paiement et gestion des commandes.',
-        cats: ['vendre'],
-        kw: 'ecommerce e-commerce woocommerce boutique magasin vendre vente commerce paiement commandes panier stock catalogue en ligne sur mesure' },
-      { name: 'Intégration de service tiers', price: '450 €', from: true,
-        desc: 'Paiement, CRM, agenda, emailing : connexion à vos outils.',
-        cats: ['vendre', 'modules'],
-        kw: 'integration service tiers api externe paiement stripe paypal crm hubspot agenda google calendar emailing newsletter brevo mailchimp webhook connexion outil' },
-
-      /* ---------- DESIGN & EXPÉRIENCE ---------- */
-      { name: "Maquettes de site ou d'application", price: '600 €', from: true,
-        desc: 'Maquettes Figma ordinateur et mobile, prêtes à être développées.',
-        cats: ['design'],
-        kw: 'maquette maquettes design ui interface figma webdesign ecrans desktop mobile graphisme visuel' },
-      { name: 'Wireframes + prototype cliquable', price: '400 €', from: true,
-        desc: 'Structure des écrans et parcours testable avant le design final.',
-        cats: ['design'],
-        kw: 'wireframe zoning prototype cliquable maquette basse fidelite parcours ux figma structure ecrans' },
-      { name: 'Design system / charte UI', price: '800 €', from: true,
-        desc: 'Couleurs, typographies et composants réutilisables, documentés dans Figma.',
-        cats: ['design'],
-        kw: 'design system charte ui graphique composants bibliotheque couleurs typographie guide style figma coherence' },
-      { name: 'Audit UX', price: '400 €', from: true,
-        desc: 'Analyse des parcours et recommandations priorisées pour simplifier la navigation.',
-        cats: ['design'],
-        kw: 'audit ux experience utilisateur ergonomie parcours navigation analyse recommandations conversion utilisabilite' },
-      { name: 'Tests utilisateurs', price: '500 €', from: true,
-        desc: 'Sessions avec de vrais utilisateurs, synthèse des points de friction.',
-        cats: ['design'],
-        kw: 'tests utilisateurs user testing entretiens ux recherche utilisateur friction utilisabilite retours panel' },
-      { name: 'Logo + identité visuelle', price: '300 €', from: true,
-        desc: 'Logo décliné, palette et typographies pour une image cohérente.',
-        cats: ['design'],
-        kw: 'logo identite visuelle graphisme marque branding charte graphique couleurs typographie visuel image' },
-      { name: 'Rédaction des textes du site', price: '250 €', from: true,
-        desc: 'Pages, boutons, messages : des textes clairs qui guident vos visiteurs.',
-        cats: ['design', 'site'],
-        kw: 'redaction textes contenu copywriting ux writing redacteur web pages boutons messages microcopie' },
-
-      /* ---------- CRÉATIF & INTERACTIF ---------- */
-      { name: 'Site immersif / interactif', price: '2 000 €', from: true,
-        desc: 'Une expérience qui marque : navigation originale, transitions, défilement animé.',
-        cats: ['creatif'],
-        kw: 'site immersif interactif experience creatif original storytelling scroll defilement animation transitions marque evenement' },
-      { name: 'Animations & micro-interactions', price: '300 €', from: true,
-        desc: "Animations d'interface fluides : apparitions, survols, transitions.",
-        cats: ['creatif', 'site'],
-        kw: 'animation animations micro interactions motion design transitions survol apparition gsap css fluide dynamique' },
-      { name: 'Expérience 3D (Three.js / WebGL)', price: '1 500 €', from: true,
-        desc: 'Scène ou produit en 3D, manipulable directement dans le navigateur.',
-        cats: ['creatif'],
-        kw: '3d threejs three js webgl canvas scene produit modele configurateur rotation immersif' },
-      { name: 'Mini-jeu web promotionnel', price: '1 200 €', from: true,
-        desc: 'Jeu jouable dans le navigateur, pour une campagne, un événement ou un salon.',
-        cats: ['creatif'],
-        kw: 'jeu mini jeu game html5 canvas navigateur gamification promotionnel campagne evenement salon concours' },
-      { name: 'Portfolio créatif sur mesure', price: '1 200 €', from: true,
-        desc: 'Un portfolio original qui met vos réalisations en scène.',
-        cats: ['creatif', 'site'],
-        kw: 'portfolio book creatif original artiste photographe designer realisations projets galerie sur mesure' },
-
-      /* ---------- APPLICATION ET API ---------- */
-      { name: 'Application web', price: '2 500 €', from: true,
-        desc: 'App métier, tableau de bord, espace utilisateur.',
-        cats: ['app'],
-        kw: 'application app web appli metier tableau de bord dashboard espace utilisateur outil logiciel plateforme intranet' },
-      { name: 'API / backend', price: '1 500 €', from: true,
-        desc: 'API sécurisée, base de données, documentation.',
-        cats: ['app'],
-        kw: 'api backend serveur base de donnees database rest documentation integration web service' },
-      { name: 'SaaS', price: '5 000 €', from: true,
-        desc: 'Produit multi-utilisateurs, abonnements, back-office.',
-        cats: ['app'],
-        kw: 'saas abonnement subscription multi utilisateurs back office produit plateforme logiciel cloud application' },
-      { name: 'Application mobile', price: '4 000 €', from: true,
-        desc: 'iOS et Android, publication sur les stores.',
-        cats: ['app'],
-        kw: 'application mobile app appli ios android react native flutter store play store app store smartphone tablette' },
-      { name: "Migration / mise à jour d'une application", price: '800 €', from: true,
-        desc: "Montée de version d'un framework ou d'un langage, code modernisé et testé.",
-        cats: ['app', 'infra'],
-        kw: 'migration mise a jour montee de version upgrade framework angular react spring php node java legacy moderniser application' },
-      { name: "Passage d'une app web en PWA / mobile", price: '600 €', from: true,
-        desc: 'App web installable ou portée en application mobile.',
-        cats: ['app'],
-        kw: 'pwa progressive web app installable hors ligne offline mobile portage react native wrapper application web notification push store' },
-
-      /* ---------- MODULES & FONCTIONNALITÉS ---------- */
-      { name: 'Système de réservation / prise de RDV', price: '900 €', from: true,
-        desc: 'Créneaux, disponibilités, confirmations e-mail et calendrier.',
-        cats: ['modules', 'site'],
-        kw: 'reservation prise de rendez vous rdv booking creneaux disponibilites agenda calendrier planning confirmation email calendly' },
-      { name: 'Tableau de bord & reporting', price: '800 €', from: true,
-        desc: 'Indicateurs, filtres et exports PDF, Excel et CSV.',
-        cats: ['modules'],
-        kw: 'tableau de bord dashboard reporting rapport statistiques indicateurs kpi graphiques export pdf excel csv donnees analyse' },
-      { name: 'Espace client / back-office / intranet', price: '1 200 €', from: true,
-        desc: 'Zone privée pour gérer contenus, utilisateurs et données.',
-        cats: ['modules'],
-        kw: 'espace client back office intranet administration zone privee gestion utilisateurs contenus crud portail interne extranet' },
-      { name: 'Authentification & gestion des rôles', price: '600 €', from: true,
-        desc: 'Connexion sécurisée, rôles, permissions, JWT ou SSO.',
-        cats: ['modules'],
-        kw: 'authentification auth connexion login inscription jwt sso oauth roles permissions droits acces securite session mot de passe' },
-      { name: "Création d'un chatbot", price: '600 €', from: true,
-        desc: 'Assistant intégré à votre site, entraîné sur vos contenus : FAQ, support, prise de contact.',
-        cats: ['modules', 'site'],
-        kw: 'chatbot bot ia intelligence artificielle llm assistant virtuel faq questions reponses support client conversation gpt widget chat agent conversationnel' },
-      { name: 'Intégration IA / LLM', price: '1 200 €', from: true,
-        desc: 'Chatbot avancé, RAG, résumé, classification : API ou modèle local.',
-        cats: ['modules'],
-        kw: 'ia intelligence artificielle llm gpt openai chatbot rag resume classification extraction embeddings vecteur assistant modele local prompt' },
-      { name: 'Collecte de données / scraping cadré', price: '450 €', from: true,
-        desc: 'Extraction structurée de données publiques, dans un cadre légal.',
-        cats: ['modules'],
-        kw: 'scraping collecte donnees extraction crawl parsing web data mining automatisation puppeteer playwright api structuree veille' },
-      { name: 'Automatisation de processus', price: '400 €', from: true,
-        desc: 'Google Sheets, agenda, connecteurs entre vos outils, avec ou sans IA : fini les tâches répétitives.',
-        cats: ['modules'],
-        kw: 'automatisation automatiser processus google sheets agenda calendrier connecteur zapier make n8n integration api script taches repetitives workflow ia intelligence artificielle' },
-      { name: "Formulaire de contact + envoi d'e-mails", price: '150 €', from: true,
-        desc: 'Formulaire protégé contre le spam, messages reçus directement par e-mail.',
-        cats: ['modules', 'site'],
-        kw: 'formulaire contact email mail envoi message demande devis spam captcha turnstile notification' },
-      { name: 'Import / export de données', price: '300 €', from: true,
-        desc: 'Reprise ou export de vos données : CSV, Excel, JSON, synchronisation entre outils.',
-        cats: ['modules'],
-        kw: 'import export donnees csv excel json synchronisation reprise transfert fichier tableur base' },
-
-      /* ---------- VISIBILITÉ & STATISTIQUES ---------- */
-      { name: 'Audit SEO', price: '200 €', from: true,
-        desc: "État des lieux technique et contenu, plan d'action priorisé.",
-        cats: ['visibilite'],
-        kw: 'audit seo referencement google analyse diagnostic positionnement mots cles visibilite plan action' },
-      { name: 'Fiche Google Business Profile', price: '150 €', from: true,
-        desc: 'Création ou optimisation de votre fiche pour apparaître sur Google Maps.',
-        cats: ['visibilite'],
-        kw: 'google business profile my business fiche maps carte local referencement local avis commerce' },
-      { name: 'Installation Google Analytics / Matomo', price: '200 €', from: true,
-        desc: "Mesure d'audience configurée, dans le respect du consentement.",
-        cats: ['visibilite'],
-        kw: 'google analytics ga4 matomo statistiques audience mesure trafic visiteurs tag manager gtm suivi' },
-      { name: 'Suivi des conversions', price: '300 €', from: true,
-        desc: 'Formulaires, appels, achats : les actions qui comptent, mesurées.',
-        cats: ['visibilite'],
-        kw: 'conversions suivi objectifs evenements tracking formulaires achats appels ga4 tag manager publicite roi' },
-      { name: 'Tableau de bord des statistiques', price: '250 €', from: true,
-        desc: 'Rapport clair de votre trafic (Looker Studio), mis à jour automatiquement.',
-        cats: ['visibilite'],
-        kw: 'tableau de bord statistiques rapport trafic looker studio data studio audience reporting kpi analytics' },
-      { name: 'Bandeau cookies + conformité RGPD', price: '250 €', from: true,
-        desc: "Recueil du consentement : aucun traceur tant que le visiteur n'a pas accepté.",
-        cats: ['visibilite', 'site'],
-        kw: 'cookies bandeau rgpd consentement cnil gdpr traceurs conformite mentions legales confidentialite' },
-
-      /* ---------- INFRA, DEVOPS & QUALITÉ ---------- */
-      { name: 'Mise en place Docker + CI/CD', price: '600 €', from: true,
-        desc: 'Conteneurisation et pipeline de déploiement automatisé.',
-        cats: ['infra'],
-        kw: 'docker conteneur container ci cd pipeline gitlab github actions integration continue deploiement automatise build image devops' },
-      { name: 'Déploiement & infrastructure', price: '400 €', from: true,
-        desc: 'VPS, Nginx, Cloudflare, nom de domaine et certificat SSL.',
-        cats: ['infra'],
-        kw: 'deploiement infrastructure serveur vps nginx cloudflare dns nom de domaine ssl https mise en ligne mise en production hebergement cloud aws gcp' },
-      { name: 'Migration de base de données', price: '500 €', from: true,
-        desc: 'Schéma, données et scripts de migration versionnés.',
-        cats: ['infra'],
-        kw: 'migration base de donnees database schema donnees postgresql mysql prisma typeorm doctrine script versionne import export transfert' },
-      { name: 'Mise en place de tests automatisés', price: '600 €', from: true,
-        desc: 'Tests unitaires et end-to-end (Jest, Cypress, Playwright).',
-        cats: ['infra', 'suivi'],
-        kw: 'tests automatises test unitaire end to end e2e jest cypress playwright vitest recette qualite couverture non regression ci' },
-      { name: 'Publication sur les stores', price: '350 €', from: true,
-        desc: 'App Store et Play Store : comptes, fiches, build et envoi.',
-        cats: ['infra'],
-        kw: 'publication store app store play store apple google fiche build ipa aab testflight review compte developpeur application mobile' },
-      { name: "Changement d'hébergement", price: '250 €', from: true,
-        desc: 'Transfert du site et de la base vers un nouvel hébergeur.',
-        cats: ['infra'],
-        kw: 'migration transfert hebergement demenagement changer hebergeur ovh o2switch deplacer site base de donnees dns' },
-      { name: 'Sécurisation + sauvegardes', price: '250 €', from: true,
-        desc: 'HTTPS, mises à jour, sauvegardes automatiques et plan de restauration.',
-        cats: ['infra', 'suivi'],
-        kw: 'securite securisation sauvegarde backup https ssl mises a jour wordpress piratage malware protection restauration' },
-      { name: 'Nom de domaine + e-mails pro', price: '150 €', from: true,
-        desc: 'Achat du domaine, DNS et adresses e-mail à votre nom.',
-        cats: ['infra'],
-        kw: 'nom de domaine dns email professionnel adresse mail ovh gandi google workspace configuration mx zone hebergement' },
-      { name: 'Supervision + alertes', price: '250 €', from: true,
-        desc: 'Surveillance du site et des erreurs, alerte immédiate en cas de panne.',
-        cats: ['infra', 'suivi'],
-        kw: 'supervision monitoring surveillance alerte panne disponibilite uptime erreurs logs sentry production' },
-      { name: 'Recette fonctionnelle', price: '400 €', from: true,
-        desc: 'Vérification complète avant mise en ligne, rapport de bugs détaillé.',
-        cats: ['infra'],
-        kw: 'recette fonctionnelle tests manuels qa qualite verification validation rapport bugs mise en ligne cahier de recette' },
-      { name: 'Tests multi-navigateurs et appareils', price: '250 €', from: true,
-        desc: 'Chrome, Safari, Firefox, mobile : affichage et fonctionnement vérifiés.',
-        cats: ['infra'],
-        kw: 'tests compatibilite navigateurs chrome safari firefox edge mobile appareils iphone android affichage qa' },
-
-      /* ---------- CONSEIL & PILOTAGE ---------- */
-      { name: 'Audit technique', price: '500 €', from: true,
-        desc: 'Code, sécurité, performance et dette technique : rapport et priorités.',
-        cats: ['conseil'],
-        kw: 'audit technique code securite performance dette technique analyse diagnostic rapport application existante' },
-      { name: 'Conseil en choix technique', price: '300 €', from: true,
-        desc: 'Stack, hébergement, outils : le bon choix pour votre projet et votre budget.',
-        cats: ['conseil'],
-        kw: 'conseil choix technique stack technologie framework hebergement outils recommandation consultant' },
-      { name: "Conception d'architecture", price: '800 €', from: true,
-        desc: "Structure de l'application, base de données et services, documentée avant le développement.",
-        cats: ['conseil', 'app'],
-        kw: 'architecture conception logicielle solution schema base de donnees services microservices modelisation uml documentation' },
-      { name: 'Revue de code', price: '300 €', from: true,
-        desc: 'Relecture détaillée, failles et améliorations commentées.',
-        cats: ['conseil'],
-        kw: 'revue de code code review relecture qualite bonnes pratiques failles refactoring' },
-      { name: 'Cadrage de projet', price: '400 €', from: true,
-        desc: 'Besoins, périmètre, priorités et planning définis avant de démarrer.',
-        cats: ['conseil'],
-        kw: 'cadrage projet besoins perimetre priorites planning atelier lancement chef de projet' },
-      { name: 'Cahier des charges', price: '500 €', from: true,
-        desc: 'Document complet pour lancer votre projet ou consulter des prestataires.',
-        cats: ['conseil'],
-        kw: 'cahier des charges specifications document besoin appel offres prestataires redaction' },
-      { name: 'Spécifications + user stories', price: '400 €', from: true,
-        desc: 'Fonctionnalités détaillées et backlog priorisé, prêts pour les développeurs.',
-        cats: ['conseil'],
-        kw: 'specifications fonctionnelles techniques user stories backlog product owner agile scrum jira priorisation' },
-      { name: 'Pilotage de projet', price: '350 €', unit: '/ jour', from: true,
-        desc: 'Suivi du planning, coordination des intervenants, points réguliers.',
-        cats: ['conseil', 'suivi'],
-        kw: 'pilotage gestion de projet chef de projet suivi planning coordination prestataires agile scrum master' },
-      { name: 'Accompagnement / mentorat', price: '60 €', unit: '/ h', from: true,
-        desc: "Montée en compétences d'une équipe ou d'un développeur junior.",
-        cats: ['conseil', 'suivi'],
-        kw: 'accompagnement mentorat coaching formation equipe developpeur junior montee en competences tech lead' },
-      { name: 'Accompagnement à la digitalisation', price: '400 €', from: true,
-        desc: 'Petites entreprises et associations : les bons outils en ligne, choisis et mis en place.',
-        cats: ['conseil'],
-        kw: 'digitalisation numerique transformation outils en ligne petite entreprise association tpe pme artisan accompagnement' },
-
-      /* ---------- MAINTENANCE ET RENFORT ---------- */
-      { name: 'Maintenance', price: '150 €', unit: '/ mois', from: true,
-        desc: 'Suivi mensuel, mises à jour, correctifs et petites évolutions.',
-        cats: ['suivi'],
-        kw: 'maintenance suivi entretien mises a jour correctifs evolutions mensuel abonnement tma support contrat infogerance retouches' },
-      { name: 'Intervention / dépannage', price: '60 €', unit: '/ h', from: true,
-        desc: 'Bug, erreur, site en panne : diagnostic et correction.',
-        cats: ['suivi'],
-        kw: 'depannage intervention correction bug erreur probleme reparer panne corriger plante casse fix soucis assistance aide wordpress shopify' },
-      { name: 'Développement à la journée', price: '400 €', unit: '/ jour', from: true,
-        desc: 'Renfort ponctuel intégré à votre équipe.',
-        cats: ['suivi'],
-        kw: 'regie renfort journee jour freelance equipe ponctuel prestation tjm consultant developpeur' }
-    ];
-
-    /* ── Synonymes appliqués aux mots de la requête ─────── */
-    var SYNONYMS = {
-      boutique:      ['shopify', 'ecommerce', 'vendre', 'commerce', 'magasin'],
-      magasin:       ['shopify', 'ecommerce', 'boutique', 'commerce'],
-      vendre:        ['ecommerce', 'shopify', 'boutique', 'commerce'],
-      vente:         ['ecommerce', 'shopify', 'boutique', 'commerce'],
-      ecommerce:     ['shopify', 'boutique', 'vendre', 'commerce'],
-      commerce:      ['ecommerce', 'shopify', 'boutique'],
-      wp:            ['wordpress'],
-      cms:           ['wordpress'],
-      blog:          ['wordpress'],
-      site:          ['vitrine'],
-      internet:      ['site', 'web', 'vitrine'],
-      web:           ['site', 'internet'],
-      appli:         ['application', 'app'],
-      app:           ['application'],
-      logiciel:      ['application', 'saas'],
-      mobile:        ['application', 'ios', 'android'],
-      logo:          ['identite', 'graphisme', 'visuel', 'marque'],
-      graphisme:     ['logo', 'visuel', 'banniere'],
-      bug:           ['depannage', 'correction', 'probleme', 'erreur'],
-      probleme:      ['depannage', 'bug', 'correction', 'aide'],
-      panne:         ['depannage', 'correction', 'bug'],
-      reparer:       ['depannage', 'correction', 'bug'],
-      cours:         ['initiation', 'formation', 'apprendre'],
-      formation:     ['initiation', 'cours', 'apprendre'],
-      apprendre:     ['initiation', 'formation', 'cours'],
-      prof:          ['initiation', 'formation', 'cours'],
-      hebergement:   ['mise en ligne', 'domaine', 'deploiement'],
-      domaine:       ['mise en ligne', 'hebergement', 'dns'],
-      deployer:      ['mise en ligne', 'deploiement', 'hebergement'],
-      referencement: ['seo', 'vitrine'],
-      seo:           ['referencement', 'vitrine'],
-      portfolio:     ['book', 'vitrine', 'projets'],
-      book:          ['portfolio'],
-      cv:            ['curriculum', 'resume'],
-      refonte:       ['refaire', 'redesign', 'modification', 'moderniser', 'relooking'],
-      moderniser:    ['refonte', 'redesign', 'relooking'],
-      maintenance:   ['suivi', 'entretien', 'infogerance'],
-      devis:         ['personnalise', 'sur mesure'],
-      etudiant:      ['ecole', 'universite', 'memoire', 'scolaire'],
-      banniere:      ['visuel', 'reseaux sociaux', 'graphisme'],
-      backend:       ['api', 'serveur', 'base de donnees'],
-      api:           ['backend', 'serveur'],
-      pwa:           ['installable', 'hors ligne', 'application', 'mobile'],
-      reservation:   ['rdv', 'rendez vous', 'booking', 'agenda', 'creneaux'],
-      rdv:           ['reservation', 'rendez vous', 'agenda', 'booking'],
-      dashboard:     ['tableau de bord', 'reporting', 'statistiques', 'kpi'],
-      reporting:     ['dashboard', 'tableau de bord', 'rapport', 'export'],
-      docker:        ['conteneur', 'devops', 'ci', 'cd'],
-      devops:        ['docker', 'ci', 'cd', 'deploiement', 'infra'],
-      infra:         ['infrastructure', 'serveur', 'deploiement', 'vps'],
-      scraping:      ['collecte', 'donnees', 'extraction'],
-      tests:         ['test', 'recette', 'jest', 'cypress', 'playwright'],
-      ia:            ['intelligence artificielle', 'llm', 'chatbot', 'gpt'],
-      chatbot:       ['ia', 'llm', 'assistant', 'bot'],
-      newsletter:    ['emailing', 'email', 'brevo', 'mailchimp'],
-      emailing:      ['newsletter', 'email', 'brevo', 'mailchimp'],
-      figma:         ['maquette', 'design', 'integration'],
-      maquette:      ['figma', 'design', 'integration'],
-      authentification: ['auth', 'connexion', 'login', 'jwt', 'sso', 'roles'],
-      vitesse:       ['performance', 'pagespeed', 'optimisation', 'rapidite'],
-      performance:   ['vitesse', 'pagespeed', 'optimisation'],
-      design:        ['maquette', 'ux', 'ui', 'figma'],
-      ux:            ['experience utilisateur', 'parcours', 'ergonomie'],
-      ui:            ['interface', 'maquette', 'design'],
-      jeu:           ['game', 'gamification'],
-      '3d':          ['threejs', 'webgl'],
-      motion:        ['animation', 'transitions'],
-      analytics:     ['statistiques', 'matomo', 'audience'],
-      stats:         ['statistiques', 'analytics', 'audience'],
-      rgpd:          ['cookies', 'consentement'],
-      cnil:          ['cookies', 'rgpd', 'consentement'],
-      accessibilite: ['rgaa', 'wcag', 'handicap'],
-      responsive:    ['adaptation', 'smartphone', 'tablette'],
-      conseil:       ['audit', 'accompagnement', 'cadrage'],
-      architecture:  ['conception', 'structure'],
-      recette:       ['tests', 'qa', 'verification']
-    };
-
-    /* ── Normalisation (minuscule, sans accents, alphanum) ─ */
-    var DIACRITICS = new RegExp('[\\u0300-\\u036f]', 'g');
-    function norm(s) {
-      return String(s == null ? '' : s)
-        .toLowerCase()
-        .normalize('NFD').replace(DIACRITICS, '')
-        .replace(/[^a-z0-9]+/g, ' ')
-        .trim();
-    }
-
-    /* Index de recherche pré-calculé pour chaque prestation. */
-    SERVICES.forEach(function (s) {
-      var catLabels = s.cats.map(function (cid) {
-        var cat = categoryById(cid);
-        return cat ? cat.label : '';
-      }).join(' ');
-      s._name = norm(s.name);
-      s._cat  = norm(catLabels);
-      s._hay  = norm([s.name, s.desc || '', s.kw, catLabels].join(' '));
-      s._words = s._hay.split(' ');
-    });
-
-    var STOP = {
-      de: 1, du: 1, des: 1, la: 1, le: 1, les: 1, un: 1, une: 1, et: 1, ou: 1,
-      en: 1, au: 1, aux: 1, sur: 1, dans: 1, par: 1, pour: 1, avec: 1,
-      je: 1, mon: 1, ma: 1, mes: 1, ce: 1, cette: 1, quel: 1, quelle: 1
-    };
-    function tokens(str) {
-      return norm(str).split(' ').filter(function (t) {
-        return t.length >= 2 && !STOP[t];
-      });
-    }
-
-    /* Correspondance ancrée sur le mot : égalité, ou préfixe
-       (« word » → « wordpress », « appli » → « application »). */
-    function wordMatch(tok, words) {
-      for (var i = 0; i < words.length; i++) {
-        var w = words[i];
-        if (w === tok) return true;
-        if (tok.length >= 3 && w.length > tok.length && w.indexOf(tok) === 0) return true;
-      }
-      return false;
-    }
-
-    /* Un mot de la requête compte s'il correspond lui-même OU l'un de
-       ses synonymes. Tous les mots doivent correspondre (ET). */
-    function tokenHits(tok, svc) {
-      if (wordMatch(tok, svc._words)) return true;
-      var syn = SYNONYMS[tok];
-      if (syn) for (var i = 0; i < syn.length; i++) {
-        var sv = norm(syn[i]);
-        if (sv.indexOf(' ') !== -1
-              ? svc._hay.indexOf(sv) !== -1
-              : wordMatch(sv, svc._words)) return true;
-      }
-      return false;
-    }
-
-    function scoreService(toks, svc) {
-      var score = 0;
-      for (var i = 0; i < toks.length; i++) {
-        var t = toks[i];
-        if (!tokenHits(t, svc)) return -1;              // AND : tout doit matcher
-        if (svc._name.indexOf(t) !== -1) score += 10;
-        else if (svc._cat.indexOf(t) !== -1) score += 4;
-        else score += 1;
-      }
-      if (svc._name === toks.join(' ')) score += 20;
-      return score;
-    }
-
-    function search(query) {
-      var toks = tokens(query);
-      if (!toks.length) return null;
-      var hits = [];
-      SERVICES.forEach(function (svc) {
-        var sc = scoreService(toks, svc);
-        if (sc >= 0) hits.push({ svc: svc, score: sc });
-      });
-      hits.sort(function (a, b) { return b.score - a.score; });
-      return hits.map(function (h) { return h.svc; });
-    }
-
-    /* ── Fabrique de DOM ────────────────────────────────── */
-    function el(tag, cls, text) {
-      var n = doc.createElement(tag);
-      if (cls) n.className = cls;
-      if (text != null) n.textContent = text;
-      return n;
-    }
-
-    function plural(n, word) { return n + ' ' + word + (n > 1 ? 's' : ''); }
-
-    /* Prestations dont c'est la catégorie principale (cats[0]) d'abord,
-       puis celles qui y figurent aussi ; ordre de SERVICES conservé. */
-    function inCategory(catId) {
-      var list = SERVICES.filter(function (s) { return s.cats.indexOf(catId) !== -1; });
-      return list.filter(function (s) { return s.cats[0] === catId; })
-        .concat(list.filter(function (s) { return s.cats[0] !== catId; }));
-    }
-
-    /* Carte de choix (profil, besoin) : un vrai lien vers l'écran suivant. */
-    function pick(hash, label, hint, cls) {
-      var a = el('a', 'pick' + (cls ? ' ' + cls : ''));
-      a.href = '#' + hash;
-      a.appendChild(el('span', 'pick__label', label));
-      a.appendChild(el('span', 'pick__hint', hint));
-      return a;
-    }
-
-    /* Prestation : nom + prix ; la description s'ouvre au clic
-       (une seule ouverte à la fois, attribut name des <details>). */
-    function serviceItem(svc) {
-      var li = el('li', 'svc-item');
-      var d = el('details', 'svc');
-      d.setAttribute('name', 'svc');
-
-      var head = el('summary', 'svc__head');
-      head.appendChild(el('span', 'svc__name', svc.name));
-      var p = el('span', 'svc__price');
-      if (svc.from) p.appendChild(el('span', 'svc__from', 'à partir de'));
-      p.appendChild(el('span', 'svc__amount', svc.price));
-      if (svc.unit) p.appendChild(el('span', 'svc__unit', svc.unit));
-      head.appendChild(p);
-      var chev = el('span', 'svc__chev');
-      chev.setAttribute('aria-hidden', 'true');
-      head.appendChild(chev);
-
-      d.appendChild(head);
-      d.appendChild(el('p', 'svc__desc', svc.desc));
-      li.appendChild(d);
-      return li;
-    }
-
-    /* Liste de prestations dans un panneau, limitée à LIMIT lignes. */
-    function servicePanel(list, title) {
-      var panel = el('section', 'panel');
-      if (title) panel.appendChild(el('h2', 'panel__title', title));
-
-      var ul = el('ul', 'svc-list');
-      var items = list.map(serviceItem);
-      // Pas de bouton pour une ou deux lignes de plus.
-      var cut = items.length > LIMIT + 2 ? LIMIT : items.length;
-      items.forEach(function (li, i) {
-        if (i >= cut) li.hidden = true;
-        ul.appendChild(li);
-      });
-      panel.appendChild(ul);
-
-      if (cut < items.length) {
-        var rest = items.length - cut;
-        var more = el('button', 'more', 'Afficher les ' + rest + ' autres prestations');
-        more.type = 'button';
-        more.addEventListener('click', function () {
-          items.forEach(function (li) { li.hidden = false; });
-          more.remove();
-          items[cut].querySelector('summary').focus();
-        });
-        panel.appendChild(more);
-      }
-      return panel;
-    }
-
-    /* Une ligne d'aide sous chaque écran. */
-    function helpLine() {
-      var p = el('p', 'help-line');
-      p.appendChild(el('span', null, 'Vous hésitez ?'));
-
-      var build = el('a', 'text-link', 'Construisez votre projet');
-      build.href = projectHref();
-      build.insertAdjacentHTML('beforeend',
-        '<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg>');
-      p.appendChild(build);
-
-      var devis = el('button', 'inline-link', 'Demander un devis');
-      devis.type = 'button';
-      devis.setAttribute('data-contact-cta', '');
-      devis.setAttribute('data-contact-subject', 'Demande de devis personnalisé');
-      p.appendChild(devis);
-      return p;
-    }
-
-    /* ── Vues : { title, sub, crumbs, body } ───────────── */
-    var ROOT = { label: 'Tarifs', hash: 'choix' };
-
-    function viewCategories() {
-      var grid = el('div', 'pick-grid');
-      CATEGORIES.forEach(function (cat) {
-        grid.appendChild(pick(cat.id, cat.label, cat.hint));
-      });
-      return {
-        title: 'Mes tarifs', sub: 'Quel est votre besoin ?', docTitle: 'Tarifs',
-        crumbs: [], body: [grid, helpLine()]
-      };
-    }
-
-    function viewServices(catId) {
-      var cat = categoryById(catId);
-      var list = inCategory(catId);
-      return {
-        title: cat.label,
-        sub: plural(list.length, 'prestation') + '. Touchez une ligne pour le détail.',
-        docTitle: cat.label + ' · Tarifs',
-        crumbs: [ROOT, { label: cat.label }],
-        body: [servicePanel(list), helpLine()]
-      };
-    }
-
-    function viewSearch(query) {
-      var q = query.trim();
-      var results = search(query) || [];
-      var view = {
-        title: 'Recherche', docTitle: 'Recherche',
-        crumbs: [ROOT, { label: 'Recherche' }]
-      };
-
-      if (!results.length) {
-        var nr = el('div', 'noresult');
-        nr.appendChild(el('p', null, 'Votre besoin est peut-être spécifique : parlons-en.'));
-        var btn = el('button', 'btn btn-cta', 'Me contacter');
-        btn.type = 'button';
-        btn.addEventListener('click', function () {
-          openContact(
-            'Demande d\'information : ' + q,
-            'Bonjour, je souhaiterais avoir des informations concernant : ' + q + '.'
-          );
-        });
-        nr.appendChild(btn);
-        view.sub = 'Aucune prestation pour « ' + q + ' ».';
-        view.body = [nr, helpLine()];
-        return view;
-      }
-
-      view.sub = plural(results.length, 'résultat') + ' pour « ' + q + ' ».';
-      view.body = [servicePanel(results)];
-      return view;
-    }
-
-    /* ── Contact (réutilise js/contact.js) ─────────────── */
-    function openContact(subject, body) {
-      if (window.ContactWidget && window.ContactWidget.open) {
-        window.ContactWidget.open({ subject: subject, body: body });
-      } else {
-        window.location.href = 'mailto:arphandrame0@gmail.com' +
-          '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-      }
-    }
-
-    /* ── Routage par hash ──────────────────────────────── */
-    /* Catégorie demandée par le hash, ou null (écran d'accueil). Une
-       ancienne adresse est réécrite sur place, sans entrée d'historique. */
-    function parseHash() {
-      var parts = (location.hash || '').replace(/^#/, '').split('/').filter(Boolean);
-      if (categoryById(parts[0])) return parts[0];
-      if (parts[0] !== 'particuliers' && parts[0] !== 'professionnels') return null;
-      var id = parts[1] && LEGACY[parts[1]] || (categoryById(parts[1]) ? parts[1] : null);
-      history.replaceState(null, '', location.pathname + location.search + (id ? '#' + id : ''));
-      return id;
-    }
-
-    function searchActive() { return tokens(input.value).length > 0; }
-
-    function clearSearch() {
-      input.value = '';
-      clearBtn.hidden = true;
-      lastWasSearch = false;
-    }
-
-    /* Fil d'Ariane : les étapes précédentes sont des liens (retour). */
-    function renderCrumbs(crumbs) {
-      crumbsEl.innerHTML = '';
-      crumbsEl.hidden = !crumbs.length;
-      if (!crumbs.length) return;
-      var ol = el('ol');
-      crumbs.forEach(function (c) {
-        var li = el('li');
-        if (c.hash) {
-          var a = el('a', null, c.label);
-          a.href = '#' + c.hash;
-          a.addEventListener('click', function (e) {
-            // Quitte la recherche ; même hash → pas de hashchange, on rend ici.
-            e.preventDefault();
-            clearSearch();
-            if (location.hash === '#' + c.hash) render(true);
-            else location.hash = c.hash;
-          });
-          li.appendChild(a);
-        } else {
-          var here = el('span', null, c.label);
-          here.setAttribute('aria-current', 'page');
-          li.appendChild(here);
-        }
-        ol.appendChild(li);
-      });
-      crumbsEl.appendChild(ol);
-    }
-
-    function render(moved) {
-      var isSearch = searchActive();
-      var category = parseHash();
-      var view = isSearch ? viewSearch(input.value)
-        : !category ? viewCategories()
-        : viewServices(category);
-
-      // En recherche, le fil ramène à l'écran d'où l'on vient.
-      if (isSearch && category) {
-        var cat = categoryById(category);
-        view.crumbs = [ROOT, { label: cat.label, hash: category }, { label: 'Recherche' }];
-      }
-
-      titleEl.textContent = view.title;
-      subEl.textContent = view.sub;
-      statusEl.textContent = isSearch ? view.sub : '';
-      document.title = view.docTitle + ' · Arphan Drame';
-      renderCrumbs(view.crumbs);
-
-      mainEl.innerHTML = '';
-      view.body.forEach(function (n) { mainEl.appendChild(n); });
-
-      // (Re)câble les CTA de devis générés dynamiquement.
-      if (window.ContactWidget && window.ContactWidget.init) {
-        window.ContactWidget.init(mainEl);
-      }
-
-      // Changement d'écran : retour en haut, le titre reçoit le focus
-      // (lecteurs d'écran, clavier), sauf pendant la saisie d'une recherche.
-      if (moved) {
-        window.scrollTo(0, 0);
-        if (doc.activeElement !== input) titleEl.focus({ preventScroll: true });
-      }
-    }
-
-    /* ── Écouteurs ─────────────────────────────────────── */
-    var lastWasSearch = false;
-    input.addEventListener('input', function () {
-      clearBtn.hidden = !input.value.length;
-      var isSearch = searchActive();
-      // scroll en haut seulement lorsqu'on bascule dans/hors recherche
-      render(isSearch !== lastWasSearch);
-      lastWasSearch = isSearch;
-    });
-
-    clearBtn.addEventListener('click', function () {
-      clearSearch();
-      input.focus();
-      render(false);
-    });
-
-    window.addEventListener('hashchange', function () {
-      // Un choix fait depuis l'écran courant sort de la recherche.
-      clearSearch();
-      render(true);
-    });
-
-    render(false);
-  })();
-  </script>
-  <script src="js/consent.js" defer></script>
-  <script src="js/analytics.js" defer></script>
-  <script src="js/analytics-events.js" defer></script>
+  <script src="/js/deeplink.js"></script>
+  <script src="/js/tarifs.js"></script>
+  <script src="/js/site.js" defer></script>
+  <script src="/js/reviews.js" defer></script>
+  <script src="/js/consent.js" defer></script>
+  <script src="/js/analytics.js" defer></script>
+  <script src="/js/analytics-events.js" defer></script>
 </body>
 </html>

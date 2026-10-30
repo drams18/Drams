@@ -9,7 +9,7 @@
      play ⇄ entering → window        (entrée dans un lieu, contenu)
      play ⇄ paused · play → end      (menu, expérience terminée)
      play → travel → play            (déplacement rapide)
-     play → leaving                  (portail, mode classique)
+     play → leaving                  (portail, retour au site)
 
    La boucle ne tourne que pendant intro / play / entering / travel :
    sélecteur, pause, fenêtre et fin la suspendent (0 % CPU derrière un panneau).
@@ -140,7 +140,7 @@ export class Game {
 
     this.selector = new UniverseSelector(ui, {
       universes: this.universes.list(), portfolio: this.portfolio, save: this.save,
-      classicHref: '/classique',
+      classicHref: '/',
       onChoose: (id) => this.startUniverse(id, { briefing: true }),
       onSound: () => this.toggleSound(),
       onVolume: (v) => this.setVolume(v),
@@ -327,7 +327,7 @@ export class Game {
     const n = this.portfolio.projects.length;
     const lines = [
       [this.portfolio.profile.seeking, 'Un projet de site ? Passez le portail.'],
-      [`${v.locations.projets} : ${n} projets à voir.`, 'Le CV est dans le menu.'],
+      [`${v.locations.projets} : ${n} projets à voir.`, 'Un devis ? Il est dans le menu.'],
     ];
     this.level = new Level(u.createLevel(), u, this.portfolio, lines);
     this.world = new World(this.level);
@@ -570,11 +570,13 @@ export class Game {
 
   async toClassic(e) {
     if (e) e.preventDefault();
-    const href = '/classique' + (this.universe ? this.currentRoute() : '');
+    // Même contenu sur le site : #projets/skywalk → /realisations/skywalk…
+    const route = this.universe ? this.currentRoute() : '';
+    const href = window.Deeplink ? window.Deeplink.siteHref(route) : '/';
     this._savePosition();
     this.state = 'leaving';
     this.loop.pause();
-    this.audio.setEnabled(false);       // le mode classique est silencieux
+    this.audio.setEnabled(false);       // le site est silencieux
     await this.fx.cover();
     window.location.href = href;
   }

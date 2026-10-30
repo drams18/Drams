@@ -1,7 +1,13 @@
-# Cloudflare Pages, liens courts (à mettre sur un CV, une signature…)
-/cv          /assets/CV.pdf           302
-/contact     /classique/contact       302
-/projets     /classique/projets       302
-/parcours    /classique/parcours      302
-/competences /classique/competences   302
-/tarif       /tarifs                  301
+# Cloudflare Pages : anciennes adresses (mode classique, retiré le 30/10/2026)
+# vers les pages du site freelance, et liens courts.
+/classique               /                 301
+/classique/              /                 301
+/classique/projets       /realisations     301
+/classique/parcours      /a-propos         301
+/classique/competences   /a-propos         301
+/classique/contact       /contact          301
+/projets                 /realisations     301
+/parcours                /a-propos         301
+/competences             /a-propos         301
+/tarif                   /tarifs           301
+/cv                      /assets/CV.pdf    302

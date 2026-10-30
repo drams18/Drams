@@ -59,7 +59,7 @@
   var VALUES = {
     form_type: ['contact', 'devis'],
     site_mode: ['classique', 'aventure'],
-    method: ['email', 'phone', 'sms', 'linkedin'],
+    method: ['email', 'phone', 'sms', 'linkedin', 'whatsapp', 'instagram'],
     link_type: ['app', 'webmail', 'copy', 'profile'],
   };
   var EVENTS = {

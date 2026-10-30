@@ -54,6 +54,8 @@
       if (/^sms:/i.test(href)) return { method: 'sms', link_type: 'app' };
       if (/^https:\/\/(mail\.google\.com\/mail\/\?view=cm|outlook\.live\.com\/mail\/)/i.test(href)) return { method: 'email', link_type: 'webmail' };
       if (/^https:\/\/([a-z]+\.)?linkedin\.com\/in\//i.test(href)) return { method: 'linkedin', link_type: 'profile' };
+      if (/^https:\/\/(wa\.me|api\.whatsapp\.com)\//i.test(href)) return { method: 'whatsapp', link_type: 'app' };
+      if (/^https:\/\/(www\.)?instagram\.com\//i.test(href)) return { method: 'instagram', link_type: 'profile' };
       return null;
     }
     // Boutons « Copier » : widget de contact (js/contact.js) et mode aventure.

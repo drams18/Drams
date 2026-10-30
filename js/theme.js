@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════
-   THEME.JS : Thème clair ou sombre du site classique, selon l'heure locale
+   THEME.JS : Thème clair ou sombre du site, selon l'heure locale
    Chargé de façon BLOQUANTE dans le <head> (≈ 1 Ko) : le thème est
    posé avant le premier affichage, sans flash.
 
@@ -16,6 +16,7 @@
   var KEY = 'drame.portfolio.theme';
   var DAY_START = 7, DAY_END = 20;
   var root = global.document.documentElement;
+  root.classList.add('js');       // contenu réservé à JavaScript (.js-only)
 
   function byHour() {
     var h = new Date().getHours();

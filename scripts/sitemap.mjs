@@ -9,10 +9,11 @@
    (clone superficiel d'un hébergeur, archive sans .git), le sitemap.xml
    déjà commité est laissé tel quel.
 
-   Une nouvelle page : l'ajouter ici ET dans vite.config.js (PAGES).
+   Une nouvelle page du site : rien à faire (scripts/pages.json). Une page
+   hors du site (mode aventure) : l'ajouter ici ET dans vite.config.js.
    ══════════════════════════════════════════════════════ */
 
-import { writeFileSync, existsSync } from 'node:fs';
+import { writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -20,19 +21,15 @@ import { dirname, join } from 'node:path';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE_URL = 'https://arphandrame.fr/';
 
-// URL (sans le domaine) → fichiers dont dépend son contenu.
+// URL (sans le domaine) → fichiers dont dépend son contenu. Les pages du
+// site viennent de scripts/pages.json (écrit par scripts/build-site.mjs) :
+// leur contenu dépend de la page et des données.
+const DATA = ['js/museum.js', 'js/tarifs-data.js', 'scripts/build-site.mjs'];
+const SITE = JSON.parse(readFileSync(join(ROOT, 'scripts/pages.json'), 'utf8'));
 const URLS = [
-  ['',                       ['index.html']],
-  ['classique',              ['classique.html']],
-  ['classique/projets',      ['classique/projets.html']],
-  ['classique/parcours',     ['classique/parcours.html']],
-  ['classique/competences',  ['classique/competences.html']],
-  ['classique/contact',      ['classique/contact.html']],
-  ['aventure',               ['aventure.html', 'js/museum.js']],
-  ['tarifs',                 ['tarifs.html']],
-  ['devis',                  ['devis.html', 'js/devis.js']],
+  ...SITE.filter(p => p.index).map(p => [p.path, [p.file, ...DATA]]),
+  ['aventure',               ['aventure.html', 'js/museum.js', 'src/aventure']],
   ['construire-projet',      ['construire-projet.html', 'src/construire']],
-  ['assets/CV.pdf',          ['assets/CV.pdf']],
 ];
 
 const git = (...args) => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();

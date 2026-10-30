@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- Source de l'image de partage (assets/img/og.jpg, 1200×630).
-     Régénérée avec les miniatures : npm run capture -->
+     Régénérée par : npm run build && npm run capture -->
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -12,33 +12,40 @@
       font-family: 'Inter Variable', -apple-system, 'Segoe UI', Roboto, sans-serif;
       background: #070c14;
     }
-    body::before {
-      content: ''; position: absolute; inset: 0;
-      background-image: linear-gradient(rgba(200,207,220,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(200,207,220,.05) 1px, transparent 1px);
-      background-size: 56px 56px;
-      -webkit-mask-image: radial-gradient(ellipse 90% 80% at 80% 0%, #000 30%, transparent 100%);
-    }
     body::after {
-      content: ''; position: absolute; top: -260px; right: -160px; width: 760px; height: 760px; border-radius: 50%;
-      background: radial-gradient(closest-side, rgba(255,143,37,.26), transparent);
+      content: ''; position: absolute; top: -300px; right: -220px; width: 860px; height: 860px; border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(255,143,37,.24), transparent);
     }
-    .card { position: absolute; z-index: 1; left: 88px; top: 96px; right: 88px; }
-    .pill { display: inline-flex; align-items: center; gap: 14px; padding: 10px 22px 10px 18px; font-size: 24px; font-weight: 500; color: #c8cfdc;
+    .card { position: absolute; z-index: 1; left: 80px; top: 72px; width: 690px; }
+    .pill { display: inline-flex; align-items: center; gap: 14px; margin: 0; padding: 10px 22px 10px 18px; font-size: 23px; font-weight: 600; color: #c8cfdc;
       border: 1.5px solid #2a3d58; border-radius: 999px; background: rgba(14,23,36,.7); }
-    .pill i { width: 12px; height: 12px; border-radius: 50%; background: #34d399; box-shadow: 0 0 0 6px rgba(52,211,153,.18); }
-    h1 { margin: 40px 0 0; font-size: 104px; font-weight: 700; letter-spacing: -.045em; line-height: 1;
-      background: linear-gradient(180deg, #f4fcf5 30%, #a1abb5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding-bottom: 8px; }
-    .job { margin: 22px 0 0; font-size: 42px; font-weight: 600; letter-spacing: -.02em; }
-    .loc { margin: 12px 0 0; font-size: 28px; color: #8f9db0; }
+    .pill i { width: 12px; height: 12px; border-radius: 50%; background: #ff9a3c; }
+    h1 { margin: 34px 0 0; font-size: 70px; font-weight: 850; letter-spacing: -.045em; line-height: 1.04; }
+    h1 em { font-style: normal; color: #ff9a3c; }
+    .for { margin: 24px 0 0; font-size: 26px; line-height: 1.4; color: #c8cfdc; }
+    .cta { display: flex; align-items: center; gap: 22px; margin-top: 34px; }
+    .btn { padding: 14px 28px; font-size: 24px; font-weight: 750; color: #070c14; background: #ff9a3c; border-radius: 999px; }
+    .name { font-size: 24px; font-weight: 600; color: #f4f8fb; }
+    .name span { display: block; font-size: 20px; font-weight: 500; color: #8f9db0; }
+    .vis { position: absolute; z-index: 1; right: 56px; top: 150px; width: 330px; }
+    .browser { width: 330px; border: 1.5px solid #2a3d58; border-radius: 14px; overflow: hidden; background: #142238; box-shadow: 0 30px 60px -24px rgba(0,0,0,.7); }
+    .bar { display: flex; gap: 7px; height: 26px; align-items: center; padding: 0 12px; background: #0e1724; border-bottom: 1px solid #1c2a3e; }
+    .bar i { width: 9px; height: 9px; border-radius: 50%; background: #2a3d58; }
+    .browser img { display: block; width: 100%; }
+    .phone { position: absolute; right: -24px; top: 84px; width: 138px; border: 6px solid #1a2230; border-radius: 26px; overflow: hidden; background: #1a2230; box-shadow: 0 0 0 1.5px #2a3d58, 0 30px 60px -20px rgba(0,0,0,.8); }
+    .phone img { display: block; width: 100%; border-radius: 20px; }
   </style>
 </head>
 <body>
   <div class="card">
-    <p class="pill" style="margin:0"><i></i><span data-seeking>En recherche de CDI (dès sept. 2026)</span></p>
-    <h1>Arphan Drame</h1>
-    <p class="job">Développeur Web Full Stack</p>
-    <p class="loc">Frontend &amp; Backend · Paris</p>
+    <p class="pill"><i></i>Développeur web freelance · Île-de-France</p>
+    <h1>Des sites et des outils qui vous amènent <em>des clients</em></h1>
+    <p class="for">Commerces, artisans, indépendants : être trouvé sur Google, réserver en ligne, gagner du temps.</p>
+    <div class="cta"><span class="btn">Devis gratuit</span><span class="name">Arphan Drame<span>arphandrame.fr</span></span></div>
   </div>
-  <script src="../js/seeking.js"></script>
+  <div class="vis" aria-hidden="true">
+    <div class="browser"><div class="bar"><i></i><i></i><i></i></div><img src="../assets/img/projets/wild-kedougou.webp" alt=""></div>
+    <div class="phone"><img src="../assets/img/projets/islaah-home-logged-in.webp" alt=""></div>
+  </div>
 </body>
 </html>

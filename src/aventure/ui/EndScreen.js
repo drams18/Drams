@@ -1,7 +1,7 @@
 /* ══════════════════════════════════════════════════════
    ENDSCREEN.JS : « Expérience terminée »
-   Les quatre volets du portfolio, puis les suites utiles à un recruteur :
-   CV et contact d'abord, projets, mode classique, ou continuer d'explorer.
+   Les quatre volets du portfolio, puis les suites utiles à un client :
+   devis et contact d'abord, projets, le site, le CV, ou continuer d'explorer.
    ══════════════════════════════════════════════════════ */
 
 import { h, clear, focusFirst, trapTab } from './dom.js';
@@ -12,7 +12,7 @@ export class EndScreen {
     this.o = opts;
     this.tiles = h('div.adv-end__tiles');
     this.kicker = h('p.adv-end__kicker');
-    this.cv = h('a.adv-btn.adv-btn--big', { href: 'assets/CV.pdf', target: '_blank', rel: 'noopener' }, 'VOIR LE CV');
+    this.cv = h('a.adv-btn.adv-btn--big', { href: '/devis' }, 'DEMANDER UN DEVIS');
     this.el = h('div.adv-end', { role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'adv-end-title', hidden: true },
       h('div.adv-end__card', null,
         this.kicker,
@@ -22,7 +22,8 @@ export class EndScreen {
           this.cv,
           h('button.adv-btn.adv-btn--big.adv-btn--alt', { type: 'button', onclick: () => opts.onContact() }, 'ME CONTACTER'),
           h('button.adv-btn', { type: 'button', onclick: () => opts.onOpen('projets') }, 'VOIR LES PROJETS'),
-          h('a.adv-btn.adv-btn--ghost', { href: '/classique', onclick: (e) => opts.onClassic(e) }, 'MODE CLASSIQUE'),
+          h('a.adv-btn.adv-btn--ghost', { href: '/', onclick: (e) => opts.onClassic(e) }, 'VOIR LE SITE'),
+          h('a.adv-btn.adv-btn--ghost', { href: 'assets/CV.pdf', target: '_blank', rel: 'noopener' }, 'CV'),
           h('button.adv-btn.adv-btn--ghost', { type: 'button', onclick: () => opts.onContinue() }, 'EXPLORER À NOUVEAU')),
         h('p.adv-end__more', null, 'Un projet de site ou d\'application ? ',
           h('button.adv-link', { type: 'button', onclick: () => opts.onPortal() }, 'Construisez votre projet')),

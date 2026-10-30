@@ -1,8 +1,8 @@
 /* ══════════════════════════════════════════════════════
-   DEEPLINK.JS : Grammaire de liens COMMUNE aux deux modes
-   Le même fragment désigne le même contenu en mode classique
-   (classique.html → /classique) et en mode aventure
-   (aventure.html → /aventure) :
+   DEEPLINK.JS : Grammaire de liens du mode aventure, et passage au site
+   Le fragment désigne un contenu du mode aventure (aventure.html →
+   /aventure) ; siteHref() donne la page du site qui montre le même
+   contenu (#projets/skywalk → /realisations/skywalk) :
 
      #profil                 profil & compétences
      #parcours[/<slug>]      une étape du parcours (bac, bts, etna…)
@@ -25,7 +25,7 @@
 
   // Pages des modes : leur URL canonique, sans « .html » (Cloudflare Pages
   // et le serveur local de Vite les servent ainsi, sans redirection).
-  var PAGES = { classique: '/classique', aventure: '/aventure', selection: '/' };
+  var PAGES = { classique: '/', aventure: '/aventure', selection: '/' };
 
   // route (URL) ⇄ id de section (SECTIONS / BUILDINGS_DATA)
   var SECTION_OF = { profil: 'profile', parcours: 'parcours', projets: 'projets', contact: 'contact' };
@@ -58,6 +58,18 @@
     try { return global.localStorage.getItem(MODE_KEY); } catch (e) { return null; }
   }
 
+  // Page du site qui montre le même contenu qu'un fragment du mode aventure.
+  function siteHref(hash) {
+    var r = parse(hash);
+    if (!r) return '/';
+    if (r.kind === 'portail') return '/devis';
+    if (r.kind !== 'section') return '/';
+    if (r.section === 'projets') return r.slug ? '/realisations/' + r.slug : '/realisations';
+    if (r.section === 'contact') return '/contact';
+    if (r.section === 'parcours') return '/a-propos#parcours';
+    return '/a-propos';
+  }
+
   // Page vers laquelle revenir depuis tarifs / construire-projet : celle du
   // dernier mode utilisé (sinon l'écran de sélection). Depuis le portail,
   // on revient DEVANT le portail (aventure) ou sur « Vous avez un projet ? ».
@@ -79,6 +91,7 @@
     PAGES: PAGES,
     parse: parse,
     build: build,
+    siteHref: siteHref,
     setMode: setMode,
     getMode: getMode,
     homeHref: homeHref,

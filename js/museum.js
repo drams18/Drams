@@ -26,14 +26,6 @@ const CATEGORY_ACCENT = {
   'Scolaire':      '#8a3bff', // violet
 };
 
-// Disponibilité : « dès <mois courant> », recalculée à chaque chargement
-// (mode aventure) et à chaque build (mode classique, puis js/seeking.js
-// la remet à jour dans la page).
-const SEEKING_MONTHS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
-function seekingNow(d = new Date()) {
-  return `En recherche de CDI (dès ${SEEKING_MONTHS[d.getMonth()]} ${d.getFullYear()})`;
-}
-
 const SECTIONS = {
   profile: {
     id: 'profile',
@@ -41,12 +33,12 @@ const SECTIONS = {
     accent: '#19e8ff',
     bio: {
       name: 'Arphan DRAME',
-      title: 'Développeur Web Full Stack',
-      location: 'Paris',
-      availability: 'Alternance chez DevPhantom',
-      // Ce que je recherche, information n°1 pour un recruteur (mode classique : hero).
-      seeking: seekingNow(),
-      description: 'Développeur Web Full Stack. Je pars d\'un besoin métier, je le comprends, et je le transforme en solution concrète, du frontend au backend. Je m\'intègre vite à une base de code existante et j\'apprends les outils nécessaires au projet.',
+      title: 'Développeur web freelance',
+      location: 'Île-de-France',
+      availability: 'Disponible pour vos projets',
+      // Badge du mode aventure : ce que je propose (plus de recherche d'emploi).
+      seeking: 'Disponible pour vos projets · devis gratuit',
+      description: 'Développeur web freelance en Île-de-France. Je pars de votre besoin, je le comprends, et je le transforme en site ou en outil concret, de la page d\'accueil jusqu\'au serveur. Je vous explique chaque étape simplement.',
       photo: 'assets/img/profile.jpg',
       languages: [
         { label: 'Français', level: 'Natif' },
@@ -62,12 +54,11 @@ const SECTIONS = {
     },
 
     // Message principal affiché en avant du bloc compétences.
-    positioning: 'Je peux m\'adapter à un environnement technique existant, comprendre rapidement un projet et apprendre les outils nécessaires pour répondre au besoin.',
+    positioning: 'Je crée des sites et des outils qui aident les commerces, artisans et indépendants à trouver des clients et à gagner du temps.',
 
-    // Mode classique, « Qui je suis » : l'expérience et la stack en une phrase
-    // chacune. Symfony / PHP / MySQL = projets DevPhantom (en équipe) ;
-    // React / TypeScript = projets personnels et scolaires uniquement.
-    aboutStack: 'Chez DevPhantom, je développe en équipe des plateformes web et des applications mobiles, surtout avec Symfony, PHP et MySQL. En projet personnel, j\'utilise aussi React et TypeScript.',
+    // Expérience en une phrase (mode aventure). Symfony / PHP / MySQL = projets
+    // DevPhantom (en équipe) ; React / TypeScript = projets personnels.
+    aboutStack: 'Près de 3 ans en entreprise chez DevPhantom, en alternance : plateformes web et applications mobiles, en équipe. En projet personnel, j\'ai publié une application sur l\'App Store.',
 
     qualities: [
       'Adaptabilité',
@@ -190,12 +181,36 @@ const SECTIONS = {
     accent: '#ff2bb0',
     email: 'arphandrame0@gmail.com',
     phone: '07 67 31 84 26',
+    // Même numéro pour WhatsApp (wa.me attend le numéro international, sans +).
+    whatsapp: '33767318426',
+    whatsappText: 'Bonjour Arphan, je vous contacte depuis votre site au sujet d\'un projet.',
+    instagram: 'https://www.instagram.com/nahpra.dev/',
+    // Lien du compte TikTok : vide = rien n'est affiché (à compléter).
+    tiktok: '',
     links: [
       { label: 'GitHub', url: 'https://github.com/drams18', color: '#f0f0f0' },
       { label: 'LinkedIn', url: 'https://www.linkedin.com/in/arphan-drame/', color: '#0a66c2' },
       { label: 'Instagram', url: 'https://www.instagram.com/nahpra.dev/', color: '#e1306c' },
       { label: 'Voir mon CV en PDF', url: 'assets/CV.pdf', color: '#1da1f2' },
     ],
+  },
+
+  // Activité freelance : identité légale (mentions légales, données
+  // structurées). Source : avis de situation SIRENE du 27/10/2026.
+  business: {
+    legalName: 'Arphan Drame',
+    status: 'Entrepreneur individuel (micro-entreprise)',
+    siren: '109 307 629',
+    siret: '109 307 629 00013',
+    ape: '62.01Z, Programmation informatique',
+    since: '01/09/2026',
+    address: ['4 rue Firmin Gémier, Hall 9', '75018 Paris'],
+    street: '4 rue Firmin Gémier, Hall 9',
+    postalCode: '75018',
+    city: 'Paris',
+    vat: 'TVA non applicable, article 293 B du CGI',
+    area: 'Île-de-France',
+    priceRange: '€€',
   },
 
   projets: {
@@ -212,13 +227,105 @@ const SECTIONS = {
     //            `alt` = légende. La première sert de couverture (bulle,
     //            info-bulle, liste). npm run images les convertit en webp.
     //   device → 'mobile' : captures de téléphone (cadre portrait)
-    // Ordre de la page Projets (mode classique) : du plus technique au moins
-    // technique (étendue de la stack, intégrations, mise en production).
-    // Un slug absent d'ici passe en fin de liste.
-    techOrder: [
-      'skywalk', 'oneday', 'wild-kedougou', 'islaah', 'crowdin', 'infinitia', 'allsab-ms',
-      'badn', 'gexp', 'hexagon', 'prospectly', 'ilamiria', 'pool-party',
+    // Site (pages Réalisations) : projets à la une, dans cet ordre (avec
+    // captures et lien en ligne), puis les autres. Un slug absent d'ici
+    // passe en fin de liste.
+    featured: ['wild-kedougou', 'islaah', 'oneday', 'allsab-ms'],
+    order: [
+      'wild-kedougou', 'islaah', 'oneday', 'allsab-ms', 'ilamiria', 'badn', 'pool-party',
+      'skywalk', 'gexp', 'hexagon', 'prospectly', 'infinitia', 'crowdin',
     ],
+    // Types de projet (filtres de la page Réalisations).
+    kinds: {
+      vitrine:     'Site vitrine',
+      reservation: 'Réservation',
+      mobile:      'Application mobile',
+      interne:     'Outil interne',
+      plateforme:  'Plateforme web',
+    },
+    // Chaque projet raconté pour un client, sans jargon : le besoin, ce que
+    // j'ai fait, ce que ça permet. Mêmes faits que `role` / `desc` plus bas,
+    // rien d'ajouté (cadre réel : personnel, en équipe, scolaire).
+    cases: {
+      'wild-kedougou': {
+        kind: 'reservation', label: 'Site de réservation', frame: 'Projet personnel',
+        need: 'Présenter une activité touristique au Sénégal et permettre de réserver en ligne, sans échanges de messages.',
+        did: 'Conçu et développé seul : le site, la réservation, le calendrier des disponibilités, les e-mails de confirmation et le référencement Google.',
+        result: 'Le visiteur découvre les formules, choisit une date libre et réserve depuis son téléphone. Les disponibilités se mettent à jour dans le calendrier et une confirmation part par e-mail.',
+      },
+      islaah: {
+        kind: 'mobile', label: 'Application iPhone', frame: 'Projet personnel',
+        need: 'S\'entraîner à reconnaître les versets du Coran, de façon ludique, sur son téléphone.',
+        did: 'Réalisé seul : l\'application iPhone, le serveur qui l\'alimente et la publication sur l\'App Store.',
+        result: 'On écoute des récitations, on joue à plusieurs modes de quiz et on suit sa progression. L\'application se télécharge sur l\'App Store.',
+      },
+      oneday: {
+        kind: 'mobile', label: 'Application installable', frame: 'Projet personnel',
+        need: 'Organiser ses journées et tenir ses habitudes, avec des rappels sur iPhone.',
+        did: 'Réalisé seul : une application qui s\'installe depuis le navigateur, fonctionne sans connexion et envoie des rappels.',
+        result: 'La veille, on prépare sa journée. Le matin, on ne voit que ce qui reste à faire, avec un rappel à l\'heure de chaque tâche.',
+      },
+      'allsab-ms': {
+        kind: 'interne', label: 'Outil interne', frame: 'En équipe chez DevPhantom',
+        need: 'Une entreprise qui met des techniciens à disposition pour des opérations de maintenance devait gérer ses équipes au même endroit.',
+        did: 'Surtout la partie serveur : connexion et droits d\'accès, espace administrateur, factures, techniciens, déplacements.',
+        result: 'Pointages, congés, remboursements et planning se gèrent dans un seul outil en ligne.',
+      },
+      ilamiria: {
+        kind: 'mobile', label: 'Application iPhone', frame: 'En équipe chez DevPhantom',
+        need: 'Une application mobile créée chez DevPhantom.',
+        did: 'Participation au développement, en équipe.',
+        result: 'Elle est publiée sur l\'App Store. Ses écrans présentent des alertes sur les sujets tendance et des idées de contenu proposées par l\'IA.',
+      },
+      badn: {
+        kind: 'mobile', label: 'Application mobile', frame: 'En équipe chez DevPhantom',
+        need: 'Organiser une sortie entre amis sans se perdre dans les messages : budget, lieu, date, qui apporte quoi.',
+        did: 'Surtout la partie serveur de l\'application.',
+        result: 'Le groupe vote pour la date, suit ses sorties à venir, et une personne seule peut rejoindre un groupe.',
+      },
+      'pool-party': {
+        kind: 'vitrine', label: 'Site vitrine', frame: 'Pour un ami',
+        need: 'Un site vitrine pour présenter une activité.',
+        did: 'Création du site sur WordPress.',
+        result: 'Projet en cours : il n\'est pas encore terminé.',
+      },
+      skywalk: {
+        kind: 'plateforme', label: 'Plateforme web', frame: 'Projet personnel',
+        need: 'Préparer une expatriation oblige à croiser des informations dispersées : visa, démarches, budget, emploi.',
+        did: 'Démarré à plusieurs à l\'ETNA, repris et poursuivi seul : j\'en ai réalisé l\'essentiel.',
+        result: 'Une liste de démarches personnalisée avec rappels, une carte des destinations, le coût de la vie comparé, des offres d\'emploi et une communauté pour échanger. En français et en anglais.',
+      },
+      gexp: {
+        kind: 'interne', label: 'Outil interne', frame: 'En équipe chez DevPhantom',
+        need: 'Une entreprise voulait produire ses rapports plus facilement.',
+        did: 'Écrans de gestion, génération de rapports, exports PDF, Excel et CSV.',
+        result: 'Chiffre d\'affaires, commandes et facturation se consultent et s\'exportent depuis l\'outil.',
+      },
+      hexagon: {
+        kind: 'interne', label: 'Outil interne', frame: 'En équipe chez DevPhantom',
+        need: 'Faciliter le travail au quotidien et la communication interne d\'une équipe.',
+        did: 'Plusieurs écrans de gestion et des fonctions de communication interne.',
+        result: 'Un espace privé où l\'équipe retrouve ses informations et communique.',
+      },
+      prospectly: {
+        kind: 'interne', label: 'Outil de recherche', frame: 'Projet personnel',
+        need: 'Repérer les commerces qui n\'ont pas de site, ou un site à refaire.',
+        did: 'Réalisé seul : idée, conception et développement.',
+        result: 'Une recherche affiche la fiche d\'un commerce et indique s\'il a besoin d\'un site.',
+      },
+      infinitia: {
+        kind: 'interne', label: 'Outil de gestion', frame: 'En équipe chez DevPhantom',
+        need: 'Une entreprise de gestion de flottes automobiles voulait refaire son site.',
+        did: 'Organisation des données, partie serveur et structure du projet, à partir d\'un échange avec le client.',
+        result: 'Projet arrêté : le client a cessé de répondre avant la fin de la partie visible.',
+      },
+      crowdin: {
+        kind: 'plateforme', label: 'Projet d\'école', frame: 'En binôme à l\'ETNA',
+        need: 'Exercice d\'école : reproduire Crowdin, un outil pour traduire un site ou une application à plusieurs.',
+        did: 'J\'ai réalisé la majeure partie du développement.',
+        result: 'Un propriétaire crée un projet, ajoute les textes à traduire, et des traducteurs les traduisent langue par langue.',
+      },
+    },
     items: [
       {
         short: 'INFINITIA',

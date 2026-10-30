@@ -4,7 +4,7 @@
    le monde.
 
      objectif · progression · lieu · invite d'interaction · retours
-     barre : Mode classique · Contact · Menu (toujours accessibles)
+     barre : Voir le site · Contact · Menu (toujours accessibles)
 
    N'écrit dans la page que lorsqu'une valeur change.
    ══════════════════════════════════════════════════════ */
@@ -33,7 +33,7 @@ export class HUD {
 
     this.zone = h('p.adv-hud__zone', { 'aria-live': 'polite' });
 
-    this.classic = h('a.adv-btn.adv-btn--ghost', { href: '/classique', title: 'Passer en mode classique, à l\'endroit que vous regardez', onclick: on.classic }, 'Mode classique');
+    this.classic = h('a.adv-btn.adv-btn--ghost', { href: '/', title: 'Revenir au site, à l\'endroit que vous regardez', onclick: on.classic }, 'Voir le site');
     this.bar = h('div.adv-hud__bar', null,
       this.classic,
       h('button.adv-btn.adv-btn--ghost', { type: 'button', onclick: on.contact }, 'Contact'),

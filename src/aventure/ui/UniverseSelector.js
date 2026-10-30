@@ -130,9 +130,10 @@ export class UniverseSelector {
         h('p.adv-sel__lead', null, 'Trois univers, un même contenu : profil, parcours, compétences et projets.')),
       this.cards,
       h('footer.adv-sel__foot', null,
-        h('a.adv-btn.adv-btn--ghost', { href: opts.classicHref }, 'Mode classique'),
+        h('a.adv-btn.adv-btn--ghost', { href: opts.classicHref }, 'Voir le site'),
         this.sound,
         this.volume.el,
+        h('a.adv-btn', { href: '/devis' }, 'Demander un devis'),
         h('a.adv-btn.adv-btn--ghost', { href: 'assets/CV.pdf', target: '_blank', rel: 'noopener' }, 'CV'),
         h('button.adv-btn.adv-btn--ghost', { type: 'button', onclick: () => opts.onContact() }, 'Contact')));
     root.appendChild(this.el);

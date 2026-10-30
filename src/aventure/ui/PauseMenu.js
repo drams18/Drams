@@ -1,7 +1,7 @@
 /* ══════════════════════════════════════════════════════
    PAUSEMENU.JS : le menu de pause
 
-   REPRENDRE · CARTE · PROGRESSION · COMPÉTENCES · CV · TARIFS · CONTACT ·
+   REPRENDRE · CARTE · PROGRESSION · COMPÉTENCES · DEVIS · TARIFS · CV · CONTACT ·
    COMMANDES · SON (+ jauge de volume) · CHANGER D'UNIVERS · MODE CLASSIQUE · COOKIES · RECOMMENCER
 
    Carte, progression, compétences et commandes s'affichent dans le volet
@@ -22,7 +22,7 @@ export class PauseMenu {
     this.volume = volumeControl('adv-vol--pause', (v) => opts.onVolume(v));
     this.restart = h('button.adv-pause__item.adv-pause__item--danger', { type: 'button', onclick: () => this._restart() }, 'RECOMMENCER');
     this.skillsBtn = h('button.adv-pause__item', { type: 'button', onclick: () => this._view('skills') });
-    this.classic = h('a.adv-pause__item', { href: '/classique', onclick: (e) => opts.onClassic(e) }, 'MODE CLASSIQUE');
+    this.classic = h('a.adv-pause__item', { href: '/', onclick: (e) => opts.onClassic(e) }, 'VOIR LE SITE');
     this.resume = h('button.adv-pause__item.adv-pause__item--main', { type: 'button', onclick: () => opts.onResume() }, 'REPRENDRE');
 
     this.menu = h('nav.adv-pause__menu', { 'aria-label': 'Menu' },
@@ -30,8 +30,9 @@ export class PauseMenu {
       h('button.adv-pause__item', { type: 'button', onclick: () => this._view('map') }, 'CARTE'),
       h('button.adv-pause__item', { type: 'button', onclick: () => this._view('progress') }, 'PROGRESSION'),
       this.skillsBtn,
-      h('a.adv-pause__item', { href: 'assets/CV.pdf', target: '_blank', rel: 'noopener' }, 'CV'),
+      h('a.adv-pause__item', { href: '/devis' }, 'DEMANDER UN DEVIS'),
       h('a.adv-pause__item', { href: '/tarifs' }, 'TARIFS'),
+      h('a.adv-pause__item', { href: 'assets/CV.pdf', target: '_blank', rel: 'noopener' }, 'CV'),
       h('button.adv-pause__item', { type: 'button', onclick: () => opts.onContact() }, 'CONTACT'),
       h('button.adv-pause__item', { type: 'button', onclick: () => this._view('keys') }, 'COMMANDES'),
       this.sound,

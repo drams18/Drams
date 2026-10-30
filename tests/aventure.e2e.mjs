@@ -134,7 +134,7 @@ ok('lieux visités comptés', await p.eval(`${G}.save.data.visitedLocations.leng
 // ── I. Fin de l'expérience (les 4 lieux ont été vus via les onglets) ──
 await p.sleep(1700);
 ok('écran de fin', await state() === 'end' && await p.eval('document.querySelector(".adv-end__title").textContent') === 'EXPÉRIENCE TERMINÉE');
-ok('fin : 4 volets + 5 actions', await p.eval('document.querySelectorAll(".adv-end__tile").length === 4 && [...document.querySelectorAll(".adv-end__actions > *")].map(e => e.textContent).join("|")') === 'VOIR LE CV|ME CONTACTER|VOIR LES PROJETS|MODE CLASSIQUE|EXPLORER À NOUVEAU');
+ok('fin : 4 volets + 6 actions', await p.eval('document.querySelectorAll(".adv-end__tile").length === 4 && [...document.querySelectorAll(".adv-end__actions > *")].map(e => e.textContent).join("|")') === 'DEMANDER UN DEVIS|ME CONTACTER|VOIR LES PROJETS|VOIR LE SITE|CV|EXPLORER À NOUVEAU');
 await shot('i1-end');
 await p.eval('[...document.querySelectorAll(".adv-end__actions button")].find(b => b.textContent === "EXPLORER À NOUVEAU").click()'); await p.sleep(200);
 ok('explorer à nouveau → jeu', await state() === 'play');
@@ -142,7 +142,7 @@ ok('explorer à nouveau → jeu', await state() === 'play');
 // ── E. Pause ──
 await p.press('Escape'); await p.sleep(250);
 ok('Échap → pause', await state() === 'paused');
-ok('pause : 13 entrées', await p.eval('[...document.querySelectorAll(".adv-pause__item")].map(e => e.textContent).join("|")') === 'REPRENDRE|CARTE|PROGRESSION|COMPÉTENCES|CV|TARIFS|CONTACT|COMMANDES|SON : ACTIVÉ|CHANGER D\'UNIVERS|MODE CLASSIQUE|COOKIES|RECOMMENCER');
+ok('pause : 14 entrées', await p.eval('[...document.querySelectorAll(".adv-pause__item")].map(e => e.textContent).join("|")') === 'REPRENDRE|CARTE|PROGRESSION|COMPÉTENCES|DEMANDER UN DEVIS|TARIFS|CV|CONTACT|COMMANDES|SON : ACTIVÉ|CHANGER D\'UNIVERS|VOIR LE SITE|COOKIES|RECOMMENCER');
 await shot('e1-pause');
 await p.eval('[...document.querySelectorAll(".adv-pause__item")].find(e => e.textContent.startsWith("SON")).click()'); await p.sleep(200);
 ok('son désactivable', await p.eval(`${G}.save.data.settings.sound === false && document.querySelector('.adv-pause .adv-vol__range').value === '0'`));
@@ -273,13 +273,13 @@ const hz = await p.eval(`(async () => {
 const ref = hz[60];
 ok('60 / 120 / 144 Hz : même distance et même saut', [30, 120, 144, 165].every(r => Math.abs(hz[r][0] - ref[0]) <= ref[0] * 0.02 && Math.abs(hz[r][1] - ref[1]) <= 3), JSON.stringify(hz));
 
-// ── H. Navigation entre modes ──
+// ── H. Navigation aventure → site ──
 await fresh('#aventure/ville');
 await p.eval(`${G}.player.place(${G}.level.location('projets').doorX, 0)`); await p.sleep(250);
 await p.click('.adv-hud__bar a'); await p.sleep(1600);
-ok('aventure → classique (emporte le lieu regardé)', (await p.eval('location.pathname + location.hash')).replace('.html', '') === '/classique/projets', await p.eval('location.href'));
-ok('classique : lien « Retour à l\'aventure »', await p.eval('[...document.querySelectorAll("[data-switch-adventure]")].some(a => a.textContent.includes("Retour à l\'aventure"))'));
-await shot('h1-classique');
+ok('aventure → site (emporte le lieu regardé)', (await p.eval('location.pathname')).replace('.html', '') === '/realisations', await p.eval('location.href'));
+ok('site : lien vers le mode aventure', await p.eval('document.querySelectorAll("[data-switch-adventure]").length > 0'));
+await shot('h1-site');
 await fresh('#portail', 1400);
 await p.press('ArrowUp'); await p.sleep(2000);
 ok('aventure → construire-projet', (await p.eval('location.pathname')).replace('.html', '') === '/construire-projet');
@@ -334,7 +334,7 @@ for (const u of ['hero', 'club']) {
 }
 ok('retour du portail → /aventure#portail', (await p.eval('window.Deeplink.homeHref(true)')) === '/aventure#portail');
 await p.goto(`${BASE}/`, 1200);
-ok('portfolio → aventure (carte du mode aventure)', await p.eval('document.querySelector("a.mode--adventure").getAttribute("href")') === '/aventure');
+ok('site → aventure (encart de l\'accueil)', await p.eval('document.querySelector(".adv a[data-switch-adventure]").getAttribute("href")') === '/aventure');
 
 // ── Accessibilité : mouvement réduit, clavier seul, ancien lien #ville ──
 await p.reducedMotion(true);

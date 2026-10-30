@@ -3,63 +3,57 @@
 
 https://arphandrame.fr/
 
-## Un portfolio, deux façons de le découvrir
+## Le site : développeur web freelance, plus un mode aventure
 
 | URL | Fichier | Rôle |
 |---|---|---|
-| `/` | `index.html` | **Écran de sélection** · « Comment souhaitez-vous me découvrir ? » |
-| `/classique` | `classique.html` | **Mode classique** · page d'entrée : Profil (jour / nuit selon l'heure locale) |
-| `/classique/projets` | `classique/projets.html` | Mode classique · Projets (espace de bulles) |
-| `/classique/parcours` | `classique/parcours.html` | Mode classique · Parcours (frise horizontale) |
-| `/classique/competences` | `classique/competences.html` | Mode classique · Compétences (écosystème) |
-| `/classique/contact` | `classique/contact.html` | Mode classique · Contact |
-| `/aventure` | `aventure.html` | **Mode aventure** · trois univers à explorer (canvas + interface DOM) |
-| `/tarifs` | `tarifs.html` | Grille tarifaire + recherche (style classique, commune aux deux modes) |
-| `/devis` | `devis.html` | « Construisez votre projet » · formulaire par étapes (site classique) |
-| `/construire-projet` | `construire-projet.html` | « Construisez votre projet » · mini-jeu (mode aventure) |
-| `/cv`, `/contact`, `/projets`, `/parcours`, `/competences` | `_redirects` | Liens courts |
+| `/` | `index.html` | **Accueil** : promesse, problèmes réglés, offres, réalisations, méthode, qui je suis, FAQ, contact |
+| `/realisations` | `realisations.html` | Réalisations (filtres par type) |
+| `/realisations/<projet>` | `realisations/<projet>.html` | Un projet : le besoin, ce que j'ai fait, ce que ça permet |
+| `/tarifs` | `tarifs.html` | 6 offres principales, puis la grille complète (HTML, recherche en JS) |
+| `/a-propos` | `a-propos.html` | Présentation, parcours, CV |
+| `/contact` | `contact.html` | Téléphone, WhatsApp, Instagram, e-mail, LinkedIn, formulaire |
+| `/devis` | `devis.html` | Demande de devis par étapes (`js/devis.js`) |
+| `/avis` | `avis.html` | Avis Google (lien envoyé aux clients) |
+| `/mentions-legales`, `/confidentialite` | | Pages légales |
+| `/aventure` | `aventure.html` | **Mode aventure** (bonus) : trois univers à explorer |
+| `/construire-projet` | `construire-projet.html` | Devis en mini-jeu (mode aventure) |
 
-- **Contenu : une seule source**, `js/museum.js`. Le mode aventure le lit directement ; les cinq
-  pages du mode classique (et l'identité de l'écran de sélection) en sont **générées en entier**
-  par `scripts/build-classic.mjs` (ne pas éditer `classique.html` ni `classique/*.html` à la main) :
+Anciennes adresses (`/classique/*`, liens courts) : redirections 301 dans `_redirects`.
+
+- **Contenu : deux sources.** `js/museum.js` (profil, contact, activité légale `business`, projets
+  et leur texte client `projets.cases`) et `js/tarifs-data.js` (prix, offres principales). Toutes
+  les pages du site en sont **générées en entier** par `scripts/build-site.mjs` (ne pas éditer le
+  HTML à la main, sauf `aventure.html` et `construire-projet.html`) :
 
   ```sh
-  npm run dev       # serveur local (Vite), rechargement à chaud
-  npm run content   # régénère seulement le HTML depuis js/museum.js
-  npm run build     # content + build Vite → dist/ (ce que sert Cloudflare Pages)
-  npm run capture   # (après build) régénère les miniatures de l'accueil + og.jpg
+  npm run dev       # serveur local (Vite)
+  npm run content   # régénère seulement le HTML
+  npm run build     # content + sitemap + build Vite → dist/ (ce que sert Cloudflare Pages)
+  npm run capture   # (après build) régénère l'image de partage assets/img/og.jpg
   npm run logo      # régénère le logo, le favicon et leurs PNG (scripts/logo.mjs)
   ```
 
-- **Liens profonds communs** (`js/deeplink.js`) : `#profil`, `#parcours/<slug>`,
-  `#projets/<slug>`, `#contact`, `#portail`. Le même fragment ouvre le même contenu dans les
-  deux modes : `/classique#projets/skywalk` (ancien format, redirigé vers
-  `/classique/projets#skywalk`) ⇄ `/aventure#projets/skywalk`. Le mode aventure ajoute
-  `#aventure/ville`, `#aventure/hero`, `#aventure/club` (l'univers, directement).
-- **Ambiance jour / nuit** : `js/theme.js` (07 h → 20 h = jour ; `?theme=day|night` pour forcer).
-- **Deux styles distincts** : l'accueil, le mode classique, les tarifs, le devis et la 404 sont un
-  site web sobre et professionnel (`css/site.css` : thèmes clair/sombre, police Inter ;
-  `css/classic.css`, `css/annexe.css`). Le mode aventure a sa propre interface, habillée par
-  l'univers choisi (`src/aventure/styles/aventure.css`) ; le mini-jeu `construire-projet`
-  (`src/construire/`) tourne sur le même moteur, dans l'univers choisi par le visiteur : même décor,
-  même personnage, même musique, chaque porte est une réponse.
-- **Devis ⇄ mini-jeu** : `js/devis.js` et `src/construire/steps.js` posent les mêmes questions, envoient
-  le même e-mail et partagent la même session. Depuis les tarifs, « Construisez votre projet » mène au
-  mini-jeu pour un visiteur du mode aventure, au formulaire pour les autres.
-- **Formulaires** : `js/contact-form.js` (EmailJS chargé à la demande).
-- **Logo** : `scripts/logo.mjs` dessine trois anneaux d'argent entrelacés, centres aux sommets d'un
-  triangle équilatéral invisible (même distance pour les trois paires) : bande aux nuages gravés
-  (illustration de l'auteur du site, contours : `scripts/logo-nuages.json`) et anneau intérieur aux
-  sept pierres. `npm run logo` produit `assets/img/logo.svg` (logo complet, barre du haut),
-  `favicon.svg` (sans les nuages, pour l'onglet), `logo-1024.png` (haute définition, fond
-  transparent), `favicon.png` (96 px) et `apple-touch-icon.png` (180 px sur #070c14). Les PNG
-  demandent Google Chrome et `sips` (macOS).
+- **Règles des pages** : complètes sans JavaScript et sans animation (rien n'est masqué en
+  attendant un défilement), un seul `<h1>`, titre et description propres, JSON-LD
+  `ProfessionalService`. Le générateur refuse un second `<h1>` ou un tiret cadratin.
+- **Styles** : `css/site.css` (thèmes jour / nuit selon l'heure, `js/theme.js`, police Inter) +
+  `css/vitrine.css` (pages du site, barre de contact mobile). `css/annexe.css` : devis et avis.
+- **Scripts** : `js/site.js` (menu, filtres, formulaire de contact), `js/tarifs.js` (recherche),
+  `js/contact-form.js` (EmailJS chargé à la demande), `js/devis.js`.
+- **Passage aventure → site** (`js/deeplink.js`, `siteHref`) : `#projets/skywalk` →
+  `/realisations/skywalk`, `#contact` → `/contact`, etc.
+- **Logo** : `scripts/logo.mjs` dessine trois anneaux d'argent entrelacés (bande aux nuages
+  gravés, contours : `scripts/logo-nuages.json`, et anneau intérieur aux sept pierres).
+  `npm run logo` produit `assets/img/logo.svg`, `favicon.svg`, `logo-1024.png`, `favicon.png` et
+  `apple-touch-icon.png` (Google Chrome et `sips` requis).
 - **Mesure d'audience** : Google Analytics 4, chargé seulement après accord (`js/consent.js`,
-  `js/analytics.js`, `js/analytics-events.js`). Détails, réglages GA4 et tests : `docs/analytics-ga4.md`.
+  `js/analytics.js`, `js/analytics-events.js`). Détails : `docs/analytics-ga4.md`.
+- **Documents administratifs** : jamais dans `assets/` publié. Le build ne copie aucun PDF de
+  `assets/` sauf `CV.pdf`, et `assets/avis-*.pdf` est ignoré par Git.
 
 Aucun framework : HTML / CSS / JS vanilla. **Vite** assemble le site dans `dist/` (Cloudflare Pages :
-commande `npm run build`, dossier `dist`) ; les scripts classiques `js/*.js` et les médias y sont
-copiés tels quels.
+commande `npm run build`, dossier `dist`).
 
 **Mode aventure : un moteur, trois univers** (`src/aventure/`, modules ES assemblés par Vite) :
 
@@ -83,23 +77,3 @@ copiés tels quels.
 - Tests : `npm test` (physique à 30 / 60 / 90 / 120 / 144 / 165 Hz, collisions, sauvegarde, données)
   et `BASE=http://localhost:5173 npm run test:e2e` (parcours complet dans Chrome headless, serveur
   `npm run dev` ou `npm run preview` lancé).
-
-**Mode classique : cinq pages, cinq environnements** (`src/classic-app.js` charge seulement
-l'expérience de la page courante) :
-
-- Profil, `src/classic/profile.js` (**GSAP**) : le nom au centre, puis métier → contexte → accès.
-- Projets, `src/classic/projects.js` : espace sans bord couvrant l'écran (deux couches en
-  parallaxe, répétition virtuelle), filtres, vue liste, fiche immersive (`#<projet>`,
-  `#tech/<compétence>`). Miniatures : déposer `assets/img/projets/<slug>.webp` (16:10) puis `npm run build`.
-- Parcours, `src/classic/timeline.js` : frise horizontale en bas (glisser, molette, clavier),
-  l'étape choisie au-dessus (`#<étape>`).
-- Compétences, `src/classic/skills.js` : écosystème « globe » (glisser + inertie), panneau détail,
-  lien projet ↔ technologie dans les deux sens (`#<compétence>`, `#projet/<slug>`).
-- `src/classic/space.js` : moteur commun aux espaces (caméra, gestes, répétition par copies réutilisées).
-- Navigation : barre du haut, portes latérales, flèches ← → du clavier ; transitions entre pages
-  par View Transitions (sens avant / arrière), pages voisines préchargées au survol.
-
-Statut, taille des bulles, liens compétence ↔ projet et chronologie sont **dérivés** de
-`js/museum.js` par `scripts/build-classic.mjs`, jamais saisis à la main. Chaque page reste complète
-sans JavaScript, et rien n'est animé si le visiteur préfère réduire les animations.
-L'adresse du site est définie dans `scripts/build-classic.mjs` (`SITE_URL`) et dans les `<head>`.

@@ -1,0 +1,117 @@
+[
+  {
+    "file": "index.html",
+    "path": "",
+    "index": true
+  },
+  {
+    "file": "realisations.html",
+    "path": "realisations",
+    "index": true
+  },
+  {
+    "file": "realisations/wild-kedougou.html",
+    "path": "realisations/wild-kedougou",
+    "index": true
+  },
+  {
+    "file": "realisations/islaah.html",
+    "path": "realisations/islaah",
+    "index": true
+  },
+  {
+    "file": "realisations/oneday.html",
+    "path": "realisations/oneday",
+    "index": true
+  },
+  {
+    "file": "realisations/allsab-ms.html",
+    "path": "realisations/allsab-ms",
+    "index": true
+  },
+  {
+    "file": "realisations/ilamiria.html",
+    "path": "realisations/ilamiria",
+    "index": true
+  },
+  {
+    "file": "realisations/badn.html",
+    "path": "realisations/badn",
+    "index": true
+  },
+  {
+    "file": "realisations/pool-party.html",
+    "path": "realisations/pool-party",
+    "index": true
+  },
+  {
+    "file": "realisations/skywalk.html",
+    "path": "realisations/skywalk",
+    "index": true
+  },
+  {
+    "file": "realisations/gexp.html",
+    "path": "realisations/gexp",
+    "index": true
+  },
+  {
+    "file": "realisations/hexagon.html",
+    "path": "realisations/hexagon",
+    "index": true
+  },
+  {
+    "file": "realisations/prospectly.html",
+    "path": "realisations/prospectly",
+    "index": true
+  },
+  {
+    "file": "realisations/infinitia.html",
+    "path": "realisations/infinitia",
+    "index": true
+  },
+  {
+    "file": "realisations/crowdin.html",
+    "path": "realisations/crowdin",
+    "index": true
+  },
+  {
+    "file": "tarifs.html",
+    "path": "tarifs",
+    "index": true
+  },
+  {
+    "file": "a-propos.html",
+    "path": "a-propos",
+    "index": true
+  },
+  {
+    "file": "contact.html",
+    "path": "contact",
+    "index": true
+  },
+  {
+    "file": "devis.html",
+    "path": "devis",
+    "index": true
+  },
+  {
+    "file": "avis.html",
+    "path": "avis",
+    "index": false
+  },
+  {
+    "file": "mentions-legales.html",
+    "path": "mentions-legales",
+    "index": true
+  },
+  {
+    "file": "confidentialite.html",
+    "path": "confidentialite",
+    "index": true
+  },
+  {
+    "file": "404.html",
+    "path": "404",
+    "index": false
+  }
+]

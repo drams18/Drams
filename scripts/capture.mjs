@@ -1,21 +1,15 @@
 /* ══════════════════════════════════════════════════════
-   CAPTURE.MJS : Génère les VRAIES miniatures de l'écran de sélection
-   (et l'image de partage) à partir des pages du site.
+   CAPTURE.MJS : Génère l'image de partage (Open Graph) à partir de
+   scripts/og.html.
 
      npm run capture
 
-   Photographie le site BUILDÉ (dist/) : lancer `npm run build` avant.
-
    Prérequis (outils locaux, pas des dépendances du site) :
      • Google Chrome   (ou variable d'environnement CHROME=/chemin/chrome)
-     • ffmpeg avec libwebp
+     • ffmpeg
 
-   Produit dans assets/img/ :
-     preview-classique-day(.webp | -640.webp)    mode classique, ville de jour
-     preview-classique-night(.webp | -640.webp)  mode classique, ville de nuit
-     preview-aventure(.webp | -640.webp)         l'univers VILLE du mode aventure
-     og.jpg                                      image de partage 1200×630
-   À relancer quand le design d'un mode change.
+   Produit assets/img/og.jpg (1200×630). Lancer `npm run build` avant
+   (le serveur sert dist/ en priorité, le reste depuis la racine).
    ══════════════════════════════════════════════════════ */
 
 import { createServer } from 'node:http';
@@ -61,25 +55,8 @@ function shot(url, png, width, height, wait = 3000) {
     `--window-size=${width},${height}`, `--virtual-time-budget=${wait}`, `--screenshot=${png}`, base + url],
     { timeout: 60000 });
 }
-async function webp(png, name) {
-  await run('ffmpeg', ['-loglevel', 'error', '-y', '-i', png, '-vf', 'scale=1280:-2', '-c:v', 'libwebp', '-quality', '78', join(OUT, `${name}.webp`)]);
-  await run('ffmpeg', ['-loglevel', 'error', '-y', '-i', png, '-vf', 'scale=640:-2', '-c:v', 'libwebp', '-quality', '74', join(OUT, `${name}-640.webp`)]);
-}
 
 try {
-  const jobs = [
-    // ?capture : page classique figée (animations GSAP désactivées).
-    { name: 'preview-classique-day',   url: 'classique.html?theme=day&capture' },
-    { name: 'preview-classique-night', url: 'classique.html?theme=night&capture' },
-    // ?capture : l'univers VILLE, sans interface par-dessus.
-    { name: 'preview-aventure',        url: 'aventure.html?capture#aventure/ville', wait: 4000 },
-  ];
-  for (const j of jobs) {
-    const png = join(tmp, j.name + '.png');
-    await shot(j.url, png, 1280, 800, j.wait);
-    await webp(png, j.name);
-    console.log('✓', j.name);
-  }
   const og = join(tmp, 'og.png');
   await shot('scripts/og.html', og, 1200, 630, 2500);
   await run('ffmpeg', ['-loglevel', 'error', '-y', '-i', og, '-q:v', '3', join(OUT, 'og.jpg')]);

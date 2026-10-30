@@ -474,7 +474,7 @@
     check.innerHTML = '<svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>';
     sec.appendChild(check);
     sec.appendChild(el('h1', 'step__title', 'Projet transmis'));
-    sec.appendChild(el('p', 'step__help', 'Merci pour votre demande. Je reviendrai vers vous rapidement.'));
+    sec.appendChild(el('p', 'step__help', 'Merci pour votre demande. Je vous réponds sous 48 h, par e-mail ou par téléphone.'));
     var back = el('a', 'btn btn--primary', 'Retour à l\'accueil');
     back.href = homeHref();
     sec.appendChild(back);

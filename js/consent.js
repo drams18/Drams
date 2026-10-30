@@ -114,26 +114,35 @@
       '.ck [hidden],.ck-dlg [hidden]{display:none!important;}',
       '.ck p,.ck-dlg p,.ck-dlg h2,.ck-dlg h3{margin:0;}',
 
-      /* Bandeau : en bas, non bloquant */
-      '.ck{position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:flex;justify-content:center;',
-      'padding:12px 12px calc(12px + env(safe-area-inset-bottom,0px));pointer-events:none;}',
-      '.ck__card{pointer-events:auto;width:100%;max-width:760px;padding:18px 20px;display:grid;gap:14px;',
-      'background:var(--ck-bg);border:1px solid var(--ck-line);border-radius:18px;',
-      'box-shadow:0 1px 2px rgba(0,0,0,.3),0 20px 50px -18px rgba(0,0,0,.6);animation:ck-in .35s cubic-bezier(.2,.7,.3,1);}',
+      /* Bandeau : une barre compacte en bas, non bloquante. --ck-lift : hauteur
+         d'une barre fixe en bas de page (barre de contact du site, construire.css). */
+      '.ck{position:fixed;left:0;right:0;bottom:var(--ck-lift,0px);z-index:2147483000;display:flex;justify-content:center;',
+      'padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));pointer-events:none;}',
+      '.ck__card{pointer-events:auto;width:100%;max-width:980px;padding:10px 12px 10px 18px;display:grid;',
+      'grid-template-columns:minmax(0,1fr) auto auto auto;grid-template-areas:"t p r a";align-items:center;gap:8px 10px;',
+      'background:var(--ck-bg);border:1px solid var(--ck-line);border-radius:16px;',
+      'box-shadow:0 1px 2px rgba(0,0,0,.3),0 16px 40px -18px rgba(0,0,0,.6);animation:ck-in .35s cubic-bezier(.2,.7,.3,1);}',
       '@keyframes ck-in{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}',
-      '.ck__t{font-size:15px;font-weight:600;color:var(--ck-text);}',
-      '.ck__actions{display:flex;flex-wrap:wrap;gap:8px;}',
+      '.ck__t{grid-area:t;font-size:13.5px;line-height:1.45;color:var(--ck-text-2);}',
+      '.ck__t a{color:var(--ck-text);text-underline-offset:2px;}',
+      '.ck__actions{display:contents;}',
+      '.ck__actions .ck-btn:nth-child(1){grid-area:r;}.ck__actions .ck-btn:nth-child(2){grid-area:a;}',
+      '.ck-link{grid-area:p;padding:8px 6px;font:600 13.5px/1.2 inherit;font-family:inherit;color:var(--ck-text);cursor:pointer;',
+      'background:none;border:0;text-decoration:underline;text-underline-offset:3px;}',
+      '.ck-link:hover{color:var(--ck-accent);}',
+      '.ck-link:focus-visible{outline:2px solid var(--ck-accent);outline-offset:2px;border-radius:6px;}',
 
       /* Boutons : refuser et accepter strictement identiques */
-      '.ck-btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 18px;',
-      'font:600 14.5px/1.3 inherit;font-family:inherit;color:var(--ck-text);cursor:pointer;text-align:center;',
+      '.ck-btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 16px;white-space:nowrap;',
+      'font:600 14px/1.3 inherit;font-family:inherit;color:var(--ck-text);cursor:pointer;text-align:center;',
       'background:var(--ck-bg-2);border:1px solid var(--ck-line);border-radius:999px;',
       'transition:border-color .2s,background .2s,transform .2s;}',
       '.ck-btn:hover{border-color:var(--ck-muted);transform:translateY(-1px);}',
       '.ck-btn:active{transform:none;}',
       '.ck-btn--ghost{background:transparent;}',
       '.ck-btn:focus-visible,.ck-fab:focus-visible,.ck-dlg__close:focus-visible{outline:2px solid var(--ck-accent);outline-offset:3px;}',
-      '.ck__actions .ck-btn{flex:1 1 150px;}',
+      '.ck-dlg .ck__actions{display:flex;flex-wrap:wrap;gap:8px;}',
+      '.ck-dlg .ck__actions .ck-btn{flex:1 1 150px;}',
       '.ck-dlg .ck__actions .ck-btn--ghost{flex-basis:100%;}',
 
       /* Panneau de préférences */
@@ -158,16 +167,16 @@
       '.ck-dlg__note{font-size:13px;color:var(--ck-muted);}',
 
       /* Accès permanent quand la page n'a pas de lien « Cookies » */
-      /* --ck-lift : hauteur d'une barre fixe en bas de page (css/classic.css, construire.css) */
+      /* --ck-lift : voir le bandeau ci-dessus */
       '.ck-fab{position:fixed;left:12px;bottom:calc(12px + var(--ck-lift,0px) + env(safe-area-inset-bottom,0px));z-index:2147482000;',
       'display:grid;place-items:center;width:36px;height:36px;padding:0;cursor:pointer;color:var(--ck-muted);',
       'background:var(--ck-bg);border:1px solid var(--ck-line);border-radius:50%;opacity:.7;transition:opacity .2s,color .2s;}',
       '.ck-fab:hover,.ck-fab:focus-visible{opacity:1;color:var(--ck-text);}',
       '.ck-fab svg{width:18px;height:18px;display:block;}',
 
-      '@media (max-width:520px){.ck{padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));}',
-      '.ck__card{padding:16px;gap:12px;border-radius:16px;}.ck,.ck-dlg{font-size:14px;}',
-      '.ck__actions .ck-btn{flex-basis:120px;}.ck__actions .ck-btn--ghost{flex-basis:100%;}',
+      '@media (max-width:640px){.ck{padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));}',
+      '.ck__card{grid-template-columns:1fr 1fr;grid-template-areas:"t p" "r a";padding:10px 10px 10px 14px;gap:8px;border-radius:14px;}',
+      '.ck__t{font-size:13px;}.ck-link{justify-self:end;align-self:start;}.ck,.ck-dlg{font-size:14px;}',
       '.ck-dlg__in{padding:18px 16px;}}',
       '@media (prefers-reduced-motion:reduce){.ck__card{animation:none;}.ck-btn{transition:none;}}'
     ].join('');
@@ -219,15 +228,15 @@
     root.setAttribute('role', 'region');
     root.setAttribute('aria-label', 'Cookies et mesure d\'audience');
     var card = el('div', 'ck__card');
-    var text = el('div');
-    text.appendChild(el('p', 'ck__t', 'Mesure d\'audience'));
-    text.appendChild(el('p', null,
-      'Avec votre accord, ce site utilise Google Analytics pour compter les visites et savoir quelles pages sont utiles. ' +
-      'Aucun cookie de mesure n\'est déposé sans votre accord, et vous pouvez changer d\'avis à tout moment.'));
+    // Court : une phrase, un lien vers le détail. Rien n'est déposé sans accord.
+    var text = el('p', 'ck__t', 'Avec votre accord, Google Analytics mesure l\'audience du site. ');
+    var more = el('a', null, 'En savoir plus');
+    more.href = '/confidentialite#cookies';
+    text.appendChild(more);
     var actions = el('div', 'ck__actions');
     actions.appendChild(button('ck-btn', 'Tout refuser', function () { choose(false); }));
     actions.appendChild(button('ck-btn', 'Tout accepter', function () { choose(true); }));
-    actions.appendChild(button('ck-btn ck-btn--ghost', 'Personnaliser', function () { open(); }));
+    actions.appendChild(button('ck-link', 'Personnaliser', function () { open(); }));
     card.appendChild(text);
     card.appendChild(actions);
     root.appendChild(card);
