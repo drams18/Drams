@@ -726,6 +726,17 @@ details[open] > summary .faq__chev { transform: rotate(180deg); }
 .foot__col a:hover { color: var(--text); }
 .foot__legal { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
 
+/* ── Cartes : plus claires que le fond pour rester lisibles ── */
+.problem, .offer, .case, .care, .process__s, .way, .path, .faq__i, .proj__s, .cat, .form-card, .adv, .noresult, .all {
+  background: var(--card); border-color: var(--card-line); box-shadow: var(--card-shadow);
+}
+.problem--cta { border-color: color-mix(in srgb, var(--accent) 55%, var(--card-line)); }
+.faq__i[open] { border-color: color-mix(in srgb, var(--accent) 40%, var(--card-line)); }
+/* Dans le bloc replié « tous les services », les catégories restent en retrait. */
+.all .cat { background: rgba(7,12,20,.35); box-shadow: none; }
+.is-searching .all { box-shadow: none; }
+.is-searching .all .cat { background: var(--card); box-shadow: var(--card-shadow); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
