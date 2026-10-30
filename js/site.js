@@ -3,7 +3,7 @@
    scripts/build-site.mjs). Chaque page est complète SANS ce script ;
    il n'ajoute que :
      • le menu mobile
-     • les filtres de la page Réalisations
+     • les flèches et points des carrousels de la page Réalisations
      • l'envoi du formulaire de contact (EmailJS, js/contact-form.js)
      • le préchargement du mode aventure à l'intention (survol, toucher)
    ══════════════════════════════════════════════════════ */
@@ -36,33 +36,38 @@
     window.addEventListener('pageshow', function (e) { if (e.persisted) setNav(false); });
   }
 
-  // ── Réalisations : filtres par type ──────────────────
-  var chips = doc.querySelectorAll('[data-filter]');
-  if (chips.length) {
-    var items = doc.querySelectorAll('[data-kind]');
-    var status = doc.querySelector('[data-filter-status]');
-    var empty = doc.querySelector('[data-filter-empty]');
-    var apply = function (kind, label) {
-      var shown = 0;
-      items.forEach(function (li) {
-        var on = !kind || li.getAttribute('data-kind') === kind;
-        li.hidden = !on;
-        if (on) shown++;
-      });
-      // Une section sans projet visible disparaît (titre compris).
-      doc.querySelectorAll('.block').forEach(function (sec) {
-        var list = sec.querySelectorAll('[data-kind]');
-        if (!list.length) return;
-        sec.hidden = !Array.prototype.some.call(list, function (li) { return !li.hidden; });
-      });
-      chips.forEach(function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-filter') === kind ? 'true' : 'false'); });
-      if (empty) empty.hidden = shown > 0;
-      if (status) status.textContent = shown + (shown > 1 ? ' projets' : ' projet') + (kind ? ' : ' + label : '');
+  // ── Réalisations : carrousels ────────────────────────
+  // Le défilement est natif (doigt, pavé, clavier) ; on ajoute les flèches
+  // et les points. Rien à faire défiler : flèches et points masqués.
+  doc.querySelectorAll('[data-rail]').forEach(function (rail) {
+    var track = rail.querySelector('.rail__track');
+    var slides = Array.prototype.slice.call(track.children);
+    var prev = rail.querySelector('[data-rail-prev]');
+    var next = rail.querySelector('[data-rail-next]');
+    var dots = rail.querySelectorAll('.rail__dots i');
+    var step = function () { return slides.length > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : track.clientWidth; };
+    var update = function () {
+      var max = track.scrollWidth - track.clientWidth;
+      rail.classList.toggle('is-static', max < 4);
+      prev.disabled = track.scrollLeft < 4;
+      next.disabled = track.scrollLeft > max - 4;
+      // Point actif : la diapositive calée à gauche (la dernière en fin de course).
+      var i = track.scrollLeft > max - 4 ? slides.length - 1 : Math.round(track.scrollLeft / (step() || 1));
+      dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
     };
-    chips.forEach(function (c) {
-      c.addEventListener('click', function () { apply(c.getAttribute('data-filter'), c.textContent); });
-    });
-  }
+    var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var go = function (dir) { track.scrollBy({ left: dir * step(), behavior: still ? 'auto' : 'smooth' }); };
+    prev.addEventListener('click', function () { go(-1); });
+    next.addEventListener('click', function () { go(1); });
+    var queued = false;
+    track.addEventListener('scroll', function () {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () { queued = false; update(); });
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+  });
 
   // ── Formulaire de contact (EmailJS chargé à la demande) ──
   var form = doc.getElementById('contact-form');

@@ -258,16 +258,16 @@
 .cta__in .kicker::after { content: ''; width: 26px; height: 2px; border-radius: 2px; background: currentColor; }
 
 /* Cartes : relief au survol + lumière qui suit le pointeur (.spot, js/fx.js) */
-.problem, .offer, .case, .process__s, .way, .mini__a, .faq__i, .proj__s, .cat, .form-card {
+.problem, .offer, .case, .care, .process__s, .way, .faq__i, .proj__s, .cat, .form-card {
   transition: transform .45s var(--fx-ease), box-shadow .45s var(--fx-ease), border-color .3s, translate .9s var(--fx-ease), opacity .9s var(--fx-ease);
 }
 @media (pointer: fine) {
-  .problem:hover, .offer:hover, .case:hover, .mini__a:hover {
+  .problem:hover, .offer:hover, .case:hover, .care:hover {
     transform: translateY(-6px);
     box-shadow: 0 30px 60px -30px rgba(0,0,0,.6), 0 0 0 1px color-mix(in srgb, var(--cta) 35%, transparent);
     border-color: transparent;
   }
-  [data-theme="day"] .problem:hover, [data-theme="day"] .offer:hover, [data-theme="day"] .case:hover, [data-theme="day"] .mini__a:hover {
+  [data-theme="day"] .problem:hover, [data-theme="day"] .offer:hover, [data-theme="day"] .case:hover, [data-theme="day"] .care:hover {
     box-shadow: 0 30px 50px -28px rgba(20,34,56,.35), 0 0 0 1px color-mix(in srgb, var(--cta) 45%, transparent);
   }
 }
@@ -286,8 +286,8 @@
 }
 .spot:hover::before, .spot:hover::after { opacity: 1; }
 
-.problem__ico, .offer__ico, .way__ico { transition: transform .5s var(--fx-ease), background .3s, color .3s; }
-.problem:hover .problem__ico, .offer:hover .offer__ico, .way:hover .way__ico { transform: rotate(-8deg) scale(1.12); color: var(--cta-ink); background: var(--cta); }
+.problem__ico, .offer__ico, .care__ico, .way__ico { transition: transform .5s var(--fx-ease), background .3s, color .3s; }
+.problem:hover .problem__ico, .offer:hover .offer__ico, .care:hover .care__ico, .way:hover .way__ico { transform: rotate(-8deg) scale(1.12); color: var(--cta-ink); background: var(--cta); }
 .offer__price .price__amount { font-size: 1.12em; letter-spacing: -.03em; }
 .case__media .mock, .case__media .mocks { transition: transform .7s var(--fx-ease); }
 .case:hover .case__media .mock--browser { transform: translateY(-8px) scale(1.025); }
@@ -299,8 +299,6 @@
   background-size: 32px 32px;
   -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000, transparent 70%); mask-image: radial-gradient(ellipse at 50% 0%, #000, transparent 70%);
 }
-.mini__img img { transition: transform .8s var(--fx-ease); }
-.mini__a:hover .mini__img img { transform: scale(1.06); }
 
 /* Boutons d'action : reflet qui balaie */
 .btn--cta { position: relative; overflow: hidden; isolation: isolate; }
@@ -377,6 +375,21 @@
 .cta__bg .aurora--1 { top: auto; bottom: -34vmax; right: auto; left: 50%; margin-left: -31vmax; }
 .cta__bg .aurora--2 { top: -20vmax; left: -36vmax; }
 .cta .sec__t { font-size: clamp(38px, 7.6vw, 80px); }
+
+/* ══ Contact : bulles autour du formulaire ════════════
+   Elles arrivent une à une puis flottent ; un point lumineux fait le tour
+   de l'anneau (ordinateur). Animé sur .orb / .orb__core, jamais sur le
+   <li> (il porte le décalage en arc). */
+.fx .orb { animation: fx-orb-in .9s var(--fx-ease) both; animation-delay: calc(.25s + var(--i, 0) * .08s); }
+.fx .orb__core { animation: fx-bob 6s ease-in-out infinite alternate; animation-delay: calc(var(--i, 0) * -1.1s); }
+.orb:hover .orb__core, .orb:focus-visible .orb__core { animation-play-state: paused; }
+@keyframes fx-orb-in { from { opacity: 0; scale: .6; translate: 0 24px; } }
+.orbit__ring::after {
+  content: ''; position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%;
+  background: var(--cta); box-shadow: 0 0 0 4px color-mix(in srgb, var(--cta) 25%, transparent), 0 0 18px var(--cta);
+}
+.fx .orbit__ring { animation: fx-spin 60s linear infinite; }
+.is-off .orbit__ring, .is-off .orb__core { animation-play-state: paused; }
 
 /* ══ Pages intérieures : en-tête lumineux ═════════════ */
 .phead { position: relative; isolation: isolate; }

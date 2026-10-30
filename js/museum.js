@@ -230,11 +230,23 @@ const SECTIONS = {
     // captures et lien en ligne), puis les autres. Un slug absent d'ici
     // passe en fin de liste.
     featured: ['wild-kedougou', 'islaah', 'oneday', 'allsab-ms'],
+    // Page Réalisations du site : un carrousel par groupe (3 au plus), dans
+    // cet ordre. Seuls ces projets ont une page sur le site ; les autres
+    // restent dans le mode aventure (leurs anciennes adresses /realisations/…
+    // sont redirigées dans _redirects).
+    groups: [
+      { id: 'sites', title: 'Sites internet', lead: 'Réservation en ligne, comptes, contenus : des sites complets, en ligne.',
+        slugs: ['wild-kedougou', 'skywalk'] },
+      { id: 'apps', title: 'Applications mobiles', lead: 'Des applications qu’on installe sur son téléphone, dont deux publiées sur l’App Store.',
+        slugs: ['islaah', 'oneday', 'ilamiria'] },
+      { id: 'outils', title: 'Outils pour les entreprises', lead: 'Plannings, factures, rapports : des outils de gestion réalisés en équipe pour des entreprises.',
+        slugs: ['allsab-ms', 'gexp'] },
+    ],
     order: [
       'wild-kedougou', 'islaah', 'oneday', 'allsab-ms', 'ilamiria', 'badn', 'pool-party',
       'skywalk', 'gexp', 'hexagon', 'prospectly', 'infinitia', 'crowdin',
     ],
-    // Types de projet (filtres de la page Réalisations).
+    // Types de projet (plus lus par le site depuis les carrousels par groupe).
     kinds: {
       vitrine:     'Site vitrine',
       reservation: 'Réservation',

@@ -10,6 +10,7 @@
                   desc, cats (la première = catégorie principale), kw
      MAIN_OFFERS  les 6 offres mises en avant (accueil + haut de /tarifs) :
                   service = nom exact dans SERVICES (prix lu là-bas)
+     CARE_OFFERS  « Vous avez déjà un site ? » sur /tarifs (même principe)
      SYNONYMS     mots de la recherche → synonymes
    ══════════════════════════════════════════════════════ */
 (function (global) {
@@ -454,7 +455,20 @@
       includes: ['Connexion entre vos outils (Google Sheets, agenda…)', 'Avec ou sans intelligence artificielle', 'Adaptée à votre façon de travailler'] }
   ];
 
-  var api = { CATEGORIES: CATEGORIES, SERVICES: SERVICES, MAIN_OFFERS: MAIN_OFFERS, SYNONYMS: SYNONYMS };
+  /* ── Vous avez déjà un site : les demandes courantes d'un client qui a
+     déjà un site. Même règle : le prix vient de SERVICES. */
+  var CARE_OFFERS = [
+    { id: 'refonte', service: 'Refonte de site', title: 'Refonte de site', icon: 'site',
+      pitch: 'Votre site actuel refait : plus moderne, plus clair, agréable sur téléphone.' },
+    { id: 'mobile', service: 'Adaptation mobile / responsive', title: 'Adaptation au téléphone', icon: 'mobile',
+      pitch: 'Votre site rendu lisible et agréable sur téléphone et tablette.' },
+    { id: 'maintenance', service: 'Maintenance', title: 'Suivi mensuel', icon: 'calendar',
+      pitch: 'Mises à jour, correctifs et petites évolutions, chaque mois.' },
+    { id: 'depannage', service: 'Intervention / dépannage', title: 'Dépannage', icon: 'bolt',
+      pitch: 'Un bug, une erreur, un site en panne : je trouve et je corrige.' }
+  ];
+
+  var api = { CATEGORIES: CATEGORIES, SERVICES: SERVICES, MAIN_OFFERS: MAIN_OFFERS, CARE_OFFERS: CARE_OFFERS, SYNONYMS: SYNONYMS };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else global.TarifsData = api;
 })(this);

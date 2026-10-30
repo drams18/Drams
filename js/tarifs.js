@@ -17,17 +17,25 @@
     'site-pro': 'site', 'vendre-pro': 'vendre', 'app-pro': 'app', 'modules-pro': 'modules',
     'infra-pro': 'infra', 'suivi-pro': 'suivi', existant: 'site', probleme: 'suivi'
   };
+  // Ouvre les volets (<details>) qui contiennent el, el compris.
+  function reveal(el) {
+    for (var d = el.closest('details'); d; d = d.parentElement && d.parentElement.closest('details')) d.open = true;
+  }
   var parts = location.hash.replace(/^#/, '').split('/');
   if (parts[0] === 'professionnels' || parts[0] === 'particuliers') {
     var id = LEGACY[parts[1]] || parts[1] || '';
     history.replaceState(null, '', location.pathname + location.search + (doc.getElementById(id) ? '#' + id : ''));
     var t = doc.getElementById(id);
-    if (t) t.scrollIntoView();
+    if (t) { reveal(t); t.scrollIntoView(); }
   }
-  // Lien vers une prestation précise : elle s'ouvre.
+  // Lien vers une prestation ou une catégorie de la grille complète (repliée) :
+  // la grille s'ouvre, la prestation aussi, puis on s'y rend.
   function openTarget() {
-    var el = location.hash && doc.getElementById(location.hash.slice(1));
-    if (el && el.tagName === 'DETAILS') el.open = true;
+    var el = location.hash && doc.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (!el || !el.closest('.all')) return;
+    var wasClosed = !el.closest('.all').open;
+    reveal(el);
+    if (wasClosed) el.scrollIntoView();
   }
   openTarget();
   window.addEventListener('hashchange', openTarget);
@@ -88,10 +96,16 @@
     return false;
   }
 
+  var all = catalog.querySelector('.all');
+  var wasOpen = all.open;
   function run() {
     var toks = tokens(input.value);
     var searching = toks.length > 0;
     clear.hidden = !input.value.length;
+    // Les résultats vivent dans la grille repliée : ouverte pendant la
+    // recherche, remise comme avant quand le champ est vidé.
+    if (searching && !catalog.classList.contains('is-searching')) { wasOpen = all.open; all.open = true; }
+    if (!searching && catalog.classList.contains('is-searching')) all.open = wasOpen;
     catalog.classList.toggle('is-searching', searching);
     var shown = 0, seen = {};
     items.forEach(function (li) {

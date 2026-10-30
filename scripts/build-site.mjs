@@ -105,18 +105,26 @@ const priceHtml = (s) => `${s.from ? '<span class="price__from">à partir de</sp
 const euros = (s) => parseInt(s.price.replace(/\D/g, ''), 10);
 const offers = T.MAIN_OFFERS.map(o => ({ ...o, svc: serviceByName(o.service) }));
 const offer = (id) => offers.find(o => o.id === id);
+const careOffers = T.CARE_OFFERS.map(o => ({ ...o, svc: serviceByName(o.service) }));
 const maintenance = serviceByName('Maintenance');
 const depannage = serviceByName('Intervention / dépannage');
 const refonte = serviceByName('Refonte de site');
 
 // ── Projets ────────────────────────────────────────────
 const CASES = SECTIONS.projets.cases;
-const KINDS = SECTIONS.projets.kinds;
-const rank = (p) => { const i = SECTIONS.projets.order.indexOf(p.slug); return i < 0 ? Infinity : i; };
-const ordered  = [...projects].sort((a, b) => rank(a) - rank(b));
-const featured = SECTIONS.projets.featured.map(s => projects.find(p => p.slug === s)).filter(Boolean);
-const others   = ordered.filter(p => !featured.includes(p));
-for (const p of projects) if (!CASES[p.slug]) throw new Error(`museum.js : texte client manquant pour ${p.slug}`);
+const bySlug = (s) => {
+  const p = projects.find(x => x.slug === s);
+  if (!p) throw new Error(`museum.js : projet introuvable, ${s}`);
+  return p;
+};
+// Groupes de la page Réalisations (un carrousel chacun). Seuls leurs projets
+// sont publiés sur le site, dans cet ordre.
+const GROUPS = SECTIONS.projets.groups.map(g => ({ ...g, items: g.slugs.map(bySlug) }));
+if (GROUPS.length > 3) throw new Error('museum.js : 3 groupes de projets au plus');
+const ordered  = GROUPS.flatMap(g => g.items);
+const featured = SECTIONS.projets.featured.map(bySlug);
+for (const p of featured) if (!ordered.includes(p)) throw new Error(`museum.js : ${p.slug} est à la une mais dans aucun groupe`);
+for (const p of ordered) if (!CASES[p.slug]) throw new Error(`museum.js : texte client manquant pour ${p.slug}`);
 const caseOf = (p) => CASES[p.slug];
 const projectUrl = (p) => `/realisations/${p.slug}`;
 
@@ -441,7 +449,7 @@ function caseCard(p, { level = 'h3', eager = false } = {}) {
   const c = caseOf(p);
   const link = linkOf(p);
   return `
-          <li class="case" data-kind="${c.kind}">
+          <li class="case">
             <a class="case__media" href="${projectUrl(p)}" tabindex="-1" aria-hidden="true">
               ${mockup(p, { eager })}
             </a>
@@ -458,29 +466,35 @@ function caseCard(p, { level = 'h3', eager = false } = {}) {
           </li>`;
 }
 
-function smallCard(p) {
+// Diapositive d'un carrousel (page Réalisations) : la capture, le besoin et
+// ce que ça permet. Le détail (« ce que j'ai fait ») est sur la page du projet.
+function slideCard(p, { eager = false } = {}) {
   const c = caseOf(p);
-  const cover = coverOf(p);
+  const link = linkOf(p);
   return `
-          <li class="mini" data-kind="${c.kind}">
-            <a class="mini__a" href="${projectUrl(p)}">
-              <span class="mini__img${p.device === 'mobile' ? ' mini__img--phone' : ''}">${cover
-                ? `<img src="${cover.src}" alt="" width="${cover.size.w}" height="${cover.size.h}" loading="lazy" decoding="async">`
-                : `<span class="mini__ph" aria-hidden="true">${esc(p.title)}</span>`}</span>
-              <span class="tags"><span class="tag tag--kind">${esc(c.label)}</span><span class="tag">${esc(c.frame)}</span></span>
-              <span class="mini__t">${esc(p.title)}</span>
-              <span class="mini__d">${esc(c.result)}</span>
-            </a>
-          </li>`;
+            <li class="case rail__slide">
+              <a class="case__media" href="${projectUrl(p)}" tabindex="-1" aria-hidden="true">
+                ${mockup(p, { eager, sizes: '(max-width: 760px) 86vw, 560px', count: p.device === 'mobile' ? 2 : 1 })}
+              </a>
+              <div class="case__body">
+                <p class="tags"><span class="tag tag--kind">${esc(c.label)}</span><span class="tag">${esc(c.frame)}</span></p>
+                <h3 class="case__t"><a href="${projectUrl(p)}">${esc(p.title)}</a></h3>
+                <dl class="case__dl">
+                  <div><dt>Le besoin</dt><dd>${esc(c.need)}</dd></div>
+                  <div><dt>Ce que ça permet</dt><dd>${esc(c.result)}</dd></div>
+                </dl>
+                <p class="case__links"><a class="btn btn--sm" href="${projectUrl(p)}">Voir le projet${icon('arrow')}</a>${link ? ext(link.url, link.label, 'btn btn--sm btn--ghost') : ''}</p>
+              </div>
+            </li>`;
 }
 
 const contactWays = () => [
   { key: 'phone', ic: 'phone', label: 'Téléphone', value: TEL_LOCAL, href: TEL_HREF, hint: 'Appelez-moi directement' },
-  { key: 'whatsapp', ic: 'whatsapp', label: 'WhatsApp', value: TEL_LOCAL, href: WA_HREF, ext: true, hint: 'Un message, je vous réponds' },
+  { key: 'whatsapp', ic: 'whatsapp', label: 'WhatsApp', value: TEL_LOCAL, orb: 'Envoyer un message', href: WA_HREF, ext: true, hint: 'Un message, je vous réponds' },
   { key: 'instagram', ic: 'instagram', label: 'Instagram', value: IG_HANDLE, href: IG_URL, ext: true, hint: 'Écrivez-moi en message privé' },
   { key: 'mail', ic: 'mail', label: 'E-mail', value: contact.email, href: MAIL_HREF, hint: 'Pour un message détaillé' },
   { key: 'linkedin', ic: 'linkedin', label: 'LinkedIn', value: 'arphan-drame', href: LINKEDIN, ext: true, hint: 'Mon profil professionnel' },
-  TIKTOK && { key: 'tiktok', ic: 'tiktok', label: 'TikTok', value: 'Mes vidéos', href: TIKTOK, ext: true, hint: 'Mes vidéos' },
+  TIKTOK && { key: 'tiktok', ic: 'tiktok', label: 'TikTok', value: '@' + TIKTOK.replace(/\/+$/, '').split('/').pop().replace(/^@/, ''), href: TIKTOK, ext: true, hint: 'Mes vidéos' },
 ].filter(Boolean);
 const wayCard = (w) => `
           <li><a class="way way--${w.key}" href="${esc(w.href)}"${w.ext ? ' target="_blank" rel="noopener"' : ''}>
@@ -501,7 +515,7 @@ const PROBLEMS = [
     sol: offer('reservation').title, svc: offer('reservation').svc, href: '/tarifs#offre-reservation' },
   { ic: 'mobile', t: 'Votre site est lent ou vieillot sur téléphone',
     d: 'Vos clients vous découvrent souvent sur leur téléphone. Je refais votre site pour qu’il soit rapide, clair et donne confiance.',
-    sol: 'Refonte de site', svc: refonte, href: `/tarifs#${svcId(refonte)}` },
+    sol: 'Refonte de site', svc: refonte, href: '/tarifs#offre-refonte' },
   { ic: 'doc', t: 'Vous faites vos devis à la main',
     d: 'Recopier les mêmes informations dans Word prend du temps. J’automatise vos devis, vos relances ou vos tableaux.',
     sol: offer('automatisation').title, svc: offer('automatisation').svc, href: '/tarifs#offre-automatisation' },
@@ -738,28 +752,25 @@ function realisationsPage() {
     description: `Projets réalisés par ${NAME}, ${JOB.toLowerCase()} en ${AREA} : site de réservation, applications publiées sur l’App Store, outils de gestion. Le besoin, ce que j’ai fait, ce que ça permet.`,
     crumbs: [{ name: 'Réalisations', path: 'realisations' }],
   };
-  const used = Object.keys(KINDS).filter(k => projects.some(p => caseOf(p).kind === k));
-  const main = `${pageHead('Réalisations', 'Ce que j’ai construit', 'Chaque projet expliqué simplement : le besoin, ce que j’ai fait, et ce que ça permet aujourd’hui.')}
-    <div class="wrap">
-      <div class="filters js-only" role="group" aria-label="Filtrer par type de projet">
-        <button type="button" class="chip" data-filter="" aria-pressed="true">Tous</button>${used.map(k => `
-        <button type="button" class="chip" data-filter="${k}" aria-pressed="false">${esc(KINDS[k])}</button>`).join('')}
-      </div>
-      <p class="sr-only" role="status" data-filter-status></p>
-
-      <section class="block" aria-labelledby="une-t">
-        <h2 class="block__t" id="une-t">À la une</h2>
-        <ul class="cases">${featured.map(p => caseCard(p, { level: 'h3' })).join('')}
+  // Un carrousel par groupe : défilement natif au doigt (scroll-snap), flèches
+  // et points ajoutés par js/site.js. Sans JS : une rangée qui défile.
+  const main = `${pageHead('Réalisations', 'Ce que j’ai construit', 'Chaque projet expliqué simplement : le besoin, et ce que ça permet aujourd’hui.')}
+    <div class="wrap rails">${GROUPS.map((g, gi) => `
+      <section class="rail" id="${g.id}" aria-labelledby="rail-${g.id}-t" data-rail>
+        <header class="rail__head">
+          <div>
+            <h2 class="block__t" id="rail-${g.id}-t">${esc(g.title)}<span class="rail__n">${g.items.length}</span></h2>
+            <p class="block__lead">${esc(g.lead)}</p>
+          </div>
+          <div class="rail__nav js-only">
+            <button type="button" class="icon-btn rail__btn" data-rail-prev aria-controls="rail-${g.id}" aria-label="Projet précédent">${icon('back')}</button>
+            <button type="button" class="icon-btn rail__btn" data-rail-next aria-controls="rail-${g.id}" aria-label="Projet suivant">${icon('arrow')}</button>
+          </div>
+        </header>
+        <ul class="rail__track" id="rail-${g.id}" tabindex="0" aria-label="${esc(g.title)} : faites défiler">${g.items.map((p, i) => slideCard(p, { eager: gi === 0 && i === 0 })).join('')}
         </ul>
-      </section>
-
-      <section class="block" aria-labelledby="autres-t">
-        <h2 class="block__t" id="autres-t">Autres projets</h2>
-        <p class="block__lead">Projets d’entreprise réalisés en équipe, projets personnels et projet d’école.</p>
-        <ul class="minis">${others.map(smallCard).join('')}
-        </ul>
-      </section>
-      <p class="empty" data-filter-empty hidden>Pas encore de projet de ce type ici. <a class="text-link" href="/devis">Parlons du vôtre${icon('arrow')}</a></p>
+        <div class="rail__dots js-only" aria-hidden="true">${g.items.map(() => '<i></i>').join('')}</div>
+      </section>`).join('')}
     </div>
 ${ctaBand('Un projet du même genre ?', 'Expliquez-moi votre besoin : je vous dis gratuitement ce que je peux faire pour vous.')}`;
   const jsonld = graph(page, {
@@ -866,9 +877,34 @@ function tarifsPage() {
             <ul class="svc-list">${inCat(c.id).map(s => svcRow(s, c.id)).join('')}
             </ul>
           </section>`;
-  const main = `${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', 'Les prix sont « à partir de » : le prix final dépend de votre projet et il est fixé dans le devis, avant de commencer. Le premier échange est gratuit.')}
-    <section class="wrap block" aria-labelledby="top-t">
-      <h2 class="block__t" id="top-t">Les offres les plus demandées</h2>${offerGrid('h3')}
+  // Ordre de lecture : ce que la plupart des visiteurs cherchent d'abord
+  // (6 offres), puis « déjà un site » (4 cartes), puis la grille complète,
+  // repliée derrière une recherche pour ne pas noyer le visiteur.
+  const paths = `
+      <nav class="paths" aria-label="Votre situation">
+        <a class="path" href="#offres">${icon('site')}<span><strong>Je n’ai pas encore de site</strong><small>ou je veux être trouvé sur Google</small></span></a>
+        <a class="path" href="#deja-un-site">${icon('bolt')}<span><strong>J’ai déjà un site</strong><small>à refaire, adapter ou entretenir</small></span></a>
+        <a class="path" href="#toutes">${icon('search')}<span><strong>J’ai un autre besoin</strong><small>application, design, conseil…</small></span></a>
+      </nav>`;
+  const careCard = (o) => `
+          <li class="care" id="offre-${o.id}">
+            <span class="care__ico">${icon(o.icon)}</span>
+            <h3 class="care__t">${esc(o.title)}</h3>
+            <p class="care__price price">${priceHtml(o.svc)}</p>
+            <p class="care__pitch">${esc(o.pitch)}</p>
+            <a class="text-link care__go" href="/devis">Demander un devis${icon('arrow')}</a>
+          </li>`;
+  const main = `${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', 'Les prix sont « à partir de » : le prix final dépend de votre projet et il est fixé dans le devis, avant de commencer. Le premier échange est gratuit.', paths)}
+    <section class="wrap block" id="offres" aria-labelledby="top-t">
+      <h2 class="block__t" id="top-t">Les offres les plus demandées</h2>
+      <p class="block__lead">Ce que les commerces, artisans et indépendants me demandent le plus souvent.</p>${offerGrid('h3')}
+    </section>
+
+    <section class="wrap block" id="deja-un-site" aria-labelledby="care-t">
+      <h2 class="block__t" id="care-t">Vous avez déjà un site ?</h2>
+      <p class="block__lead">Pas besoin de tout refaire : je peux l’améliorer, l’adapter au téléphone ou m’en occuper pour vous.</p>
+      <ul class="cares">${careOffers.map(careCard).join('')}
+      </ul>
     </section>
 
     <section class="wrap" aria-label="Premier échange gratuit">
@@ -883,13 +919,13 @@ function tarifsPage() {
       </div>
     </section>
 
-    <section class="wrap block catalog" aria-labelledby="all-t">
-      <h2 class="block__t" id="all-t">Toutes les prestations</h2>
-      <p class="block__lead">${T.SERVICES.length} prestations, classées par besoin. Touchez une ligne pour voir le détail.</p>
+    <section class="wrap block catalog" id="toutes" aria-labelledby="all-t">
+      <h2 class="block__t" id="all-t">Un autre besoin ?</h2>
+      <p class="block__lead">Design, statistiques, application sur mesure, conseil… Tapez ce que vous cherchez, ou ouvrez la liste complète.</p>
       <div class="search js-only" role="search">
         ${icon('search', 'ico search__ico')}
         <label class="sr-only" for="tarifSearch">Rechercher une prestation</label>
-        <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Rechercher : site, boutique, réservation…">
+        <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Rechercher : logo, application, statistiques…">
         <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
       </div>
       <p class="search__status" id="tarifStatus" role="status" aria-live="polite"></p>
@@ -897,13 +933,18 @@ function tarifsPage() {
         <p>Votre besoin est peut-être spécifique : parlons-en.</p>
         <p class="cta__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit${icon('arrow')}</a><a class="btn" href="/contact">Me contacter</a></p>
       </div>
-      <nav class="cat-nav" aria-label="Catégories">${T.CATEGORIES.map(c => `<a class="chip" href="#${c.id}">${esc(c.label)}</a>`).join('')}</nav>
-      <div class="cats">${main_.map(catBlock).join('')}
-      </div>
-      <h2 class="block__t block__t--sub" id="tech-t">Projets techniques</h2>
-      <p class="block__lead">Pour les entreprises qui ont déjà une équipe ou un logiciel : applications sur mesure, serveur, mise en production.</p>
-      <div class="cats">${tech.map(catBlock).join('')}
-      </div>
+      <details class="all" id="liste">
+        <summary class="all__sum"><span>Voir toutes les prestations</span><span class="all__n">${T.SERVICES.length}</span>${icon('chevron', 'ico all__chev')}</summary>
+        <div class="all__body">
+          <nav class="cat-nav" aria-label="Catégories">${T.CATEGORIES.map(c => `<a class="chip" href="#${c.id}">${esc(c.label)}</a>`).join('')}</nav>
+          <div class="cats">${main_.map(catBlock).join('')}
+          </div>
+          <h3 class="block__t block__t--sub" id="tech-t">Projets techniques</h3>
+          <p class="block__lead">Pour les entreprises qui ont déjà une équipe ou un logiciel : applications sur mesure, serveur, mise en production.</p>
+          <div class="cats">${tech.map(catBlock).join('')}
+          </div>
+        </div>
+      </details>
       <p class="note">${esc(vatNote)}</p>
     </section>
 ${ctaBand('Vous hésitez entre deux offres ?', 'Décrivez votre activité en quelques clics : je vous conseille la solution la plus simple pour votre budget.')}`;
@@ -1000,15 +1041,24 @@ function contactPage() {
     description: `Contacter ${NAME}, ${JOB.toLowerCase()} en ${AREA} : téléphone ${TEL_LOCAL}, WhatsApp, Instagram ${IG_HANDLE}, e-mail ou formulaire. Premier échange gratuit.`,
     crumbs: [{ name: 'Contact', path: 'contact' }],
   };
-  const main = `${pageHead('Contact', 'Parlons de votre projet', 'Un premier échange gratuit et sans engagement. Appelez, écrivez sur WhatsApp ou laissez un message : je vous réponds sous 48 h.')}
-    <div class="wrap contact">
-      <section aria-labelledby="ways-t">
-        <h2 class="block__t" id="ways-t">Me joindre directement</h2>
-        <ul class="ways ways--col">${contactWays().map(wayCard).join('')}
-        </ul>
-        <p class="contact__devis">Vous préférez décrire votre projet étape par étape ? <a class="text-link" href="/devis">Demander un devis${icon('arrow')}</a></p>
-      </section>
-      <section class="form-card" aria-labelledby="form-t">
+  // Le formulaire au centre, les six moyens de contact en bulles autour :
+  // trois à gauche, trois à droite (ordinateur) ; trois au-dessus, trois
+  // en dessous (téléphone), les plus directs en premier.
+  const ways = contactWays();
+  if (ways.length !== 6) throw new Error('contact : 6 bulles attendues (TikTok manquant ?)');
+  const orb = (w, i) => `
+          <li style="--i:${i}"><a class="orb orb--${w.key}" href="${esc(w.href)}"${w.ext ? ' target="_blank" rel="noopener"' : ''}>
+            <span class="orb__core">${icon(w.ic)}</span>
+            <span class="orb__l">${esc(w.label)}</span>
+            <span class="orb__v">${esc(w.orb || w.value)}</span>
+          </a></li>`;
+  const main = `${pageHead('Contact', 'Parlons de votre projet', 'Un premier échange gratuit et sans engagement. Choisissez le moyen le plus simple pour vous : je vous réponds sous 48 h.')}
+    <div class="wrap orbit">
+      <span class="orbit__ring" aria-hidden="true"></span>
+      <h2 class="sr-only" id="ways-t">Me joindre directement</h2>
+      <ul class="orbit__side orbit__side--l" aria-labelledby="ways-t">${ways.slice(0, 3).map(orb).join('')}
+      </ul>
+      <section class="form-card orbit__form" aria-labelledby="form-t">
         <h2 class="block__t" id="form-t">Envoyer un message</h2>
         <p class="form-card__lead">Quelques lignes suffisent. Je vous réponds par e-mail ou par téléphone.</p>
         <form class="cform" id="contact-form" action="${MAIL_HREF}" method="post" enctype="text/plain">
@@ -1020,7 +1070,10 @@ function contactPage() {
           <p class="cform__note">Vos coordonnées servent uniquement à vous répondre. <a href="/confidentialite">Confidentialité</a></p>
           <p class="form-status" role="status" aria-live="polite"></p>
         </form>
+        <p class="contact__devis">Vous préférez décrire votre projet étape par étape ? <a class="text-link" href="/devis">Demander un devis${icon('arrow')}</a></p>
       </section>
+      <ul class="orbit__side orbit__side--r" aria-labelledby="ways-t">${ways.slice(3).map((w, i) => orb(w, i + 3)).join('')}
+      </ul>
     </div>`;
   const jsonld = graph(page, { '@type': 'ContactPage', name: page.title, description: page.description, mainEntity: { '@id': BUSINESS_ID } });
   return [page, shell(page, { main, jsonld, scripts: ['/js/contact-form.js'] })];

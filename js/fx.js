@@ -23,9 +23,9 @@
 
   // ── Apparitions au défilement ─────────────────────────
   var REVEAL = [
-    '.sec__head > *', '.problem', '.offer', '.case', '.process__s', '.about__photo', '.about__txt > *', '.adv',
-    '.faq__i', '.cta__in > *', '.way', '.mini', '.block__t', '.proj__media', '.proj__s', '.shots > *', '.cat',
-    '.free', '.form-card', '.contact > *', '.tl__list > li', '.about-page > *', '.sec__more', '.legal > *', '.cta__row > *',
+    '.sec__head > *', '.problem', '.offer', '.cases > .case', '.care', '.rail__track', '.process__s', '.about__photo', '.about__txt > *', '.adv',
+    '.faq__i', '.cta__in > *', '.way', '.block__t', '.proj__media', '.proj__s', '.shots > *', '.cat',
+    '.free', '.orbit__form', '.tl__list > li', '.about-page > *', '.sec__more', '.legal > *', '.cta__row > *',
   ].join(',');
   var fold = innerHeight * 0.94;
   var targets = Array.prototype.filter.call(doc.querySelectorAll(REVEAL), function (el) {
@@ -66,7 +66,7 @@
 
   // ── Lumière qui suit le pointeur sur les cartes ───────
   if (fine) {
-    var CARDS = '.problem, .offer, .case, .way, .mini__a, .faq__i, .proj__s, .cat, .form-card, .free';
+    var CARDS = '.problem, .offer, .case, .care, .way, .faq__i, .proj__s, .cat, .form-card, .free';
     doc.querySelectorAll(CARDS).forEach(function (c) { c.classList.add('spot'); });
     doc.addEventListener('pointermove', function (e) {
       var c = e.target.closest && e.target.closest('.spot');
@@ -179,7 +179,7 @@
       if (e.target === hero) heroOn = e.isIntersecting;
     });
   });
-  doc.querySelectorAll('[data-hero], .ticker, .cta').forEach(function (el) { pause.observe(el); });
+  doc.querySelectorAll('[data-hero], .ticker, .cta, .orbit').forEach(function (el) { pause.observe(el); });
   heroOn = !!hero;
 
   root.classList.add('fxr');

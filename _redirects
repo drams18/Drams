@@ -11,3 +11,11 @@
 /competences             /a-propos         301
 /tarif                   /tarifs           301
 /cv                      /assets/CV.pdf    302
+# Projets retirés du site le 30/10/2026 (toujours visibles dans le mode
+# aventure) : leurs anciennes pages renvoient vers les réalisations.
+/realisations/pool-party   /realisations     301
+/realisations/prospectly   /realisations     301
+/realisations/infinitia    /realisations     301
+/realisations/hexagon      /realisations     301
+/realisations/crowdin      /realisations     301
+/realisations/badn         /realisations     301

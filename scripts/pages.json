@@ -15,6 +15,11 @@
     "index": true
   },
   {
+    "file": "realisations/skywalk.html",
+    "path": "realisations/skywalk",
+    "index": true
+  },
+  {
     "file": "realisations/islaah.html",
     "path": "realisations/islaah",
     "index": true
@@ -25,53 +30,18 @@
     "index": true
   },
   {
-    "file": "realisations/allsab-ms.html",
-    "path": "realisations/allsab-ms",
-    "index": true
-  },
-  {
     "file": "realisations/ilamiria.html",
     "path": "realisations/ilamiria",
     "index": true
   },
   {
-    "file": "realisations/badn.html",
-    "path": "realisations/badn",
-    "index": true
-  },
-  {
-    "file": "realisations/pool-party.html",
-    "path": "realisations/pool-party",
-    "index": true
-  },
-  {
-    "file": "realisations/skywalk.html",
-    "path": "realisations/skywalk",
+    "file": "realisations/allsab-ms.html",
+    "path": "realisations/allsab-ms",
     "index": true
   },
   {
     "file": "realisations/gexp.html",
     "path": "realisations/gexp",
-    "index": true
-  },
-  {
-    "file": "realisations/hexagon.html",
-    "path": "realisations/hexagon",
-    "index": true
-  },
-  {
-    "file": "realisations/prospectly.html",
-    "path": "realisations/prospectly",
-    "index": true
-  },
-  {
-    "file": "realisations/infinitia.html",
-    "path": "realisations/infinitia",
-    "index": true
-  },
-  {
-    "file": "realisations/crowdin.html",
-    "path": "realisations/crowdin",
     "index": true
   },
   {

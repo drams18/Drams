@@ -341,9 +341,15 @@
       <p class="kicker">Tarifs</p>
       <h1 class="phead__t">Tarifs : des prix clairs, affichés d’avance</h1>
       <p class="phead__lead">Les prix sont « à partir de » : le prix final dépend de votre projet et il est fixé dans le devis, avant de commencer. Le premier échange est gratuit.</p>
+      <nav class="paths" aria-label="Votre situation">
+        <a class="path" href="#offres"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-site"/></svg><span><strong>Je n’ai pas encore de site</strong><small>ou je veux être trouvé sur Google</small></span></a>
+        <a class="path" href="#deja-un-site"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bolt"/></svg><span><strong>J’ai déjà un site</strong><small>à refaire, adapter ou entretenir</small></span></a>
+        <a class="path" href="#toutes"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-search"/></svg><span><strong>J’ai un autre besoin</strong><small>application, design, conseil…</small></span></a>
+      </nav>
     </header>
-    <section class="wrap block" aria-labelledby="top-t">
+    <section class="wrap block" id="offres" aria-labelledby="top-t">
       <h2 class="block__t" id="top-t">Les offres les plus demandées</h2>
+      <p class="block__lead">Ce que les commerces, artisans et indépendants me demandent le plus souvent.</p>
         <ul class="offers">
           <li class="offer" id="offre-fiche-google">
             <span class="offer__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg></span>
@@ -396,6 +402,41 @@
         </ul>
     </section>
 
+    <section class="wrap block" id="deja-un-site" aria-labelledby="care-t">
+      <h2 class="block__t" id="care-t">Vous avez déjà un site ?</h2>
+      <p class="block__lead">Pas besoin de tout refaire : je peux l’améliorer, l’adapter au téléphone ou m’en occuper pour vous.</p>
+      <ul class="cares">
+          <li class="care" id="offre-refonte">
+            <span class="care__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-site"/></svg></span>
+            <h3 class="care__t">Refonte de site</h3>
+            <p class="care__price price"><span class="price__from">à partir de</span> <span class="price__amount">600 €</span></p>
+            <p class="care__pitch">Votre site actuel refait : plus moderne, plus clair, agréable sur téléphone.</p>
+            <a class="text-link care__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          </li>
+          <li class="care" id="offre-mobile">
+            <span class="care__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mobile"/></svg></span>
+            <h3 class="care__t">Adaptation au téléphone</h3>
+            <p class="care__price price"><span class="price__from">à partir de</span> <span class="price__amount">300 €</span></p>
+            <p class="care__pitch">Votre site rendu lisible et agréable sur téléphone et tablette.</p>
+            <a class="text-link care__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          </li>
+          <li class="care" id="offre-maintenance">
+            <span class="care__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-calendar"/></svg></span>
+            <h3 class="care__t">Suivi mensuel</h3>
+            <p class="care__price price"><span class="price__from">à partir de</span> <span class="price__amount">150 €</span> <span class="price__unit">/ mois</span></p>
+            <p class="care__pitch">Mises à jour, correctifs et petites évolutions, chaque mois.</p>
+            <a class="text-link care__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          </li>
+          <li class="care" id="offre-depannage">
+            <span class="care__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bolt"/></svg></span>
+            <h3 class="care__t">Dépannage</h3>
+            <p class="care__price price"><span class="price__from">à partir de</span> <span class="price__amount">60 €</span> <span class="price__unit">/ h</span></p>
+            <p class="care__pitch">Un bug, une erreur, un site en panne : je trouve et je corrige.</p>
+            <a class="text-link care__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          </li>
+      </ul>
+    </section>
+
     <section class="wrap" aria-label="Premier échange gratuit">
       <div class="free">
         <span class="free__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg></span>
@@ -408,13 +449,13 @@
       </div>
     </section>
 
-    <section class="wrap block catalog" aria-labelledby="all-t">
-      <h2 class="block__t" id="all-t">Toutes les prestations</h2>
-      <p class="block__lead">74 prestations, classées par besoin. Touchez une ligne pour voir le détail.</p>
+    <section class="wrap block catalog" id="toutes" aria-labelledby="all-t">
+      <h2 class="block__t" id="all-t">Un autre besoin ?</h2>
+      <p class="block__lead">Design, statistiques, application sur mesure, conseil… Tapez ce que vous cherchez, ou ouvrez la liste complète.</p>
       <div class="search js-only" role="search">
         <svg class="ico search__ico" aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
         <label class="sr-only" for="tarifSearch">Rechercher une prestation</label>
-        <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Rechercher : site, boutique, réservation…">
+        <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Rechercher : logo, application, statistiques…">
         <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
       </div>
       <p class="search__status" id="tarifStatus" role="status" aria-live="polite"></p>
@@ -422,8 +463,11 @@
         <p>Votre besoin est peut-être spécifique : parlons-en.</p>
         <p class="cta__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn" href="/contact">Me contacter</a></p>
       </div>
-      <nav class="cat-nav" aria-label="Catégories"><a class="chip" href="#site">Site internet</a><a class="chip" href="#vendre">Vendre en ligne</a><a class="chip" href="#modules">Modules &amp; fonctionnalités</a><a class="chip" href="#visibilite">Visibilité &amp; statistiques</a><a class="chip" href="#design">Design &amp; expérience</a><a class="chip" href="#suivi">Maintenance et renfort</a><a class="chip" href="#creatif">Créatif &amp; interactif</a><a class="chip" href="#conseil">Conseil &amp; pilotage</a><a class="chip" href="#app">Application et API</a><a class="chip" href="#infra">Infra, DevOps &amp; qualité</a></nav>
-      <div class="cats">
+      <details class="all" id="liste">
+        <summary class="all__sum"><span>Voir toutes les prestations</span><span class="all__n">74</span><svg class="ico all__chev" aria-hidden="true" focusable="false"><use href="#i-chevron"/></svg></summary>
+        <div class="all__body">
+          <nav class="cat-nav" aria-label="Catégories"><a class="chip" href="#site">Site internet</a><a class="chip" href="#vendre">Vendre en ligne</a><a class="chip" href="#modules">Modules &amp; fonctionnalités</a><a class="chip" href="#visibilite">Visibilité &amp; statistiques</a><a class="chip" href="#design">Design &amp; expérience</a><a class="chip" href="#suivi">Maintenance et renfort</a><a class="chip" href="#creatif">Créatif &amp; interactif</a><a class="chip" href="#conseil">Conseil &amp; pilotage</a><a class="chip" href="#app">Application et API</a><a class="chip" href="#infra">Infra, DevOps &amp; qualité</a></nav>
+          <div class="cats">
           <section class="cat" id="site" aria-labelledby="cat-site">
             <h3 class="cat__t" id="cat-site">Site internet<span>Vitrine, WordPress, refonte, accessibilité</span></h3>
             <ul class="svc-list">
@@ -914,10 +958,10 @@
               </li>
             </ul>
           </section>
-      </div>
-      <h2 class="block__t block__t--sub" id="tech-t">Projets techniques</h2>
-      <p class="block__lead">Pour les entreprises qui ont déjà une équipe ou un logiciel : applications sur mesure, serveur, mise en production.</p>
-      <div class="cats">
+          </div>
+          <h3 class="block__t block__t--sub" id="tech-t">Projets techniques</h3>
+          <p class="block__lead">Pour les entreprises qui ont déjà une équipe ou un logiciel : applications sur mesure, serveur, mise en production.</p>
+          <div class="cats">
           <section class="cat" id="app" aria-labelledby="cat-app">
             <h3 class="cat__t" id="cat-app">Application et API<span>Web, mobile, SaaS, backend</span></h3>
             <ul class="svc-list">
@@ -1042,7 +1086,9 @@
               </li>
             </ul>
           </section>
-      </div>
+          </div>
+        </div>
+      </details>
       <p class="note">Prix nets : TVA non applicable, article 293 B du CGI. Le prix final dépend de votre projet, il est fixé dans le devis avant de commencer.</p>
     </section>
 

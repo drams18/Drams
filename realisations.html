@@ -135,20 +135,20 @@
           {
             "@type": "ListItem",
             "position": 2,
+            "url": "https://arphandrame.fr/realisations/skywalk",
+            "name": "SkyWalk"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
             "url": "https://arphandrame.fr/realisations/islaah",
             "name": "ISLAAH"
           },
           {
             "@type": "ListItem",
-            "position": 3,
+            "position": 4,
             "url": "https://arphandrame.fr/realisations/oneday",
             "name": "OneDay"
-          },
-          {
-            "@type": "ListItem",
-            "position": 4,
-            "url": "https://arphandrame.fr/realisations/allsab-ms",
-            "name": "Allsab-MS"
           },
           {
             "@type": "ListItem",
@@ -159,50 +159,14 @@
           {
             "@type": "ListItem",
             "position": 6,
-            "url": "https://arphandrame.fr/realisations/badn",
-            "name": "BADN"
+            "url": "https://arphandrame.fr/realisations/allsab-ms",
+            "name": "Allsab-MS"
           },
           {
             "@type": "ListItem",
             "position": 7,
-            "url": "https://arphandrame.fr/realisations/pool-party",
-            "name": "Pool Party Experience"
-          },
-          {
-            "@type": "ListItem",
-            "position": 8,
-            "url": "https://arphandrame.fr/realisations/skywalk",
-            "name": "SkyWalk"
-          },
-          {
-            "@type": "ListItem",
-            "position": 9,
             "url": "https://arphandrame.fr/realisations/gexp",
             "name": "GEXP"
-          },
-          {
-            "@type": "ListItem",
-            "position": 10,
-            "url": "https://arphandrame.fr/realisations/hexagon",
-            "name": "Hexagon"
-          },
-          {
-            "@type": "ListItem",
-            "position": 11,
-            "url": "https://arphandrame.fr/realisations/prospectly",
-            "name": "Plateforme de recherche de prospects"
-          },
-          {
-            "@type": "ListItem",
-            "position": 12,
-            "url": "https://arphandrame.fr/realisations/infinitia",
-            "name": "Infinitia"
-          },
-          {
-            "@type": "ListItem",
-            "position": 13,
-            "url": "https://arphandrame.fr/realisations/crowdin",
-            "name": "Crowdin (clone)"
           }
         ]
       }
@@ -290,174 +254,173 @@
     <header class="phead wrap">
       <p class="kicker">Réalisations</p>
       <h1 class="phead__t">Ce que j’ai construit</h1>
-      <p class="phead__lead">Chaque projet expliqué simplement : le besoin, ce que j’ai fait, et ce que ça permet aujourd’hui.</p>
+      <p class="phead__lead">Chaque projet expliqué simplement : le besoin, et ce que ça permet aujourd’hui.</p>
     </header>
-    <div class="wrap">
-      <div class="filters js-only" role="group" aria-label="Filtrer par type de projet">
-        <button type="button" class="chip" data-filter="" aria-pressed="true">Tous</button>
-        <button type="button" class="chip" data-filter="vitrine" aria-pressed="false">Site vitrine</button>
-        <button type="button" class="chip" data-filter="reservation" aria-pressed="false">Réservation</button>
-        <button type="button" class="chip" data-filter="mobile" aria-pressed="false">Application mobile</button>
-        <button type="button" class="chip" data-filter="interne" aria-pressed="false">Outil interne</button>
-        <button type="button" class="chip" data-filter="plateforme" aria-pressed="false">Plateforme web</button>
-      </div>
-      <p class="sr-only" role="status" data-filter-status></p>
-
-      <section class="block" aria-labelledby="une-t">
-        <h2 class="block__t" id="une-t">À la une</h2>
-        <ul class="cases">
-          <li class="case" data-kind="reservation">
-            <a class="case__media" href="/realisations/wild-kedougou" tabindex="-1" aria-hidden="true">
-              <figure class="mock mock--browser">
+    <div class="wrap rails">
+      <section class="rail" id="sites" aria-labelledby="rail-sites-t" data-rail>
+        <header class="rail__head">
+          <div>
+            <h2 class="block__t" id="rail-sites-t">Sites internet<span class="rail__n">2</span></h2>
+            <p class="block__lead">Réservation en ligne, comptes, contenus : des sites complets, en ligne.</p>
+          </div>
+          <div class="rail__nav js-only">
+            <button type="button" class="icon-btn rail__btn" data-rail-prev aria-controls="rail-sites" aria-label="Projet précédent"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-back"/></svg></button>
+            <button type="button" class="icon-btn rail__btn" data-rail-next aria-controls="rail-sites" aria-label="Projet suivant"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
+          </div>
+        </header>
+        <ul class="rail__track" id="rail-sites" tabindex="0" aria-label="Sites internet : faites défiler">
+            <li class="case rail__slide">
+              <a class="case__media" href="/realisations/wild-kedougou" tabindex="-1" aria-hidden="true">
+                <figure class="mock mock--browser">
               <div class="mock__bar" aria-hidden="true"><i></i><i></i><i></i><span>wild-kedougou-experience.hitmind-pro.workers.dev</span></div>
-              <img src="/assets/img/projets/wild-kedougou-home.webp" srcset="/assets/img/projets/wild-kedougou.webp 720w, /assets/img/projets/wild-kedougou-home.webp 1600w" sizes="(max-width: 760px) 92vw, 560px" alt="Page d'accueil" width="1600" height="778" loading="lazy" decoding="async">
+              <img src="/assets/img/projets/wild-kedougou-home.webp" srcset="/assets/img/projets/wild-kedougou.webp 720w, /assets/img/projets/wild-kedougou-home.webp 1600w" sizes="(max-width: 760px) 86vw, 560px" alt="Page d'accueil" width="1600" height="778" fetchpriority="high" decoding="async">
             </figure>
-            </a>
-            <div class="case__body">
-              <p class="tags"><span class="tag tag--kind">Site de réservation</span><span class="tag">Projet personnel</span></p>
-              <h3 class="case__t"><a href="/realisations/wild-kedougou">Wild Kédougou Experience</a></h3>
-              <dl class="case__dl">
-                <div><dt>Le besoin</dt><dd>Présenter une activité touristique au Sénégal et permettre de réserver en ligne, sans échanges de messages.</dd></div>
-                <div><dt>Ce que j’ai fait</dt><dd>Conçu et développé seul : le site, la réservation, le calendrier des disponibilités, les e-mails de confirmation et le référencement Google.</dd></div>
-                <div><dt>Ce que ça permet</dt><dd>Le visiteur découvre les formules, choisit une date libre et réserve depuis son téléphone. Les disponibilités se mettent à jour dans le calendrier et une confirmation part par e-mail.</dd></div>
-              </dl>
-              <p class="case__links"><a class="btn btn--sm" href="/realisations/wild-kedougou">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Voir le site en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
-            </div>
-          </li>
-          <li class="case" data-kind="mobile">
-            <a class="case__media" href="/realisations/islaah" tabindex="-1" aria-hidden="true">
-              <div class="mocks mocks--1">
+              </a>
+              <div class="case__body">
+                <p class="tags"><span class="tag tag--kind">Site de réservation</span><span class="tag">Projet personnel</span></p>
+                <h3 class="case__t"><a href="/realisations/wild-kedougou">Wild Kédougou Experience</a></h3>
+                <dl class="case__dl">
+                  <div><dt>Le besoin</dt><dd>Présenter une activité touristique au Sénégal et permettre de réserver en ligne, sans échanges de messages.</dd></div>
+                  <div><dt>Ce que ça permet</dt><dd>Le visiteur découvre les formules, choisit une date libre et réserve depuis son téléphone. Les disponibilités se mettent à jour dans le calendrier et une confirmation part par e-mail.</dd></div>
+                </dl>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/wild-kedougou">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Voir le site en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </div>
+            </li>
+            <li class="case rail__slide">
+              <a class="case__media" href="/realisations/skywalk" tabindex="-1" aria-hidden="true">
+                <figure class="mock mock--browser">
+              <div class="mock__bar" aria-hidden="true"><i></i><i></i><i></i><span>skywalk-chi.vercel.app</span></div>
+              <img src="/assets/img/projets/skywalk-home-logged-out.webp" srcset="/assets/img/projets/skywalk.webp 720w, /assets/img/projets/skywalk-home-logged-out.webp 1600w" sizes="(max-width: 760px) 86vw, 560px" alt="Page d'accueil" width="1600" height="775" loading="lazy" decoding="async">
+            </figure>
+              </a>
+              <div class="case__body">
+                <p class="tags"><span class="tag tag--kind">Plateforme web</span><span class="tag">Projet personnel</span></p>
+                <h3 class="case__t"><a href="/realisations/skywalk">SkyWalk</a></h3>
+                <dl class="case__dl">
+                  <div><dt>Le besoin</dt><dd>Préparer une expatriation oblige à croiser des informations dispersées : visa, démarches, budget, emploi.</dd></div>
+                  <div><dt>Ce que ça permet</dt><dd>Une liste de démarches personnalisée avec rappels, une carte des destinations, le coût de la vie comparé, des offres d'emploi et une communauté pour échanger. En français et en anglais.</dd></div>
+                </dl>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/skywalk">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://skywalk-chi.vercel.app/" target="_blank" rel="noopener">Voir le site en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </div>
+            </li>
+        </ul>
+        <div class="rail__dots js-only" aria-hidden="true"><i></i><i></i></div>
+      </section>
+      <section class="rail" id="apps" aria-labelledby="rail-apps-t" data-rail>
+        <header class="rail__head">
+          <div>
+            <h2 class="block__t" id="rail-apps-t">Applications mobiles<span class="rail__n">3</span></h2>
+            <p class="block__lead">Des applications qu’on installe sur son téléphone, dont deux publiées sur l’App Store.</p>
+          </div>
+          <div class="rail__nav js-only">
+            <button type="button" class="icon-btn rail__btn" data-rail-prev aria-controls="rail-apps" aria-label="Projet précédent"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-back"/></svg></button>
+            <button type="button" class="icon-btn rail__btn" data-rail-next aria-controls="rail-apps" aria-label="Projet suivant"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
+          </div>
+        </header>
+        <ul class="rail__track" id="rail-apps" tabindex="0" aria-label="Applications mobiles : faites défiler">
+            <li class="case rail__slide">
+              <a class="case__media" href="/realisations/islaah" tabindex="-1" aria-hidden="true">
+                <div class="mocks mocks--2">
               <figure class="mock mock--phone"><img src="/assets/img/projets/islaah-home-logged-in.webp" alt="Accueil : les modes de jeu" width="370" height="800" loading="lazy" decoding="async"></figure>
+              <figure class="mock mock--phone"><img src="/assets/img/projets/islaah-onboarding.webp" alt="Écran de bienvenue" width="370" height="800" loading="lazy" decoding="async"></figure>
             </div>
-            </a>
-            <div class="case__body">
-              <p class="tags"><span class="tag tag--kind">Application iPhone</span><span class="tag">Projet personnel</span></p>
-              <h3 class="case__t"><a href="/realisations/islaah">ISLAAH</a></h3>
-              <dl class="case__dl">
-                <div><dt>Le besoin</dt><dd>S'entraîner à reconnaître les versets du Coran, de façon ludique, sur son téléphone.</dd></div>
-                <div><dt>Ce que j’ai fait</dt><dd>Réalisé seul : l'application iPhone, le serveur qui l'alimente et la publication sur l'App Store.</dd></div>
-                <div><dt>Ce que ça permet</dt><dd>On écoute des récitations, on joue à plusieurs modes de quiz et on suit sa progression. L'application se télécharge sur l'App Store.</dd></div>
-              </dl>
-              <p class="case__links"><a class="btn btn--sm" href="/realisations/islaah">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener">Voir sur l’App Store<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
-            </div>
-          </li>
-          <li class="case" data-kind="mobile">
-            <a class="case__media" href="/realisations/oneday" tabindex="-1" aria-hidden="true">
-              <div class="mocks mocks--1">
+              </a>
+              <div class="case__body">
+                <p class="tags"><span class="tag tag--kind">Application iPhone</span><span class="tag">Projet personnel</span></p>
+                <h3 class="case__t"><a href="/realisations/islaah">ISLAAH</a></h3>
+                <dl class="case__dl">
+                  <div><dt>Le besoin</dt><dd>S'entraîner à reconnaître les versets du Coran, de façon ludique, sur son téléphone.</dd></div>
+                  <div><dt>Ce que ça permet</dt><dd>On écoute des récitations, on joue à plusieurs modes de quiz et on suit sa progression. L'application se télécharge sur l'App Store.</dd></div>
+                </dl>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/islaah">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener">Voir sur l’App Store<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </div>
+            </li>
+            <li class="case rail__slide">
+              <a class="case__media" href="/realisations/oneday" tabindex="-1" aria-hidden="true">
+                <div class="mocks mocks--2">
               <figure class="mock mock--phone"><img src="/assets/img/projets/oneday-home-program.webp" alt="Journée du jour avec un programme appliqué" width="440" height="954" loading="lazy" decoding="async"></figure>
+              <figure class="mock mock--phone"><img src="/assets/img/projets/oneday-home-without-program.webp" alt="Journée vide : ajout d'une tâche" width="440" height="956" loading="lazy" decoding="async"></figure>
             </div>
-            </a>
-            <div class="case__body">
-              <p class="tags"><span class="tag tag--kind">Application installable</span><span class="tag">Projet personnel</span></p>
-              <h3 class="case__t"><a href="/realisations/oneday">OneDay</a></h3>
-              <dl class="case__dl">
-                <div><dt>Le besoin</dt><dd>Organiser ses journées et tenir ses habitudes, avec des rappels sur iPhone.</dd></div>
-                <div><dt>Ce que j’ai fait</dt><dd>Réalisé seul : une application qui s'installe depuis le navigateur, fonctionne sans connexion et envoie des rappels.</dd></div>
-                <div><dt>Ce que ça permet</dt><dd>La veille, on prépare sa journée. Le matin, on ne voit que ce qui reste à faire, avec un rappel à l'heure de chaque tâche.</dd></div>
-              </dl>
-              <p class="case__links"><a class="btn btn--sm" href="/realisations/oneday">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener">Voir le site en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </a>
+              <div class="case__body">
+                <p class="tags"><span class="tag tag--kind">Application installable</span><span class="tag">Projet personnel</span></p>
+                <h3 class="case__t"><a href="/realisations/oneday">OneDay</a></h3>
+                <dl class="case__dl">
+                  <div><dt>Le besoin</dt><dd>Organiser ses journées et tenir ses habitudes, avec des rappels sur iPhone.</dd></div>
+                  <div><dt>Ce que ça permet</dt><dd>La veille, on prépare sa journée. Le matin, on ne voit que ce qui reste à faire, avec un rappel à l'heure de chaque tâche.</dd></div>
+                </dl>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/oneday">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener">Voir le site en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </div>
+            </li>
+            <li class="case rail__slide">
+              <a class="case__media" href="/realisations/ilamiria" tabindex="-1" aria-hidden="true">
+                <div class="mocks mocks--2">
+              <figure class="mock mock--phone"><img src="/assets/img/projets/ilamiria-onboarding-2.webp" alt="Notification d'un sujet tendance" width="313" height="680" loading="lazy" decoding="async"></figure>
+              <figure class="mock mock--phone"><img src="/assets/img/projets/ilamiria-onboarding-4.webp" alt="Idées de contenu personnalisées par l'IA" width="313" height="680" loading="lazy" decoding="async"></figure>
             </div>
-          </li>
-          <li class="case" data-kind="interne">
-            <a class="case__media" href="/realisations/allsab-ms" tabindex="-1" aria-hidden="true">
-              <figure class="mock mock--browser">
+              </a>
+              <div class="case__body">
+                <p class="tags"><span class="tag tag--kind">Application iPhone</span><span class="tag">En équipe chez DevPhantom</span></p>
+                <h3 class="case__t"><a href="/realisations/ilamiria">Ilamiria</a></h3>
+                <dl class="case__dl">
+                  <div><dt>Le besoin</dt><dd>Une application mobile créée chez DevPhantom.</dd></div>
+                  <div><dt>Ce que ça permet</dt><dd>Elle est publiée sur l'App Store. Ses écrans présentent des alertes sur les sujets tendance et des idées de contenu proposées par l'IA.</dd></div>
+                </dl>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/ilamiria">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://apps.apple.com/fr/app/ilamiria/id6749936753" target="_blank" rel="noopener">Voir sur l’App Store<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </div>
+            </li>
+        </ul>
+        <div class="rail__dots js-only" aria-hidden="true"><i></i><i></i><i></i></div>
+      </section>
+      <section class="rail" id="outils" aria-labelledby="rail-outils-t" data-rail>
+        <header class="rail__head">
+          <div>
+            <h2 class="block__t" id="rail-outils-t">Outils pour les entreprises<span class="rail__n">2</span></h2>
+            <p class="block__lead">Plannings, factures, rapports : des outils de gestion réalisés en équipe pour des entreprises.</p>
+          </div>
+          <div class="rail__nav js-only">
+            <button type="button" class="icon-btn rail__btn" data-rail-prev aria-controls="rail-outils" aria-label="Projet précédent"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-back"/></svg></button>
+            <button type="button" class="icon-btn rail__btn" data-rail-next aria-controls="rail-outils" aria-label="Projet suivant"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
+          </div>
+        </header>
+        <ul class="rail__track" id="rail-outils" tabindex="0" aria-label="Outils pour les entreprises : faites défiler">
+            <li class="case rail__slide">
+              <a class="case__media" href="/realisations/allsab-ms" tabindex="-1" aria-hidden="true">
+                <figure class="mock mock--browser">
               <div class="mock__bar" aria-hidden="true"><i></i><i></i><i></i><span>allsab-ms.com</span></div>
-              <img src="/assets/img/projets/allsab-ms-admin.webp" srcset="/assets/img/projets/allsab-ms.webp 720w, /assets/img/projets/allsab-ms-admin.webp 1600w" sizes="(max-width: 760px) 92vw, 560px" alt="Tableau de bord de l'intranet : pointages, congés, remboursements, planning" width="1600" height="777" loading="lazy" decoding="async">
+              <img src="/assets/img/projets/allsab-ms-admin.webp" srcset="/assets/img/projets/allsab-ms.webp 720w, /assets/img/projets/allsab-ms-admin.webp 1600w" sizes="(max-width: 760px) 86vw, 560px" alt="Tableau de bord de l'intranet : pointages, congés, remboursements, planning" width="1600" height="777" loading="lazy" decoding="async">
             </figure>
-            </a>
-            <div class="case__body">
-              <p class="tags"><span class="tag tag--kind">Outil interne</span><span class="tag">En équipe chez DevPhantom</span></p>
-              <h3 class="case__t"><a href="/realisations/allsab-ms">Allsab-MS</a></h3>
-              <dl class="case__dl">
-                <div><dt>Le besoin</dt><dd>Une entreprise qui met des techniciens à disposition pour des opérations de maintenance devait gérer ses équipes au même endroit.</dd></div>
-                <div><dt>Ce que j’ai fait</dt><dd>Surtout la partie serveur : connexion et droits d'accès, espace administrateur, factures, techniciens, déplacements.</dd></div>
-                <div><dt>Ce que ça permet</dt><dd>Pointages, congés, remboursements et planning se gèrent dans un seul outil en ligne.</dd></div>
-              </dl>
-              <p class="case__links"><a class="btn btn--sm" href="/realisations/allsab-ms">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://allsab-ms.com/" target="_blank" rel="noopener">Voir le site en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
-            </div>
-          </li>
+              </a>
+              <div class="case__body">
+                <p class="tags"><span class="tag tag--kind">Outil interne</span><span class="tag">En équipe chez DevPhantom</span></p>
+                <h3 class="case__t"><a href="/realisations/allsab-ms">Allsab-MS</a></h3>
+                <dl class="case__dl">
+                  <div><dt>Le besoin</dt><dd>Une entreprise qui met des techniciens à disposition pour des opérations de maintenance devait gérer ses équipes au même endroit.</dd></div>
+                  <div><dt>Ce que ça permet</dt><dd>Pointages, congés, remboursements et planning se gèrent dans un seul outil en ligne.</dd></div>
+                </dl>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/allsab-ms">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://allsab-ms.com/" target="_blank" rel="noopener">Voir le site en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </div>
+            </li>
+            <li class="case rail__slide">
+              <a class="case__media" href="/realisations/gexp" tabindex="-1" aria-hidden="true">
+                <figure class="mock mock--browser">
+              <div class="mock__bar" aria-hidden="true"><i></i><i></i><i></i></div>
+              <img src="/assets/img/projets/gexp-dashboard.webp" srcset="/assets/img/projets/gexp.webp 720w, /assets/img/projets/gexp-dashboard.webp 1600w" sizes="(max-width: 760px) 86vw, 560px" alt="Tableau de bord : chiffre d'affaires, commandes et facturation" width="1600" height="770" loading="lazy" decoding="async">
+            </figure>
+              </a>
+              <div class="case__body">
+                <p class="tags"><span class="tag tag--kind">Outil interne</span><span class="tag">En équipe chez DevPhantom</span></p>
+                <h3 class="case__t"><a href="/realisations/gexp">GEXP</a></h3>
+                <dl class="case__dl">
+                  <div><dt>Le besoin</dt><dd>Une entreprise voulait produire ses rapports plus facilement.</dd></div>
+                  <div><dt>Ce que ça permet</dt><dd>Chiffre d'affaires, commandes et facturation se consultent et s'exportent depuis l'outil.</dd></div>
+                </dl>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/gexp">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
+              </div>
+            </li>
         </ul>
+        <div class="rail__dots js-only" aria-hidden="true"><i></i><i></i></div>
       </section>
-
-      <section class="block" aria-labelledby="autres-t">
-        <h2 class="block__t" id="autres-t">Autres projets</h2>
-        <p class="block__lead">Projets d’entreprise réalisés en équipe, projets personnels et projet d’école.</p>
-        <ul class="minis">
-          <li class="mini" data-kind="mobile">
-            <a class="mini__a" href="/realisations/ilamiria">
-              <span class="mini__img mini__img--phone"><img src="/assets/img/projets/ilamiria.webp" alt="" width="313" height="680" loading="lazy" decoding="async"></span>
-              <span class="tags"><span class="tag tag--kind">Application iPhone</span><span class="tag">En équipe chez DevPhantom</span></span>
-              <span class="mini__t">Ilamiria</span>
-              <span class="mini__d">Elle est publiée sur l'App Store. Ses écrans présentent des alertes sur les sujets tendance et des idées de contenu proposées par l'IA.</span>
-            </a>
-          </li>
-          <li class="mini" data-kind="mobile">
-            <a class="mini__a" href="/realisations/badn">
-              <span class="mini__img mini__img--phone"><img src="/assets/img/projets/badn.webp" alt="" width="360" height="781" loading="lazy" decoding="async"></span>
-              <span class="tags"><span class="tag tag--kind">Application mobile</span><span class="tag">En équipe chez DevPhantom</span></span>
-              <span class="mini__t">BADN</span>
-              <span class="mini__d">Le groupe vote pour la date, suit ses sorties à venir, et une personne seule peut rejoindre un groupe.</span>
-            </a>
-          </li>
-          <li class="mini" data-kind="vitrine">
-            <a class="mini__a" href="/realisations/pool-party">
-              <span class="mini__img"><span class="mini__ph" aria-hidden="true">Pool Party Experience</span></span>
-              <span class="tags"><span class="tag tag--kind">Site vitrine</span><span class="tag">Pour un ami</span></span>
-              <span class="mini__t">Pool Party Experience</span>
-              <span class="mini__d">Projet en cours : il n'est pas encore terminé.</span>
-            </a>
-          </li>
-          <li class="mini" data-kind="plateforme">
-            <a class="mini__a" href="/realisations/skywalk">
-              <span class="mini__img"><img src="/assets/img/projets/skywalk.webp" alt="" width="720" height="349" loading="lazy" decoding="async"></span>
-              <span class="tags"><span class="tag tag--kind">Plateforme web</span><span class="tag">Projet personnel</span></span>
-              <span class="mini__t">SkyWalk</span>
-              <span class="mini__d">Une liste de démarches personnalisée avec rappels, une carte des destinations, le coût de la vie comparé, des offres d'emploi et une communauté pour échanger. En français et en anglais.</span>
-            </a>
-          </li>
-          <li class="mini" data-kind="interne">
-            <a class="mini__a" href="/realisations/gexp">
-              <span class="mini__img"><img src="/assets/img/projets/gexp.webp" alt="" width="720" height="347" loading="lazy" decoding="async"></span>
-              <span class="tags"><span class="tag tag--kind">Outil interne</span><span class="tag">En équipe chez DevPhantom</span></span>
-              <span class="mini__t">GEXP</span>
-              <span class="mini__d">Chiffre d'affaires, commandes et facturation se consultent et s'exportent depuis l'outil.</span>
-            </a>
-          </li>
-          <li class="mini" data-kind="interne">
-            <a class="mini__a" href="/realisations/hexagon">
-              <span class="mini__img"><img src="/assets/img/projets/hexagon.webp" alt="" width="720" height="348" loading="lazy" decoding="async"></span>
-              <span class="tags"><span class="tag tag--kind">Outil interne</span><span class="tag">En équipe chez DevPhantom</span></span>
-              <span class="mini__t">Hexagon</span>
-              <span class="mini__d">Un espace privé où l'équipe retrouve ses informations et communique.</span>
-            </a>
-          </li>
-          <li class="mini" data-kind="interne">
-            <a class="mini__a" href="/realisations/prospectly">
-              <span class="mini__img"><img src="/assets/img/projets/prospectly.webp" alt="" width="720" height="348" loading="lazy" decoding="async"></span>
-              <span class="tags"><span class="tag tag--kind">Outil de recherche</span><span class="tag">Projet personnel</span></span>
-              <span class="mini__t">Plateforme de recherche de prospects</span>
-              <span class="mini__d">Une recherche affiche la fiche d'un commerce et indique s'il a besoin d'un site.</span>
-            </a>
-          </li>
-          <li class="mini" data-kind="interne">
-            <a class="mini__a" href="/realisations/infinitia">
-              <span class="mini__img"><img src="/assets/img/projets/infinitia.webp" alt="" width="720" height="469" loading="lazy" decoding="async"></span>
-              <span class="tags"><span class="tag tag--kind">Outil de gestion</span><span class="tag">En équipe chez DevPhantom</span></span>
-              <span class="mini__t">Infinitia</span>
-              <span class="mini__d">Projet arrêté : le client a cessé de répondre avant la fin de la partie visible.</span>
-            </a>
-          </li>
-          <li class="mini" data-kind="plateforme">
-            <a class="mini__a" href="/realisations/crowdin">
-              <span class="mini__img"><img src="/assets/img/projets/crowdin.webp" alt="" width="720" height="332" loading="lazy" decoding="async"></span>
-              <span class="tags"><span class="tag tag--kind">Projet d'école</span><span class="tag">En binôme à l'ETNA</span></span>
-              <span class="mini__t">Crowdin (clone)</span>
-              <span class="mini__d">Un propriétaire crée un projet, ajoute les textes à traduire, et des traducteurs les traduisent langue par langue.</span>
-            </a>
-          </li>
-        </ul>
-      </section>
-      <p class="empty" data-filter-empty hidden>Pas encore de projet de ce type ici. <a class="text-link" href="/devis">Parlons du vôtre<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
     </div>
 
     <section class="sec cta cta--band" aria-label="Un projet du même genre ?">
