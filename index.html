@@ -38,6 +38,7 @@
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <link rel="stylesheet" href="/css/site.css">
   <link rel="stylesheet" href="/css/vitrine.css">
+  <link rel="stylesheet" href="/css/fx.css">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -253,31 +254,50 @@
   </header>
 
   <main id="main" tabindex="-1">
-    <section class="hero" aria-labelledby="hero-t">
+    <section class="hero" aria-labelledby="hero-t" data-hero>
+      <div class="hero__bg" aria-hidden="true">
+        <span class="aurora aurora--1"></span><span class="aurora aurora--2"></span><span class="aurora aurora--3"></span>
+        <span class="hero__floor"></span>
+        <span class="hero__spot"></span>
+        <span class="grain"></span>
+      </div>
       <div class="wrap hero__grid">
         <div class="hero__txt">
           <h1 id="hero-t" class="hero__h1">
             <span class="hero__kicker">Développeur web freelance · Île-de-France</span>
-            <span class="hero__title">Des sites et des outils qui vous amènent <em>des clients</em></span>
+            <span class="hero__title"><span class="w"><span style="--i:0">Des</span></span> <span class="w"><span style="--i:1">sites</span></span> <span class="w"><span style="--i:2">et</span></span> <span class="w"><span style="--i:3">des</span></span> <span class="w"><span style="--i:4">outils</span></span> <span class="w"><span style="--i:5">qui</span></span> <span class="w"><span style="--i:6">vous</span></span> <span class="w"><span style="--i:7">amènent</span></span> <em><span class="w"><span style="--i:8">des</span></span> <span class="w"><span style="--i:9">clients</span></span><svg class="hero__swash" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 17C70 6 160 4 296 12" pathLength="1"/></svg></em></span>
           </h1>
           <p class="hero__lead">Pour les commerces, artisans et indépendants d’Île-de-France. Je vous aide à être trouvé sur Google, à recevoir des réservations en ligne et à gagner du temps sur vos tâches.</p>
           <div class="hero__cta">
-            <a class="btn btn--cta btn--lg" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
-            <a class="btn btn--lg" href="#contact"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>M’appeler / WhatsApp</a>
+            <a class="btn btn--cta btn--lg" href="/devis" data-magnet>Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--lg btn--glass" href="#contact"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>M’appeler / WhatsApp</a>
           </div>
           <p class="hero__trust"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Diagnostic gratuit en 48 h · Île-de-France</p>
         </div>
         <div class="hero__vis" aria-hidden="true">
-          <figure class="mock mock--browser hero__browser">
-            <div class="mock__bar"><i></i><i></i><i></i><span>wild-kedougou-experience</span></div>
-            <img src="/assets/img/projets/wild-kedougou-home.webp" srcset="/assets/img/projets/wild-kedougou.webp 720w, /assets/img/projets/wild-kedougou-home.webp 1600w" sizes="(max-width: 900px) 88vw, 560px" alt="" width="1600" height="778" decoding="async">
-          </figure>
-          <figure class="mock mock--phone hero__phone"><img src="/assets/img/projets/islaah-home-logged-in.webp" alt="" width="370" height="800" decoding="async"></figure>
+          <img class="hero__seal" src="/assets/img/logo.svg" alt="" width="520" height="520" decoding="async">
+          <div class="hero__stage" data-tilt>
+            <figure class="mock mock--browser hero__browser">
+              <div class="mock__bar"><i></i><i></i><i></i><span>wild-kedougou-experience</span></div>
+              <img src="/assets/img/projets/wild-kedougou-home.webp" srcset="/assets/img/projets/wild-kedougou.webp 720w, /assets/img/projets/wild-kedougou-home.webp 1600w" sizes="(max-width: 900px) 88vw, 560px" alt="" width="1600" height="778" decoding="async" fetchpriority="high">
+            </figure>
+            <figure class="mock mock--phone hero__phone"><img src="/assets/img/projets/islaah-home-logged-in.webp" alt="" width="370" height="800" decoding="async"></figure>
+            <span class="float float--1"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg>Visible sur Google Maps</span>
+            <span class="float float--2"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-calendar"/></svg>Nouvelle réservation</span>
+            <span class="float float--3"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bolt"/></svg>Devis envoyé automatiquement</span>
+            <span class="float float--4"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mobile"/></svg>Rapide sur téléphone</span>
+          </div>
         </div>
       </div>
+      <a class="hero__scroll" href="#pb" tabindex="-1" aria-hidden="true"><span></span></a>
     </section>
 
-    <section class="sec" aria-labelledby="pb-t">
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker__band ticker__band--a"><div class="ticker__track"><span class="ticker__set"><span>Fiche Google</span><i></i><span>Landing page</span><i></i><span>Site vitrine</span><i></i><span>Réservation en ligne</span><i></i><span>Boutique Shopify</span><i></i><span>Automatisation</span><i></i><span>Refonte de site</span><i></i><span>Maintenance</span><i></i></span><span class="ticker__set"><span>Fiche Google</span><i></i><span>Landing page</span><i></i><span>Site vitrine</span><i></i><span>Réservation en ligne</span><i></i><span>Boutique Shopify</span><i></i><span>Automatisation</span><i></i><span>Refonte de site</span><i></i><span>Maintenance</span><i></i></span></div></div>
+      <div class="ticker__band ticker__band--b"><div class="ticker__track"><span class="ticker__set"><span>Fiche Google</span><i></i><span>Landing page</span><i></i><span>Site vitrine</span><i></i><span>Réservation en ligne</span><i></i><span>Boutique Shopify</span><i></i><span>Automatisation</span><i></i><span>Refonte de site</span><i></i><span>Maintenance</span><i></i></span><span class="ticker__set"><span>Fiche Google</span><i></i><span>Landing page</span><i></i><span>Site vitrine</span><i></i><span>Réservation en ligne</span><i></i><span>Boutique Shopify</span><i></i><span>Automatisation</span><i></i><span>Refonte de site</span><i></i><span>Maintenance</span><i></i></span></div></div>
+    </div>
+
+    <section class="sec" id="pb" aria-labelledby="pb-t">
       <div class="wrap">
         <header class="sec__head">
           <p class="kicker">Ce que je règle pour vous</p>
@@ -473,7 +493,7 @@
           <p class="kicker">Méthode</p>
           <h2 class="sec__t" id="pr-t">Comment ça se passe</h2>
         </header>
-        <ol class="process">
+        <ol class="process" data-process>
           <li class="process__s"><span class="process__n">1</span><h3 class="process__t">Premier échange gratuit</h3><p>Vous m’expliquez votre activité et votre besoin, par téléphone, WhatsApp ou message. Je vous réponds sous 48 h.</p></li>
           <li class="process__s"><span class="process__n">2</span><h3 class="process__t">Devis et maquette</h3><p>Je vous envoie un devis clair, puis une maquette pour voir le résultat avant de commencer.</p></li>
           <li class="process__s"><span class="process__n">3</span><h3 class="process__t">Réalisation</h3><p>Je construis votre site ou votre outil et je vous montre l’avancement. Vous validez à chaque étape.</p></li>
@@ -548,11 +568,12 @@
     </section>
 
     <section class="sec cta" id="contact" aria-labelledby="ct-t">
+      <div class="cta__bg" aria-hidden="true"><span class="aurora aurora--1"></span><span class="aurora aurora--2"></span><span class="grain"></span></div>
       <div class="wrap cta__in">
         <p class="kicker">Contact</p>
         <h2 class="sec__t" id="ct-t">Parlons de votre projet</h2>
         <p class="sec__lead">Un premier échange gratuit et sans engagement. Choisissez le moyen le plus simple pour vous.</p>
-        <p class="cta__main"><a class="btn btn--cta btn--lg" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
+        <p class="cta__main"><a class="btn btn--cta btn--lg btn--halo" href="/devis" data-magnet>Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
         <ul class="ways">
           <li><a class="way way--phone" href="tel:+33767318426">
             <span class="way__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span>
@@ -630,6 +651,7 @@
 
   <script src="/js/deeplink.js"></script>
   <script src="/js/site.js" defer></script>
+  <script src="/js/fx.js" defer></script>
   <script src="/js/reviews.js" defer></script>
   <script src="/js/consent.js" defer></script>
   <script src="/js/analytics.js" defer></script>

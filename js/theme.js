@@ -17,6 +17,8 @@
   var DAY_START = 7, DAY_END = 20;
   var root = global.document.documentElement;
   root.classList.add('js');       // contenu réservé à JavaScript (.js-only)
+  // Effets d'entrée (css/fx.css), sauf si le visiteur demande moins de mouvement.
+  try { if (!global.matchMedia('(prefers-reduced-motion: reduce)').matches) root.classList.add('fx'); } catch (e) { /* noop */ }
 
   function byHour() {
     var h = new Date().getHours();

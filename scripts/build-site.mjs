@@ -23,7 +23,8 @@
    généré ici.
 
    Règles : chaque page est complète sans JavaScript et sans animation
-   (rien n'est masqué en attendant un défilement), un seul <h1>, un titre
+   (les effets de css/fx.css + js/fx.js ne masquent rien sans JS, ni si le
+   visiteur demande moins de mouvement), un seul <h1>, un titre
    et une description propres. Rien n'est inventé : un texte manquant
    reste [À COMPLÉTER] dans les données.
    ══════════════════════════════════════════════════════ */
@@ -386,7 +387,8 @@ function shell(page, { main, jsonld = null, css = [], scripts = [], keepMode = f
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <link rel="stylesheet" href="/css/site.css">
-  <link rel="stylesheet" href="/css/vitrine.css">${css.map(c => `\n  <link rel="stylesheet" href="${c}">`).join('')}${jsonld ? ld(jsonld) : ''}
+  <link rel="stylesheet" href="/css/vitrine.css">
+  <link rel="stylesheet" href="/css/fx.css">${css.map(c => `\n  <link rel="stylesheet" href="${c}">`).join('')}${jsonld ? ld(jsonld) : ''}
 </head>
 <body class="${['p-' + page.key, bodyClass].filter(Boolean).join(' ')}"${keepMode ? ' data-keep-mode' : ''}>${SPRITE}
 
@@ -400,6 +402,7 @@ ${callbar(page.key)}
 
   <script src="/js/deeplink.js"></script>${scripts.map(s => `\n  <script src="${s}"></script>`).join('')}
   <script src="/js/site.js" defer></script>
+  <script src="/js/fx.js" defer></script>
   <script src="/js/reviews.js" defer></script>
   <script src="/js/consent.js" defer></script>
   <script src="/js/analytics.js" defer></script>
@@ -555,33 +558,59 @@ function homePage() {
   const wk = projects.find(p => p.slug === 'wild-kedougou');
   const isl = projects.find(p => p.slug === 'islaah');
   const heroShot = shotsOf(wk)[0], heroCover = coverOf(wk), phoneShot = shotsOf(isl)[0];
+  // Titre découpé mot à mot (entrée animée par css/fx.css) ; le texte lu
+  // reste la phrase entière.
+  let wi = 0;
+  const words = (s) => s.split(' ').map(w => `<span class="w"><span style="--i:${wi++}">${w}</span></span>`).join(' ');
+  // Bandeaux défilants : les prestations, rien d'autre.
+  const tick = [...offers.map(o => o.title), 'Refonte de site', 'Maintenance'];
+  const band = (cls) => `<div class="ticker__band ${cls}"><div class="ticker__track">${[0, 1].map(() => `<span class="ticker__set">${tick.map(t => `<span>${esc(t)}</span><i></i>`).join('')}</span>`).join('')}</div></div>`;
 
   const main = `
-    <section class="hero" aria-labelledby="hero-t">
+    <section class="hero" aria-labelledby="hero-t" data-hero>
+      <div class="hero__bg" aria-hidden="true">
+        <span class="aurora aurora--1"></span><span class="aurora aurora--2"></span><span class="aurora aurora--3"></span>
+        <span class="hero__floor"></span>
+        <span class="hero__spot"></span>
+        <span class="grain"></span>
+      </div>
       <div class="wrap hero__grid">
         <div class="hero__txt">
           <h1 id="hero-t" class="hero__h1">
             <span class="hero__kicker">${JOB} · ${AREA}</span>
-            <span class="hero__title">Des sites et des outils qui vous amènent <em>des clients</em></span>
+            <span class="hero__title">${words('Des sites et des outils qui vous amènent')} <em>${words('des clients')}<svg class="hero__swash" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 17C70 6 160 4 296 12" pathLength="1"/></svg></em></span>
           </h1>
           <p class="hero__lead">Pour les commerces, artisans et indépendants d’${AREA}. Je vous aide à être trouvé sur Google, à recevoir des réservations en ligne et à gagner du temps sur vos tâches.</p>
           <div class="hero__cta">
-            <a class="btn btn--cta btn--lg" href="/devis">Demander un devis gratuit${icon('arrow')}</a>
-            <a class="btn btn--lg" href="#contact">${icon('phone')}M’appeler / WhatsApp</a>
+            <a class="btn btn--cta btn--lg" href="/devis" data-magnet>Demander un devis gratuit${icon('arrow')}</a>
+            <a class="btn btn--lg btn--glass" href="#contact">${icon('phone')}M’appeler / WhatsApp</a>
           </div>
           <p class="hero__trust">${icon('check')}Diagnostic gratuit en 48 h · ${AREA}</p>
         </div>
         <div class="hero__vis" aria-hidden="true">
-          <figure class="mock mock--browser hero__browser">
-            <div class="mock__bar"><i></i><i></i><i></i><span>wild-kedougou-experience</span></div>
-            <img src="${heroShot.src}" srcset="${heroCover.src} ${heroCover.size.w}w, ${heroShot.src} ${heroShot.size.w}w" sizes="(max-width: 900px) 88vw, 560px" alt="" width="${heroShot.size.w}" height="${heroShot.size.h}" decoding="async">
-          </figure>
-          <figure class="mock mock--phone hero__phone"><img src="${phoneShot.src}" alt="" width="${phoneShot.size.w}" height="${phoneShot.size.h}" decoding="async"></figure>
+          <img class="hero__seal" src="/assets/img/logo.svg" alt="" width="520" height="520" decoding="async">
+          <div class="hero__stage" data-tilt>
+            <figure class="mock mock--browser hero__browser">
+              <div class="mock__bar"><i></i><i></i><i></i><span>wild-kedougou-experience</span></div>
+              <img src="${heroShot.src}" srcset="${heroCover.src} ${heroCover.size.w}w, ${heroShot.src} ${heroShot.size.w}w" sizes="(max-width: 900px) 88vw, 560px" alt="" width="${heroShot.size.w}" height="${heroShot.size.h}" decoding="async" fetchpriority="high">
+            </figure>
+            <figure class="mock mock--phone hero__phone"><img src="${phoneShot.src}" alt="" width="${phoneShot.size.w}" height="${phoneShot.size.h}" decoding="async"></figure>
+            <span class="float float--1">${icon('pin')}Visible sur Google Maps</span>
+            <span class="float float--2">${icon('calendar')}Nouvelle réservation</span>
+            <span class="float float--3">${icon('bolt')}Devis envoyé automatiquement</span>
+            <span class="float float--4">${icon('mobile')}Rapide sur téléphone</span>
+          </div>
         </div>
       </div>
+      <a class="hero__scroll" href="#pb" tabindex="-1" aria-hidden="true"><span></span></a>
     </section>
 
-    <section class="sec" aria-labelledby="pb-t">
+    <div class="ticker" aria-hidden="true">
+      ${band('ticker__band--a')}
+      ${band('ticker__band--b')}
+    </div>
+
+    <section class="sec" id="pb" aria-labelledby="pb-t">
       <div class="wrap">
         <header class="sec__head">
           <p class="kicker">Ce que je règle pour vous</p>
@@ -633,7 +662,7 @@ function homePage() {
           <p class="kicker">Méthode</p>
           <h2 class="sec__t" id="pr-t">Comment ça se passe</h2>
         </header>
-        <ol class="process">${PROCESS.map((s, i) => `
+        <ol class="process" data-process>${PROCESS.map((s, i) => `
           <li class="process__s"><span class="process__n">${i + 1}</span><h3 class="process__t">${esc(s.t)}</h3><p>${esc(s.d)}</p></li>`).join('')}
         </ol>
       </div>
@@ -681,11 +710,12 @@ function homePage() {
     </section>
 
     <section class="sec cta" id="contact" aria-labelledby="ct-t">
+      <div class="cta__bg" aria-hidden="true"><span class="aurora aurora--1"></span><span class="aurora aurora--2"></span><span class="grain"></span></div>
       <div class="wrap cta__in">
         <p class="kicker">Contact</p>
         <h2 class="sec__t" id="ct-t">Parlons de votre projet</h2>
         <p class="sec__lead">Un premier échange gratuit et sans engagement. Choisissez le moyen le plus simple pour vous.</p>
-        <p class="cta__main"><a class="btn btn--cta btn--lg" href="/devis">Demander un devis gratuit${icon('arrow')}</a></p>
+        <p class="cta__main"><a class="btn btn--cta btn--lg btn--halo" href="/devis" data-magnet>Demander un devis gratuit${icon('arrow')}</a></p>
         <ul class="ways">${contactWays().slice(0, 4).map(wayCard).join('')}
         </ul>
       </div>
