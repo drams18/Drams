@@ -365,6 +365,8 @@ const SECTIONS = {
         category: 'Professionnel',
         pick: true,
         tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'React Router', 'Leaflet', 'Hono', 'Cloudflare Workers', 'Cloudflare D1', 'Cloudflare R2', 'Brevo', 'PWA'],
+        // Technos principales (prises dans tech), affichées sous le titre de la fiche projet.
+        mainTech: ['React', 'TypeScript', 'Hono', 'Cloudflare Workers'],
         role: 'Projet freelance réalisé seul pour un client, conseiller immobilier : conception, interface, API, base de données, e-mails automatiques et mise en ligne.',
         desc: 'Application web de suivi des visites immobilières, installable sur le téléphone. Le conseiller gère ses biens, vendeurs, acquéreurs, visites, comptes rendus et tâches ; chaque conseiller ne voit que ses propres données. Les acquéreurs, sans compte, reçoivent confirmation, rappel et demande d\'avis par e-mail et répondent par un lien personnel ; les vendeurs consultent les comptes rendus publiés pour eux. Carte des biens et des prospects vendeurs avec le DPE trouvé automatiquement dans la base de l\'ADEME, saisie d\'adresse assistée (Base Adresse Nationale), bon de visite prérempli à signer au doigt ou à imprimer, historique de chaque fiche, rappels envoyés par une tâche planifiée toutes les 5 minutes.',
         links: [
@@ -386,6 +388,7 @@ const SECTIONS = {
         type: 'Plateforme Web',
         category: 'Professionnel',
         tech: ['Symfony', 'Node.js', 'NestJS', 'MySQL'],
+        mainTech: ['Symfony', 'NestJS', 'MySQL'],
         role: 'Projet DevPhantom, en équipe. J\'ai participé à la création à partir de zéro après un échange avec le client : conception de la base de données, développement du backend, préparation de l\'architecture du projet.',
         desc: 'Plateforme facilitant la gestion de flottes automobiles. Le client souhaitait une refonte de son site existant ; la partie frontend n\'a finalement pas été terminée, le client ayant cessé de répondre.',
         links: [],
@@ -402,6 +405,7 @@ const SECTIONS = {
         category: 'Professionnel',
         pick: true,
         tech: ['PHP', 'Symfony', 'MySQL'],
+        mainTech: ['PHP', 'Symfony', 'MySQL'],
         role: 'Projet DevPhantom, en équipe : l\'un des premiers projets que j\'ai repris en arrivant. Travail principalement côté backend : authentification, gestion des rôles, espace administrateur, gestion des factures, des travailleurs et des déplacements / trajets.',
         desc: 'Intranet spécialisé dans la mise à disposition de techniciens pour des opérations de maintenance spécialisées.',
         links: [
@@ -419,6 +423,7 @@ const SECTIONS = {
         type: 'Plateforme Web',
         category: 'Professionnel',
         tech: ['PHP', 'Symfony', 'JavaScript', 'MySQL'],
+        mainTech: ['PHP', 'Symfony', 'MySQL'],
         role: 'Projet DevPhantom, en équipe. Développement de plusieurs CRUD, de fonctionnalités liées à la communication interne, et participation à l\'évolution de la plateforme.',
         desc: 'Plateforme destinée à faciliter le travail opérationnel et la communication interne.',
         links: [],
@@ -435,6 +440,7 @@ const SECTIONS = {
         type: 'Plateforme Web',
         category: 'Professionnel',
         tech: ['PHP', 'Symfony', 'MySQL'],
+        mainTech: ['PHP', 'Symfony', 'MySQL'],
         role: 'Projet DevPhantom, en équipe. Développement de CRUD, génération de rapports, exports PDF, Excel et CSV.',
         desc: 'Plateforme destinée à faciliter la génération de rapports et la communication interne.',
         links: [],
@@ -450,6 +456,7 @@ const SECTIONS = {
         type: 'Application Mobile',
         category: 'Professionnel',
         tech: ['React Native'],
+        mainTech: ['React Native'],
         role: 'Projet interne DevPhantom, réalisé en équipe.',
         desc: 'Application mobile développée chez DevPhantom et publiée sur l\'App Store.',
         links: [
@@ -472,6 +479,7 @@ const SECTIONS = {
         category: 'Professionnel',
         pick: true,
         tech: ['React Native', 'Node.js'],
+        mainTech: ['React Native', 'Node.js'],
         role: 'Projet interne DevPhantom, en équipe. J\'étais principalement impliqué sur le développement backend.',
         desc: 'Application pour organiser des sorties entre amis : définition d\'un budget, choix d\'un lieu et d\'une date, répartition de ce que chacun apporte, et possibilité pour des personnes seules de rejoindre un groupe pour sortir avec d\'autres.',
         links: [],
@@ -494,6 +502,7 @@ const SECTIONS = {
         category: 'Personnel',
         pick: true,
         tech: ['React', 'TypeScript', 'Vite', 'Mantine', 'Hono', 'Cloudflare Workers', 'Cloudflare D1', 'Cloudflare R2', 'Durable Objects', 'WebSocket', 'Web Push', 'PWA', 'Vitest'],
+        mainTech: ['React', 'TypeScript', 'Hono', 'Cloudflare Workers'],
         role: 'Projet personnel et bénévole, réalisé seul : conception, interface React, API sur Cloudflare Workers, base de données, tests et mise en ligne. L\'API, d\'abord écrite en Java / Spring Boot avec PostgreSQL, a été réécrite pour tourner entièrement chez Cloudflare, avec les mêmes adresses et les mêmes règles.',
         desc: 'Plateforme pour organiser et rejoindre des séances de révision du bac, en bibliothèque, à distance ou en mode hybride, pour que les lycéens profitent des connaissances de personnes qui maîtrisent les matières. Les lycéens (15 ans et plus) s\'inscrivent en un formulaire, filtrent le catalogue et réservent leur place en un clic, ou proposent une séance quand rien n\'est prévu. Les organisateurs, sur invitation, créent leurs séances, partagent des documents PDF et suivent les participants. Fiches de 526 lieux publics issus d\'OpenStreetMap, rappel la veille par notification, écrans mis à jour en direct, application installable et consultable hors ligne, export et suppression des données, administration des comptes, des lieux et des signalements.',
         links: [
@@ -517,6 +526,7 @@ const SECTIONS = {
         category: 'Personnel',
         pick: true,
         tech: ['Java 21', 'Spring Boot', 'PostgreSQL', 'Flyway', 'RabbitMQ', 'Angular', 'TypeScript', 'Docker', 'Testcontainers', 'Playwright', 'Vitest', 'Prometheus', 'Grafana', 'Kubernetes', 'Terraform'],
+        mainTech: ['Java 21', 'Spring Boot', 'Angular', 'PostgreSQL'],
         role: 'Projet personnel, réalisé seul : cadrage produit, architecture, API en Java / Spring Boot, service d\'envoi séparé, interface Angular, tests, conteneurisation et supervision. L\'application fonctionne de bout en bout en local ; le déploiement sur Kubernetes et AWS est préparé, mais le projet n\'est pas encore en ligne.',
         desc: 'Outil pour aider les commerces indépendants (librairie, boutique de matériel d\'art, caviste…) à savoir quels clients relancer, quand les contacter et quel message leur envoyer. Le commerçant importe ses clients et ses achats depuis un fichier CSV : il voit un aperçu ligne par ligne avant de valider, et les doublons sont repérés. Il crée ensuite des groupes de clients à partir de critères simples (inactifs depuis plusieurs mois, nombre d\'achats, montant dépensé, date de la dernière relance) et l\'application affiche, pour chaque client, la raison de sa présence dans la liste. Il rédige un e-mail personnalisé (prénom, nom, boutique), voit qui sera exclu et pourquoi, puis valide lui-même l\'envoi et suit les résultats. Le consentement est intégré au parcours : un e-mail importé ne vaut pas accord, la désinscription se fait en un clic, et les données d\'un client peuvent être exportées ou effacées (RGPD). Plusieurs boutiques partagent la plateforme, chacune isolée des autres, avec un rôle propriétaire et un rôle membre. Côté technique : architecture hexagonale en 4 modules vérifiée par ArchUnit, envoi fiable par transactional outbox et RabbitMQ (nouvelles tentatives, file des messages en échec, pas de double envoi), isolation des boutiques à trois niveaux (code, requêtes SQL, contraintes en base), 221 tests backend, 31 tests frontend et des parcours Playwright sur ordinateur et mobile.',
         status: 'Pas encore en ligne',
@@ -538,6 +548,7 @@ const SECTIONS = {
         category: 'Personnel',
         pick: true,
         tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Supabase', 'Google Calendar API', 'Brevo', 'Cloudflare Workers', 'PWA', 'SEO'],
+        mainTech: ['React', 'TypeScript', 'Tailwind CSS', 'Supabase'],
         role: 'Projet personnel : conception et développement complets (frontend, backend serverless, intégrations).',
         desc: 'Site / plateforme de réservation pour une activité touristique au Sénégal : présentation de l\'activité, réservation, gestion des disponibilités, intégration calendrier, notifications e-mail, interface responsive et optimisation SEO / données structurées.',
         links: [
@@ -557,6 +568,7 @@ const SECTIONS = {
         type: 'Site vitrine WordPress',
         category: 'Personnel',
         tech: ['WordPress', 'PHP', 'CSS'],
+        mainTech: ['WordPress'],
         role: 'Projet en cours, réalisé pour un ami : création et intégration d\'un site vitrine WordPress.',
         desc: 'Site vitrine WordPress. Projet en cours : ni livré ni terminé à ce jour.',
         status: 'En cours',
@@ -574,6 +586,7 @@ const SECTIONS = {
         category: 'Personnel',
         pick: true,
         tech: ['React Native', 'Symfony', 'MySQL', 'Cloudflare', 'Railway', 'Expo'],
+        mainTech: ['React Native', 'Expo', 'Symfony', 'MySQL'],
         role: 'Projet personnel, conception et développement complet : app mobile, API et mise en production.',
         desc: 'Teste ta connaissance du Coran : application mobile pour s\'entraîner à reconnaître les versets, avec écoute de récitations, plusieurs modes de quiz et suivi de progression. Disponible sur l\'App Store.',
         links: [
@@ -598,6 +611,7 @@ const SECTIONS = {
         type: 'Projet personnel',
         category: 'Personnel',
         tech: ['Node.js', 'Railway', 'HTML', 'CSS', 'JavaScript', 'NoSQL'],
+        mainTech: ['Node.js', 'JavaScript'],
         role: 'Projet personnel : idée, conception et développement réalisés seul.',
         desc: 'Plateforme permettant de rechercher une enseigne qui a besoin d\'un site web ou d\'une mise à jour.',
         links: [
@@ -616,6 +630,7 @@ const SECTIONS = {
         type: 'PWA de planification',
         category: 'Personnel',
         tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'React Router', 'Supabase', 'PostgreSQL', 'PWA', 'Web Push', 'Cloudflare Pages', 'Cloudflare Workers'],
+        mainTech: ['React', 'TypeScript', 'Supabase', 'PWA'],
         role: 'Projet personnel : conception et développement complets (frontend, backend serverless, notifications push). PWA que j\'ai construite pour organiser mes journées, mieux travailler et m\'installer des habitudes.',
         desc: 'Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d\'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d\'avancement, modèles de journée réutilisables (« programmes ») applicables à n\'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.',
         links: [
@@ -637,6 +652,7 @@ const SECTIONS = {
         category: 'Personnel',
         pick: true,
         tech: ['React', 'TypeScript', 'Vite', 'Tailwind', 'React Query', 'i18next', 'NestJS', 'PostgreSQL', 'TypeORM', 'JWT', 'OpenAI API', 'Jest', 'Vitest', 'Playwright', 'Docker', 'Nginx', 'GitHub Actions', 'GitLab CI'],
+        mainTech: ['React', 'TypeScript', 'NestJS', 'PostgreSQL'],
         role: 'Projet personnel que je mène seul sur toute la chaîne. Démarré à plusieurs à l\'ETNA, je l\'ai repris et poursuivi seul, avec l\'aide ponctuelle de camarades, et j\'en ai réalisé l\'essentiel : conception et architecture du monorepo, frontend React, API REST NestJS, modèle de données et migrations PostgreSQL, authentification JWT, fonctionnalités métier, tests unitaires et de bout en bout, documentation, conteneurisation Docker et pipeline d\'intégration continue.',
         desc: 'Plateforme web full-stack qui accompagne un projet d\'expatriation de bout en bout, en français et en anglais. Partir à l\'étranger oblige à croiser des informations dispersées (visa, démarches, budget, emploi) : SkyWalk les réunit. Après un onboarding, l\'utilisateur crée son projet et obtient une checklist personnalisée avec suivi des démarches et rappels d\'échéance, explore les destinations sur une carte du monde, compare le coût de la vie entre villes, consulte des offres d\'emploi et échange avec la communauté : forum, messagerie privée, buddies et experts vérifiés. Côté technique : API REST NestJS documentée avec Swagger, recherche full-text PostgreSQL, forum modéré par filtre local et modération OpenAI, liens gouvernementaux officiels trouvés par recherche web, classés par un LLM puis validés par un administrateur, coffre-fort documentaire chiffré, dashboard à widgets réorganisables, back-office d\'administration et données externes (Adzuna, REST Countries, OCDE).',
         links: [
@@ -658,6 +674,7 @@ const SECTIONS = {
         type: 'Plateforme de localisation',
         category: 'Scolaire',
         tech: ['Symfony 7', 'PHP 8', 'Doctrine ORM', 'PostgreSQL', 'Twig', 'Docker', 'Bootstrap'],
+        mainTech: ['Symfony 7', 'PHP 8', 'PostgreSQL'],
         role: 'Projet scolaire ETNA réalisé en binôme (déc. 2024 – janv. 2025) ; j\'ai porté la majeure partie du développement : modélisation Doctrine et migrations, CRUD projets / langues / sources / traductions, import et export CSV, verrouillage des chaînes sources, inscription avec vérification d\'e-mail, contrôle d\'accès par voter.',
         desc: 'Reproduction de Crowdin : plateforme collaborative de gestion de traductions (localisation). Un propriétaire crée un projet avec une langue source et plusieurs langues cibles, y ajoute des chaînes à traduire à la main ou par import CSV en masse, puis les traducteurs produisent et suivent les traductions par langue. Comptes avec vérification d\'e-mail, profils (langues parlées, statut traducteur), verrouillage des chaînes sources (seul le propriétaire modifie une source verrouillée), statuts de traduction, export CSV, pagination et contrôle d\'accès par rôles.',
         links: [],

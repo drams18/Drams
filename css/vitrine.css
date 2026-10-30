@@ -405,6 +405,13 @@ a { text-underline-offset: 3px; }
 .proj__tech h2 { margin-bottom: 10px; font-size: 14px; font-weight: 650; color: var(--muted); }
 .techs { display: flex; flex-wrap: wrap; gap: 6px; }
 .techs li { padding: 2px 10px; font-size: 13px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; }
+/* Technos principales : sous le titre de la fiche, et repérées dans la liste complète. */
+.techs li.is-main, .techs--main li {
+  color: var(--accent-2); font-weight: 650;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.techs--main { gap: 8px; margin-top: 16px; }
+.techs--main li { padding: 5px 14px; font-size: 14.5px; box-shadow: 0 6px 18px -10px color-mix(in srgb, var(--accent) 70%, transparent); }
 .proj__nav { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 48px; }
 .proj__nav a { display: flex; align-items: center; gap: 12px; min-width: 0; font-weight: 650; color: var(--text); text-decoration: none; }
 .proj__nav a:last-child { text-align: right; }

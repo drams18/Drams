@@ -796,7 +796,8 @@ function projectPage(p, i) {
   };
   const link = linkOf(p);
   const shots = shotsOf(p);
-  const prev = ordered[(i - 1 + ordered.length) % ordered.length];
+  const mainTech = (p.mainTech || []).filter(t => (p.tech || []).includes(t));
+  const prev =ordered[(i - 1 + ordered.length) % ordered.length];
   const next = ordered[(i + 1) % ordered.length];
   const gallery = p.device === 'mobile'
     ? mockup(p, { eager: true, count: Math.min(3, shots.length) })
@@ -807,7 +808,8 @@ function projectPage(p, i) {
       <header class="phead wrap">
         <nav class="crumbs" aria-label="Fil d’Ariane"><a href="/realisations">${icon('back')}Réalisations</a></nav>
         <p class="tags"><span class="tag tag--kind">${esc(c.label)}</span><span class="tag">${esc(c.frame)}</span>${p.status ? `<span class="tag tag--wip">${esc(p.status)}</span>` : ''}</p>
-        <h1 class="phead__t">${esc(p.title)}</h1>
+        <h1 class="phead__t">${esc(p.title)}</h1>${mainTech.length ? `
+        <ul class="techs techs--main" aria-label="Technologies principales">${mainTech.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
         ${link ? `<p class="proj__links">${ext(link.url, link.label, 'btn btn--cta')}</p>` : ''}
       </header>
       <div class="wrap proj__media">${gallery}
@@ -824,8 +826,8 @@ function projectPage(p, i) {
         </ul>
       </div>` : ''}
       <div class="wrap proj__tech">
-        <h2>Technologies utilisées</h2>
-        <ul class="techs">${(p.tech || []).map(t => `<li>${esc(t)}</li>`).join('')}</ul>
+        <h2>Toutes les technologies utilisées</h2>
+        <ul class="techs">${(p.tech || []).map(t => `<li${mainTech.includes(t) ? ' class="is-main"' : ''}>${esc(t)}</li>`).join('')}</ul>
       </div>
       <nav class="wrap proj__nav" aria-label="Autres projets">
         <a href="${projectUrl(prev)}">${icon('back')}<span><small>Projet précédent</small>${esc(prev.title)}</span></a>
