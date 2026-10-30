@@ -2,11 +2,11 @@
    VITRINE.CSS : Pages du site (générées par scripts/build-site.mjs) :
    accueil, réalisations, projets, tarifs, à propos, contact, devis,
    avis, pages légales, 404.
-   Au-dessus de css/site.css (thèmes jour / nuit, police Inter, .btn).
+   Au-dessus de css/site.css (thème sombre, police Inter, .btn).
 
    Identité : bleu nuit #070c14, surfaces #0e1724 / #142238, texte
    #f4f8fb, accent orange #ff9a3c / #ffb877. Boutons d'action orange
-   dans les deux thèmes (encre bleu nuit : contraste ≥ 7:1).
+   (encre bleu nuit : contraste ≥ 7:1).
    Mobile d'abord. Rien n'est masqué en attendant un défilement : le
    contenu est visible sans JavaScript et sans animation.
    ══════════════════════════════════════════════════════ */
@@ -21,10 +21,8 @@
   --r-lg: 20px;
   --ease-out: cubic-bezier(.16,1,.3,1);
 }
-/* Couleurs des canaux de contact (bulles de /contact). Le thème jour vient
-   après : :root désigne aussi <html data-theme="day">. */
-:root, [data-theme="night"] { --wa: #3ddc84; --ig: #f2679f; --li: #5aa6ea; --mail: #b585ea; --tt: #3ad7e2; }
-[data-theme="day"] { --wa: #128c4a; --ig: #c2185b; --li: #0a66c2; --mail: #7c4dc4; --tt: #0b7f88; }
+/* Couleurs des canaux de contact (bulles de /contact). */
+:root { --wa: #3ddc84; --ig: #f2679f; --li: #5aa6ea; --mail: #b585ea; --tt: #3ad7e2; }
 
 html { scroll-behavior: smooth; scroll-padding-top: calc(var(--top) + 12px); }
 body { min-height: 100vh; padding-bottom: var(--bar); overflow-x: clip; }

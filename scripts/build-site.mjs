@@ -190,8 +190,6 @@ const SPRITE = `
     <symbol id="i-tiktok" viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.5 2.5 2.3 4 5 4.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
-    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="1.8"/></symbol>
-    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
     <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M4 8h16l2 9h-5l-2-3H9l-2 3H2zM7 10v4M5 12h4" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="15" y="10.5" width="2" height="2" fill="currentColor"/></symbol>
@@ -219,10 +217,6 @@ function topbar(current) {
         <a class="nav__extra" href="/aventure" data-switch-adventure>${icon('gamepad')}Mode aventure</a>
       </nav>
       <div class="topbar__actions">
-        <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Changer de thème">
-          ${icon('sun', 'ico ico--sun')}
-          ${icon('moon', 'ico ico--moon')}
-        </button>
         <a class="btn btn--cta btn--sm topbar__cta" href="/devis"${current === 'devis' ? ' aria-current="page"' : ''}>Demander un devis</a>
         <button type="button" class="icon-btn nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Ouvrir le menu">
           ${icon('menu')}
@@ -367,7 +361,7 @@ function shell(page, { main, jsonld = null, css = [], scripts = [], keepMode = f
   const robots = page.robots || 'index, follow';
   return `<!DOCTYPE html>
 <!-- GÉNÉRÉ par scripts/build-site.mjs, ne pas éditer : npm run content -->
-<html lang="fr" data-theme="night">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -1205,7 +1199,7 @@ function privacyPage() {
           <tr><td>Formulaire de contact</td><td>Nom, e-mail, téléphone (facultatif), message</td><td>Vous répondre</td><td>Mesures précontractuelles prises à votre demande</td><td>3 ans après notre dernier échange</td></tr>
           <tr><td>Demande de devis (formulaire ou mini-jeu)</td><td>Prénom, nom, e-mail, téléphone (facultatif), message, réponses aux questions (type de projet, besoin, budget…)</td><td>Étudier votre projet et vous faire une proposition</td><td>Mesures précontractuelles prises à votre demande</td><td>3 ans après notre dernier échange ; si vous devenez client, durée légale de conservation des documents comptables</td></tr>
           <tr><td>Mesure d’audience, seulement si vous l’acceptez</td><td>Pages vues, clics sur un moyen de contact, envoi d’un formulaire (jamais son contenu), identifiant de cookie, données techniques du navigateur</td><td>Savoir quelles pages sont utiles</td><td>Votre consentement</td><td>Cookies : 13 mois au plus. Données dans Google Analytics : 14 mois au plus</td></tr>
-          <tr><td>Fonctionnement du site</td><td>Réglages enregistrés dans votre navigateur (voir plus bas)</td><td>Thème, brouillon de devis, progression du mode aventure, votre choix sur les cookies</td><td>Nécessaires au fonctionnement</td><td>Voir le tableau des cookies</td></tr>
+          <tr><td>Fonctionnement du site</td><td>Réglages enregistrés dans votre navigateur (voir plus bas)</td><td>Brouillon de devis, progression du mode aventure, votre choix sur les cookies</td><td>Nécessaires au fonctionnement</td><td>Voir le tableau des cookies</td></tr>
         </tbody>
       </table></div>
       <p>Le contenu des formulaires n’est jamais envoyé à Google Analytics.</p>
@@ -1229,7 +1223,7 @@ function privacyPage() {
           <tr><td>drame.consent</td><td>Votre choix sur les cookies</td><td>6 mois, puis redemandé</td><td>Non</td></tr>
           <tr><td>drame.portfolio.mode, drame.aventure.save</td><td>Dernier mode utilisé, progression du mode aventure</td><td>Jusqu’à ce que vous les effaciez</td><td>Non</td></tr>
           <tr><td>drame.reviews</td><td>Rappel discret pour un client invité à laisser un avis</td><td>Jusqu’à ce que vous l’effaciez</td><td>Non</td></tr>
-          <tr><td>drame.portfolio.theme, drame.buildproject et autres réglages de session</td><td>Thème choisi, brouillon de demande de devis, navigation</td><td>Fermeture de l’onglet</td><td>Non</td></tr>
+          <tr><td>drame.buildproject et autres réglages de session</td><td>Brouillon de demande de devis, navigation</td><td>Fermeture de l’onglet</td><td>Non</td></tr>
         </tbody>
       </table></div>
       <p>Vous pouvez changer d’avis à tout moment : <a href="#cookies" role="button" data-consent-open>gérer les cookies</a>.</p>

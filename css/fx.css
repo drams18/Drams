@@ -29,17 +29,12 @@
   --fx-glass:  color-mix(in srgb, var(--surface) 72%, transparent);
   --fx-ease:   cubic-bezier(.16,1,.3,1);
 }
-[data-theme="day"] {
-  --fx-grid:   rgba(20,34,56,.13);
-  --fx-glass:  color-mix(in srgb, #fff 80%, transparent);
-}
 
 /* Grain (bruit fixe, très léger) */
 .grain {
   position: absolute; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-[data-theme="day"] .grain { opacity: .05; mix-blend-mode: multiply; }
 
 /* Lumières (aurores) : grands dégradés radiaux qui dérivent lentement */
 .aurora {
@@ -50,8 +45,6 @@
 .aurora--1 { top: -28vmax; right: -16vmax; background: radial-gradient(closest-side, var(--fx-orange), transparent); }
 .aurora--2 { top: 4vmax; left: -30vmax; background: radial-gradient(closest-side, var(--fx-sky), transparent); opacity: .32; animation-duration: 28s; animation-delay: -8s; }
 .aurora--3 { bottom: -40vmax; left: 20%; background: radial-gradient(closest-side, var(--fx-violet), transparent); opacity: .3; animation-duration: 34s; animation-delay: -15s; }
-[data-theme="day"] .aurora { mix-blend-mode: normal; opacity: .2; }
-[data-theme="day"] .aurora--2, [data-theme="day"] .aurora--3 { opacity: .12; }
 @keyframes fx-drift {
   0%   { transform: translate3d(0, 0, 0) scale(1); }
   50%  { transform: translate3d(-6vmax, 4vmax, 0) scale(1.12); }
@@ -92,7 +85,6 @@
   transform: translate3d(70vw, 30vh, 0); opacity: 0; transition: opacity .6s;
 }
 .hero.is-lit .hero__spot { opacity: 1; }
-[data-theme="day"] .hero__spot { background: radial-gradient(closest-side, color-mix(in srgb, var(--fx-orange) 14%, transparent), transparent); }
 
 /* Titre : mots qui montent depuis un masque */
 .hero__title { font-size: clamp(40px, 9.4vw, 78px); line-height: 1.02; letter-spacing: -.05em; }
@@ -104,9 +96,6 @@
   background-size: 220% 100%;
   -webkit-background-clip: text; background-clip: text; color: transparent;
   animation: fx-shimmer 7s linear infinite;
-}
-[data-theme="day"] .hero__title em .w > span {
-  background-image: linear-gradient(100deg, #b45309 0%, #ea580c 25%, #9a3412 50%, #c2410c 75%, #b45309 100%);
 }
 @keyframes fx-shimmer { to { background-position: -220% 0; } }
 .hero__swash {
@@ -165,7 +154,6 @@
   translate: -50% -50%; opacity: .13; pointer-events: none;
   animation: fx-spin 120s linear infinite;
 }
-[data-theme="day"] .hero__seal { opacity: .16; }
 @keyframes fx-spin { to { rotate: 360deg; } }
 
 /* Badges flottants */
@@ -266,9 +254,6 @@
     transform: translateY(-6px);
     box-shadow: 0 30px 60px -30px rgba(0,0,0,.6), 0 0 0 1px color-mix(in srgb, var(--cta) 35%, transparent);
     border-color: transparent;
-  }
-  [data-theme="day"] .problem:hover, [data-theme="day"] .offer:hover, [data-theme="day"] .case:hover, [data-theme="day"] .care:hover {
-    box-shadow: 0 30px 50px -28px rgba(20,34,56,.35), 0 0 0 1px color-mix(in srgb, var(--cta) 45%, transparent);
   }
 }
 .spot { position: relative; isolation: isolate; }

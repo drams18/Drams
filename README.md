@@ -37,7 +37,7 @@ Anciennes adresses (`/classique/*`, liens courts) : redirections 301 dans `_redi
 - **Règles des pages** : complètes sans JavaScript et sans animation (rien n'est masqué en
   attendant un défilement), un seul `<h1>`, titre et description propres, JSON-LD
   `ProfessionalService`. Le générateur refuse un second `<h1>` ou un tiret cadratin.
-- **Styles** : `css/site.css` (thèmes jour / nuit selon l'heure, `js/theme.js`, police Inter) +
+- **Styles** : `css/site.css` (thème sombre unique, police Inter) +
   `css/vitrine.css` (pages du site, barre de contact mobile). `css/annexe.css` : devis et avis.
 - **Scripts** : `js/site.js` (menu, filtres, formulaire de contact), `js/tarifs.js` (recherche),
   `js/contact-form.js` (EmailJS chargé à la demande), `js/devis.js`.

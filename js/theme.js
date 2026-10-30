@@ -1,67 +1,18 @@
 /* ══════════════════════════════════════════════════════
-   THEME.JS : Thème clair ou sombre du site, selon l'heure locale
-   Chargé de façon BLOQUANTE dans le <head> (≈ 1 Ko) : le thème est
-   posé avant le premier affichage, sans flash.
-
-     07 h → 20 h  : data-theme="day"   (clair)
-     sinon        : data-theme="night" (sombre)
-
-   Un interrupteur ([data-theme-toggle]) permet de choisir l'autre
-   thème ; ce choix n'est retenu que pour la session en cours
-   (le lendemain, l'heure reprend la main).
+   THEME.JS : Réglages posés avant le premier affichage.
+   Chargé de façon BLOQUANTE dans le <head> (quelques octets) :
+     .js  contenu réservé à JavaScript (.js-only)
+     .fx  effets d'entrée (css/fx.css), sauf si le visiteur demande
+          moins de mouvement
+   Le site n'a qu'un thème, sombre : le thème clair a été retiré le
+   30/10/2026.
    ══════════════════════════════════════════════════════ */
 (function (global) {
   'use strict';
 
-  var KEY = 'drame.portfolio.theme';
-  var DAY_START = 7, DAY_END = 20;
   var root = global.document.documentElement;
-  root.classList.add('js');       // contenu réservé à JavaScript (.js-only)
-  // Effets d'entrée (css/fx.css), sauf si le visiteur demande moins de mouvement.
+  root.classList.add('js');
   try { if (!global.matchMedia('(prefers-reduced-motion: reduce)').matches) root.classList.add('fx'); } catch (e) { /* noop */ }
-
-  function byHour() {
-    var h = new Date().getHours();
-    return h >= DAY_START && h < DAY_END ? 'day' : 'night';
-  }
-
-  function override() {
-    try { return global.sessionStorage.getItem(KEY); } catch (e) { return null; }
-  }
-
-  function apply(theme) {
-    root.setAttribute('data-theme', theme);
-    var meta = global.document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'day' ? '#f6f8fb' : '#070c14');
-    var btns = global.document.querySelectorAll('[data-theme-toggle]');
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].setAttribute('aria-pressed', theme === 'night' ? 'true' : 'false');
-      btns[i].setAttribute('aria-label', theme === 'day' ? 'Passer au thème sombre' : 'Passer au thème clair');
-      btns[i].setAttribute('title', theme === 'day' ? 'Thème clair (selon votre heure), passer au sombre' : 'Thème sombre, passer au clair');
-    }
-  }
-
-  // ?theme=day|night force l'ambiance (captures d'écran, lien partagé),
-  // sans être mémorisé.
-  var q = null;
-  try { q = new URLSearchParams(global.location.search).get('theme'); } catch (e) { /* noop */ }
-  var o = q === 'day' || q === 'night' ? q : override();
-  apply(o === 'day' || o === 'night' ? o : byHour());
-
-  function toggle() {
-    var next = root.getAttribute('data-theme') === 'day' ? 'night' : 'day';
-    try {
-      if (next === byHour()) global.sessionStorage.removeItem(KEY);   // retour au rythme de l'heure
-      else global.sessionStorage.setItem(KEY, next);
-    } catch (e) { /* noop */ }
-    apply(next);
-  }
-
-  global.document.addEventListener('DOMContentLoaded', function () {
-    apply(root.getAttribute('data-theme'));          // synchronise les boutons
-    var btns = global.document.querySelectorAll('[data-theme-toggle]');
-    for (var i = 0; i < btns.length; i++) btns[i].addEventListener('click', toggle);
-  });
-
-  global.PortfolioTheme = { toggle: toggle, byHour: byHour };
+  // Ancien choix de thème (session) : plus utilisé.
+  try { global.sessionStorage.removeItem('drame.portfolio.theme'); } catch (e) { /* noop */ }
 })(window);
