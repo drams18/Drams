@@ -45,6 +45,11 @@
     "index": true
   },
   {
+    "file": "realisations/hearth.html",
+    "path": "realisations/hearth",
+    "index": true
+  },
+  {
     "file": "realisations/allsab-ms.html",
     "path": "realisations/allsab-ms",
     "index": true

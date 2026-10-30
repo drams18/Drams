@@ -109,7 +109,7 @@ await shot('d2-skills');
 await p.eval('[...document.querySelectorAll(".adv-skill .adv-actions button")].find(b => b.textContent === "Crowdin (clone)").click()');
 await p.sleep(250);
 ok('projet associé cliquable → galerie', await p.eval('document.querySelector(".adv-gal__title").textContent') === 'Crowdin (clone)' && await p.eval('location.hash') === '#projets/crowdin');
-ok('galerie : 15 projets', await p.eval('document.querySelectorAll(".adv-gal__tab").length') === 15);
+ok('galerie : 16 projets', await p.eval('document.querySelectorAll(".adv-gal__tab").length') === 16);
 await p.eval('document.querySelector(".adv-win__body").focus()');
 await p.press('ArrowRight'); await p.sleep(200);
 ok('galerie : clavier →', await p.eval('document.querySelector(".adv-gal__title").textContent') === 'ImmoConnect');
