@@ -460,24 +460,25 @@ function caseCard(p, { level = 'h3', eager = false } = {}) {
           </li>`;
 }
 
-// Diapositive d'un carrousel (page Réalisations) : la capture, le besoin et
-// ce que ça permet. Le détail (« ce que j'ai fait ») est sur la page du projet.
+// Diapositive d'un carrousel (page Réalisations), compacte : la capture, ce
+// que c'est, le titre et les liens. Les textes (besoin, ce que j'ai fait, ce
+// que ça permet) sont sur la page du projet.
+const KIND_ICON = { mobile: 'mobile', plateforme: 'site', reservation: 'calendar', vitrine: 'page', interne: 'doc' };
 function slideCard(p, { eager = false } = {}) {
   const c = caseOf(p);
   const link = linkOf(p);
   return `
-            <li class="case rail__slide">
-              <a class="case__media" href="${projectUrl(p)}" tabindex="-1" aria-hidden="true">
-                ${mockup(p, { eager, sizes: '(max-width: 760px) 86vw, 560px', count: p.device === 'mobile' ? 2 : 1 })}
-              </a>
+            <li class="case case--mini rail__slide">
+              <div class="case__top">
+                <a class="case__media" href="${projectUrl(p)}" tabindex="-1" aria-hidden="true">
+                  ${mockup(p, { eager, sizes: '(max-width: 760px) 78vw, 380px', count: p.device === 'mobile' ? 2 : 1 })}
+                </a>
+                <p class="case__badge">${icon(KIND_ICON[c.kind] || 'site')}${esc(c.label)}</p>
+              </div>
               <div class="case__body">
-                <p class="tags"><span class="tag tag--kind">${esc(c.label)}</span><span class="tag">${esc(c.frame)}</span></p>
                 <h3 class="case__t"><a href="${projectUrl(p)}">${esc(p.title)}</a></h3>
-                <dl class="case__dl">
-                  <div><dt>Le besoin</dt><dd>${esc(c.need)}</dd></div>
-                  <div><dt>Ce que ça permet</dt><dd>${esc(c.result)}</dd></div>
-                </dl>
-                <p class="case__links"><a class="btn btn--sm" href="${projectUrl(p)}">Voir le projet${icon('arrow')}</a>${link ? ext(link.url, link.label, 'btn btn--sm btn--ghost') : ''}</p>
+                <p class="case__frame">${esc(c.frame)}</p>
+                <p class="case__links"><a class="btn btn--sm" href="${projectUrl(p)}">Voir le projet${icon('arrow')}</a>${link ? ext(link.url, /App Store/.test(link.label) ? 'App Store' : 'Voir en ligne', 'btn btn--sm btn--ghost') : ''}</p>
               </div>
             </li>`;
 }
@@ -748,14 +749,13 @@ function realisationsPage() {
   };
   // Un carrousel par groupe : défilement natif au doigt (scroll-snap), flèches
   // et points ajoutés par js/site.js. Sans JS : une rangée qui défile.
-  const main = `${pageHead('Réalisations', 'Ce que j’ai construit', 'Chaque projet expliqué simplement : le besoin, et ce que ça permet aujourd’hui.')}
+  const jump = `
+      <nav class="jump" aria-label="Types de projets">${GROUPS.map(g => `<a class="chip" href="#${g.id}">${esc(g.title)}<span class="rail__n">${g.items.length}</span></a>`).join('')}</nav>`;
+  const main = `${pageHead('Réalisations', 'Ce que j’ai construit', 'Ouvrez un projet pour voir le besoin, ce que j’ai fait et ce que ça permet.', jump)}
     <div class="wrap rails">${GROUPS.map((g, gi) => `
       <section class="rail" id="${g.id}" aria-labelledby="rail-${g.id}-t" data-rail>
         <header class="rail__head">
-          <div>
-            <h2 class="block__t" id="rail-${g.id}-t">${esc(g.title)}<span class="rail__n">${g.items.length}</span></h2>
-            <p class="block__lead">${esc(g.lead)}</p>
-          </div>
+          <h2 class="block__t" id="rail-${g.id}-t">${esc(g.title)}<span class="rail__n">${g.items.length}</span></h2>
           <div class="rail__nav js-only">
             <button type="button" class="icon-btn rail__btn" data-rail-prev aria-controls="rail-${g.id}" aria-label="Projet précédent">${icon('back')}</button>
             <button type="button" class="icon-btn rail__btn" data-rail-next aria-controls="rail-${g.id}" aria-label="Projet suivant">${icon('arrow')}</button>
