@@ -764,46 +764,8 @@ function realisationsPage() {
   // Un carrousel par groupe : défilement natif au doigt (scroll-snap), flèches
   // et points ajoutés par js/site.js. Sans JS : une rangée qui défile.
   const jump = `
-      <nav class="jump" aria-label="Types de projets">${GROUPS.map(g => `<a class="chip" href="#${g.id}">${esc(g.title)}<span class="rail__n">${g.items.length}</span></a>`).join('')}</nav>
-      <div class="views js-only" role="group" aria-label="Affichage des réalisations" data-views hidden>
-        <button type="button" class="views__b" data-view="mur" aria-pressed="true">${icon('grid')}Mur</button>
-        <button type="button" class="views__b" data-view="liste" aria-pressed="false">${icon('menu')}Liste</button>
-      </div>`;
-  // Mur (ordinateur, js/wall.js + css/wall.css) : toutes les captures sur
-  // un plan sans fin que l'on fait glisser. Les carrousels restent la
-  // version lisible sans JavaScript, au clavier et sur téléphone.
-  const img = (s) => ({ src: s.src, w: s.size.w, h: s.size.h });
-  const wallData = {
-    groups: GROUPS.map(g => ({ id: g.id, title: g.title })),
-    tiles: GROUPS.flatMap(g => g.items.flatMap(p => {
-      const c = caseOf(p);
-      const shots = shotsOf(p);
-      const base = { group: g.id, slug: p.slug, title: p.title, label: c.label, href: projectUrl(p) };
-      if (p.device === 'mobile') {
-        const pairs = [];
-        for (let i = 0; i < shots.length; i += 2) pairs.push({ ...base, phone: true, imgs: shots.slice(i, i + 2).map(img) });
-        return pairs;
-      }
-      const cover = coverOf(p);
-      return shots.map((s, i) => ({ ...base, phone: false, imgs: [i === 0 && cover ? { src: cover.src, w: cover.size.w, h: cover.size.h } : img(s)] }));
-    })),
-  };
-  const wall = `
-    <section class="wall js-only" id="mur" aria-labelledby="wall-t" data-wall hidden>
-      <h2 class="sr-only" id="wall-t">Toutes les captures</h2>
-      <div class="wall__view" role="group" tabindex="0" aria-label="Mur de captures : faites glisser, ou utilisez les flèches du clavier" data-cursor="Glisser">
-        <div class="wall__dots" aria-hidden="true"></div>
-        <div class="wall__field"></div>
-      </div>
-      <p class="wall__hint" aria-hidden="true">${icon('move')}Glissez pour explorer</p>
-      <div class="wall__bar" role="group" aria-label="Filtrer par type de projet">
-        <button type="button" class="wall__f" data-filter="" aria-pressed="true">Tous<span>${ordered.length}</span></button>${GROUPS.map(g => `
-        <button type="button" class="wall__f" data-filter="${g.id}" aria-pressed="false">${esc(g.title)}<span>${g.items.length}</span></button>`).join('')}
-      </div>
-    </section>`;
-  const tail = `
-  <script type="application/json" id="wall-data">${JSON.stringify(wallData).replace(/</g, '\\u003c')}</script>`;
-  const main = `${pageHead('Réalisations', 'Ce que j’ai construit', 'Ouvrez un projet pour voir le besoin, ce que j’ai fait et ce que ça permet.', jump)}${wall}
+      <nav class="jump" aria-label="Types de projets">${GROUPS.map(g => `<a class="chip" href="#${g.id}">${esc(g.title)}<span class="rail__n">${g.items.length}</span></a>`).join('')}</nav>`;
+  const main = `${pageHead('Réalisations', 'Ce que j’ai construit', 'Ouvrez un projet pour voir le besoin, ce que j’ai fait et ce que ça permet.', jump)}
     <div class="wrap rails">${GROUPS.map((g, gi) => `
       <section class="rail" id="${g.id}" aria-labelledby="rail-${g.id}-t" data-rail>
         <header class="rail__head">
@@ -825,7 +787,7 @@ ${ctaBand('Un projet du même genre ?', 'Expliquez-moi votre besoin : je vous di
       '@type': 'ListItem', position: i + 1, url: SITE_URL + projectUrl(p).slice(1), name: p.title,
     })) },
   });
-  return [page, shell(page, { main, jsonld, tail, css: ['/css/wall.css'], scripts: ['/js/wall.js'] })];
+  return [page, shell(page, { main, jsonld })];
 }
 
 function ctaBand(title, text) {

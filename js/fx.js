@@ -143,8 +143,8 @@
     var path = url.pathname.replace(/\.html$/, '').replace(/\/+$/, '') || '/';
     if (LABELS[path]) return LABELS[path];
     if (!/^\/realisations\/[^/]+$/.test(path)) return '';
-    var card = a.closest('.case, .wall__card');
-    var t = card && card.querySelector('.case__t, .wall__t');
+    var card = a.closest('.case');
+    var t = card && card.querySelector('.case__t');
     if (t) return t.textContent.trim();
     var span = a.closest('.proj__nav') && a.querySelector('span');
     if (span && span.lastChild && span.lastChild.nodeType === 3) return span.lastChild.nodeValue.trim();
@@ -250,7 +250,7 @@
   }
   window.FX = { confetti: confetti, scramble: scramble };
 
-  // Curseur : mini pistolet en CSS pur (css/fx.css), rien à faire ici.
+  // Curseur : mini sabre en CSS pur (css/fx.css), rien à faire ici.
 
   // ══ Menu et nom : texte brouillé au survol ════════════
   if (mouse) {

@@ -521,11 +521,11 @@ html[data-curtain]::after {
 .scr__t { overflow: hidden; }
 .brand__job { white-space: nowrap; }
 
-/* ══ Curseur : mini pistolet (souris seulement) ════════
-   Curseur natif (aucun retard) ; le point de clic est le bout du canon.
+/* ══ Curseur : mini sabre (souris seulement) ════════
+   Curseur natif (aucun retard) ; le point de clic est la pointe de la lame.
    Les champs de saisie gardent le curseur texte. */
 @media (hover: hover) and (pointer: fine) {
-  html, html * { cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 32 32'><path d='M3 7.5h1.5V6h2v1.5H27a1 1 0 0 1 1 1V14l2.6 12.4a1 1 0 0 1-.9 1.2l-5.6.6a1 1 0 0 1-1.1-.8L20.6 17.5h-2.1v1.2a2.8 2.8 0 0 1-2.8 2.8h-2.4V14H3a1 1 0 0 1-1-1V8.5a1 1 0 0 1 1-1z' fill='%23121212' stroke='%23fff' stroke-width='1.6' stroke-linejoin='round' paint-order='stroke'/><path d='M15 14.6v3.9h1a1 1 0 0 0 1-1v-2.9z' fill='%23fff'/><path d='M8 10.5h17' stroke='%232d45f5' stroke-width='1.4' stroke-linecap='round'/></svg>") 2 9, auto !important; }
+  html, html * { cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 32 32'><path d='M22.6 16.4Q29.5 20 27 27' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round'/><path d='M2 2C9 4.5 15 11 20.8 18.2L18.2 20.8C12.5 15 6.5 8.5 2 2z' fill='%23121212' stroke='%23fff' stroke-width='1.6' stroke-linejoin='round' paint-order='stroke'/><path d='M20.4 20.4L26 26' stroke='%23fff' stroke-width='4.6' stroke-linecap='round'/><path d='M16 23L23 16' stroke='%23fff' stroke-width='4' stroke-linecap='round'/><path d='M20.4 20.4L26 26' stroke='%23121212' stroke-width='2.8' stroke-linecap='round'/><circle cx='27' cy='27' r='2.2' fill='%23121212' stroke='%23fff' stroke-width='1.6' paint-order='stroke'/><path d='M16 23L23 16' stroke='%232d45f5' stroke-width='2.4' stroke-linecap='round'/><path d='M22.6 16.4Q29.5 20 27 27' fill='none' stroke='%232d45f5' stroke-width='1.4' stroke-linecap='round'/><path d='M6 5.2C10.5 8 14 11.5 17.6 16' stroke='%232d45f5' stroke-width='.8' stroke-linecap='round' fill='none'/></svg>") 2 2, auto !important; }
   html :is(input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]):not([type=range]), textarea, select, [contenteditable]) { cursor: auto !important; }
 }
 

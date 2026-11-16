@@ -30,7 +30,6 @@
   <link rel="stylesheet" href="/css/site.css">
   <link rel="stylesheet" href="/css/vitrine.css">
   <link rel="stylesheet" href="/css/fx.css">
-  <link rel="stylesheet" href="/css/wall.css">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -272,25 +271,7 @@
       <h1 class="phead__t"><span class="bw" style="--i:0">Ce</span> <span class="bw" style="--i:1">que</span> <span class="bw" style="--i:2">j’ai</span> <span class="bw" style="--i:3">construit</span></h1>
       <p class="phead__lead">Ouvrez un projet pour voir le besoin, ce que j’ai fait et ce que ça permet.</p>
       <nav class="jump" aria-label="Types de projets"><a class="chip" href="#sites">Sites et applications web<span class="rail__n">4</span></a><a class="chip" href="#apps">Applications mobiles<span class="rail__n">3</span></a><a class="chip" href="#outils">Outils pour les entreprises<span class="rail__n">3</span></a></nav>
-      <div class="views js-only" role="group" aria-label="Affichage des réalisations" data-views hidden>
-        <button type="button" class="views__b" data-view="mur" aria-pressed="true"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-grid"/></svg>Mur</button>
-        <button type="button" class="views__b" data-view="liste" aria-pressed="false"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>Liste</button>
-      </div>
     </header>
-    <section class="wall js-only" id="mur" aria-labelledby="wall-t" data-wall hidden>
-      <h2 class="sr-only" id="wall-t">Toutes les captures</h2>
-      <div class="wall__view" role="group" tabindex="0" aria-label="Mur de captures : faites glisser, ou utilisez les flèches du clavier" data-cursor="Glisser">
-        <div class="wall__dots" aria-hidden="true"></div>
-        <div class="wall__field"></div>
-      </div>
-      <p class="wall__hint" aria-hidden="true"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-move"/></svg>Glissez pour explorer</p>
-      <div class="wall__bar" role="group" aria-label="Filtrer par type de projet">
-        <button type="button" class="wall__f" data-filter="" aria-pressed="true">Tous<span>10</span></button>
-        <button type="button" class="wall__f" data-filter="sites" aria-pressed="false">Sites et applications web<span>4</span></button>
-        <button type="button" class="wall__f" data-filter="apps" aria-pressed="false">Applications mobiles<span>3</span></button>
-        <button type="button" class="wall__f" data-filter="outils" aria-pressed="false">Outils pour les entreprises<span>3</span></button>
-      </div>
-    </section>
     <div class="wrap rails">
       <section class="rail" id="sites" aria-labelledby="rail-sites-t" data-rail>
         <header class="rail__head">
@@ -549,9 +530,7 @@
   </nav>
 
 
-  <script type="application/json" id="wall-data">{"groups":[{"id":"sites","title":"Sites et applications web"},{"id":"apps","title":"Applications mobiles"},{"id":"outils","title":"Outils pour les entreprises"}],"tiles":[{"group":"sites","slug":"immoconnect","title":"ImmoConnect","label":"Outil de gestion","href":"/realisations/immoconnect","phone":true,"imgs":[{"src":"/assets/img/projets/immoconnect-accueil.webp","w":600,"h":1299},{"src":"/assets/img/projets/immoconnect-carte.webp","w":600,"h":1299}]},{"group":"sites","slug":"immoconnect","title":"ImmoConnect","label":"Outil de gestion","href":"/realisations/immoconnect","phone":true,"imgs":[{"src":"/assets/img/projets/immoconnect-visite.webp","w":600,"h":1299},{"src":"/assets/img/projets/immoconnect-prospects.webp","w":600,"h":1299}]},{"group":"sites","slug":"wild-kedougou","title":"Wild Kédougou Experience","label":"Site de réservation","href":"/realisations/wild-kedougou","phone":false,"imgs":[{"src":"/assets/img/projets/wild-kedougou.webp","w":720,"h":350}]},{"group":"sites","slug":"wild-kedougou","title":"Wild Kédougou Experience","label":"Site de réservation","href":"/realisations/wild-kedougou","phone":false,"imgs":[{"src":"/assets/img/projets/wild-kedougou-reserver.webp","w":1600,"h":775}]},{"group":"sites","slug":"orlena","title":"Orlena","label":"Plateforme web","href":"/realisations/orlena","phone":true,"imgs":[{"src":"/assets/img/projets/orlena-seances.webp","w":600,"h":1299},{"src":"/assets/img/projets/orlena-seance.webp","w":600,"h":1299}]},{"group":"sites","slug":"orlena","title":"Orlena","label":"Plateforme web","href":"/realisations/orlena","phone":true,"imgs":[{"src":"/assets/img/projets/orlena-lieu.webp","w":600,"h":1299},{"src":"/assets/img/projets/orlena-mes-seances.webp","w":600,"h":1299}]},{"group":"sites","slug":"skywalk","title":"SkyWalk","label":"Plateforme web","href":"/realisations/skywalk","phone":false,"imgs":[{"src":"/assets/img/projets/skywalk.webp","w":720,"h":349}]},{"group":"sites","slug":"skywalk","title":"SkyWalk","label":"Plateforme web","href":"/realisations/skywalk","phone":false,"imgs":[{"src":"/assets/img/projets/skywalk-home.webp","w":1600,"h":777}]},{"group":"sites","slug":"skywalk","title":"SkyWalk","label":"Plateforme web","href":"/realisations/skywalk","phone":false,"imgs":[{"src":"/assets/img/projets/skywalk-search-destination.webp","w":1600,"h":773}]},{"group":"sites","slug":"skywalk","title":"SkyWalk","label":"Plateforme web","href":"/realisations/skywalk","phone":false,"imgs":[{"src":"/assets/img/projets/skywalk-create-project.webp","w":1600,"h":768}]},{"group":"apps","slug":"islaah","title":"ISLAAH","label":"Application iPhone","href":"/realisations/islaah","phone":true,"imgs":[{"src":"/assets/img/projets/islaah-home-logged-in.webp","w":370,"h":800},{"src":"/assets/img/projets/islaah-onboarding.webp","w":370,"h":800}]},{"group":"apps","slug":"islaah","title":"ISLAAH","label":"Application iPhone","href":"/realisations/islaah","phone":true,"imgs":[{"src":"/assets/img/projets/islaah-audio-listening.webp","w":370,"h":800},{"src":"/assets/img/projets/islaah-bad-answer.webp","w":370,"h":800}]},{"group":"apps","slug":"islaah","title":"ISLAAH","label":"Application iPhone","href":"/realisations/islaah","phone":true,"imgs":[{"src":"/assets/img/projets/islaas-levels.webp","w":370,"h":800},{"src":"/assets/img/projets/islaah-home-logged-out.webp","w":370,"h":800}]},{"group":"apps","slug":"oneday","title":"OneDay","label":"Application installable","href":"/realisations/oneday","phone":true,"imgs":[{"src":"/assets/img/projets/oneday-home-program.webp","w":440,"h":954},{"src":"/assets/img/projets/oneday-home-without-program.webp","w":440,"h":956}]},{"group":"apps","slug":"ilamiria","title":"Ilamiria","label":"Application iPhone","href":"/realisations/ilamiria","phone":true,"imgs":[{"src":"/assets/img/projets/ilamiria-onboarding-2.webp","w":313,"h":680},{"src":"/assets/img/projets/ilamiria-onboarding-4.webp","w":313,"h":680}]},{"group":"apps","slug":"ilamiria","title":"Ilamiria","label":"Application iPhone","href":"/realisations/ilamiria","phone":true,"imgs":[{"src":"/assets/img/projets/ilamiria-onboarding-1.webp","w":314,"h":680},{"src":"/assets/img/projets/ilamiria-onboarding-3.webp","w":314,"h":680}]},{"group":"outils","slug":"hearth","title":"Hearth","label":"Outil de gestion","href":"/realisations/hearth","phone":false,"imgs":[{"src":"/assets/img/projets/hearth.webp","w":720,"h":450}]},{"group":"outils","slug":"hearth","title":"Hearth","label":"Outil de gestion","href":"/realisations/hearth","phone":false,"imgs":[{"src":"/assets/img/projets/hearth-segment.webp","w":1600,"h":1000}]},{"group":"outils","slug":"hearth","title":"Hearth","label":"Outil de gestion","href":"/realisations/hearth","phone":false,"imgs":[{"src":"/assets/img/projets/hearth-campagne.webp","w":1600,"h":1000}]},{"group":"outils","slug":"hearth","title":"Hearth","label":"Outil de gestion","href":"/realisations/hearth","phone":false,"imgs":[{"src":"/assets/img/projets/hearth-client.webp","w":1600,"h":1000}]},{"group":"outils","slug":"allsab-ms","title":"Allsab-MS","label":"Outil interne","href":"/realisations/allsab-ms","phone":false,"imgs":[{"src":"/assets/img/projets/allsab-ms.webp","w":720,"h":350}]},{"group":"outils","slug":"gexp","title":"GEXP","label":"Outil interne","href":"/realisations/gexp","phone":false,"imgs":[{"src":"/assets/img/projets/gexp.webp","w":720,"h":347}]}]}</script>
   <script src="/js/deeplink.js"></script>
-  <script src="/js/wall.js"></script>
   <script src="/js/site.js" defer></script>
   <script src="/js/fx.js" defer></script>
   <script src="/js/reviews.js" defer></script>
