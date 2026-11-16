@@ -23,19 +23,23 @@
 
   // ── Apparitions au défilement ─────────────────────────
   var REVEAL = [
-    '.sec__head > *', '.problem', '.offer', '.cases > .case', '.care', '.rail__track', '.process__s', '.about__photo', '.about__txt > *', '.adv',
+    '.sec__head > *', '.problem', '.offer', '.care', '.rail__track', '.process__s', '.about__photo', '.about__txt > *', '.adv',
     '.faq__i', '.cta__in > *', '.way', '.block__t', '.proj__media', '.proj__s', '.shots > *', '.cat',
     '.free', '.orbit__form', '.tl__list > li', '.about-page > *', '.sec__more', '.legal > *', '.cta__row > *',
   ].join(',');
+  // Téléphone : une rangée qui défile au doigt apparaît d'un bloc (ses cartes
+  // hors écran sur le côté n'attendent pas d'être balayées pour s'afficher).
+  var narrow = matchMedia('(max-width: 699px)').matches;
   var fold = innerHeight * 0.94;
-  var targets = Array.prototype.filter.call(doc.querySelectorAll(REVEAL), function (el) {
+  var targets = Array.prototype.filter.call(doc.querySelectorAll(REVEAL + (narrow ? ',.swipe-wrap' : '')), function (el) {
+    if (narrow && el.closest('.swipe')) return false;
     return !el.closest('.hero, .phead') && el.getBoundingClientRect().top > fold;
   });
   // Décalage en cascade entre éléments frères
   targets.forEach(function (el) {
     var sibs = Array.prototype.filter.call(el.parentNode.children, function (c) { return targets.indexOf(c) >= 0; });
     var i = sibs.indexOf(el);
-    el.style.setProperty('--d', (Math.min(i, 5) * 0.08).toFixed(2) + 's');
+    el.style.setProperty('--d', (Math.min(i, 4) * 0.06).toFixed(2) + 's');
     el.classList.add('rv');
   });
   var io = new IntersectionObserver(function (entries) {
@@ -44,7 +48,7 @@
       e.target.classList.add('in');
       io.unobserve(e.target);
       // Une fois apparu, le délai ne doit plus freiner le survol.
-      setTimeout(function () { e.target.style.removeProperty('--d'); }, 1400);
+      setTimeout(function () { e.target.style.removeProperty('--d'); }, 1000);
     });
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
   targets.forEach(function (el) { io.observe(el); });

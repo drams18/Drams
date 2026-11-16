@@ -4,8 +4,8 @@
      .js  contenu réservé à JavaScript (.js-only)
      .fx  effets d'entrée (css/fx.css), sauf si le visiteur demande
           moins de mouvement
-   Le site n'a qu'un thème, sombre : le thème clair a été retiré le
-   30/10/2026.
+   Le site n'a qu'un thème, clair (Cloud Dancer & Cobalt, 16/11/2026),
+   défini dans css/site.css.
    ══════════════════════════════════════════════════════ */
 (function (global) {
   'use strict';

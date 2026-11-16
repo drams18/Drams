@@ -121,7 +121,7 @@
       '.ck__card{pointer-events:auto;width:100%;max-width:980px;padding:10px 12px 10px 18px;display:grid;',
       'grid-template-columns:minmax(0,1fr) auto auto auto;grid-template-areas:"t p r a";align-items:center;gap:8px 10px;',
       'background:var(--ck-bg);border:1px solid var(--ck-line);border-radius:16px;',
-      'box-shadow:0 1px 2px rgba(0,0,0,.3),0 16px 40px -18px rgba(0,0,0,.6);animation:ck-in .35s cubic-bezier(.2,.7,.3,1);}',
+      'box-shadow:0 1px 2px rgba(22,28,66,.12),0 16px 40px -18px rgba(22,28,66,.4);animation:ck-in .35s cubic-bezier(.2,.7,.3,1);}',
       '@keyframes ck-in{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}',
       '.ck__t{grid-area:t;font-size:13.5px;line-height:1.45;color:var(--ck-text-2);}',
       '.ck__t a{color:var(--ck-text);text-underline-offset:2px;}',
@@ -175,8 +175,11 @@
       '.ck-fab svg{width:18px;height:18px;display:block;}',
 
       '@media (max-width:640px){.ck{padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));}',
-      '.ck__card{grid-template-columns:1fr 1fr;grid-template-areas:"t p" "r a";padding:10px 10px 10px 14px;gap:8px;border-radius:14px;}',
-      '.ck__t{font-size:13px;}.ck-link{justify-self:end;align-self:start;}.ck,.ck-dlg{font-size:14px;}',
+      /* Téléphone : la phrase sur toute la largeur, puis une seule rangée de
+         boutons (refuser et accepter toujours identiques). */
+      '.ck__card{grid-template-columns:1fr 1fr auto;grid-template-areas:"t t t" "r a p";padding:10px;gap:8px 6px;border-radius:14px;}',
+      '.ck__t{font-size:13px;line-height:1.4;padding:0 4px;}.ck-btn{min-height:38px;padding:6px 8px;font-size:13.5px;}',
+      '.ck-link{padding:8px 4px;font-size:13px;}.ck,.ck-dlg{font-size:14px;}',
       '.ck-dlg__in{padding:18px 16px;}}',
       '@media (prefers-reduced-motion:reduce){.ck__card{animation:none;}.ck-btn{transition:none;}}'
     ].join('');

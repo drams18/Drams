@@ -2,8 +2,10 @@
    SITE.JS : Confort des pages du site (générées par
    scripts/build-site.mjs). Chaque page est complète SANS ce script ;
    il n'ajoute que :
-     • le menu mobile
-     • les flèches et points des carrousels de la page Réalisations
+     • le menu mobile (plein écran, la page derrière ne défile plus)
+     • les flèches et points des carrousels (Réalisations, accueil)
+     • les points des rangées qui défilent au doigt (offres de l'accueil)
+     • la barre d'appel qui s'efface quand le clavier est ouvert
      • l'envoi du formulaire de contact (EmailJS, js/contact-form.js)
      • le préchargement du mode aventure à l'intention (survol, toucher)
    ══════════════════════════════════════════════════════ */
@@ -24,6 +26,8 @@
     nav.classList.toggle('is-open', open);
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     toggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    toggle.innerHTML = '<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-' + (open ? 'close' : 'menu') + '"/></svg>';
+    doc.documentElement.classList.toggle('nav-open', open);
   }
   if (nav && toggle) {
     toggle.addEventListener('click', function () { setNav(!nav.classList.contains('is-open')); });
@@ -34,6 +38,9 @@
       if (nav.classList.contains('is-open') && !e.target.closest('#site-nav, .nav-toggle')) setNav(false);
     });
     window.addEventListener('pageshow', function (e) { if (e.persisted) setNav(false); });
+    // Lien du menu vers une ancre de la page : on referme.
+    nav.addEventListener('click', function (e) { if (e.target.closest('a')) setNav(false); });
+    matchMedia('(min-width: 900px)').addEventListener('change', function (m) { if (m.matches) setNav(false); });
   }
 
   // ── Réalisations : carrousels ────────────────────────
@@ -49,16 +56,16 @@
     var update = function () {
       var max = track.scrollWidth - track.clientWidth;
       rail.classList.toggle('is-static', max < 4);
-      prev.disabled = track.scrollLeft < 4;
-      next.disabled = track.scrollLeft > max - 4;
+      if (prev) prev.disabled = track.scrollLeft < 4;
+      if (next) next.disabled = track.scrollLeft > max - 4;
       // Point actif : la diapositive calée à gauche (la dernière en fin de course).
       var i = track.scrollLeft > max - 4 ? slides.length - 1 : Math.round(track.scrollLeft / (step() || 1));
       dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
     };
     var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     var go = function (dir) { track.scrollBy({ left: dir * step(), behavior: still ? 'auto' : 'smooth' }); };
-    prev.addEventListener('click', function () { go(-1); });
-    next.addEventListener('click', function () { go(1); });
+    if (prev) prev.addEventListener('click', function () { go(-1); });
+    if (next) next.addEventListener('click', function () { go(1); });
     var queued = false;
     track.addEventListener('scroll', function () {
       if (queued) return;
@@ -68,6 +75,31 @@
     window.addEventListener('resize', update, { passive: true });
     update();
   });
+
+  // ── Rangées au doigt (téléphone) : point actif ────────
+  doc.querySelectorAll('[data-swipe]').forEach(function (wrap) {
+    var track = wrap.querySelector('.swipe');
+    var dots = wrap.querySelectorAll('.swipe__dots i');
+    if (!track || !dots.length) return;
+    var queued = false;
+    var update = function () {
+      queued = false;
+      var kids = track.children;
+      var step = kids.length > 1 ? kids[1].offsetLeft - kids[0].offsetLeft : track.clientWidth;
+      var max = track.scrollWidth - track.clientWidth;
+      var i = track.scrollLeft > max - 4 ? kids.length - 1 : Math.round(track.scrollLeft / (step || 1));
+      dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
+    };
+    track.addEventListener('scroll', function () {
+      if (!queued) { queued = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  });
+
+  // ── Clavier ouvert : la barre d'appel laisse la place ──
+  var typing = function (t) { return t && t.matches && t.matches('input:not([type=checkbox]):not([type=radio]), textarea, select'); };
+  doc.addEventListener('focusin', function (e) { if (typing(e.target)) doc.documentElement.classList.add('is-typing'); });
+  doc.addEventListener('focusout', function (e) { if (typing(e.target)) doc.documentElement.classList.remove('is-typing'); });
 
   // ── Formulaire de contact (EmailJS chargé à la demande) ──
   var form = doc.getElementById('contact-form');

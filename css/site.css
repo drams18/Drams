@@ -4,44 +4,47 @@
    Style web professionnel et sobre, volontairement DISTINCT du mode
    aventure (habillé par l'univers choisi : src/aventure/styles/aventure.css).
 
-   Un seul thème, sombre (le thème clair a été retiré le 30/10/2026).
+   Un seul thème, clair (Cloud Dancer & Cobalt, depuis le 16/11/2026).
    ══════════════════════════════════════════════════════ */
 
 /* Inter auto-hébergée : regroupée par Vite (npm run build). */
 @import '@fontsource-variable/inter';
 
 :root {
-  /* Palette du logo (assets/img/logo.svg) : bleu nuit,
-     métal argenté, orange de la pierre du Ciel en accent. */
-  --bg:        #070c14;
-  --bg-alt:    #0a111c;
-  --surface:   #0e1724;
-  --surface-2: #142238;
-  --line:      #1c2a3e;
-  --line-2:    #2a3d58;
-  /* Cartes : un cran plus clair que --surface pour bien se détacher du fond */
-  --card:      linear-gradient(180deg, #1a2b44 0%, #132036 100%);
-  --card-line: #2f4668;
-  --card-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 18px 40px -22px rgba(0,0,0,.85);
-  --text:     #f4f8fb;
-  --text-2:    #c8cfdc;
-  --muted:     #8f9db0;
-  --accent:    #ff9a3c;
-  --accent-2:  #ffb877;
-  --grid:      rgba(200,207,220,.05);
-  --glow:      rgba(255,143,37,.22);
-  --shadow:    0 1px 2px rgba(0,0,0,.45), 0 12px 32px -12px rgba(0,0,0,.7);
-  --ok:        #34d399;
-  --err:       #fb7185;
+  /* Palette « Cloud Dancer & Cobalt » (16/11/2026) : fond blanc cassé
+     (Pantone 2026 Cloud Dancer), encre presque noire, un seul accent
+     bleu cobalt. Ombres teintées bleu nuit (--sh), jamais noires. */
+  --bg:        #f0eee9;
+  --bg-alt:    #e9e6df;
+  --surface:   #fbfaf7;
+  --surface-2: #f4f2ec;
+  --line:      #dfdad0;
+  --line-2:    #cbc5b8;
+  --sh:        22 28 66;
+  /* Cartes : blanches, un cran au-dessus du fond */
+  --card:      linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
+  --card-line: #e1dcd2;
+  --card-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 1px 2px rgb(var(--sh) / .05), 0 18px 40px -26px rgb(var(--sh) / .28);
+  --text:      #121212;
+  --text-2:    #3b3a37;
+  --muted:     #67645e;
+  --accent:    #2d45f5;
+  --accent-2:  #1f35d9;
+  --accent-soft: #7d8bff;
+  --grid:      rgb(18 18 18 / .05);
+  --glow:      rgb(45 69 245 / .14);
+  --shadow:    0 1px 2px rgb(var(--sh) / .08), 0 12px 32px -14px rgb(var(--sh) / .25);
+  --ok:        #12935b;
+  --err:       #d12f4c;
   /* Catégories de projets : couleurs des gemmes */
-  --c-pro:     #6aaaf0;
-  --c-perso:   #ef7a76;
-  --c-school:  #b585ea;
-  /* Bouton principal : métal argenté */
-  --primary-bg:   linear-gradient(180deg, #f4fcf5, #c8cfdc);
-  --primary-line: #c8cfdc;
-  --primary-ink:  #070c14;
-  color-scheme: dark;
+  --c-pro:     #2f7bd9;
+  --c-perso:   #d9534f;
+  --c-school:  #8a55d6;
+  /* Bouton principal : encre */
+  --primary-bg:   #121212;
+  --primary-line: #121212;
+  --primary-ink:  #f0eee9;
+  color-scheme: light;
 }
 
 :root {
@@ -128,7 +131,7 @@ img, svg { display: block; }
 :root .cw-overlay { font-family: var(--font); background: color-mix(in srgb, #000 55%, transparent); backdrop-filter: blur(6px); }
 :root .cw-panel {
   background: var(--surface); color: var(--text); border: 1px solid var(--line);
-  border-radius: 20px; box-shadow: 0 30px 80px -20px rgba(0,0,0,.55); overflow: hidden auto;
+  border-radius: 20px; box-shadow: 0 30px 80px -20px rgb(var(--sh) / .3); overflow: hidden auto;
 }
 :root .cw-panel::before, :root .cw-panel::after { content: none; }
 :root .cw-head { padding: 18px 20px; background: none; border-bottom: 1px solid var(--line); }

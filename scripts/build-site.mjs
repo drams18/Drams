@@ -215,6 +215,7 @@ function topbar(current) {
       <nav class="nav" id="site-nav" aria-label="Pages du site">
         ${nav}
         <a class="nav__extra" href="/aventure" data-switch-adventure>${icon('gamepad')}Mode aventure</a>
+        <a class="btn btn--cta btn--lg nav__cta" href="/devis">Demander un devis gratuit${icon('arrow')}</a>
       </nav>
       <div class="topbar__actions">
         <a class="btn btn--cta btn--sm topbar__cta" href="/devis"${current === 'devis' ? ' aria-current="page"' : ''}>Demander un devis</a>
@@ -383,7 +384,7 @@ function shell(page, { main, jsonld = null, css = [], scripts = [], keepMode = f
   <meta name="twitter:title" content="${esc(page.ogTitle || page.title)}">
   <meta name="twitter:description" content="${esc(page.description)}">
   <meta name="twitter:image" content="${SITE_URL}assets/img/og.jpg">
-  <meta name="theme-color" content="#070c14">${page.head || ''}
+  <meta name="theme-color" content="#f0eee9">${page.head || ''}
   <script src="/js/theme.js"></script>
   <link rel="icon" href="/assets/img/favicon.png" sizes="96x96">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
@@ -434,31 +435,16 @@ function offerCard(o, { level = 'h3' } = {}) {
             <a class="text-link offer__go" href="/devis">Demander un devis${icon('arrow')}</a>
           </li>`;
 }
-const offerGrid = (level) => `
+// swipe : sur téléphone, les offres défilent au doigt (accueil).
+const offerGrid = (level, { swipe = false } = {}) => swipe ? `
+        <div class="swipe-wrap" data-swipe>
+          <ul class="offers swipe" aria-label="Offres : faites défiler">${offers.map(o => offerCard(o, { level })).join('')}
+          </ul>
+          <div class="swipe__dots js-only" aria-hidden="true">${offers.map(() => '<i></i>').join('')}</div>
+        </div>` : `
         <ul class="offers">${offers.map(o => offerCard(o, { level })).join('')}
         </ul>`;
 const vatNote = `Prix nets : ${biz.vat}. Le prix final dépend de votre projet, il est fixé dans le devis avant de commencer.`;
-
-function caseCard(p, { level = 'h3', eager = false } = {}) {
-  const c = caseOf(p);
-  const link = linkOf(p);
-  return `
-          <li class="case">
-            <a class="case__media" href="${projectUrl(p)}" tabindex="-1" aria-hidden="true">
-              ${mockup(p, { eager })}
-            </a>
-            <div class="case__body">
-              <p class="tags"><span class="tag tag--kind">${esc(c.label)}</span><span class="tag">${esc(c.frame)}</span></p>
-              <${level} class="case__t"><a href="${projectUrl(p)}">${esc(p.title)}</a></${level}>
-              <dl class="case__dl">
-                <div><dt>Le besoin</dt><dd>${esc(c.need)}</dd></div>
-                <div><dt>Ce que j’ai fait</dt><dd>${esc(c.did)}</dd></div>
-                <div><dt>Ce que ça permet</dt><dd>${esc(c.result)}</dd></div>
-              </dl>
-              <p class="case__links"><a class="btn btn--sm" href="${projectUrl(p)}">Voir le projet${icon('arrow')}</a>${link ? ext(link.url, link.label, 'btn btn--sm btn--ghost') : ''}</p>
-            </div>
-          </li>`;
-}
 
 // Diapositive d'un carrousel (page Réalisations), compacte : la capture, ce
 // que c'est, le titre et les liens. Les textes (besoin, ce que j'ai fait, ce
@@ -589,10 +575,10 @@ function homePage() {
             <span class="hero__kicker">${JOB} · ${AREA}</span>
             <span class="hero__title">${words('Des sites et des outils qui vous amènent')} <em>${words('des clients')}<svg class="hero__swash" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 17C70 6 160 4 296 12" pathLength="1"/></svg></em></span>
           </h1>
-          <p class="hero__lead">Pour les commerces, artisans et indépendants d’${AREA}. Je vous aide à être trouvé sur Google, à recevoir des réservations en ligne et à gagner du temps sur vos tâches.</p>
+          <p class="hero__lead">Pour les commerces, artisans et indépendants d’${AREA}.<span class="hero__more"> Je vous aide à être trouvé sur Google, à recevoir des réservations en ligne et à gagner du temps sur vos tâches.</span></p>
           <div class="hero__cta">
             <a class="btn btn--cta btn--lg" href="/devis" data-magnet>Demander un devis gratuit${icon('arrow')}</a>
-            <a class="btn btn--lg btn--glass" href="#contact">${icon('phone')}M’appeler / WhatsApp</a>
+            <a class="btn btn--lg btn--glass hero__alt" href="#contact">${icon('phone')}M’appeler / WhatsApp</a>
           </div>
           <p class="hero__trust">${icon('check')}Diagnostic gratuit en 48 h · ${AREA}</p>
         </div>
@@ -647,7 +633,7 @@ function homePage() {
           <p class="kicker">Offres</p>
           <h2 class="sec__t" id="of-t">Mes offres principales</h2>
           <p class="sec__lead">Des prix clairs, affichés « à partir de ». Ce qui est compris est écrit noir sur blanc.</p>
-        </header>${offerGrid('h3')}
+        </header>${offerGrid('h3', { swipe: true })}
         <p class="sec__more"><a class="btn" href="/tarifs">Voir la grille complète des tarifs${icon('arrow')}</a><span class="note">${esc(vatNote)}</span></p>
       </div>
     </section>
@@ -659,8 +645,17 @@ function homePage() {
           <h2 class="sec__t" id="re-t">Ce que j’ai déjà construit</h2>
           <p class="sec__lead">Un site de réservation, des applications publiées sur l’App Store, un outil de gestion d’entreprise : chaque projet expliqué simplement.</p>
         </header>
-        <ul class="cases">${featured.map(p => caseCard(p)).join('')}
-        </ul>
+        <div class="rails rails--home">
+          <section class="rail" aria-label="Projets à la une" data-rail>
+            <div class="rail__nav js-only">
+              <button type="button" class="icon-btn rail__btn" data-rail-prev aria-controls="rail-home" aria-label="Projet précédent">${icon('back')}</button>
+              <button type="button" class="icon-btn rail__btn" data-rail-next aria-controls="rail-home" aria-label="Projet suivant">${icon('arrow')}</button>
+            </div>
+            <ul class="rail__track" id="rail-home" tabindex="0" aria-label="Projets à la une : faites défiler">${featured.map(p => slideCard(p)).join('')}
+            </ul>
+            <div class="rail__dots js-only" aria-hidden="true">${featured.map(() => '<i></i>').join('')}</div>
+          </section>
+        </div>
         <p class="sec__more"><a class="btn" href="/realisations">Voir toutes les réalisations${icon('arrow')}</a></p>
       </div>
     </section>
@@ -684,8 +679,8 @@ function homePage() {
           <p class="kicker">Qui je suis</p>
           <h2 class="sec__t" id="me-t">Arphan, développeur web à votre écoute</h2>
           <p>Je m’appelle ${esc(NAME)}, développeur web freelance en ${AREA}. J’ai passé près de 3 ans en entreprise, chez DevPhantom, à créer en équipe des plateformes web et des applications mobiles. J’ai aussi publié seul une application sur l’App Store.</p>
-          <p>Aujourd’hui, je mets cette expérience au service des commerces, artisans et indépendants : des outils simples, expliqués sans jargon, qui vous amènent des clients et vous font gagner du temps.</p>
-          <ul class="facts">
+          <p class="about__more">Aujourd’hui, je mets cette expérience au service des commerces, artisans et indépendants : des outils simples, expliqués sans jargon, qui vous amènent des clients et vous font gagner du temps.</p>
+          <ul class="facts about__more">
             <li>${icon('pin')}${AREA}</li>
             <li>${icon('check')}Près de 3 ans en entreprise</li>
             <li>${icon('mobile')}Applications publiées sur l’App Store</li>

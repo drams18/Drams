@@ -22,7 +22,7 @@
   <meta name="twitter:title" content="Arphan Drame · Développeur web freelance · Île-de-France">
   <meta name="twitter:description" content="Sites vitrines, réservation en ligne, fiche Google, boutique Shopify : des sites et des outils qui amènent des clients aux commerces, artisans et indépendants d’Île-de-France. Devis gratuit.">
   <meta name="twitter:image" content="https://arphandrame.fr/assets/img/og.jpg">
-  <meta name="theme-color" content="#070c14">
+  <meta name="theme-color" content="#f0eee9">
   <script>
     (function (h) {
       var m = /^#(profil|parcours|projets|contact|portail|competences|formation|services)(?:\/(.+))?$/.exec(h);
@@ -237,6 +237,7 @@
         <a href="/a-propos">À propos</a>
         <a href="/contact">Contact</a>
         <a class="nav__extra" href="/aventure" data-switch-adventure><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-gamepad"/></svg>Mode aventure</a>
+        <a class="btn btn--cta btn--lg nav__cta" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
       </nav>
       <div class="topbar__actions">
         <a class="btn btn--cta btn--sm topbar__cta" href="/devis">Demander un devis</a>
@@ -261,10 +262,10 @@
             <span class="hero__kicker">Développeur web freelance · Île-de-France</span>
             <span class="hero__title"><span class="w"><span style="--i:0">Des</span></span> <span class="w"><span style="--i:1">sites</span></span> <span class="w"><span style="--i:2">et</span></span> <span class="w"><span style="--i:3">des</span></span> <span class="w"><span style="--i:4">outils</span></span> <span class="w"><span style="--i:5">qui</span></span> <span class="w"><span style="--i:6">vous</span></span> <span class="w"><span style="--i:7">amènent</span></span> <em><span class="w"><span style="--i:8">des</span></span> <span class="w"><span style="--i:9">clients</span></span><svg class="hero__swash" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 17C70 6 160 4 296 12" pathLength="1"/></svg></em></span>
           </h1>
-          <p class="hero__lead">Pour les commerces, artisans et indépendants d’Île-de-France. Je vous aide à être trouvé sur Google, à recevoir des réservations en ligne et à gagner du temps sur vos tâches.</p>
+          <p class="hero__lead">Pour les commerces, artisans et indépendants d’Île-de-France.<span class="hero__more"> Je vous aide à être trouvé sur Google, à recevoir des réservations en ligne et à gagner du temps sur vos tâches.</span></p>
           <div class="hero__cta">
             <a class="btn btn--cta btn--lg" href="/devis" data-magnet>Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
-            <a class="btn btn--lg btn--glass" href="#contact"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>M’appeler / WhatsApp</a>
+            <a class="btn btn--lg btn--glass hero__alt" href="#contact"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>M’appeler / WhatsApp</a>
           </div>
           <p class="hero__trust"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Diagnostic gratuit en 48 h · Île-de-France</p>
         </div>
@@ -344,7 +345,8 @@
           <h2 class="sec__t" id="of-t">Mes offres principales</h2>
           <p class="sec__lead">Des prix clairs, affichés « à partir de ». Ce qui est compris est écrit noir sur blanc.</p>
         </header>
-        <ul class="offers">
+        <div class="swipe-wrap" data-swipe>
+          <ul class="offers swipe" aria-label="Offres : faites défiler">
           <li class="offer" id="offre-fiche-google">
             <span class="offer__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg></span>
             <h3 class="offer__t">Fiche Google</h3>
@@ -393,7 +395,9 @@
             <ul class="offer__inc" aria-label="Compris"><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Connexion entre vos outils (Google Sheets, agenda…)</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Avec ou sans intelligence artificielle</li><li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Adaptée à votre façon de travailler</li></ul>
             <a class="text-link offer__go" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
           </li>
-        </ul>
+          </ul>
+          <div class="swipe__dots js-only" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
         <p class="sec__more"><a class="btn" href="/tarifs">Voir la grille complète des tarifs<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><span class="note">Prix nets : TVA non applicable, article 293 B du CGI. Le prix final dépend de votre projet, il est fixé dans le devis avant de commencer.</span></p>
       </div>
     </section>
@@ -405,78 +409,81 @@
           <h2 class="sec__t" id="re-t">Ce que j’ai déjà construit</h2>
           <p class="sec__lead">Un site de réservation, des applications publiées sur l’App Store, un outil de gestion d’entreprise : chaque projet expliqué simplement.</p>
         </header>
-        <ul class="cases">
-          <li class="case">
-            <a class="case__media" href="/realisations/wild-kedougou" tabindex="-1" aria-hidden="true">
-              <figure class="mock mock--browser">
+        <div class="rails rails--home">
+          <section class="rail" aria-label="Projets à la une" data-rail>
+            <div class="rail__nav js-only">
+              <button type="button" class="icon-btn rail__btn" data-rail-prev aria-controls="rail-home" aria-label="Projet précédent"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-back"/></svg></button>
+              <button type="button" class="icon-btn rail__btn" data-rail-next aria-controls="rail-home" aria-label="Projet suivant"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
+            </div>
+            <ul class="rail__track" id="rail-home" tabindex="0" aria-label="Projets à la une : faites défiler">
+            <li class="case case--mini rail__slide">
+              <div class="case__top">
+                <a class="case__media" href="/realisations/wild-kedougou" tabindex="-1" aria-hidden="true">
+                  <figure class="mock mock--browser">
               <div class="mock__bar" aria-hidden="true"><i></i><i></i><i></i><span>wild-kedougou-experience.hitmind-pro.workers.dev</span></div>
-              <img src="/assets/img/projets/wild-kedougou-home.webp" srcset="/assets/img/projets/wild-kedougou.webp 720w, /assets/img/projets/wild-kedougou-home.webp 1600w" sizes="(max-width: 760px) 92vw, 560px" alt="Page d'accueil" width="1600" height="778" loading="lazy" decoding="async">
+              <img src="/assets/img/projets/wild-kedougou-home.webp" srcset="/assets/img/projets/wild-kedougou.webp 720w, /assets/img/projets/wild-kedougou-home.webp 1600w" sizes="(max-width: 760px) 78vw, 380px" alt="Page d'accueil" width="1600" height="778" loading="lazy" decoding="async">
             </figure>
-            </a>
-            <div class="case__body">
-              <p class="tags"><span class="tag tag--kind">Site de réservation</span><span class="tag">Projet personnel</span></p>
-              <h3 class="case__t"><a href="/realisations/wild-kedougou">Wild Kédougou Experience</a></h3>
-              <dl class="case__dl">
-                <div><dt>Le besoin</dt><dd>Présenter une activité touristique au Sénégal et permettre de réserver en ligne, sans échanges de messages.</dd></div>
-                <div><dt>Ce que j’ai fait</dt><dd>Conçu et développé seul : le site, la réservation, le calendrier des disponibilités, les e-mails de confirmation et le référencement Google.</dd></div>
-                <div><dt>Ce que ça permet</dt><dd>Le visiteur découvre les formules, choisit une date libre et réserve depuis son téléphone. Les disponibilités se mettent à jour dans le calendrier et une confirmation part par e-mail.</dd></div>
-              </dl>
-              <p class="case__links"><a class="btn btn--sm" href="/realisations/wild-kedougou">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Voir le site en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
-            </div>
-          </li>
-          <li class="case">
-            <a class="case__media" href="/realisations/islaah" tabindex="-1" aria-hidden="true">
-              <div class="mocks mocks--1">
+                </a>
+                <p class="case__badge"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-calendar"/></svg>Site de réservation</p>
+              </div>
+              <div class="case__body">
+                <h3 class="case__t"><a href="/realisations/wild-kedougou">Wild Kédougou Experience</a></h3>
+                <p class="case__frame">Projet personnel</p>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/wild-kedougou">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://wild-kedougou-experience.hitmind-pro.workers.dev/" target="_blank" rel="noopener">Voir en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </div>
+            </li>
+            <li class="case case--mini rail__slide">
+              <div class="case__top">
+                <a class="case__media" href="/realisations/islaah" tabindex="-1" aria-hidden="true">
+                  <div class="mocks mocks--2">
               <figure class="mock mock--phone"><img src="/assets/img/projets/islaah-home-logged-in.webp" alt="Accueil : les modes de jeu" width="370" height="800" loading="lazy" decoding="async"></figure>
+              <figure class="mock mock--phone"><img src="/assets/img/projets/islaah-onboarding.webp" alt="Écran de bienvenue" width="370" height="800" loading="lazy" decoding="async"></figure>
             </div>
-            </a>
-            <div class="case__body">
-              <p class="tags"><span class="tag tag--kind">Application iPhone</span><span class="tag">Projet personnel</span></p>
-              <h3 class="case__t"><a href="/realisations/islaah">ISLAAH</a></h3>
-              <dl class="case__dl">
-                <div><dt>Le besoin</dt><dd>S'entraîner à reconnaître les versets du Coran, de façon ludique, sur son téléphone.</dd></div>
-                <div><dt>Ce que j’ai fait</dt><dd>Réalisé seul : l'application iPhone, le serveur qui l'alimente et la publication sur l'App Store.</dd></div>
-                <div><dt>Ce que ça permet</dt><dd>On écoute des récitations, on joue à plusieurs modes de quiz et on suit sa progression. L'application se télécharge sur l'App Store.</dd></div>
-              </dl>
-              <p class="case__links"><a class="btn btn--sm" href="/realisations/islaah">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener">Voir sur l’App Store<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
-            </div>
-          </li>
-          <li class="case">
-            <a class="case__media" href="/realisations/oneday" tabindex="-1" aria-hidden="true">
-              <div class="mocks mocks--1">
+                </a>
+                <p class="case__badge"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mobile"/></svg>Application iPhone</p>
+              </div>
+              <div class="case__body">
+                <h3 class="case__t"><a href="/realisations/islaah">ISLAAH</a></h3>
+                <p class="case__frame">Projet personnel</p>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/islaah">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://apps.apple.com/us/app/islaah/id6758726142" target="_blank" rel="noopener">App Store<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </div>
+            </li>
+            <li class="case case--mini rail__slide">
+              <div class="case__top">
+                <a class="case__media" href="/realisations/oneday" tabindex="-1" aria-hidden="true">
+                  <div class="mocks mocks--2">
               <figure class="mock mock--phone"><img src="/assets/img/projets/oneday-home-program.webp" alt="Journée du jour avec un programme appliqué" width="440" height="954" loading="lazy" decoding="async"></figure>
+              <figure class="mock mock--phone"><img src="/assets/img/projets/oneday-home-without-program.webp" alt="Journée vide : ajout d'une tâche" width="440" height="956" loading="lazy" decoding="async"></figure>
             </div>
-            </a>
-            <div class="case__body">
-              <p class="tags"><span class="tag tag--kind">Application installable</span><span class="tag">Projet personnel</span></p>
-              <h3 class="case__t"><a href="/realisations/oneday">OneDay</a></h3>
-              <dl class="case__dl">
-                <div><dt>Le besoin</dt><dd>Organiser ses journées et tenir ses habitudes, avec des rappels sur iPhone.</dd></div>
-                <div><dt>Ce que j’ai fait</dt><dd>Réalisé seul : une application qui s'installe depuis le navigateur, fonctionne sans connexion et envoie des rappels.</dd></div>
-                <div><dt>Ce que ça permet</dt><dd>La veille, on prépare sa journée. Le matin, on ne voit que ce qui reste à faire, avec un rappel à l'heure de chaque tâche.</dd></div>
-              </dl>
-              <p class="case__links"><a class="btn btn--sm" href="/realisations/oneday">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener">Voir le site en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
-            </div>
-          </li>
-          <li class="case">
-            <a class="case__media" href="/realisations/allsab-ms" tabindex="-1" aria-hidden="true">
-              <figure class="mock mock--browser">
+                </a>
+                <p class="case__badge"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mobile"/></svg>Application installable</p>
+              </div>
+              <div class="case__body">
+                <h3 class="case__t"><a href="/realisations/oneday">OneDay</a></h3>
+                <p class="case__frame">Projet personnel</p>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/oneday">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://oneday-5s9.pages.dev/" target="_blank" rel="noopener">Voir en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </div>
+            </li>
+            <li class="case case--mini rail__slide">
+              <div class="case__top">
+                <a class="case__media" href="/realisations/allsab-ms" tabindex="-1" aria-hidden="true">
+                  <figure class="mock mock--browser">
               <div class="mock__bar" aria-hidden="true"><i></i><i></i><i></i><span>allsab-ms.com</span></div>
-              <img src="/assets/img/projets/allsab-ms-admin.webp" srcset="/assets/img/projets/allsab-ms.webp 720w, /assets/img/projets/allsab-ms-admin.webp 1600w" sizes="(max-width: 760px) 92vw, 560px" alt="Tableau de bord de l'intranet : pointages, congés, remboursements, planning" width="1600" height="777" loading="lazy" decoding="async">
+              <img src="/assets/img/projets/allsab-ms-admin.webp" srcset="/assets/img/projets/allsab-ms.webp 720w, /assets/img/projets/allsab-ms-admin.webp 1600w" sizes="(max-width: 760px) 78vw, 380px" alt="Tableau de bord de l'intranet : pointages, congés, remboursements, planning" width="1600" height="777" loading="lazy" decoding="async">
             </figure>
-            </a>
-            <div class="case__body">
-              <p class="tags"><span class="tag tag--kind">Outil interne</span><span class="tag">En équipe chez DevPhantom</span></p>
-              <h3 class="case__t"><a href="/realisations/allsab-ms">Allsab-MS</a></h3>
-              <dl class="case__dl">
-                <div><dt>Le besoin</dt><dd>Une entreprise qui met des techniciens à disposition pour des opérations de maintenance devait gérer ses équipes au même endroit.</dd></div>
-                <div><dt>Ce que j’ai fait</dt><dd>Surtout la partie serveur : connexion et droits d'accès, espace administrateur, factures, techniciens, déplacements.</dd></div>
-                <div><dt>Ce que ça permet</dt><dd>Pointages, congés, remboursements et planning se gèrent dans un seul outil en ligne.</dd></div>
-              </dl>
-              <p class="case__links"><a class="btn btn--sm" href="/realisations/allsab-ms">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://allsab-ms.com/" target="_blank" rel="noopener">Voir le site en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
-            </div>
-          </li>
-        </ul>
+                </a>
+                <p class="case__badge"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-doc"/></svg>Outil interne</p>
+              </div>
+              <div class="case__body">
+                <h3 class="case__t"><a href="/realisations/allsab-ms">Allsab-MS</a></h3>
+                <p class="case__frame">En équipe chez DevPhantom</p>
+                <p class="case__links"><a class="btn btn--sm" href="/realisations/allsab-ms">Voir le projet<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn btn--sm btn--ghost" href="https://allsab-ms.com/" target="_blank" rel="noopener">Voir en ligne<svg class="ico ico--xs" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a></p>
+              </div>
+            </li>
+            </ul>
+            <div class="rail__dots js-only" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          </section>
+        </div>
         <p class="sec__more"><a class="btn" href="/realisations">Voir toutes les réalisations<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a></p>
       </div>
     </section>
@@ -503,8 +510,8 @@
           <p class="kicker">Qui je suis</p>
           <h2 class="sec__t" id="me-t">Arphan, développeur web à votre écoute</h2>
           <p>Je m’appelle Arphan Drame, développeur web freelance en Île-de-France. J’ai passé près de 3 ans en entreprise, chez DevPhantom, à créer en équipe des plateformes web et des applications mobiles. J’ai aussi publié seul une application sur l’App Store.</p>
-          <p>Aujourd’hui, je mets cette expérience au service des commerces, artisans et indépendants : des outils simples, expliqués sans jargon, qui vous amènent des clients et vous font gagner du temps.</p>
-          <ul class="facts">
+          <p class="about__more">Aujourd’hui, je mets cette expérience au service des commerces, artisans et indépendants : des outils simples, expliqués sans jargon, qui vous amènent des clients et vous font gagner du temps.</p>
+          <ul class="facts about__more">
             <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg>Île-de-France</li>
             <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Près de 3 ans en entreprise</li>
             <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mobile"/></svg>Applications publiées sur l’App Store</li>

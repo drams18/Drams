@@ -70,7 +70,12 @@
   background: var(--surface); border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: 6px;
 }
 @media (hover: none) { .step__actions .hint { display: none; } }
-.btn:disabled, .btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+/* Désactivé : gris franc, lisible (un bouton coloré à demi transparent se lit mal) */
+.btn:disabled, .btn[aria-disabled="true"],
+.wizard .btn--primary:disabled, .wizard .btn--primary[aria-disabled="true"] {
+  color: var(--muted); background: var(--surface-2); border-color: var(--line-2); cursor: not-allowed; transform: none; box-shadow: none;
+}
+.btn:disabled::after, .btn[aria-disabled="true"]::after { content: none; }
 
 /* Récapitulatif */
 .recap { margin-top: 28px; padding: 4px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
