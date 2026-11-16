@@ -31,6 +31,7 @@
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -91,6 +92,9 @@ const TIKTOK    = contact.tiktok || '';
 const CV_URL    = '/assets/CV.pdf';
 const PHOTO     = existsSync(join(ROOT, 'assets/img/arphan-drame.webp')) ? '/assets/img/arphan-drame.webp' : null;
 const GOOGLE_PROFILE = PROFILE_URL && PROFILE_URL !== REVIEW_URL ? PROFILE_URL : '';
+// Image de partage : l'adresse change avec le fichier (?v=empreinte), sinon le
+// cache (Cloudflare, 7 jours ; Facebook, WhatsApp…) garde l'ancienne image.
+const OG_IMAGE = `${SITE_URL}assets/img/og.jpg?v=${createHash('sha1').update(readFileSync(join(ROOT, 'assets/img/og.jpg'))).digest('hex').slice(0, 8)}`;
 
 // ── Tarifs ─────────────────────────────────────────────
 const serviceByName = (name) => {
@@ -317,7 +321,7 @@ const business = () => ({
   alternateName: NAME,
   description: `${JOB} en ${AREA} : sites vitrines, landing pages, réservation en ligne, boutiques Shopify, fiches Google et automatisations pour les commerces, artisans et indépendants.`,
   url: SITE_URL,
-  image: `${SITE_URL}assets/img/og.jpg`,
+  image: `${OG_IMAGE}`,
   logo: `${SITE_URL}assets/img/logo-1024.png`,
   telephone: TEL_INTL,
   email: contact.email,
@@ -376,14 +380,14 @@ function shell(page, { main, jsonld = null, css = [], scripts = [], keepMode = f
   <meta property="og:title" content="${esc(page.ogTitle || page.title)}">
   <meta property="og:description" content="${esc(page.description)}">
   <meta property="og:url" content="${url}">
-  <meta property="og:image" content="${SITE_URL}assets/img/og.jpg">
+  <meta property="og:image" content="${OG_IMAGE}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="${esc(NAME)}, ${JOB} en ${AREA} : des sites et des outils qui vous amènent des clients">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${esc(page.ogTitle || page.title)}">
   <meta name="twitter:description" content="${esc(page.description)}">
-  <meta name="twitter:image" content="${SITE_URL}assets/img/og.jpg">
+  <meta name="twitter:image" content="${OG_IMAGE}">
   <meta name="theme-color" content="#f0eee9">${page.head || ''}
   <script src="/js/theme.js"></script>
   <link rel="icon" href="/assets/img/favicon.png" sizes="96x96">
