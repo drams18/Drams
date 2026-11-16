@@ -250,50 +250,7 @@
   }
   window.FX = { confetti: confetti, scramble: scramble };
 
-  // ══ Curseur : point + anneau ══════════════════════════
-  // Le point suit la souris exactement, l'anneau le rattrape en douceur et
-  // grossit sur ce qui se clique. Le curseur du système reste dans les
-  // champs de saisie. Souris seulement.
-  if (mouse) {
-    var cur = doc.createElement('div');
-    cur.className = 'cursor is-hidden';
-    cur.setAttribute('aria-hidden', 'true');
-    cur.innerHTML = '<span class="cursor__ring"><span class="cursor__txt"></span></span><span class="cursor__dot"></span>';
-    body.appendChild(cur);
-    root.classList.add('has-cursor');
-    var ring = cur.firstChild, dot = cur.lastChild, ctxt = ring.firstChild;
-    var mx = -100, my = -100, rx = -100, ry = -100, running = 0;
-    var follow = function () {
-      rx += (mx - rx) * 0.2; ry += (my - ry) * 0.2;
-      ring.style.transform = 'translate3d(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px,0)';
-      running = Math.abs(mx - rx) + Math.abs(my - ry) > 0.2 ? raf(follow) : 0;
-    };
-    doc.addEventListener('pointermove', function (e) {
-      if (e.pointerType !== 'mouse') { cur.classList.add('is-hidden'); return; }
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0)';
-      if (cur.classList.contains('is-hidden')) { cur.classList.remove('is-hidden'); rx = mx; ry = my; }
-      if (!running) running = raf(follow);
-    }, { passive: true });
-    var FIELD = 'input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]):not([type=range]), textarea, select, [contenteditable]';
-    var CLICK = 'a, button, summary, label, [role=button], input[type=checkbox], input[type=radio]';
-    doc.addEventListener('pointerover', function (e) {
-      var t = e.target;
-      if (!t.closest) return;
-      var field = t.closest(FIELD);
-      var tagged = !field && t.closest('[data-cursor]');
-      var link = !field && t.closest(CLICK);
-      // Un lien dans une zone marquée (mur) : « Voir » ; la zone : son texte.
-      var label = tagged ? (link && tagged.contains(link) && tagged !== link ? (link.getAttribute('data-cursor') || 'Voir') : tagged.getAttribute('data-cursor')) : '';
-      cur.classList.toggle('is-text', !!field);
-      cur.classList.toggle('is-link', !!link && !label);
-      cur.classList.toggle('is-label', !!label);
-      if (label && ctxt.textContent !== label) ctxt.textContent = label;
-    }, { passive: true });
-    doc.addEventListener('mouseout', function (e) { if (!e.relatedTarget) cur.classList.add('is-hidden'); });
-    doc.addEventListener('pointerdown', function () { cur.classList.add('is-down'); }, { passive: true });
-    doc.addEventListener('pointerup', function () { cur.classList.remove('is-down'); }, { passive: true });
-  }
+  // Curseur : mini pistolet en CSS pur (css/fx.css), rien à faire ici.
 
   // ══ Menu et nom : texte brouillé au survol ════════════
   if (mouse) {
