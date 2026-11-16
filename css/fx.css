@@ -6,6 +6,9 @@
      • partout : apparitions au défilement, lumière qui suit le pointeur
        sur les cartes, boutons magnétiques, barre de progression,
        transitions entre pages, en-têtes des pages intérieures
+     • écran d'arrivée, rideau entre les pages, titres mot à mot flous
+       puis nets, mots fantômes du hero, curseur, texte brouillé du menu,
+       confettis
 
    Garde-fous :
      .fx   posée par js/theme.js (dans le <head>) si le visiteur n'a PAS
@@ -15,8 +18,9 @@
            dépendent du défilement (apparitions, frise) en dépendent.
    Sans JavaScript ou avec « réduire les animations » : tout est visible,
    rien ne bouge.
-   Perf : uniquement transform / opacity animés, dégradés statiques
-   (aucun filtre flou animé), boucles en pause hors écran (.is-off).
+   Perf : transform / opacity animés, dégradés statiques, boucles en
+   pause hors écran (.is-off). Seul flou animé : les mots des titres,
+   une fois, sur ordinateur.
    ══════════════════════════════════════════════════════ */
 
 @property --a { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
@@ -423,15 +427,134 @@
 .brand:hover .brand__logo { transform: rotate(120deg); }
 .topbar__cta { position: relative; }
 
-/* ══ Transitions entre pages (navigateurs compatibles) ═ */
-@media (prefers-reduced-motion: no-preference) {
-  @view-transition { navigation: auto; }
-  .topbar { view-transition-name: topbar; }
-  ::view-transition-old(root) { animation: fx-vt-out .28s ease both; }
-  ::view-transition-new(root) { animation: fx-vt-in .5s var(--fx-ease) both; }
+/* Transitions entre pages : le rideau (plus bas) remplace la transition
+   native du navigateur (@view-transition), qui se battait avec lui. */
+
+/* ══ Attente : rideau ou écran d'arrivée encore baissé ═══
+   js/theme.js pose .hold (et le retire lui-même par sécurité) : les
+   entrées de la page attendent, figées à leur premier état. */
+.hold body *, .hold body *::before, .hold body *::after { animation-play-state: paused !important; }
+
+/* ══ Écran d'arrivée (js/fx.js) ═══════════════════════
+   html.intro::before couvre la page dès le premier affichage, en
+   attendant que js/fx.js construise l'écran (.intro-on). */
+html.intro::before {
+  content: ''; position: fixed; inset: 0; z-index: 9998;
+  background: radial-gradient(ellipse 70% 60% at 50% 45%, #1b2154 0%, #121212 70%);
 }
-@keyframes fx-vt-out { to { opacity: 0; transform: translateY(-14px) scale(.99); } }
-@keyframes fx-vt-in  { from { opacity: 0; transform: translateY(22px); } }
+html.intro-on::before { content: none; }
+.intro-screen { position: fixed; inset: 0; z-index: 9999; }
+.intro-screen__sheet, .intro-screen__ink { position: absolute; inset: 0; will-change: transform; }
+.intro-screen__sheet { background: var(--accent); }
+.intro-screen__ink {
+  display: grid; place-items: center; overflow: hidden;
+  background: radial-gradient(ellipse 70% 60% at 50% 45%, #1b2154 0%, #121212 70%);
+}
+.intro-screen__in { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 0 24px; text-align: center; }
+.intro-screen__logo { width: clamp(92px, 15vw, 132px); height: auto; filter: drop-shadow(0 12px 40px rgb(45 69 245 / .5)); }
+.intro-screen__name {
+  font-size: clamp(42px, 9vw, 104px); font-weight: 800; line-height: 1; letter-spacing: -.05em;
+  color: #f0eee9; white-space: nowrap;
+}
+.intro-screen__c { display: inline-block; overflow: hidden; vertical-align: top; padding: .06em 0 .14em; margin: -.06em 0 -.14em; }
+.intro-screen__c > span { display: inline-block; }
+.intro-screen__sp { display: inline-block; width: .24em; }
+.intro-screen__job { font-size: clamp(12px, 1.5vw, 15px); font-weight: 650; letter-spacing: .2em; text-transform: uppercase; color: #9aa3ff; }
+.intro-screen__count {
+  position: absolute; right: clamp(20px, 5vw, 56px); bottom: clamp(16px, 4vw, 40px);
+  font: 700 clamp(56px, 11vw, 132px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: rgb(240 238 233 / .16); font-variant-numeric: tabular-nums;
+}
+.intro-screen__count::after { content: '%'; margin-left: .06em; font-size: .42em; }
+.intro-screen__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgb(255 255 255 / .08); }
+.intro-screen__bar i {
+  position: absolute; inset: 0; transform-origin: left; transform: scaleX(0);
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft)); box-shadow: 0 0 14px var(--accent);
+}
+
+/* ══ Rideau entre les pages ════════════════════════════
+   .curtain : posé par js/fx.js au départ, il monte. html[data-curtain] :
+   la page d'arrivée naît couverte (js/theme.js), le rideau se lève. */
+.curtain, html[data-curtain]::after {
+  position: fixed; inset: 0; z-index: 9997; display: grid; place-items: center; padding: 0 24px;
+  color: #fff; background: var(--accent); text-align: center;
+  font: 800 clamp(40px, 8.4vw, 104px)/1.04 var(--font); letter-spacing: -.045em;
+  will-change: transform;
+}
+.curtain__t { max-width: 14ch; }
+html[data-curtain]::after {
+  content: attr(data-curtain); pointer-events: none;
+  animation: fx-curtain .74s cubic-bezier(.76,0,.24,1) .12s both;
+}
+@keyframes fx-curtain { to { transform: translate3d(0, -100%, 0); } }
+
+/* ══ Titres mot à mot : flous puis nets ════════════════
+   En-têtes de page : découpés par scripts/build-site.mjs (.bw), joués en
+   CSS. Titres et chapeaux de section : découpés par js/fx.js (.rv--w),
+   joués à l'apparition. Sans flou sur téléphone (fluidité). */
+.bw { display: inline-block; }
+.fx .phead > .phead__t { animation: none; }
+.fx .phead__t .bw { animation: fx-bw .9s var(--fx-ease) both; animation-delay: calc(.06s + min(var(--i), 16) * .045s); }
+@keyframes fx-bw   { from { opacity: 0; translate: 0 .38em; filter: blur(10px); } }
+@keyframes fx-bw-m { from { opacity: 0; translate: 0 .38em; } }
+.fxr .rv.rv--w { opacity: 1; translate: none; }
+.fxr .rv--w .bw { opacity: 0; translate: 0 .42em; filter: blur(8px); }
+.fxr .rv--w.in .bw {
+  opacity: 1; translate: 0 0; filter: none;
+  transition: opacity .7s var(--fx-ease), translate .85s var(--fx-ease), filter .7s var(--fx-ease);
+  transition-delay: calc(var(--d, 0s) + min(var(--i), 24) * .028s);
+}
+@media (max-width: 899px), (pointer: coarse) {
+  .fx .phead__t .bw { animation-name: fx-bw-m; }
+  .fxr .rv--w .bw { filter: none; }
+}
+
+/* ══ Hero : mots fantômes révélés autour du pointeur ═══ */
+.ghost {
+  position: absolute; inset: 0; display: none; flex-direction: column; justify-content: center; align-items: center;
+  font-size: min(17vw, 250px); font-weight: 900; line-height: .84; letter-spacing: -.065em; text-transform: uppercase; white-space: nowrap;
+  color: color-mix(in srgb, var(--accent) 17%, transparent); user-select: none;
+  -webkit-mask-image: radial-gradient(circle 340px at var(--gx, 50%) var(--gy, 50%), #000 0%, rgb(0 0 0 / .55) 45%, transparent 100%);
+          mask-image: radial-gradient(circle 340px at var(--gx, 50%) var(--gy, 50%), #000 0%, rgb(0 0 0 / .55) 45%, transparent 100%);
+  opacity: 0; transition: opacity .7s;
+}
+@media (pointer: fine) and (min-width: 900px) { .ghost { display: flex; } }
+.hero.is-lit .ghost { opacity: 1; }
+
+/* ══ Menu : texte brouillé au survol (largeur figée) ═══ */
+.scr { display: inline-grid; }
+.scr > * { grid-area: 1 / 1; white-space: nowrap; }
+.scr__g { visibility: hidden; }
+.scr__t { overflow: hidden; }
+.brand__job { white-space: nowrap; }
+
+/* ══ Curseur : point + anneau (souris seulement) ═══════
+   Le conteneur est déplacé par js/fx.js ; le dessin (::before) grossit. */
+html.has-cursor, html.has-cursor * { cursor: none !important; }
+html.has-cursor :is(input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]), textarea, select, [contenteditable]) { cursor: auto !important; }
+.cursor { position: fixed; left: 0; top: 0; z-index: 10000; pointer-events: none; mix-blend-mode: difference; transition: opacity .25s; }
+.cursor.is-hidden, .cursor.is-text { opacity: 0; }
+.cursor__dot, .cursor__ring { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
+.cursor__dot::before, .cursor__ring::before { content: ''; position: absolute; border-radius: 50%; }
+.cursor__dot::before { left: -4px; top: -4px; width: 8px; height: 8px; background: #fff; transition: transform .3s var(--fx-ease), opacity .2s; }
+.cursor__ring::before {
+  left: -19px; top: -19px; width: 38px; height: 38px; border: 1.5px solid #fff;
+  transition: transform .45s var(--fx-ease), background-color .3s, border-color .3s;
+}
+.cursor.is-link .cursor__ring::before { transform: scale(1.6); }
+.cursor.is-link .cursor__dot::before { transform: scale(.4); }
+.cursor.is-down .cursor__ring::before { transform: scale(.82); }
+.cursor.is-link.is-down .cursor__ring::before { transform: scale(1.3); }
+.cursor.is-label .cursor__ring::before { transform: scale(2.3); background-color: #fff; }
+.cursor.is-label .cursor__dot::before { opacity: 0; }
+.cursor__txt {
+  position: absolute; left: 0; top: 0; translate: -50% -50%; opacity: 0; transition: opacity .2s;
+  font: 750 11px/1 var(--font); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; color: #000;
+}
+.cursor.is-label .cursor__txt { opacity: 1; transition-delay: .1s; }
+
+/* ══ Confettis (formulaire envoyé) ═════════════════════ */
+.confetti { position: fixed; inset: 0; z-index: 9996; width: 100%; height: 100%; pointer-events: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .hero__spot, .fx-progress { display: none; }

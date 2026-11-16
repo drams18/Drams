@@ -55,6 +55,10 @@ const slugify = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowe
 const ext = (url, label, cls = 'btn btn--ghost') =>
   `<a class="${cls}" href="${esc(url)}" target="_blank" rel="noopener">${label}${icon('external', 'ico ico--xs')}</a>`;
 
+// Titre découpé mot à mot (entrée floue animée par css/fx.css) ; le texte
+// lu reste la phrase entière.
+const bw = (s) => esc(s).split(' ').map((w, i) => `<span class="bw" style="--i:${i}">${w}</span>`).join(' ');
+
 // Dimensions d'un webp (en-tête VP8 / VP8L / VP8X) : réserve la place de
 // l'image avant son chargement.
 function webpSize(file) {
@@ -78,6 +82,8 @@ const biz      = SECTIONS.business;
 const NAME = bio.name.replace(/\b(\p{Lu})(\p{Lu}+)\b/gu, (m, a, b) => a + b.toLowerCase());
 const JOB = 'Développeur web freelance';
 const AREA = biz.area;
+// Variantes du métier, affichées au survol du nom (barre du haut, js/fx.js).
+const JOB_ALT = ['Créateur de sites web', `Développeur web · ${AREA}`, 'Sites et outils sur mesure'];
 
 const TEL_LOCAL = contact.phone;                                   // 07 67 31 84 26
 const TEL_INTL  = '+33' + contact.phone.replace(/\D/g, '').replace(/^0/, '');
@@ -207,6 +213,8 @@ const SPRITE = `
     <symbol id="i-site" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.8"/><circle cx="6.5" cy="6.5" r=".9" fill="currentColor"/><circle cx="9.3" cy="6.5" r=".9" fill="currentColor"/></symbol>
     <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8"/><path d="m9 15 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></g></symbol>
+    <symbol id="i-move" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
   </svg>`;
 
@@ -215,7 +223,7 @@ function topbar(current) {
   return `
   <header class="topbar">
     <div class="topbar__inner">
-      <a class="brand" href="/"${current === 'home' ? ' aria-current="page"' : ''}><img class="brand__logo" src="/assets/img/logo.svg" alt="" width="30" height="30"><span class="brand__txt"><span class="brand__name">${esc(NAME)}</span><span class="brand__job">${JOB}</span></span></a>
+      <a class="brand" href="/"${current === 'home' ? ' aria-current="page"' : ''}><img class="brand__logo" src="/assets/img/logo.svg" alt="" width="30" height="30"><span class="brand__txt"><span class="brand__name">${esc(NAME)}</span><span class="brand__job" data-alt="${esc(JOB_ALT.join('|'))}">${JOB}</span></span></a>
       <nav class="nav" id="site-nav" aria-label="Pages du site">
         ${nav}
         <a class="nav__extra" href="/aventure" data-switch-adventure>${icon('gamepad')}Mode aventure</a>
@@ -256,6 +264,7 @@ function footer() {
       <div class="foot__id">
         <a class="brand" href="/"><img class="brand__logo" src="/assets/img/logo.svg" alt="" width="30" height="30" loading="lazy"><span class="brand__txt"><span class="brand__name">${esc(NAME)}</span><span class="brand__job">${JOB} · ${AREA}</span></span></a>
         <p>Des sites et des outils pour les commerces, artisans et indépendants d’${AREA}.</p>
+        <p class="foot__now js-only"><span class="pulse" aria-hidden="true"></span><span>${AREA}, il est <time data-clock>--:--</time></span><span class="foot__sep" aria-hidden="true">·</span><span>Réponse sous 48 h</span></p>
         <ul class="foot__socials" aria-label="Réseaux">${socials.map(s => `
           <li><a class="icon-btn" href="${esc(s.href)}" target="_blank" rel="noopener" aria-label="${esc(s.label)}" title="${esc(s.label)}">${icon(s.ic)}</a></li>`).join('')}
         </ul>
@@ -361,12 +370,16 @@ const ld = (data) => `\n  <script type="application/ld+json">\n${JSON.stringify(
 
 // ── Gabarit ────────────────────────────────────────────
 // page : { key, path, file, title, description, crumbs?, robots? }
-function shell(page, { main, jsonld = null, css = [], scripts = [], keepMode = false, bodyClass = '' }) {
+// Écran d'arrivée (js/theme.js, js/fx.js) : pas sur les pages où l'on vient
+// faire quelque chose (contact, devis, avis, pages légales, 404).
+const INTRO_PAGES = ['home', 'realisations', 'tarifs', 'a-propos'];
+
+function shell(page, { main, jsonld = null, css = [], scripts = [], keepMode = false, bodyClass = '', tail = '' }) {
   const url = SITE_URL + page.path;
   const robots = page.robots || 'index, follow';
   return `<!DOCTYPE html>
 <!-- GÉNÉRÉ par scripts/build-site.mjs, ne pas éditer : npm run content -->
-<html lang="fr">
+<html lang="fr"${INTRO_PAGES.includes(page.key) ? ' data-intro' : ''}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -407,6 +420,7 @@ ${topbar(page.key)}
 ${footer()}
 ${callbar(page.key)}
 
+${tail}
   <script src="/js/deeplink.js"></script>${scripts.map(s => `\n  <script src="${s}"></script>`).join('')}
   <script src="/js/site.js" defer></script>
   <script src="/js/fx.js" defer></script>
@@ -423,7 +437,7 @@ ${callbar(page.key)}
 const pageHead = (kicker, title, lead = '', extra = '') => `
     <header class="phead wrap">
       ${kicker ? `<p class="kicker">${kicker}</p>` : ''}
-      <h1 class="phead__t">${title}</h1>
+      <h1 class="phead__t">${bw(title)}</h1>
       ${lead ? `<p class="phead__lead">${lead}</p>` : ''}${extra}
     </header>`;
 
@@ -570,6 +584,7 @@ function homePage() {
       <div class="hero__bg" aria-hidden="true">
         <span class="aurora aurora--1"></span><span class="aurora aurora--2"></span><span class="aurora aurora--3"></span>
         <span class="hero__floor"></span>
+        <span class="ghost"><span>Sites</span><span>Outils</span><span>Clients</span></span>
         <span class="hero__spot"></span>
         <span class="grain"></span>
       </div>
@@ -749,8 +764,46 @@ function realisationsPage() {
   // Un carrousel par groupe : défilement natif au doigt (scroll-snap), flèches
   // et points ajoutés par js/site.js. Sans JS : une rangée qui défile.
   const jump = `
-      <nav class="jump" aria-label="Types de projets">${GROUPS.map(g => `<a class="chip" href="#${g.id}">${esc(g.title)}<span class="rail__n">${g.items.length}</span></a>`).join('')}</nav>`;
-  const main = `${pageHead('Réalisations', 'Ce que j’ai construit', 'Ouvrez un projet pour voir le besoin, ce que j’ai fait et ce que ça permet.', jump)}
+      <nav class="jump" aria-label="Types de projets">${GROUPS.map(g => `<a class="chip" href="#${g.id}">${esc(g.title)}<span class="rail__n">${g.items.length}</span></a>`).join('')}</nav>
+      <div class="views js-only" role="group" aria-label="Affichage des réalisations" data-views hidden>
+        <button type="button" class="views__b" data-view="mur" aria-pressed="true">${icon('grid')}Mur</button>
+        <button type="button" class="views__b" data-view="liste" aria-pressed="false">${icon('menu')}Liste</button>
+      </div>`;
+  // Mur (ordinateur, js/wall.js + css/wall.css) : toutes les captures sur
+  // un plan sans fin que l'on fait glisser. Les carrousels restent la
+  // version lisible sans JavaScript, au clavier et sur téléphone.
+  const img = (s) => ({ src: s.src, w: s.size.w, h: s.size.h });
+  const wallData = {
+    groups: GROUPS.map(g => ({ id: g.id, title: g.title })),
+    tiles: GROUPS.flatMap(g => g.items.flatMap(p => {
+      const c = caseOf(p);
+      const shots = shotsOf(p);
+      const base = { group: g.id, slug: p.slug, title: p.title, label: c.label, href: projectUrl(p) };
+      if (p.device === 'mobile') {
+        const pairs = [];
+        for (let i = 0; i < shots.length; i += 2) pairs.push({ ...base, phone: true, imgs: shots.slice(i, i + 2).map(img) });
+        return pairs;
+      }
+      const cover = coverOf(p);
+      return shots.map((s, i) => ({ ...base, phone: false, imgs: [i === 0 && cover ? { src: cover.src, w: cover.size.w, h: cover.size.h } : img(s)] }));
+    })),
+  };
+  const wall = `
+    <section class="wall js-only" id="mur" aria-labelledby="wall-t" data-wall hidden>
+      <h2 class="sr-only" id="wall-t">Toutes les captures</h2>
+      <div class="wall__view" role="group" tabindex="0" aria-label="Mur de captures : faites glisser, ou utilisez les flèches du clavier" data-cursor="Glisser">
+        <div class="wall__dots" aria-hidden="true"></div>
+        <div class="wall__field"></div>
+      </div>
+      <p class="wall__hint" aria-hidden="true">${icon('move')}Glissez pour explorer</p>
+      <div class="wall__bar" role="group" aria-label="Filtrer par type de projet">
+        <button type="button" class="wall__f" data-filter="" aria-pressed="true">Tous<span>${ordered.length}</span></button>${GROUPS.map(g => `
+        <button type="button" class="wall__f" data-filter="${g.id}" aria-pressed="false">${esc(g.title)}<span>${g.items.length}</span></button>`).join('')}
+      </div>
+    </section>`;
+  const tail = `
+  <script type="application/json" id="wall-data">${JSON.stringify(wallData).replace(/</g, '\\u003c')}</script>`;
+  const main = `${pageHead('Réalisations', 'Ce que j’ai construit', 'Ouvrez un projet pour voir le besoin, ce que j’ai fait et ce que ça permet.', jump)}${wall}
     <div class="wrap rails">${GROUPS.map((g, gi) => `
       <section class="rail" id="${g.id}" aria-labelledby="rail-${g.id}-t" data-rail>
         <header class="rail__head">
@@ -772,7 +825,7 @@ ${ctaBand('Un projet du même genre ?', 'Expliquez-moi votre besoin : je vous di
       '@type': 'ListItem', position: i + 1, url: SITE_URL + projectUrl(p).slice(1), name: p.title,
     })) },
   });
-  return [page, shell(page, { main, jsonld })];
+  return [page, shell(page, { main, jsonld, tail, css: ['/css/wall.css'], scripts: ['/js/wall.js'] })];
 }
 
 function ctaBand(title, text) {
@@ -807,7 +860,7 @@ function projectPage(p, i) {
       <header class="phead wrap">
         <nav class="crumbs" aria-label="Fil d’Ariane"><a href="/realisations">${icon('back')}Réalisations</a></nav>
         <p class="tags"><span class="tag tag--kind">${esc(c.label)}</span><span class="tag">${esc(c.frame)}</span>${p.status ? `<span class="tag tag--wip">${esc(p.status)}</span>` : ''}</p>
-        <h1 class="phead__t">${esc(p.title)}</h1>${mainTech.length ? `
+        <h1 class="phead__t">${bw(p.title)}</h1>${mainTech.length ? `
         <ul class="techs techs--main" aria-label="Technologies principales">${mainTech.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
         ${link ? `<p class="proj__links">${ext(link.url, link.label, 'btn btn--cta')}</p>` : ''}
       </header>
@@ -978,7 +1031,7 @@ function aproposPage() {
       ${PHOTO ? `<img class="about__photo" src="${PHOTO}" alt="${esc(NAME)}" width="320" height="320" fetchpriority="high" decoding="async">` : ''}
       <div>
         <p class="kicker">À propos</p>
-        <h1 class="phead__t">${esc(NAME)}, ${JOB.toLowerCase()} en ${AREA}</h1>
+        <h1 class="phead__t">${bw(`${NAME}, ${JOB.toLowerCase()} en ${AREA}`)}</h1>
         <p class="phead__lead">Je crée des sites et des outils simples pour les commerces, artisans et indépendants. Mon objectif : que vous trouviez plus de clients et que vous perdiez moins de temps.</p>
       </div>
     </header>
@@ -1130,7 +1183,7 @@ function notFoundPage() {
   const main = `
     <div class="wrap lost">
       <p class="lost__code" aria-hidden="true">404</p>
-      <h1 class="phead__t">Cette page n’existe pas</h1>
+      <h1 class="phead__t">${bw('Cette page n’existe pas')}</h1>
       <p class="phead__lead">Elle a peut-être changé d’adresse. Voici les pages les plus utiles :</p>
       <p class="lost__btns"><a class="btn btn--cta" href="/">Accueil</a><a class="btn" href="/realisations">Réalisations</a><a class="btn" href="/tarifs">Tarifs</a><a class="btn" href="/contact">Contact</a></p>
     </div>`;

@@ -480,6 +480,7 @@
     sec.appendChild(back);
     history.replaceState(null, '', location.pathname);
     mount(sec);
+    if (window.FX) window.FX.confetti();
   }
 
   // ── Clavier : Entrée valide l'étape (hors champs de saisie) ──

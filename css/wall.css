@@ -1,0 +1,113 @@
+/* ══════════════════════════════════════════════════════
+   WALL.CSS : Mur des réalisations (page /realisations, ordinateur à la
+   souris, construit par js/wall.js) et bouton Mur / Liste.
+   Sans JavaScript, sur téléphone ou au doigt : rien de tout ça, la page
+   garde ses carrousels.
+   ══════════════════════════════════════════════════════ */
+
+/* ── Mur / Liste ────────────────────────────────────── */
+.views {
+  display: inline-flex; gap: 4px; margin-top: 18px; padding: 4px;
+  background: var(--surface); border: 1px solid var(--line-2); border-radius: 999px;
+}
+.views__b {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 6px 15px;
+  font: 600 14px/1 var(--font); color: var(--muted); cursor: pointer;
+  background: transparent; border: 0; border-radius: 999px;
+  transition: color .2s, background-color .25s;
+}
+.views__b .ico { width: 16px; height: 16px; }
+.views__b:hover { color: var(--text); }
+.views__b[aria-pressed="true"] { color: var(--bg); background: var(--text); }
+html.is-wall .rails, html.is-wall .jump { display: none; }
+html.is-wall .views { margin-top: 24px; }
+
+/* ── Le mur ─────────────────────────────────────────── */
+.wall { position: relative; margin: 12px 0 72px; }
+.wall__view {
+  position: relative; height: min(76svh, 820px); min-height: 520px; overflow: clip;
+  cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+  background: var(--bg-alt); border-block: 1px solid var(--line);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.wall__view:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+.wall.is-dragging .wall__view { cursor: grabbing; }
+.wall.is-dragging .wall__field { pointer-events: none; }
+.wall__dots {
+  position: absolute; inset: -26px; pointer-events: none; will-change: transform;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--text) 20%, transparent) 1.2px, transparent 1.7px);
+  background-size: 26px 26px;
+}
+.wall__field { position: absolute; left: 0; top: 0; will-change: transform; }
+.wall__copy { position: absolute; left: 0; top: 0; }
+
+/* Cartes : capture dans un cadre (navigateur, ou deux téléphones) */
+.wall__card {
+  position: absolute; display: block; box-sizing: border-box; width: 340px; overflow: hidden;
+  color: var(--text); text-decoration: none; -webkit-user-drag: none;
+  background: var(--surface); border: 1px solid var(--card-line); border-radius: 16px;
+  box-shadow: 0 1px 2px rgb(var(--sh) / .06), 0 26px 50px -30px rgb(var(--sh) / .45);
+  transition: scale .55s var(--fx-ease, ease), rotate .55s var(--fx-ease, ease), box-shadow .55s var(--fx-ease, ease);
+}
+.wall__card:hover, .wall__card:focus-visible {
+  z-index: 2; scale: 1.04; rotate: 0deg;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent), 0 36px 70px -34px rgb(var(--sh) / .55);
+}
+.wall__card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.wall__card img { display: block; width: 100%; height: auto; pointer-events: none; }
+.wall__chrome {
+  display: flex; align-items: center; gap: 5px; height: 22px; padding: 0 10px;
+  background: var(--surface-2); border-bottom: 1px solid var(--line);
+}
+.wall__chrome i { width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); }
+.wall__card--phone {
+  display: flex; justify-content: center; gap: 12px; padding: 16px;
+  background: linear-gradient(160deg, #fff, var(--surface-2));
+}
+.wall__card--phone img { width: 147px; flex: none; border-radius: 18px; box-shadow: 0 0 0 4px #121212, 0 18px 30px -18px rgb(var(--sh) / .55); }
+
+/* Légende au survol : le projet et ce que c'est */
+.wall__cap {
+  position: absolute; left: 10px; right: 10px; bottom: 10px;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 9px 12px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent); border-radius: 11px;
+  box-shadow: 0 10px 24px -14px rgb(var(--sh) / .45);
+  opacity: 0; translate: 0 8px; transition: opacity .3s, translate .45s var(--fx-ease, ease);
+}
+.wall__card:hover .wall__cap, .wall__card:focus-visible .wall__cap { opacity: 1; translate: 0 0; }
+.wall__t { font-size: 15px; font-weight: 750; letter-spacing: -.01em; }
+.wall__l { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+
+/* Entrée : les cartes arrivent en cascade */
+.wall.is-entering .wall__card { animation: wall-in .8s var(--fx-ease, ease) both; animation-delay: calc(min(var(--k), 24) * 26ms); }
+@keyframes wall-in { from { opacity: 0; scale: .86; translate: 0 30px; } }
+
+/* Invitation à glisser, effacée au premier geste */
+.wall__hint {
+  position: absolute; left: 50%; top: 18px; z-index: 3; translate: -50% 0; pointer-events: none;
+  display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px;
+  font: 600 13.5px/1 var(--font); color: var(--bg); background: var(--text); border-radius: 999px;
+  box-shadow: 0 16px 30px -16px rgb(var(--sh) / .6);
+  transition: opacity .5s, translate .5s var(--fx-ease, ease);
+}
+.wall__hint .ico { width: 16px; height: 16px; }
+.wall.is-touched .wall__hint { opacity: 0; translate: -50% -10px; }
+
+/* Filtres : barre en pilule en bas du mur */
+.wall__bar {
+  position: absolute; left: 50%; bottom: 22px; z-index: 3; translate: -50% 0;
+  display: flex; gap: 4px; padding: 5px;
+  background: color-mix(in srgb, #121212 92%, transparent); border-radius: 999px;
+  box-shadow: 0 20px 40px -20px rgb(var(--sh) / .7);
+}
+.wall__f {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 7px 15px;
+  font: 600 14px/1 var(--font); color: rgb(240 238 233 / .7); white-space: nowrap; cursor: pointer;
+  background: transparent; border: 0; border-radius: 999px;
+  transition: color .2s, background-color .25s;
+}
+.wall__f span { font-size: 12px; opacity: .6; font-variant-numeric: tabular-nums; }
+.wall__f:hover { color: #f0eee9; }
+.wall__f[aria-pressed="true"] { color: #121212; background: #f0eee9; }
+.wall__f:focus-visible { outline-color: var(--accent-soft); }

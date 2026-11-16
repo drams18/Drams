@@ -8,6 +8,7 @@
      • la barre d'appel qui s'efface quand le clavier est ouvert
      • l'envoi du formulaire de contact (EmailJS, js/contact-form.js)
      • le préchargement du mode aventure à l'intention (survol, toucher)
+     • l'heure en Île-de-France dans le pied de page
    ══════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -124,6 +125,7 @@
         out.textContent = 'Message envoyé, merci ! Je vous réponds sous 48 h.';
         out.classList.add('is-ok');
         form.reset();
+        if (window.FX) window.FX.confetti();
       }).catch(function (err) {
         console.error('EmailJS error:', err);
         msg.value = original;
@@ -134,6 +136,19 @@
         submit.innerHTML = label;
       });
     });
+  }
+
+  // ── Pied de page : heure en Île-de-France ─────────────
+  var clocks = doc.querySelectorAll('[data-clock]');
+  if (clocks.length && window.Intl) {
+    var fmt = new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    var tick = function () {
+      var now = new Date();
+      var t = fmt.format(now);
+      clocks.forEach(function (c) { c.textContent = t; c.dateTime = now.toISOString(); });
+      setTimeout(tick, 1000 - (now.getTime() % 1000) + 5);
+    };
+    tick();
   }
 
   // ── Mode aventure : préchargé seulement si le visiteur s'y intéresse ──
