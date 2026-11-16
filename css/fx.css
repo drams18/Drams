@@ -54,7 +54,8 @@
   50%  { transform: translate3d(-6vmax, 4vmax, 0) scale(1.12); }
   100% { transform: translate3d(4vmax, -3vmax, 0) scale(.94); }
 }
-.is-off .aurora, .is-off .hero__floor::before, .is-off .hero__seal, .is-off .float, .is-off .ticker__track { animation-play-state: paused; }
+.is-off .aurora, .is-off .hero__floor::before, .is-off .hero__seal, .is-off .float, .is-off .ticker__track,
+.is-off .hero__title em .w > span, .is-off .hero__kicker::before, .is-off .hero__cta .btn--cta::after, .is-off .btn--halo { animation-play-state: paused; }
 
 /* ══ Accueil : hero ═══════════════════════════════════ */
 .hero { isolation: isolate; display: grid; align-items: center; }
@@ -121,11 +122,10 @@
 @keyframes fx-fade { from { opacity: 0; } }
 @keyframes fx-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 
-.hero__kicker { background: var(--fx-glass); }
-@supports (backdrop-filter: blur(4px)) { .hero__kicker, .btn--glass { backdrop-filter: blur(10px); } }
+.hero__kicker { background: color-mix(in srgb, var(--surface) 90%, transparent); }
 .hero__kicker::before { box-shadow: 0 0 0 0 color-mix(in srgb, var(--cta) 60%, transparent); animation: fx-ping 2.2s ease-out infinite; }
 @keyframes fx-ping { 70%, 100% { box-shadow: 0 0 0 9px transparent; } }
-.btn--glass { background: var(--fx-glass); }
+.btn--glass { background: color-mix(in srgb, var(--surface) 90%, transparent); }
 
 /* Scène 3D : navigateur + téléphone + badges, inclinée */
 .hero__vis { perspective: 1400px; padding: 24px 12% 40px 0; }
@@ -136,7 +136,8 @@
 }
 .hero__stage {
   position: relative; transform-style: preserve-3d;
-  transform: rotateY(var(--ry, -16deg)) rotateX(var(--rx, 7deg));
+  transform: rotateY(-16deg) rotateX(7deg);
+  will-change: transform;
 }
 .fx .hero__stage { animation: fx-stage 1.6s var(--fx-ease) .25s both; }
 @keyframes fx-stage { from { opacity: 0; translate: 0 70px; scale: .86; } }
@@ -169,9 +170,6 @@
   box-shadow: 0 18px 40px -16px rgb(var(--sh) / .3);
   transform: translateZ(140px);
   animation: fx-bob 6s ease-in-out infinite alternate;
-}
-@supports (backdrop-filter: blur(4px)) {
-  @media (pointer: fine) { .float { background: var(--fx-glass); backdrop-filter: blur(12px) saturate(1.4); } }
 }
 .float .ico {
   width: 30px; height: 30px; padding: 6px; border-radius: 9px;
@@ -407,6 +405,18 @@
 .fxr .kicker.rv::before { transform: scaleX(0); transition: transform .6s var(--fx-ease) calc(var(--d, 0s) + .15s); }
 .fxr .kicker.rv.in::before { transform: scaleX(1); }
 
+/* ══ Liés au défilement, sans JavaScript à chaque image ═
+   js/fx.js pose .fx-sbar / .fx-shero si le navigateur sait animer au
+   défilement ; sinon il le fait lui-même. */
+@keyframes fx-prog     { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes fx-hero-txt { to { transform: translate3d(0, -70px, 0); opacity: .15; } }
+@keyframes fx-hero-vis { to { transform: translate3d(0, 60px, 0) scale(.94); } }
+.fx-sbar .fx-progress { animation: fx-prog linear both; animation-timeline: scroll(root); }
+.fx-shero [data-hero] { view-timeline: --hero block; }
+.fx-shero .hero__txt, .fx-shero .hero__vis { animation: fx-hero-txt linear both; animation-timeline: --hero; animation-range: exit-crossing 0% exit-crossing 100%; }
+.fx-shero .hero__vis { animation-name: fx-hero-vis; }
+.hold .fx-progress, .hold .hero__txt, .hold .hero__vis { animation-play-state: running !important; }
+
 /* ══ Barre du haut + progression ══════════════════════ */
 .fx-progress {
   position: fixed; left: 0; top: 0; right: 0; z-index: 70; height: 3px; pointer-events: none;
@@ -477,7 +487,7 @@ html.intro-on::before { content: none; }
 .curtain__t { max-width: 14ch; }
 html[data-curtain]::after {
   content: attr(data-curtain); pointer-events: none;
-  animation: fx-curtain .74s cubic-bezier(.76,0,.24,1) .12s both;
+  animation: fx-curtain .56s cubic-bezier(.76,0,.24,1) .04s both;
 }
 @keyframes fx-curtain { to { transform: translate3d(0, -100%, 0); } }
 

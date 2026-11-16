@@ -9,7 +9,8 @@
      • lumière qui suit le pointeur sur les cartes
      • hero : halo, mots fantômes et scène 3D qui suivent le pointeur,
        recul au défilement
-     • curseur point + anneau, texte brouillé au survol du menu et du nom
+     • défilement doux à la molette (ordinateur)
+     • texte brouillé au survol du menu et du nom
      • boutons magnétiques, barre de progression, barre du haut
      • méthode : frise qui se remplit
      • confettis après l'envoi d'un formulaire (window.FX.confetti)
@@ -91,11 +92,11 @@
     };
     play(q('.intro-screen__logo'), [{ opacity: 0, transform: 'scale(.55) rotate(-140deg)' }, { opacity: 1, transform: 'none' }], { duration: 900, delay: 60, easing: EASE_BACK });
     el.querySelectorAll('.intro-screen__c > span').forEach(function (c, i) {
-      play(c, [{ transform: 'translate3d(0,110%,0)' }, { transform: 'none' }], { duration: 760, delay: 240 + i * 32, easing: EASE_OUT });
+      play(c, [{ transform: 'translate3d(0,110%,0)' }, { transform: 'none' }], { duration: 640, delay: 180 + i * 24, easing: EASE_OUT });
     });
-    play(q('.intro-screen__job'), [{ opacity: 0, transform: 'translate3d(0,14px,0)' }, { opacity: 1, transform: 'none' }], { duration: 600, delay: 640, easing: EASE_OUT });
+    play(q('.intro-screen__job'), [{ opacity: 0, transform: 'translate3d(0,14px,0)' }, { opacity: 1, transform: 'none' }], { duration: 520, delay: 480, easing: EASE_OUT });
 
-    var t0 = performance.now(), D = 1150, leaving = false;
+    var t0 = performance.now(), D = 950, leaving = false;
     (function tick(now) {
       if (leaving) return;
       var p = clamp((now - t0) / D, 0, 1), e = 1 - Math.pow(1 - p, 3);
@@ -105,7 +106,7 @@
     })(t0);
 
     var SKIP = ['pointerdown', 'keydown', 'wheel', 'touchstart'];
-    var timer = setTimeout(leave, 1260);
+    var timer = setTimeout(leave, 1040);
     SKIP.forEach(function (t) { addEventListener(t, leave, { passive: true }); });
 
     function leave() {
@@ -115,13 +116,13 @@
       SKIP.forEach(function (t) { removeEventListener(t, leave, { passive: true }); });
       count.textContent = '100';
       bar.style.transform = 'scaleX(1)';
-      play(inner, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translate3d(0,-36px,0)' }], { duration: 420, easing: 'cubic-bezier(.5,0,.75,0)' });
+      play(inner, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translate3d(0,-36px,0)' }], { duration: 340, easing: 'cubic-bezier(.5,0,.75,0)' });
       play(q('.intro-screen__count'), [{ opacity: 1 }, { opacity: 0 }], { duration: 300 });
       play(q('.intro-screen__bar'), [{ opacity: 1 }, { opacity: 0 }], { duration: 300 });
-      play(ink, [{ transform: 'translate3d(0,0,0)' }, { transform: 'translate3d(0,-100%,0)' }], { duration: 760, delay: 260, easing: EASE_IO });
-      var last = play(sheet, [{ transform: 'translate3d(0,0,0)' }, { transform: 'translate3d(0,-100%,0)' }], { duration: 760, delay: 380, easing: EASE_IO });
+      play(ink, [{ transform: 'translate3d(0,0,0)' }, { transform: 'translate3d(0,-100%,0)' }], { duration: 640, delay: 200, easing: EASE_IO });
+      var last = play(sheet, [{ transform: 'translate3d(0,0,0)' }, { transform: 'translate3d(0,-100%,0)' }], { duration: 640, delay: 290, easing: EASE_IO });
       // Les entrées de la page démarrent pendant que le dernier rideau se lève.
-      setTimeout(function () { root.classList.remove('hold'); }, 520);
+      setTimeout(function () { root.classList.remove('hold'); }, 400);
       last.finished.then(done, done);
     }
     function done() {
@@ -158,11 +159,11 @@
     curtain.setAttribute('aria-hidden', 'true');
     curtain.innerHTML = '<span class="curtain__t"></span>';
     body.appendChild(curtain);
-    scramble(curtain.firstChild, label, 420);
+    scramble(curtain.firstChild, label, 300);
     try { sessionStorage.setItem('drame.curtain', label); } catch (e) { /* noop */ }
     var go = function () { location.href = href; };
-    var safety = setTimeout(go, 700);
-    curtain.animate([{ transform: 'translate3d(0,100%,0)' }, { transform: 'translate3d(0,0,0)' }], { duration: 440, easing: EASE_IO, fill: 'both' })
+    var safety = setTimeout(go, 520);
+    curtain.animate([{ transform: 'translate3d(0,100%,0)' }, { transform: 'translate3d(0,0,0)' }], { duration: 330, easing: EASE_IO, fill: 'both' })
       .finished.then(function () { clearTimeout(safety); go(); }, go);
   }
   if (Element.prototype.animate) {
@@ -358,23 +359,32 @@
   if (fine) {
     var CARDS = '.problem, .offer, .case, .care, .way, .faq__i, .proj__s, .cat, .form-card, .free';
     doc.querySelectorAll(CARDS).forEach(function (c) { c.classList.add('spot'); });
-    doc.addEventListener('pointermove', function (e) {
+    var spotEv = null;
+    var spotFrame = function () {
+      var e = spotEv;
+      spotEv = null;
       var c = e.target.closest && e.target.closest('.spot');
       if (!c) return;
       var r = c.getBoundingClientRect();
       c.style.setProperty('--mx', (e.clientX - r.left).toFixed(0) + 'px');
       c.style.setProperty('--my', (e.clientY - r.top).toFixed(0) + 'px');
+    };
+    doc.addEventListener('pointermove', function (e) {
+      if (!spotEv) raf(spotFrame);
+      spotEv = e;
     }, { passive: true });
 
     // Boutons magnétiques
     doc.querySelectorAll('[data-magnet]').forEach(function (b) {
+      var r = null;
+      b.addEventListener('pointerenter', function () { r = b.getBoundingClientRect(); });
       b.addEventListener('pointermove', function (e) {
-        var r = b.getBoundingClientRect();
+        if (!r) r = b.getBoundingClientRect();
         var x = (e.clientX - r.left - r.width / 2) * 0.22;
         var y = (e.clientY - r.top - r.height / 2) * 0.35;
         b.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px';
       });
-      b.addEventListener('pointerleave', function () { b.style.translate = ''; });
+      b.addEventListener('pointerleave', function () { b.style.translate = ''; r = null; });
     });
   }
 
@@ -394,10 +404,7 @@
       psx += (sx - psx) * 0.12; psy += (sy - psy) * 0.12;
       // Les mots fantômes traînent un peu plus : effet liquide.
       gsx += (sx - gsx) * 0.07; gsy += (sy - gsy) * 0.07;
-      if (stage) {
-        stage.style.setProperty('--ry', (-16 + cx * 14).toFixed(2) + 'deg');
-        stage.style.setProperty('--rx', (7 - cy * 10).toFixed(2) + 'deg');
-      }
+      if (stage) stage.style.transform = 'rotateY(' + (-16 + cx * 14).toFixed(2) + 'deg) rotateX(' + (7 - cy * 10).toFixed(2) + 'deg)';
       if (spot) spot.style.transform = 'translate3d(' + psx.toFixed(0) + 'px,' + psy.toFixed(0) + 'px,0)';
       if (ghost) { ghost.style.setProperty('--gx', gsx.toFixed(0) + 'px'); ghost.style.setProperty('--gy', gsy.toFixed(0) + 'px'); }
       var still = Math.abs(tx - cx) + Math.abs(ty - cy) < 0.002 && Math.abs(sx - psx) + Math.abs(sy - psy) < 0.5 && Math.abs(sx - gsx) + Math.abs(sy - gsy) < 0.5;
@@ -419,28 +426,37 @@
     }
 
     // Recul au défilement : le texte s'efface, la scène descend.
-    var heroScroll = function () {
-      var h = hero.offsetHeight || 1;
-      var p = clamp(scrollY / h, 0, 1);
+    var heroH = 1;
+    var heroScroll = function (y) {
+      var p = clamp(y / heroH, 0, 1);
       if (txt) { txt.style.transform = 'translate3d(0,' + (-p * 70).toFixed(1) + 'px,0)'; txt.style.opacity = (1 - p * 0.85).toFixed(3); }
       if (vis) vis.style.transform = 'translate3d(0,' + (p * 60).toFixed(1) + 'px,0) scale(' + (1 - p * 0.06).toFixed(3) + ')';
     };
     hero.__scroll = heroScroll;
+    hero.__measure = function () { heroH = hero.offsetHeight || 1; };
   }
 
   // ══ Méthode : frise ═══════════════════════════════════
+  // Géométrie lue au chargement et au redimensionnement ; au défilement,
+  // une seule lecture (la position de la frise), puis les écritures.
   var proc = doc.querySelector('[data-process]');
-  var steps = proc ? proc.querySelectorAll('.process__s') : [];
-  function procScroll() {
+  var steps = proc ? Array.prototype.slice.call(proc.querySelectorAll('.process__s')) : [];
+  var procOn = false, procH = 1, stepTops = [];
+  function procMeasure() {
     if (!proc) return;
-    var r = proc.getBoundingClientRect();
-    var p = clamp((innerHeight * 0.72 - r.top) / (r.height || 1), 0, 1);
-    proc.style.setProperty('--p', p.toFixed(3));
+    procH = proc.offsetHeight || 1;
+    var top = proc.getBoundingClientRect().top;
+    stepTops = steps.map(function (s) { return s.getBoundingClientRect().top - top; });
     // Frise verticale : la ligne s'arrête au centre du dernier numéro.
     var last = steps[steps.length - 1];
-    if (last) proc.style.setProperty('--tail', (proc.offsetHeight - last.offsetTop - 23) + 'px');
-    var line = innerHeight * 0.72;
-    steps.forEach(function (s) { s.classList.toggle('on', s.getBoundingClientRect().top < line); });
+    if (last) proc.style.setProperty('--tail', (procH - last.offsetTop - 23) + 'px');
+  }
+  function procScroll(vh) {
+    if (!proc || !procOn) return;
+    var line = vh * 0.72;
+    var top = proc.getBoundingClientRect().top;
+    proc.style.setProperty('--p', clamp((line - top) / procH, 0, 1).toFixed(3));
+    steps.forEach(function (s, i) { s.classList.toggle('on', top + stepTops[i] < line); });
   }
 
   // ══ Barre de progression + barre du haut ══════════════
@@ -450,32 +466,107 @@
   body.appendChild(bar);
   var topbar = doc.querySelector('.topbar');
 
+  // Barre de progression et recul du hero : liés au défilement en CSS pur
+  // quand le navigateur le permet (fluide, sans JavaScript à chaque image).
+  var cssBar = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline', 'scroll()'));
+  var cssHero = cssBar && CSS.supports('animation-range', 'exit-crossing 0% exit-crossing 100%');
+  if (cssBar) root.classList.add('fx-sbar');
+  if (cssHero) root.classList.add('fx-shero');
+  var maxY = 1, vh = innerHeight, lastY = -1;
+  function measure() {
+    vh = innerHeight;
+    maxY = root.scrollHeight - vh;
+    if (hero && !cssHero) hero.__measure();
+    procMeasure();
+    lastY = -1;
+  }
+  function paint() {
+    var y = scrollY;
+    if (y === lastY) return;
+    lastY = y;
+    if (!cssBar) bar.style.transform = 'scaleX(' + (maxY > 0 ? clamp(y / maxY, 0, 1) : 0).toFixed(4) + ')';
+    if (topbar) topbar.classList.toggle('is-scrolled', y > 24);
+    if (hero && heroOn && !cssHero) hero.__scroll(y);
+    procScroll(vh);
+  }
   var ticking = false;
   function onScroll() {
     if (ticking) return;
     ticking = true;
-    raf(function () {
-      ticking = false;
-      var max = root.scrollHeight - innerHeight;
-      bar.style.transform = 'scaleX(' + (max > 0 ? clamp(scrollY / max, 0, 1) : 0).toFixed(4) + ')';
-      if (topbar) topbar.classList.toggle('is-scrolled', scrollY > 24);
-      if (hero && heroOn) hero.__scroll();
-      procScroll();
-    });
+    raf(function () { ticking = false; paint(); });
   }
+  var resizing = 0;
   addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', onScroll, { passive: true });
+  addEventListener('resize', function () {
+    cancelAnimationFrame(resizing);
+    resizing = raf(function () { measure(); paint(); });
+  }, { passive: true });
+  // La page s'allonge quand les images arrivent : on remesure.
+  addEventListener('load', function () { measure(); paint(); });
+  if (window.ResizeObserver) new ResizeObserver(function () { maxY = root.scrollHeight - innerHeight; }).observe(body);
+
+  // ══ Défilement doux à la molette (ordinateur) ═════════
+  // La molette fixe une cible, la page la rejoint en glissant (amorti
+  // exponentiel, indépendant de la fréquence d'affichage). Les zones qui
+  // défilent elles-mêmes, le zoom (Ctrl), le menu ouvert et le défilement
+  // horizontal restent natifs. Clavier, clic, barre de défilement :
+  // natifs aussi, le glissé s'arrête.
+  if (mouse) (function smoothWheel() {
+    var y = 0, target = 0, last = 0, run = 0;
+    function ownScroll(el, dy) {
+      for (; el && el !== body && el !== root; el = el.parentElement) {
+        if (el.nodeType !== 1) continue;
+        if (el.scrollHeight <= el.clientHeight + 1) continue;
+        if (!/(auto|scroll)/.test(getComputedStyle(el).overflowY)) continue;
+        if (dy < 0 ? el.scrollTop > 0 : el.scrollTop + el.clientHeight < el.scrollHeight - 1) return true;
+      }
+      return false;
+    }
+    function stop() {
+      if (!run) return;
+      cancelAnimationFrame(run);
+      run = 0;
+      root.style.scrollBehavior = '';
+    }
+    function step(now) {
+      var dt = Math.min(now - last, 64) / 1000;
+      last = now;
+      y += (target - y) * (1 - Math.exp(-9 * dt));
+      if (Math.abs(target - y) < 0.4) y = target;
+      scrollTo(0, y);
+      paint();                       // effets liés au défilement : même image
+      if (y === target) { run = 0; root.style.scrollBehavior = ''; } else run = raf(step);
+    }
+    addEventListener('wheel', function (e) {
+      if (e.defaultPrevented || e.ctrlKey || root.classList.contains('nav-open') || root.classList.contains('intro-on')) return;
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      var dy = e.deltaY * (e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? vh : 1);
+      if (!dy || ownScroll(e.target, dy)) return;
+      e.preventDefault();
+      if (!run) {
+        y = target = scrollY;
+        last = performance.now();
+        root.style.scrollBehavior = 'auto';
+        run = raf(step);
+      }
+      target = clamp(target + dy, 0, Math.max(maxY, root.scrollHeight - innerHeight));
+    }, { passive: false });
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (t) { addEventListener(t, stop, { passive: true }); });
+  })();
 
   // ══ Boucles en pause hors écran ═══════════════════════
   var pause = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       e.target.classList.toggle('is-off', !e.isIntersecting);
       if (e.target === hero) heroOn = e.isIntersecting;
+      if (e.target === proc) { procOn = true; procScroll(vh); procOn = e.isIntersecting; }
     });
   });
   doc.querySelectorAll('[data-hero], .ticker, .cta, .orbit').forEach(function (el) { pause.observe(el); });
+  if (proc) pause.observe(proc);
   heroOn = !!hero;
 
   root.classList.add('fxr');
-  onScroll();
+  measure();
+  paint();
 })();

@@ -36,8 +36,8 @@
       if (fx) {
         root.setAttribute('data-curtain', label);
         root.classList.add('hold');
-        later(320, function () { root.classList.remove('hold'); });
-        later(1400, function () { root.removeAttribute('data-curtain'); });
+        later(160, function () { root.classList.remove('hold'); });
+        later(1000, function () { root.removeAttribute('data-curtain'); });
       }
     }
   } catch (e) { /* noop */ }
