@@ -586,7 +586,6 @@ function homePage() {
         <span class="hero__floor"></span>
         <span class="ghost"><span>Sites</span><span>Outils</span><span>Clients</span></span>
         <span class="hero__spot"></span>
-        <span class="grain"></span>
       </div>
       <div class="wrap hero__grid">
         <div class="hero__txt">
@@ -733,7 +732,7 @@ function homePage() {
     </section>
 
     <section class="sec cta" id="contact" aria-labelledby="ct-t">
-      <div class="cta__bg" aria-hidden="true"><span class="aurora aurora--1"></span><span class="aurora aurora--2"></span><span class="grain"></span></div>
+      <div class="cta__bg" aria-hidden="true"><span class="aurora aurora--1"></span><span class="aurora aurora--2"></span></div>
       <div class="wrap cta__in">
         <p class="kicker">Contact</p>
         <h2 class="sec__t" id="ct-t">Parlons de votre projet</h2>

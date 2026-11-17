@@ -9,7 +9,6 @@
      • lumière qui suit le pointeur sur les cartes
      • hero : halo, mots fantômes et scène 3D qui suivent le pointeur,
        recul au défilement
-     • défilement doux à la molette (ordinateur)
      • texte brouillé au survol du menu et du nom
      • boutons magnétiques, barre de progression, barre du haut
      • méthode : frise qui se remplit
@@ -399,6 +398,86 @@
     var vis = hero.querySelector('.hero__vis');
     var tx = 0, ty = 0, cx = 0, cy = 0, sx = 0, sy = 0, psx = 0, psy = 0, gsx = 0, gsy = 0, moving = 0;
 
+    // Sol quadrillé en perspective, dessiné dans un canvas. Les lignes de
+    // fuite ne bougent pas : cuites une fois dans un tampon (avec le
+    // fondu). À chaque image : le tampon + une douzaine de lignes
+    // horizontales qui avancent vers le visiteur.
+    var floorEl = hero.querySelector('.hero__floor');
+    var floor = null;
+    if (floorEl && doc.createElement('canvas').getContext) {
+      floor = (function () {
+        var cv = doc.createElement('canvas');
+        var ctx = cv.getContext('2d');
+        floorEl.classList.add('hero__floor--c');
+        floorEl.appendChild(cv);
+        var color = getComputedStyle(root).getPropertyValue('--accent').trim() || '#2d45f5';
+        var W = 0, H = 0, dpr = 1, VY = 0, K = 0, S = 0, buf = null, run = 0, t0 = performance.now();
+        var fade = function (y) {            // 1 en bas, 0 en haut (comme l'ancien masque)
+          var t = (H - y) / H;
+          return t < 0.35 ? 1 - t / 0.35 * 0.25 : Math.max(0, 0.75 * (1 - (t - 0.35) / 0.55));
+        };
+        function size() {
+          var w = floorEl.clientWidth, h = floorEl.clientHeight;
+          if (!w || !h) return;
+          dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+          W = w; H = h;
+          cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+          VY = -1.2 * H;                      // point de fuite, au-dessus du canvas
+          K = H - VY;                         // y = VY + K / profondeur
+          S = Math.min(72, W / 11) / K;       // pas de la grille (cases carrées en bas)
+          // Lignes de fuite + fondu, une fois.
+          buf = doc.createElement('canvas');
+          buf.width = cv.width; buf.height = cv.height;
+          var b = buf.getContext('2d');
+          b.setTransform(dpr, 0, 0, dpr, 0, 0);
+          b.strokeStyle = color; b.lineWidth = 1.5; b.globalAlpha = 0.2;
+          var cxm = W / 2, dTop = K / (0 - VY), n = Math.ceil((W / 2) * dTop / (K * S)) + 1;
+          b.beginPath();
+          for (var i = -n; i <= n; i++) {
+            b.moveTo(cxm + i * S * K, H);
+            b.lineTo(cxm + i * S * K / dTop, 0);
+          }
+          b.stroke();
+          b.globalAlpha = 1;
+          b.globalCompositeOperation = 'destination-in';
+          var g = b.createLinearGradient(0, H, 0, 0);
+          g.addColorStop(0, '#000'); g.addColorStop(0.35, 'rgba(0,0,0,.75)'); g.addColorStop(0.9, 'transparent');
+          b.fillStyle = g;
+          b.fillRect(0, 0, W, H);
+          draw(performance.now());
+        }
+        function draw(now) {
+          if (!buf) return;
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.clearRect(0, 0, cv.width, cv.height);
+          ctx.drawImage(buf, 0, 0);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ctx.strokeStyle = color;
+          var phase = ((now - t0) / 3200) % 1, dTop = K / (0 - VY);
+          for (var k = 0; ; k++) {
+            var d = 1 + (k + 1 - phase) * S;
+            if (d > dTop) break;
+            var y = VY + K / d;
+            var a = fade(y);
+            if (a <= 0.01) continue;
+            ctx.globalAlpha = 0.2 * a;
+            ctx.lineWidth = 1.5 / d;
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+          }
+          ctx.globalAlpha = 1;
+        }
+        function loop(now) { draw(now); run = raf(loop); }
+        if (window.ResizeObserver) new ResizeObserver(size).observe(floorEl);
+        size();
+        return {
+          start: function () { if (!run && !doc.hidden) run = raf(loop); },
+          stop: function () { cancelAnimationFrame(run); run = 0; },
+        };
+      })();
+      doc.addEventListener('visibilitychange', function () { if (doc.hidden) floor.stop(); else if (heroOn) floor.start(); });
+    }
+    hero.__floor = floor;
+
     var frame = function () {
       cx += (tx - cx) * 0.08; cy += (ty - cy) * 0.08;
       psx += (sx - psx) * 0.12; psy += (sy - psy) * 0.12;
@@ -505,60 +584,14 @@
   addEventListener('load', function () { measure(); paint(); });
   if (window.ResizeObserver) new ResizeObserver(function () { maxY = root.scrollHeight - innerHeight; }).observe(body);
 
-  // ══ Défilement doux à la molette (ordinateur) ═════════
-  // La molette fixe une cible, la page la rejoint en glissant (amorti
-  // exponentiel, indépendant de la fréquence d'affichage). Les zones qui
-  // défilent elles-mêmes, le zoom (Ctrl), le menu ouvert et le défilement
-  // horizontal restent natifs. Clavier, clic, barre de défilement :
-  // natifs aussi, le glissé s'arrête.
-  if (mouse) (function smoothWheel() {
-    var y = 0, target = 0, last = 0, run = 0;
-    function ownScroll(el, dy) {
-      for (; el && el !== body && el !== root; el = el.parentElement) {
-        if (el.nodeType !== 1) continue;
-        if (el.scrollHeight <= el.clientHeight + 1) continue;
-        if (!/(auto|scroll)/.test(getComputedStyle(el).overflowY)) continue;
-        if (dy < 0 ? el.scrollTop > 0 : el.scrollTop + el.clientHeight < el.scrollHeight - 1) return true;
-      }
-      return false;
-    }
-    function stop() {
-      if (!run) return;
-      cancelAnimationFrame(run);
-      run = 0;
-      root.style.scrollBehavior = '';
-    }
-    function step(now) {
-      var dt = Math.min(now - last, 64) / 1000;
-      last = now;
-      y += (target - y) * (1 - Math.exp(-9 * dt));
-      if (Math.abs(target - y) < 0.4) y = target;
-      scrollTo(0, y);
-      paint();                       // effets liés au défilement : même image
-      if (y === target) { run = 0; root.style.scrollBehavior = ''; } else run = raf(step);
-    }
-    addEventListener('wheel', function (e) {
-      if (e.defaultPrevented || e.ctrlKey || root.classList.contains('nav-open') || root.classList.contains('intro-on')) return;
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-      var dy = e.deltaY * (e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? vh : 1);
-      if (!dy || ownScroll(e.target, dy)) return;
-      e.preventDefault();
-      if (!run) {
-        y = target = scrollY;
-        last = performance.now();
-        root.style.scrollBehavior = 'auto';
-        run = raf(step);
-      }
-      target = clamp(target + dy, 0, Math.max(maxY, root.scrollHeight - innerHeight));
-    }, { passive: false });
-    ['pointerdown', 'keydown', 'touchstart'].forEach(function (t) { addEventListener(t, stop, { passive: true }); });
-  })();
-
   // ══ Boucles en pause hors écran ═══════════════════════
   var pause = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       e.target.classList.toggle('is-off', !e.isIntersecting);
-      if (e.target === hero) heroOn = e.isIntersecting;
+      if (e.target === hero) {
+        heroOn = e.isIntersecting;
+        if (hero.__floor) hero.__floor[heroOn ? 'start' : 'stop']();
+      }
       if (e.target === proc) { procOn = true; procScroll(vh); procOn = e.isIntersecting; }
     });
   });
