@@ -13,7 +13,9 @@
        poursuivi seul (l'essentiel du travail). Ne pas écrire « équipe de 7 ».
      • Crowdin (clone) = projet scolaire ETNA en binôme.
      • Pool Party Experience = projet EN COURS.
-     • Wild Kédougou / Prospectly / ISLAAH / OneDay = projets PERSONNELS.
+     • Wild Kédougou / Prospectly / ISLAAH / Tournée = projets PERSONNELS.
+     • Tournée = outil d'enquêteur, accès privé (texte neutre : ne pas dire que c'est pour mon propre usage) : captures faites
+       avec des ménages FICTIFS, jamais de vraies données.
      • Projets DevPhantom = travail d'équipe (~4 personnes).
    ══════════════════════════════════════════════════════ */
 
@@ -229,7 +231,7 @@ const SECTIONS = {
     // Site (pages Réalisations) : projets à la une, dans cet ordre (avec
     // captures et lien en ligne), puis les autres. Un slug absent d'ici
     // passe en fin de liste.
-    featured: ['wild-kedougou', 'islaah', 'oneday', 'allsab-ms'],
+    featured: ['wild-kedougou', 'islaah', 'tournee', 'allsab-ms'],
     // Page Réalisations du site : un carrousel par groupe (3 au plus), dans
     // cet ordre. Seuls ces projets ont une page sur le site ; les autres
     // restent dans le mode aventure (leurs anciennes adresses /realisations/…
@@ -238,12 +240,12 @@ const SECTIONS = {
       { id: 'sites', title: 'Sites et applications web', lead: 'Réservation, comptes, outils métier : des sites et des applications web complets, en ligne.',
         slugs: ['immoconnect', 'wild-kedougou', 'orlena', 'skywalk'] },
       { id: 'apps', title: 'Applications mobiles', lead: 'Des applications qu’on installe sur son téléphone, dont deux publiées sur l’App Store.',
-        slugs: ['islaah', 'oneday', 'ilamiria'] },
+        slugs: ['islaah', 'tournee', 'ilamiria'] },
       { id: 'outils', title: 'Outils pour les entreprises', lead: 'Commande à emporter, relance des clients, plannings, factures : des outils de gestion pour les entreprises et les commerces.',
         slugs: ['ugo', 'hearth', 'allsab-ms', 'gexp'] },
     ],
     order: [
-      'immoconnect', 'wild-kedougou', 'orlena', 'ugo', 'hearth', 'islaah', 'oneday', 'allsab-ms', 'ilamiria', 'badn', 'pool-party',
+      'immoconnect', 'wild-kedougou', 'orlena', 'ugo', 'hearth', 'islaah', 'tournee', 'allsab-ms', 'ilamiria', 'badn', 'pool-party',
       'skywalk', 'gexp', 'hexagon', 'prospectly', 'infinitia', 'crowdin',
     ],
     // Types de projet (plus lus par le site depuis les carrousels par groupe).
@@ -294,11 +296,11 @@ const SECTIONS = {
         did: 'Réalisé seul : l\'application iPhone, le serveur qui l\'alimente et la publication sur l\'App Store.',
         result: 'On écoute des récitations, on joue à plusieurs modes de quiz et on suit sa progression. L\'application se télécharge sur l\'App Store.',
       },
-      oneday: {
+      tournee: {
         kind: 'mobile', label: 'Application installable', frame: 'Projet personnel',
-        need: 'Organiser ses journées et tenir ses habitudes, avec des rappels sur iPhone.',
-        did: 'Réalisé seul : une application qui s\'installe depuis le navigateur, fonctionne sans connexion et envoie des rappels.',
-        result: 'La veille, on prépare sa journée. Le matin, on ne voit que ce qui reste à faire, avec un rappel à l\'heure de chaque tâche.',
+        need: 'Un enquêteur qui interroge des ménages à domicile reçoit ses adresses sur des fiches papier : il doit savoir qui appeler, chez qui repasser et dans quel ordre faire sa tournée.',
+        did: 'Conçu et développé seul : l\'application qui s\'installe sur le téléphone, la lecture automatique des fiches, la carte, le calcul de la tournée, l\'agenda des rendez-vous avec rappels, et la mise en ligne.',
+        result: 'On photographie une fiche : elle est redressée et lue, et le ménage est créé sans rien recopier. On appelle ou on envoie un SMS en un appui, on change le statut d\'un geste, et la carte montre où en est chaque ménage. La tournée du jour est calculée selon le temps de trajet réel, à pied, à vélo ou en voiture. La lecture des fiches se fait dans le téléphone : aucun document n\'est envoyé à un service extérieur de lecture ou d\'IA.',
       },
       'allsab-ms': {
         kind: 'interne', label: 'Outil interne', frame: 'En équipe chez DevPhantom',
@@ -655,25 +657,27 @@ const SECTIONS = {
         accent: '#ff123d',
       },
       {
-        short: 'ONEDAY',
-        slug: 'oneday',
-        date: '01/2026',
-        title: 'OneDay',
-        type: 'PWA de planification',
+        short: 'TOURNÉE',
+        slug: 'tournee',
+        date: '11/2026',
+        title: 'Tournée',
+        type: 'Application installable',
         category: 'Personnel',
-        tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'React Router', 'Supabase', 'PostgreSQL', 'PWA', 'Web Push', 'Cloudflare Pages', 'Cloudflare Workers'],
-        mainTech: ['React', 'TypeScript', 'Supabase', 'PWA'],
-        role: 'Projet personnel : conception et développement complets (frontend, backend serverless, notifications push). PWA que j\'ai construite pour organiser mes journées, mieux travailler et m\'installer des habitudes.',
-        desc: 'Planificateur quotidien minimaliste, à usage strictement personnel (compte unique, pas d\'inscription), pensé pour organiser mes journées et ancrer des habitudes de travail. Chaque soir on prépare la journée du lendemain ; chaque matin on ne voit que les tâches restantes du jour. Tâches horodatées avec description et suivi d\'avancement, modèles de journée réutilisables (« programmes ») applicables à n\'importe quelle date, reprise de la veille en un clic. Application installable sur iPhone (PWA), utilisable hors ligne, avec des rappels par notification push déclenchés chaque minute par un cron Cloudflare Worker (Web Push / VAPID). Données isolées par utilisateur via les policies RLS de Supabase.',
-        links: [
-          { label: 'Voir le projet', url: 'https://oneday-5s9.pages.dev/' },
-        ],
+        tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'shadcn/ui', 'PostgreSQL', 'Prisma', 'Supabase', 'Cloudflare Workers', 'Cloudflare R2', 'Tesseract.js', 'pdf.js', 'pdf-lib', 'Leaflet', 'OpenStreetMap', 'OSRM', 'Zod', 'PWA', 'Web Push'],
+        mainTech: ['Next.js', 'TypeScript', 'PostgreSQL', 'PWA'],
+        role: 'Projet personnel, réalisé seul : conception, interface mobile, base de données, lecture des fiches dans le navigateur, carte et calcul de tournée, agenda et notifications, protection des données et mise en ligne.',
+        desc: 'Application pour les enquêteurs qui interrogent des ménages à domicile, dans le cadre d\'enquêtes de mobilité en Île-de-France (accès privé, sur connexion). Elle s\'installe sur le téléphone et s\'ouvre en plein écran. Les fiches papier des ménages sont photographiées (coins repérés, fiche redressée) ou importées en PDF, JPG ou PNG, puis lues automatiquement dans le navigateur avec Tesseract : le nom, les téléphones, l\'adresse et l\'identifiant remplissent la fiche, et une fiche déjà scannée est repérée. Les ménages sont classés par priorité (avec numéro d\'abord, puis du plus proche au plus éloigné), avec un statut en un geste (à traiter, appelé, traité, refus, absent, à recontacter…), le nombre de passages déjà tentés, l\'appel ou le SMS pré-rédigé en un appui et le code résultat de la fiche. Sur la carte, chaque ménage prend la couleur de son statut, et la tournée du jour est calculée selon les durées de trajet réelles à pied, à vélo ou en voiture (OSRM), avec des liens Google Maps et Waze. Un agenda garde les rendez-vous et les rappels pris avec les ménages, avec une notification sur le téléphone (Web Push), et un bilan regroupe les enquêtes par code résultat. Côté données : documents dans un espace de stockage privé en Europe, lecture des fiches faite sur l\'appareil (aucun document envoyé à un service de lecture ou d\'IA), seules les adresses et coordonnées partent vers le géocodage et le calcul d\'itinéraire, contrôle d\'accès à chaque page et chaque action, limitation des tentatives de connexion.',
+        status: 'Accès privé',
+        links: [],
         device: 'mobile',
         shots: [
-          { file: 'oneday-home-program', alt: 'Journée du jour avec un programme appliqué' },
-          { file: 'oneday-home-without-program', alt: 'Journée vide : ajout d\'une tâche' },
+          { file: 'tournee-itineraire', alt: 'Carte des ménages, colorés selon leur statut, autour du point de départ' },
+          { file: 'tournee-menages', alt: 'Ménages par ordre de priorité : téléphone, adresse, étage, passages tentés et rappel' },
+          { file: 'tournee-fiche', alt: 'Fiche d\'un ménage : statut en un geste, code résultat et personnes à contacter' },
+          { file: 'tournee-agenda', alt: 'Agenda des rendez-vous et rappels pris avec les ménages' },
+          { file: 'tournee-scanner', alt: 'Scanner des fiches : photo depuis le téléphone ou import de fichiers' },
         ],
-        accent: '#19e8ff',
+        accent: '#2f5bd3',
       },
       {
         short: 'SKYWALK',
