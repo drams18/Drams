@@ -386,7 +386,8 @@ function shell(page, { main, jsonld = null, css = [], scripts = [], keepMode = f
   <title>${esc(page.title)}</title>
   <meta name="description" content="${esc(page.description)}">
   <meta name="robots" content="${robots}">${page.key === '404' ? '' : `
-  <link rel="canonical" href="${url}">`}
+  <link rel="canonical" href="${url}">`}${page.key === 'home' ? `
+  <meta name="msvalidate.01" content="E357421C0966555E58E525532581185D">` : ''}
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="${esc(NAME)} · ${JOB}">
