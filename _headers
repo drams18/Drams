@@ -18,3 +18,13 @@
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+
+# Référencement : seule l'adresse https://arphandrame.fr doit être indexée.
+# Les copies servies par l'adresse Cloudflare (portfolio-3kx.pages.dev, et
+# ses aperçus) et par www sont marquées « ne pas indexer ».
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
+https://www.arphandrame.fr/*
+  X-Robots-Tag: noindex
