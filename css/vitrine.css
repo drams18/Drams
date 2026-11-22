@@ -245,7 +245,11 @@ a { text-underline-offset: 3px; }
 .hero__phone img { border-radius: 19px; }
 @media (max-width: 559px) {
   .hero { padding-top: 28px; }
+  .hero__area { display: none; }   /* étiquette sur une ligne ; la région est dans la phrase dessous */
   .hero__cta .btn { width: 100%; }
+}
+@media (max-width: 389px) {
+  .hero__kicker { padding-inline: 12px; gap: 8px; font-size: 12.5px; letter-spacing: 0; }
 }
 @media (min-width: 900px) {
   .hero { padding: 72px 0 96px; }

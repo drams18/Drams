@@ -591,7 +591,7 @@ function homePage() {
       <div class="wrap hero__grid">
         <div class="hero__txt">
           <h1 id="hero-t" class="hero__h1">
-            <span class="hero__kicker">${JOB} · ${AREA}</span>
+            <span class="hero__kicker"><span>${NAME} · ${JOB}<span class="hero__area"> · ${AREA}</span></span></span>
             <span class="hero__title">${words('Des sites et des outils qui vous amènent')} <em>${words('des clients')}<svg class="hero__swash" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 17C70 6 160 4 296 12" pathLength="1"/></svg></em></span>
           </h1>
           <p class="hero__lead">Pour les commerces, artisans et indépendants d’${AREA}.<span class="hero__more"> Je vous aide à être trouvé sur Google, à recevoir des réservations en ligne et à gagner du temps sur vos tâches.</span></p>

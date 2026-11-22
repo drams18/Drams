@@ -2,6 +2,7 @@
 # vers les pages du site freelance, et liens courts.
 /classique               /                 301
 /classique/              /                 301
+/classique.html          /                 301
 /classique/projets       /realisations     301
 /classique/parcours      /a-propos         301
 /classique/competences   /a-propos         301
