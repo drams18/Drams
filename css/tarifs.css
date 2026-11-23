@@ -384,6 +384,8 @@ html:has(.sheet[open]) { overflow: hidden; }
   .tile__b { padding-left: 4px; }
 }
 
+.route__more { display: flex; align-items: flex-start; justify-content: center; gap: 8px; max-width: 56ch; margin: 28px auto 0; font-size: 14.5px; line-height: 1.5; color: var(--muted); text-align: left; text-wrap: pretty; }
+.route__more .ico { flex: none; width: 16px; height: 16px; margin-top: 3px; color: var(--tone, currentColor); }
 .routes__note { margin-top: 36px; text-align: center; }
 .free-wrap { margin-top: 56px; margin-bottom: 72px; }
 

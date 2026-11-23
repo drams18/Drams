@@ -840,7 +840,7 @@ html.nav-open .topbar { background: var(--bg) !important; backdrop-filter: none 
 /* Réalisations : catégories et titres de carrousel centrés, flèches à droite */
 .jump { justify-content: center; }
 .rails .rail__head { position: relative; justify-content: center; min-height: 44px; }
-.rails .rail__nav { position: absolute; right: 0; top: 50%; translate: 0 -50%; }
+.rails .rail__head .rail__nav { position: absolute; right: 0; top: 50%; translate: 0 -50%; }
 
 /* Fiche projet : en-tête, captures, technologies */
 .phead .crumbs, .phead .tags, .phead .techs { justify-content: center; }

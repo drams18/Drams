@@ -27,11 +27,15 @@
     'site-pro': 'site', 'vendre-pro': 'vendre', 'app-pro': 'app', 'modules-pro': 'modules',
     'infra-pro': 'infra', 'suivi-pro': 'suivi', existant: 'deja-un-site', probleme: 'offre-depannage'
   };
+  // Familles retirées le 23/11/2026 (liste réduite) : vers leur parcours.
   var MOVED = {
     offres: 'pas-de-site', toutes: 'autre-besoin', liste: 'autre-besoin',
-    site: 'pas-de-site', vendre: 'pas-de-site-creer', modules: 'deja-un-site-fonctions',
-    visibilite: 'deja-un-site-visibilite', design: 'autre-besoin-design', suivi: 'deja-un-site-entretien',
-    creatif: 'autre-besoin-creatif', conseil: 'autre-besoin-conseil', app: 'autre-besoin-apps', infra: 'autre-besoin-devops'
+    site: 'pas-de-site', vendre: 'pas-de-site', modules: 'deja-un-site-fonctions',
+    visibilite: 'deja-un-site-visibilite', design: 'autre-besoin', suivi: 'deja-un-site-entretien',
+    creatif: 'autre-besoin', conseil: 'autre-besoin-accompagner', app: 'autre-besoin', infra: 'autre-besoin',
+    'deja-un-site-moderniser': 'deja-un-site', 'pas-de-site-creer': 'pas-de-site', 'pas-de-site-demarrer': 'pas-de-site',
+    'autre-besoin-apps': 'autre-besoin', 'autre-besoin-ia': 'autre-besoin', 'autre-besoin-creatif': 'autre-besoin',
+    'autre-besoin-design': 'autre-besoin', 'autre-besoin-devops': 'autre-besoin', 'autre-besoin-conseil': 'autre-besoin-accompagner'
   };
   function legacy() {
     var h = decodeURIComponent(location.hash.replace(/^#/, ''));

@@ -926,9 +926,12 @@ function tarifsPage() {
     const min = Math.min(...[...all].filter(s => !s.unit).map(euros));
     return { ...p, top, groups, all, min };
   });
+  // Les prestations hors parcours ne s'affichent pas : elles restent dans
+  // la page (bloc caché) pour que la recherche les trouve.
   const covered = new Set(paths.flatMap(p => [...p.all]));
-  const lost = T.SERVICES.filter(s => !covered.has(s));
-  if (lost.length) throw new Error(`tarifs-data : prestations dans aucun parcours, ${lost.map(s => s.name).join(', ')}`);
+  const searchOnly = T.SERVICES.filter(s => !covered.has(s));
+  const CAT_ICON = { site: 'site', vendre: 'bag', modules: 'grid', visibilite: 'chart', design: 'palette',
+    suivi: 'shield', creatif: 'cube', conseil: 'compass', app: 'code', infra: 'server' };
 
   // Ancre d'une prestation (#landing-page…) : à sa première apparition.
   const ids = new Set();
@@ -980,7 +983,8 @@ function tarifsPage() {
             <h3 class="grp__t" id="${p.id}-${g.id}-t"><span class="grp__ico">${icon(g.icon)}</span>${esc(g.label)}<span class="grp__n">${g.list.length}</span></h3>
             <ul class="tiles">${g.list.map(s => tile(s, { ico: g.icon, where: `${p.short} · ${g.label}` })).join('')}
             </ul>
-          </section>`).join('')}
+          </section>`).join('')}${p.more ? `
+          <p class="route__more">${icon('search')}<span>${esc(p.more)}</span></p>` : ''}
         </section>`;
 
   // Haut de page : la recherche, puis les 3 bulles.
@@ -1031,7 +1035,11 @@ function tarifsPage() {
 
   const main = `${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', 'Prix « à partir de », fixés dans le devis avant de commencer. Premier échange gratuit.', finder + bubbles)}
     <div class="routes">${switcher}
-      <div class="wrap">${paths.map(route).join('')}
+      <div class="wrap">${paths.map(route).join('')}${searchOnly.length ? `
+        <div class="search-only" hidden>
+          <ul class="tiles">${searchOnly.map(s => tile(s, { ico: CAT_ICON[s.cats[0]] || 'plus', where: catLabel(s.cats[0]) })).join('')}
+          </ul>
+        </div>` : ''}
         <p class="note routes__note">${esc(vatNote)}</p>
       </div>
     </div>
