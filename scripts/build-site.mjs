@@ -287,6 +287,10 @@ function footer() {
         <a href="/contact">Contact</a>
         <a href="/devis">Demander un devis</a>
       </nav>
+      <nav class="foot__col foot__col--svc" aria-label="Services">
+        <p class="foot__t">Services</p>${SERVICE_PAGES.map(sp => `
+        <a href="/${sp.slug}">${esc(sp.h1.replace(/ à \S+$/, '').replace(/ et fiche Google$/, ''))}</a>`).join('')}
+      </nav>
       <div class="foot__col foot__col--wide">
         <p class="foot__t">Contact</p>
         <a href="${TEL_HREF}">${esc(TEL_LOCAL)}</a>
@@ -457,7 +461,7 @@ function offerCard(o, { level = 'h3' } = {}) {
   return `
           <li class="offer" id="offre-${o.id}">
             <span class="offer__ico">${icon(o.icon)}</span>
-            <${level} class="offer__t">${esc(o.title)}</${level}>
+            <${level} class="offer__t">${servicePageOf(o.id) ? `<a href="/${servicePageOf(o.id).slug}">${esc(o.title)}</a>` : esc(o.title)}</${level}>
             <p class="offer__price price">${priceHtml(o.svc)}</p>
             <p class="offer__pitch">${esc(o.pitch)}</p>
             <ul class="offer__inc" aria-label="Compris">${o.includes.map(i => `<li>${icon('check')}${esc(i)}</li>`).join('')}</ul>
@@ -519,13 +523,13 @@ const wayCard = (w) => `
 const PROBLEMS = [
   { ic: 'pin', t: 'Vous n’êtes pas sur Google Maps',
     d: 'Quand on cherche votre métier près de chez vous, ce sont vos concurrents qui apparaissent. Je crée ou je complète votre fiche Google.',
-    sol: offer('fiche-google').title, svc: offer('fiche-google').svc, href: '/tarifs#offre-fiche-google' },
+    sol: offer('fiche-google').title, svc: offer('fiche-google').svc, href: '/referencement-local' },
   { ic: 'chat', t: 'Vos rendez-vous se prennent par DM',
     d: 'Vous répondez aux messages un par un, à toute heure. Avec la réservation en ligne, vos clients choisissent seuls un créneau libre.',
-    sol: offer('reservation').title, svc: offer('reservation').svc, href: '/tarifs#offre-reservation' },
+    sol: offer('reservation').title, svc: offer('reservation').svc, href: '/site-reservation-en-ligne' },
   { ic: 'mobile', t: 'Votre site est lent ou vieillot sur téléphone',
     d: 'Vos clients vous découvrent souvent sur leur téléphone. Je refais votre site pour qu’il soit rapide, clair et donne confiance.',
-    sol: 'Refonte de site', svc: refonte, href: '/tarifs#offre-refonte' },
+    sol: 'Refonte de site', svc: refonte, href: '/refonte-site-internet' },
   { ic: 'doc', t: 'Vous faites vos devis à la main',
     d: 'Recopier les mêmes informations dans Word prend du temps. J’automatise vos devis, vos relances ou vos tableaux.',
     sol: offer('automatisation').title, svc: offer('automatisation').svc, href: '/tarifs#offre-automatisation' },
@@ -563,9 +567,11 @@ const FAQ = [
 function homePage() {
   const page = {
     key: 'home', path: '', file: 'index.html',
-    title: `${JOB} en ${AREA} · ${NAME}`,
+    // Mots-clés rankingCoach (23/11/2026) : « développeur web freelance »,
+    // « création de site internet », « création de site internet paris ».
+    title: `${JOB} · Création de site internet ${biz.city} · ${NAME}`,
     ogTitle: `${NAME} · ${JOB} · ${AREA}`,
-    description: `Sites vitrines, réservation en ligne, fiche Google, boutique Shopify : des sites et des outils qui amènent des clients aux commerces, artisans et indépendants d’${AREA}. Devis gratuit.`,
+    description: `${JOB} : création de site internet ${biz.city} et ${AREA}, site vitrine, réservation en ligne, fiche Google pour commerces et artisans. Devis gratuit.`,
     // Anciens liens (#projets/skywalk… de l'ancien mode classique et du mode
     // aventure) : renvoyés vers la bonne page avant tout affichage.
     head: `
@@ -660,7 +666,7 @@ function homePage() {
       <div class="wrap">
         <header class="sec__head">
           <p class="kicker">Offres</p>
-          <h2 class="sec__t" id="of-t">Mes offres principales</h2>
+          <h2 class="sec__t" id="of-t">Création de site internet : mes offres</h2>
           <p class="sec__lead">Des prix clairs, affichés « à partir de ». Ce qui est compris est écrit noir sur blanc.</p>
         </header>${offerGrid('h3', { swipe: true })}
         <p class="sec__more"><a class="btn" href="/tarifs">Voir la grille complète des tarifs${icon('arrow')}</a><span class="note">${esc(vatNote)}</span></p>
@@ -706,8 +712,8 @@ function homePage() {
         ${PHOTO ? `<img class="about__photo" src="${PHOTO}" alt="${esc(NAME)}" width="320" height="320" loading="lazy" decoding="async">` : ''}
         <div class="about__txt">
           <p class="kicker">Qui je suis</p>
-          <h2 class="sec__t" id="me-t">Arphan, développeur web à votre écoute</h2>
-          <p>Je m’appelle ${esc(NAME)}, développeur web freelance en ${AREA}. J’ai passé près de 3 ans en entreprise, chez DevPhantom, à créer en équipe des plateformes web et des applications mobiles. J’ai aussi publié seul une application sur l’App Store.</p>
+          <h2 class="sec__t" id="me-t">Arphan, développeur web freelance à ${biz.city}</h2>
+          <p>Je m’appelle ${esc(NAME)}, développeur web freelance à ${biz.city}, en ${AREA}. J’ai passé près de 3 ans en entreprise, chez DevPhantom, à créer en équipe des plateformes web et des applications mobiles. J’ai aussi publié seul une application sur l’App Store.</p>
           <p class="about__more">Aujourd’hui, je mets cette expérience au service des commerces, artisans et indépendants : des outils simples, expliqués sans jargon, qui vous amènent des clients et vous font gagner du temps.</p>
           <ul class="facts about__more">
             <li>${icon('pin')}${AREA}</li>
@@ -1080,6 +1086,254 @@ function tarifsPage() {
 }
 
 // ══════════════════════════════════════════════════════
+// PAGES SERVICES (une par mot-clé suivi dans rankingCoach, 23/11/2026)
+// ══════════════════════════════════════════════════════
+// Une page par prestation que les clients cherchent sur Google. Prix lus
+// dans SERVICES (jamais écrits ici), engagements repris de la FAQ (délais,
+// propriété, paiement) : rien d'inventé, pas de promesse de résultat.
+// kw : expression suivie dans rankingCoach, à garder telle quelle dans le
+// titre, le h1 et le texte.
+const LOCAL_LINE = `Je suis développeur web freelance à ${biz.city} ${biz.postalCode.slice(-2).replace(/^0/, '')}e et je travaille avec les commerces, artisans et indépendants de toute l’${AREA}. Vous avez un seul interlocuteur, du premier échange jusqu’après la mise en ligne.`;
+const FAQ_OWN = FAQ.find(f => /appartient/.test(f.q));
+const FAQ_PAY = FAQ.find(f => /paiement/.test(f.q));
+const SERVICE_PAGES = [
+  {
+    slug: 'creation-site-vitrine', kw: 'création de site vitrine', offer: 'site-vitrine', icon: 'site',
+    h1: `Création de site vitrine à ${biz.city}`,
+    title: `Création de site vitrine à ${biz.city} · ${NAME}`,
+    services: ['Site vitrine', 'Landing page'],
+    lead: 'Un site de plusieurs pages qui présente votre activité, donne confiance et permet de vous contacter en un geste, sur téléphone comme sur ordinateur.',
+    desc: () => `Création de site vitrine à ${biz.city} et en ${AREA} pour commerces, artisans et indépendants : rapide sur téléphone, prêt pour Google. Dès ${serviceByName('Site vitrine').price}, devis gratuit.`,
+    h2: 'Un site vitrine, pour quoi faire ?',
+    text: [
+      'Quand un client entend parler de vous, il vous cherche sur Google. Un site vitrine lui montre en quelques secondes ce que vous faites, où vous êtes, vos horaires et comment vous joindre. C’est aussi ce qui vous permet d’apparaître dans les résultats de recherche, au lieu de dépendre seulement d’Instagram ou du bouche-à-oreille.',
+      'Je m’occupe de la création de site vitrine de A à Z : les pages, la mise en forme de vos textes et de vos photos, le nom de domaine, l’hébergement et la mise en ligne. Le site est codé sur mesure, pensé d’abord pour le téléphone et préparé pour Google dès le départ.',
+      () => `Vous n’avez besoin que d’une page pour présenter une offre ? Une landing page suffit, ${priceText(serviceByName('Landing page'))}.`,
+    ],
+    gets: ['Nom de domaine enregistré à votre nom', 'Le site vous appartient une fois réglé'],
+    faq: [
+      { q: 'Combien coûte un site vitrine ?', a: () => `Un site vitrine commence à ${serviceByName('Site vitrine').price}. Après un premier échange gratuit, je vous envoie un devis détaillé : le prix est fixé avant de commencer. Le nom de domaine et l’hébergement ont un petit coût annuel, indiqué dans le devis.` },
+      { q: 'Combien de temps faut-il pour créer un site vitrine ?', a: 'Comptez environ une semaine, à partir du moment où j’ai vos textes et vos photos.' },
+      FAQ_OWN,
+    ],
+    projects: ['wild-kedougou', 'orlena'],
+  },
+  {
+    slug: 'site-reservation-en-ligne', kw: 'site de réservation en ligne', offer: 'reservation', icon: 'calendar',
+    h1: 'Site de réservation en ligne',
+    title: `Site de réservation en ligne · Prise de rendez-vous · ${NAME}`,
+    services: ['Système de réservation / prise de RDV'],
+    lead: 'Vos clients voient vos créneaux libres et réservent seuls, à toute heure. Ils reçoivent la confirmation par e-mail, le rendez-vous arrive dans votre agenda.',
+    desc: () => `Site de réservation en ligne pour salons, instituts, coachs et artisans à ${biz.city} : vos clients réservent seuls un créneau libre. Dès ${serviceByName('Système de réservation / prise de RDV').price}, devis gratuit.`,
+    h2: 'Fini les rendez-vous pris par message',
+    text: [
+      'Répondre aux messages et aux appels pour caler chaque rendez-vous prend du temps, et un message oublié, c’est un client perdu. Avec un site de réservation en ligne, le client choisit lui-même un créneau libre depuis son téléphone, à n’importe quelle heure.',
+      'Je mets en place la réservation avec vos prestations, vos horaires et vos disponibilités. La confirmation part automatiquement par e-mail et le rendez-vous s’ajoute à votre agenda. Ça convient à tous ceux qui travaillent sur rendez-vous ou sur créneaux.',
+      'J’ai déjà construit ce type de site : Wild Kédougou, un site de réservation avec calendrier des disponibilités et e-mails de confirmation (projet personnel).',
+    ],
+    gets: [],
+    faq: [
+      { q: 'Combien coûte un site de réservation en ligne ?', a: () => `La réservation en ligne commence à ${serviceByName('Système de réservation / prise de RDV').price}. Le prix exact dépend de vos prestations et de vos règles (durées, acompte, rappels) : il est fixé dans le devis, avant de commencer.` },
+      { q: 'Je n’ai pas encore de site, c’est possible ?', a: () => `Oui. Je crée un site vitrine (${priceText(serviceByName('Site vitrine'))}) ou une landing page (${priceText(serviceByName('Landing page'))}) avec la réservation intégrée. Le devis détaille chaque partie.` },
+      FAQ_OWN,
+    ],
+    projects: ['wild-kedougou', 'ugo', 'immoconnect'],
+  },
+  {
+    slug: 'creation-boutique-en-ligne', kw: 'création de boutique en ligne', offer: 'boutique', icon: 'bag',
+    h1: 'Création de boutique en ligne',
+    title: `Création de boutique en ligne Shopify à ${biz.city} · ${NAME}`,
+    services: ['Boutique Shopify', 'E-commerce (WooCommerce ou sur mesure)'],
+    lead: 'Vendez vos produits sur internet avec une boutique à votre image : catalogue, paiement en ligne et commandes prêts à fonctionner.',
+    desc: () => `Création de boutique en ligne Shopify ou sur mesure à ${biz.city} et en ${AREA} : produits, paiement et commandes prêts. Dès ${serviceByName('Boutique Shopify').price}, devis gratuit.`,
+    h2: 'Votre boutique, prête à vendre',
+    text: [
+      'Une boutique en ligne permet à vos clients d’acheter quand ils le veulent, même quand votre magasin est fermé, et de vous trouver au-delà de votre quartier.',
+      'Pour la plupart des commerces, je conseille Shopify : le paiement est sécurisé et vous gérez vous-même vos produits et vos commandes. Je personnalise la boutique à votre image, j’ajoute vos produits, je configure le paiement et les commandes, puis je vous montre comment l’utiliser.',
+      'Si votre besoin sort du cadre de Shopify, je crée aussi des boutiques WooCommerce ou sur mesure.',
+    ],
+    gets: ['Prise en main expliquée à la livraison'],
+    faq: [
+      { q: 'Combien coûte une boutique en ligne ?', a: () => `Une boutique Shopify commence à ${serviceByName('Boutique Shopify').price}, une boutique WooCommerce ou sur mesure à ${serviceByName('E-commerce (WooCommerce ou sur mesure)').price}. Le prix est fixé dans le devis, avant de commencer. L’abonnement Shopify se règle directement auprès de Shopify.` },
+      { q: 'Pourrai-je ajouter mes produits moi-même ?', a: () => `Oui. Avec Shopify, vous ajoutez vos produits, changez vos prix et suivez vos commandes depuis votre téléphone ou votre ordinateur. Je vous montre comment faire à la livraison, et une séance de formation est possible (${priceText(serviceByName('Formation à la gestion de votre site'))}).` },
+      FAQ_PAY,
+    ],
+    projects: ['ugo'],
+  },
+  {
+    slug: 'refonte-site-internet', kw: 'refonte de site internet', care: 'refonte', icon: 'site',
+    h1: 'Refonte de site internet',
+    title: `Refonte de site internet à ${biz.city} · ${NAME}`,
+    services: ['Refonte de site', 'Adaptation mobile / responsive'],
+    lead: 'Votre site est lent, daté ou difficile à lire sur téléphone ? Je le refais pour qu’il soit rapide, clair et qu’il donne envie de vous contacter.',
+    desc: () => `Refonte de site internet à ${biz.city} et en ${AREA} : un site plus rapide, moderne et lisible sur téléphone, contenus conservés. Dès ${serviceByName('Refonte de site').price}, devis gratuit.`,
+    h2: 'Quand faut-il refaire son site ?',
+    text: [
+      'Un site qui met du temps à s’afficher, des textes trop petits sur téléphone, des informations plus à jour, un design d’une autre époque : vos visiteurs partent avant de vous appeler. Google tient compte, lui aussi, de la vitesse et de l’affichage sur téléphone.',
+      'Pour la refonte de site internet, je pars de votre site actuel, qu’il soit sur WordPress, Wix ou fait à la main. Je garde ce qui fonctionne (vos textes, vos photos, votre nom de domaine) et je refais le reste : un design moderne, une navigation simple, un affichage rapide sur téléphone et des pages bien préparées pour Google.',
+      () => `Si seul l’affichage sur téléphone pose problème, une adaptation mobile peut suffire, ${priceText(serviceByName('Adaptation mobile / responsive'))}.`,
+    ],
+    gets: ['Vos contenus et votre nom de domaine conservés', 'Nouveau design, pensé d’abord pour le téléphone', 'Bases du référencement Google'],
+    faq: [
+      { q: 'Combien coûte une refonte de site ?', a: () => `Une refonte commence à ${serviceByName('Refonte de site').price}. Le prix dépend du nombre de pages et de ce qu’il faut refaire : je regarde votre site, puis je vous envoie un devis détaillé, fixé avant de commencer.` },
+      { q: 'Vais-je perdre ma place sur Google ?', a: 'Je garde les adresses de vos pages ou je mets en place des redirections, pour que Google et vos clients retrouvent tout. Les titres et les descriptions de vos pages sont repris et améliorés.' },
+      FAQ_OWN,
+    ],
+    projects: [],
+  },
+  {
+    slug: 'maintenance-site-web', kw: 'maintenance de site web', care: 'maintenance', icon: 'calendar',
+    h1: 'Maintenance de site web',
+    title: `Maintenance de site web · Suivi mensuel et dépannage · ${NAME}`,
+    services: ['Maintenance', 'Intervention / dépannage'],
+    lead: 'Mises à jour, correctifs, petites modifications : je m’occupe de votre site chaque mois, et j’interviens en cas de panne.',
+    desc: () => `Maintenance de site web à ${biz.city} et en ${AREA} : mises à jour, correctifs et petites évolutions dès ${maintenance.price} par mois, dépannage dès ${depannage.price} de l’heure.`,
+    h2: 'Un site, ça s’entretient',
+    text: [
+      'Un site laissé sans suivi finit par poser problème : extensions plus à jour, formulaire qui n’envoie plus rien, page qui s’affiche mal, informations dépassées. Souvent, on s’en rend compte quand un client le signale.',
+      'Avec la maintenance de site web, je fais les mises à jour, je corrige ce qui ne va pas et je réalise les petites évolutions dont vous avez besoin : un nouveau tarif, une photo, une page à modifier. Vous avez un seul contact, joignable par téléphone ou WhatsApp.',
+      () => `Vous préférez faire appel à moi seulement en cas de besoin ? Le dépannage est facturé ${priceText(depannage)}. Je reprends aussi des sites que je n’ai pas créés : WordPress, Shopify ou sites sur mesure.`,
+    ],
+    gets: ['Mises à jour', 'Correctifs', 'Petites évolutions chaque mois', 'Un seul contact, par téléphone ou WhatsApp'],
+    faq: [
+      { q: 'Combien coûte la maintenance d’un site ?', a: () => `Le suivi mensuel commence à ${maintenance.price} par mois. Sans suivi, le dépannage est facturé ${priceText(depannage)}. Le contenu exact du suivi est écrit dans le devis.` },
+      { q: 'Mon site a été fait par quelqu’un d’autre, vous pouvez le reprendre ?', a: 'Oui. Je regarde d’abord comment il est construit, puis je vous dis ce que je peux prendre en charge et à quel prix.' },
+      { q: 'Et si vous avez créé mon site ?', a: 'Si un défaut lié à mon travail apparaît dans le mois qui suit la mise en ligne, je le corrige sans frais. Ensuite, vous choisissez entre le suivi mensuel et le dépannage à la demande.' },
+    ],
+    projects: [],
+  },
+  {
+    slug: 'referencement-local', kw: 'référencement local', offer: 'fiche-google', icon: 'pin',
+    h1: 'Référencement local et fiche Google',
+    title: `Référencement local à ${biz.city} · Fiche Google Maps · ${NAME}`,
+    services: ['Fiche Google Business Profile', 'Audit SEO', 'SEO technique + données structurées'],
+    lead: 'Apparaissez sur Google Maps et dans les recherches près de chez vous, quand un client cherche votre métier dans votre quartier.',
+    desc: () => `Référencement local à ${biz.city} : création ou reprise de votre fiche Google pour apparaître sur Google Maps près de chez vous. Dès ${serviceByName('Fiche Google Business Profile').price}, devis gratuit.`,
+    h2: 'Être trouvé par les clients du quartier',
+    text: [
+      'Quand quelqu’un cherche « coiffeur Paris 18 » ou « plombier près de moi », Google affiche d’abord une carte avec quelques établissements. Le référencement local, c’est le travail qui vous aide à apparaître dans cette carte et dans les résultats de votre zone.',
+      'Je crée ou je reprends votre fiche Google : catégories, horaires, services, zone d’intervention, photos, liens vers votre site, votre téléphone et vos réseaux. Une fiche complète et à jour donne à Google et à vos clients les informations dont ils ont besoin.',
+      () => `Pour aller plus loin, un audit SEO (${priceText(serviceByName('Audit SEO'))}) fait le point sur votre site et votre présence sur Google, avec un plan d’action clair.`,
+    ],
+    gets: [],
+    faq: [
+      { q: 'Combien de temps pour apparaître sur Google Maps ?', a: 'Une fois la fiche validée par Google, elle peut apparaître rapidement. Sa position dépend ensuite de la distance avec la personne qui cherche, de votre activité, de vos avis et de la concurrence : personne ne peut garantir la première place.' },
+      { q: 'Faut-il un site internet pour avoir une fiche Google ?', a: 'Non, une fiche peut exister sans site. Mais un site relié à votre fiche donne plus d’informations à vos clients et à Google.' },
+      FAQ_PAY,
+    ],
+    projects: ['wild-kedougou'],
+  },
+];
+const servicePageOf = (offerId) => SERVICE_PAGES.find(s => s.offer === offerId || s.care === offerId);
+const val = (v) => typeof v === 'function' ? v() : v;
+
+function servicePage(s) {
+  const svcs = s.services.map(serviceByName);
+  const base = (s.offer && offer(s.offer)) || careOffers.find(o => o.id === s.care) || {};
+  const gets = [...(base.includes || [svcs[0].desc]), ...s.gets];
+  const page = {
+    key: 'service', path: s.slug, file: `${s.slug}.html`,
+    title: s.title,
+    description: val(s.desc),
+    crumbs: [{ name: s.h1, path: s.slug }],
+  };
+  const projs = s.projects.map(bySlug).filter(Boolean);
+  const others = SERVICE_PAGES.filter(o => o !== s);
+  const main = `${pageHead('Services', s.h1, esc(s.lead), `
+      <ul class="svc-prices" aria-label="Tarifs">${svcs.map(v => `
+        <li><span>${esc(v.name)}</span><span class="price">${priceHtml(v)}</span></li>`).join('')}
+      </ul>
+      <p class="svc-cta"><a class="btn btn--cta btn--lg" href="/devis" data-magnet>Demander un devis gratuit${icon('arrow')}</a><a class="btn btn--lg" href="${esc(WA_HREF)}" target="_blank" rel="noopener">${icon('whatsapp')}WhatsApp</a></p>`)}
+
+    <section class="sec" aria-labelledby="svc-why">
+      <div class="wrap prose svc-prose">
+        <h2 class="sec__t" id="svc-why">${esc(s.h2)}</h2>${s.text.map(t => `
+        <p>${esc(val(t))}</p>`).join('')}
+        <p>${esc(LOCAL_LINE)}</p>
+      </div>
+    </section>
+
+    <section class="sec sec--alt" aria-labelledby="svc-inc">
+      <div class="wrap">
+        <header class="sec__head">
+          <p class="kicker">Compris</p>
+          <h2 class="sec__t" id="svc-inc">Ce que vous obtenez</h2>
+        </header>
+        <ul class="svc-gets">${gets.map(g => `<li>${icon('check')}${esc(g)}</li>`).join('')}</ul>
+        <p class="sec__more"><span class="note">${esc(vatNote)}</span></p>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="svc-how">
+      <div class="wrap">
+        <header class="sec__head">
+          <p class="kicker">Méthode</p>
+          <h2 class="sec__t" id="svc-how">Comment ça se passe</h2>
+        </header>
+        <ol class="process" data-process>${PROCESS.map((p, i) => `
+          <li class="process__s"><span class="process__n">${i + 1}</span><h3 class="process__t">${esc(p.t)}</h3><p>${esc(p.d)}</p></li>`).join('')}
+        </ol>
+      </div>
+    </section>${projs.length ? `
+
+    <section class="sec sec--alt" aria-labelledby="svc-re">
+      <div class="wrap">
+        <header class="sec__head">
+          <p class="kicker">Réalisations</p>
+          <h2 class="sec__t" id="svc-re">Des projets du même genre</h2>
+        </header>
+        <div class="rails">
+          <section class="rail" aria-label="Projets du même genre" data-rail>
+            <ul class="rail__track" id="rail-${s.slug}" tabindex="0" aria-label="Projets : faites défiler">${projs.map(p => slideCard(p)).join('')}
+            </ul>
+          </section>
+        </div>
+      </div>
+    </section>` : ''}
+
+    <section class="sec${projs.length ? '' : ' sec--alt'}" aria-labelledby="svc-faq">
+      <div class="wrap faq-wrap">
+        <header class="sec__head">
+          <p class="kicker">Questions</p>
+          <h2 class="sec__t" id="svc-faq">Questions fréquentes</h2>
+        </header>
+        <div class="faq">${s.faq.map(f => `
+          <details class="faq__i">
+            <summary><h3>${esc(f.q)}</h3>${icon('chevron', 'ico faq__chev')}</summary>
+            <p>${esc(val(f.a))}</p>
+          </details>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <nav class="sec svc-more" aria-labelledby="svc-o">
+      <div class="wrap">
+        <h2 class="block__t" id="svc-o">Mes autres services</h2>
+        <ul class="svc-links">${others.map(o => `
+          <li><a href="/${o.slug}">${icon(o.icon)}<span>${esc(o.h1)}</span>${icon('arrow', 'ico ico--xs')}</a></li>`).join('')}
+          <li><a href="/tarifs">${icon('doc')}<span>Tous les tarifs</span>${icon('arrow', 'ico ico--xs')}</a></li>
+        </ul>
+      </div>
+    </nav>
+${ctaBand('Parlons de votre projet', 'Expliquez-moi votre besoin : je vous dis gratuitement ce que je peux faire pour vous.')}`;
+  const faq = s.faq.map(f => ({ q: f.q, a: val(f.a) }));
+  const jsonld = graph(page, { name: page.title, description: page.description, mainEntity: { '@id': `${SITE_URL}${s.slug}#service` } }, [{
+    '@type': 'Service', '@id': `${SITE_URL}${s.slug}#service`, name: s.h1, serviceType: s.kw,
+    description: s.lead, provider: { '@id': BUSINESS_ID },
+    areaServed: [{ '@type': 'City', name: biz.city }, { '@type': 'AdministrativeArea', name: AREA }],
+    audience: { '@type': 'BusinessAudience', name: `Professionnels : ${PRO_WHO}` },
+    offers: svcs.map(v => ({
+      '@type': 'Offer', name: v.name, priceCurrency: 'EUR',
+      priceSpecification: { '@type': 'PriceSpecification', minPrice: euros(v), priceCurrency: 'EUR' },
+    })),
+  }, {
+    '@type': 'FAQPage', '@id': `${SITE_URL}${s.slug}#faq`,
+    mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  }]);
+  return [page, shell(page, { main, jsonld })];
+}
+
+// ══════════════════════════════════════════════════════
 // À PROPOS
 // ══════════════════════════════════════════════════════
 function aproposPage() {
@@ -1371,7 +1625,7 @@ function writePage(file, html) {
 rmSync(join(ROOT, 'realisations'), { recursive: true, force: true });
 
 const built = [
-  homePage(), realisationsPage(), ...ordered.map(projectPage), tarifsPage(), aproposPage(), contactPage(),
+  homePage(), realisationsPage(), ...ordered.map(projectPage), tarifsPage(), ...SERVICE_PAGES.map(servicePage), aproposPage(), contactPage(),
   devisPage(), avisPage(), legalPage(), privacyPage(), notFoundPage(),
 ];
 for (const [page, html] of built) {

@@ -70,6 +70,36 @@
     "index": true
   },
   {
+    "file": "creation-site-vitrine.html",
+    "path": "creation-site-vitrine",
+    "index": true
+  },
+  {
+    "file": "site-reservation-en-ligne.html",
+    "path": "site-reservation-en-ligne",
+    "index": true
+  },
+  {
+    "file": "creation-boutique-en-ligne.html",
+    "path": "creation-boutique-en-ligne",
+    "index": true
+  },
+  {
+    "file": "refonte-site-internet.html",
+    "path": "refonte-site-internet",
+    "index": true
+  },
+  {
+    "file": "maintenance-site-web.html",
+    "path": "maintenance-site-web",
+    "index": true
+  },
+  {
+    "file": "referencement-local.html",
+    "path": "referencement-local",
+    "index": true
+  },
+  {
     "file": "a-propos.html",
     "path": "a-propos",
     "index": true
