@@ -1006,7 +1006,6 @@ function tarifsPage() {
   const bubbles = `
       <nav class="bubs" id="situation" aria-labelledby="situation-t">
         <p class="bubs__k" id="situation-t">Votre situation</p>
-        <svg class="bubs__link" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M120 70C300 0 380 120 500 60s220-60 380 10" pathLength="1"/></svg>
         <ul class="bubs__list">${paths.map((p, i) => `
           <li class="bub bub--${i + 1}" style="--i:${i}">
             <a class="bub__a" href="#${p.id}">
