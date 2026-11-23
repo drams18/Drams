@@ -802,3 +802,71 @@ html.nav-open .topbar { background: var(--bg) !important; backdrop-filter: none 
 }
 .foot__now time { color: var(--text); font-variant-numeric: tabular-nums; }
 .foot__sep { opacity: .5; }
+
+/* ══ Mise en page centrée (23/11/2026) ══════════════════
+   Demande d'Arphan : « les infos ne sont pas centrées, elles sont
+   décalées ». Titres, chapeaux, étiquettes et boutons de section sont
+   centrés sur tout le site, à toutes les largeurs. Les longs textes
+   (à propos, pages légales) restent alignés à gauche, dans une colonne
+   centrée, pour rester faciles à lire. Exception : le hero de l'accueil
+   sur ordinateur (texte à gauche, scène 3D à droite). */
+.sec__head, .phead { margin-inline: auto; text-align: center; }
+.sec__head .kicker, .phead .kicker { justify-content: center; }
+.sec__head .kicker::after, .phead .kicker::after { content: ''; width: 26px; height: 2px; border-radius: 2px; background: currentColor; }
+.sec__lead, .phead__lead { margin-inline: auto; max-width: 60ch; text-wrap: balance; }
+.sec__more { justify-content: center; text-align: center; }
+.sec__more .note { flex-basis: 100%; }
+
+/* Accueil, sur une colonne (téléphone, tablette) : hero centré lui aussi */
+@media (max-width: 899px) {
+  .hero__txt { text-align: center; }
+  .hero__h1 { align-items: center; }
+  .hero__kicker { align-self: center; }
+  .hero__lead { margin-inline: auto; }
+  .hero__cta, .hero__trust { justify-content: center; }
+}
+/* Accueil, « Qui je suis » : photo + texte, le duo centré dans la page */
+@media (min-width: 900px) {
+  .about { grid-template-columns: 240px minmax(0, 680px); justify-content: center; }
+}
+@media (max-width: 899px) {
+  .about { justify-items: center; text-align: center; }
+  .about__txt p { margin-inline: auto; }
+  .about__txt .kicker { justify-content: center; }
+  .about .facts { justify-content: center; }
+  .about .adv { text-align: left; justify-self: stretch; }
+}
+
+/* Réalisations : catégories et titres de carrousel centrés, flèches à droite */
+.jump { justify-content: center; }
+.rails .rail__head { position: relative; justify-content: center; min-height: 44px; }
+.rails .rail__nav { position: absolute; right: 0; top: 50%; translate: 0 -50%; }
+
+/* Fiche projet : en-tête, captures, technologies */
+.phead .crumbs, .phead .tags, .phead .techs { justify-content: center; }
+.phead .crumbs { display: flex; }
+.proj__more > .block__t, .proj__tech > h2 { text-align: center; }
+.proj__tech .techs { justify-content: center; }
+.shots { grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 520px)); justify-content: center; }
+.shots--phone { grid-template-columns: repeat(auto-fit, minmax(150px, 210px)); }
+
+/* À propos : photo au-dessus du titre, texte dans une colonne centrée */
+.phead--about { grid-template-columns: minmax(0, 1fr) !important; justify-items: center; }
+.about-page { max-width: 820px; }
+.about-page > .adv { text-align: left; }
+
+/* Pages légales : colonne centrée */
+.legal { max-width: 820px; }
+.legal__dl { max-width: none; }
+
+/* Bandeau « Un projet du même genre ? » : centré, boutons dessous */
+.cta__row { grid-template-columns: minmax(0, 1fr) !important; justify-items: center; text-align: center; }
+.cta__row p { margin-inline: auto; max-width: 60ch; }
+.cta__row .cta__btns { justify-content: center; }
+
+/* Contact : à 1000-1199 px, les bulles en arc dépassaient de l'écran */
+@media (min-width: 1000px) and (max-width: 1199px) {
+  .orb { width: 150px; }
+  .orbit__side--l li:nth-child(2) { translate: -16px 0; }
+  .orbit__side--r li:nth-child(2) { translate: 16px 0; }
+}
