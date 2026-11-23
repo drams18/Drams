@@ -666,8 +666,8 @@ function homePage() {
       <div class="wrap">
         <header class="sec__head">
           <p class="kicker">Offres</p>
-          <h2 class="sec__t" id="of-t">Création de site internet : mes offres</h2>
-          <p class="sec__lead">Des prix clairs, affichés « à partir de ». Ce qui est compris est écrit noir sur blanc.</p>
+          <h2 class="sec__t" id="of-t">Création de site internet ${biz.city} : mes offres</h2>
+          <p class="sec__lead">Création de site internet ${biz.city} et ${AREA} : des prix clairs, affichés « à partir de ». Ce qui est compris est écrit noir sur blanc.</p>
         </header>${offerGrid('h3', { swipe: true })}
         <p class="sec__more"><a class="btn" href="/tarifs">Voir la grille complète des tarifs${icon('arrow')}</a><span class="note">${esc(vatNote)}</span></p>
       </div>
