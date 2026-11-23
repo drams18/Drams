@@ -275,9 +275,9 @@
 
   // ══ Apparitions au défilement ═════════════════════════
   var REVEAL = [
-    '.sec__head > *', '.problem', '.offer', '.care', '.rail__track', '.process__s', '.about__photo', '.about__txt > *', '.adv',
-    '.faq__i', '.cta__in > *', '.way', '.block__t', '.block__lead', '.proj__media', '.proj__s', '.shots > *', '.cat',
-    '.free', '.orbit__form', '.tl__list > li', '.about-page > *', '.sec__more', '.legal > *', '.cta__row > *',
+    '.sec__head > *', '.problem', '.offer', '.rail__track', '.process__s', '.about__photo', '.about__txt > *', '.adv',
+    '.faq__i', '.cta__in > *', '.way', '.block__t', '.block__lead', '.proj__media', '.proj__s', '.shots > *',
+    '.free', '.route__head', '.grp', '.orbit__form', '.tl__list > li', '.about-page > *', '.sec__more', '.legal > *', '.cta__row > *',
   ].join(',');
   // Titres et chapeaux : mot à mot, flous puis nets.
   var WORDS = '.sec__t, .block__t, .sec__lead, .block__lead';
@@ -356,7 +356,7 @@
 
   // ══ Lumière qui suit le pointeur sur les cartes ═══════
   if (fine) {
-    var CARDS = '.problem, .offer, .case, .care, .way, .faq__i, .proj__s, .cat, .form-card, .free';
+    var CARDS = '.problem, .offer, .case, .way, .faq__i, .proj__s, .form-card, .free';
     doc.querySelectorAll(CARDS).forEach(function (c) { c.classList.add('spot'); });
     var spotEv = null;
     var spotFrame = function () {

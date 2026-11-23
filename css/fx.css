@@ -250,11 +250,11 @@
 .cta__in .kicker::after { content: ''; width: 26px; height: 2px; border-radius: 2px; background: currentColor; }
 
 /* Cartes : relief au survol + lumière qui suit le pointeur (.spot, js/fx.js) */
-.problem, .offer, .case, .care, .process__s, .way, .faq__i, .proj__s, .cat, .form-card {
+.problem, .offer, .case, .process__s, .way, .faq__i, .proj__s, .form-card {
   transition: transform .45s var(--fx-ease), box-shadow .45s var(--fx-ease), border-color .3s, translate .65s var(--fx-ease), opacity .55s var(--fx-ease);
 }
 @media (pointer: fine) {
-  .problem:hover, .offer:hover, .case:hover, .care:hover {
+  .problem:hover, .offer:hover, .case:hover {
     transform: translateY(-6px);
     box-shadow: 0 30px 60px -30px rgb(var(--sh) / .35), 0 0 0 1px color-mix(in srgb, var(--cta) 35%, transparent);
     border-color: transparent;
@@ -276,7 +276,7 @@
 .spot:hover::before, .spot:hover::after { opacity: 1; }
 
 .problem__ico, .offer__ico, .care__ico, .way__ico { transition: transform .5s var(--fx-ease), background .3s, color .3s; }
-.problem:hover .problem__ico, .offer:hover .offer__ico, .care:hover .care__ico, .way:hover .way__ico { transform: rotate(-8deg) scale(1.12); color: var(--cta-ink); background: var(--cta); }
+.problem:hover .problem__ico, .offer:hover .offer__ico, .way:hover .way__ico { transform: rotate(-8deg) scale(1.12); color: var(--cta-ink); background: var(--cta); }
 .offer__price .price__amount { font-size: 1.12em; letter-spacing: -.03em; }
 .case__media .mock, .case__media .mocks { transition: transform .7s var(--fx-ease); }
 .case:hover .case__media .mock--browser { transform: translateY(-8px) scale(1.025); }

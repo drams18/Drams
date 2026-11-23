@@ -216,6 +216,16 @@ const SPRITE = `
     <symbol id="i-grid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></g></symbol>
     <symbol id="i-move" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 2.8 20 7.3v9.4l-8 4.5-8-4.5V7.3zM4 7.3l8 4.5 8-4.5M12 11.8v9.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M11 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7zM19 15c.3 1.7 1 2.4 2.6 2.6-1.7.3-2.4 1-2.6 2.6-.3-1.7-1-2.4-2.6-2.6 1.7-.3 2.4-1 2.6-2.6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="4" width="17" height="7" rx="1.8"/><rect x="3.5" y="13" width="17" height="7" rx="1.8"/></g><circle cx="7.5" cy="7.5" r="1.1" fill="currentColor"/><circle cx="7.5" cy="16.5" r="1.1" fill="currentColor"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.3 0 2-.9 2-1.9 0-1.4-1.2-1.7-1.2-2.9 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7.5" cy="11" r="1.2" fill="currentColor"/><circle cx="10" cy="7" r="1.2" fill="currentColor"/><circle cx="14.6" cy="7" r="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15.5 8.5-2 5-5 2 2-5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16M8.5 16v-4M12.5 16V8M16.5 16v-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v6c0 4.4 3.2 7.6 7.5 9 4.3-1.4 7.5-4.6 7.5-9V6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8.8 12.2 2.2 2.2 4.2-4.4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V6M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
   </svg>`;
 
 function topbar(current) {
@@ -861,6 +871,37 @@ ${ctaBand('Un projet du même genre ?', 'Expliquez-moi votre besoin : je vous di
 // ══════════════════════════════════════════════════════
 // TARIFS
 // ══════════════════════════════════════════════════════
+// Illustrations des 3 bulles de /tarifs (décor). Trait = currentColor,
+// aplats = classes .a-* (css/tarifs.css), animées au survol.
+const BUB_ART = {
+  'deja-un-site': `<svg class="bub__art" viewBox="0 0 120 96" aria-hidden="true" focusable="false">
+                <rect class="a-card" x="8" y="10" width="86" height="64" rx="9"/>
+                <path class="a-line" d="M8 25h86"/>
+                <circle class="a-dot" cx="17" cy="17.5" r="2"/><circle class="a-dot" cx="24" cy="17.5" r="2"/><circle class="a-dot" cx="31" cy="17.5" r="2"/>
+                <rect class="a-soft" x="18" y="34" width="38" height="7" rx="3.5"/>
+                <rect class="a-faint" x="18" y="47" width="54" height="4" rx="2"/><rect class="a-faint" x="18" y="56" width="42" height="4" rx="2"/>
+                <g class="a-spin"><circle class="a-accent" cx="92" cy="70" r="19"/>
+                  <path class="a-ink" d="M83.5 67a9 9 0 0 1 15.4-3.6M100.5 73a9 9 0 0 1-15.4 3.6"/>
+                  <path class="a-ink" d="m99.4 58.6-.4 5-5-.3M84.6 81.4l.4-5 5 .3"/></g>
+              </svg>`,
+  'pas-de-site': `<svg class="bub__art" viewBox="0 0 120 96" aria-hidden="true" focusable="false">
+                <rect class="a-card a-dash" x="10" y="14" width="82" height="62" rx="9"/>
+                <path class="a-line a-dash" d="M10 29h82"/>
+                <g class="a-build"><rect class="a-soft" x="20" y="39" width="30" height="7" rx="3.5"/>
+                  <rect class="a-faint" x="20" y="52" width="44" height="4" rx="2"/><rect class="a-faint" x="20" y="61" width="30" height="4" rx="2"/></g>
+                <path class="a-cursor" d="m66 50 17 6.4-7.4 2.5-2.6 7.4z"/>
+                <g class="a-twinkle"><path class="a-accent" d="M98 8c1 7.2 3.8 10 11 11-7.2 1-10 3.8-11 11-1-7.2-3.8-10-11-11 7.2-1 10-3.8 11-11z"/></g>
+              </svg>`,
+  'autre-besoin': `<svg class="bub__art" viewBox="0 0 120 96" aria-hidden="true" focusable="false">
+                <g class="a-float"><path class="a-card" d="M50 10 76 24.5v29L50 68 24 53.5v-29z"/>
+                  <path class="a-soft" d="M50 10 76 24.5 50 39 24 24.5z"/>
+                  <path class="a-line" d="M24 24.5 50 39l26-14.5M50 39v29"/></g>
+                <g class="a-chip"><rect class="a-accent" x="72" y="54" width="38" height="28" rx="9"/>
+                  <path class="a-ink" d="m85 62-5 6 5 6M97 62l5 6-5 6"/></g>
+                <path class="a-spark" d="M14 64c.7 4.4 2.6 6.3 7 7-4.4.7-6.3 2.6-7 7-.7-4.4-2.6-6.3-7-7 4.4-.7 6.3-2.6 7-7z"/>
+              </svg>`,
+};
+
 function tarifsPage() {
   const page = {
     key: 'tarifs', path: 'tarifs', file: 'tarifs.html',
@@ -868,56 +909,135 @@ function tarifsPage() {
     description: `Tarifs d’un ${JOB.toLowerCase()} en ${AREA} : fiche Google ${offer('fiche-google').svc.price}, landing page ${offer('landing-page').svc.price}, site vitrine ${offer('site-vitrine').svc.price}, réservation en ligne ${offer('reservation').svc.price}. Prix affichés, devis gratuit.`,
     crumbs: [{ name: 'Tarifs', path: 'tarifs' }],
   };
-  const main_ = T.CATEGORIES.filter(c => !c.tech), tech = T.CATEGORIES.filter(c => c.tech);
-  const inCat = (id) => {
-    const list = T.SERVICES.filter(s => s.cats.includes(id));
-    return list.filter(s => s.cats[0] === id).concat(list.filter(s => s.cats[0] !== id));
-  };
   const catLabel = (id) => (T.CATEGORIES.find(c => c.id === id) || {}).label || '';
-  const svcRow = (s, cat) => `
-              <li class="svc-item" data-search="${esc([s.name, s.desc, s.kw, ...s.cats.map(catLabel)].join(' '))}">
-                <details class="svc"${s.cats[0] === cat ? ` id="${svcId(s)}"` : ''}>
-                  <summary class="svc__head"><span class="svc__name">${esc(s.name)}</span><span class="svc__price price">${priceHtml(s)}</span><span class="svc__chev" aria-hidden="true"></span></summary>
-                  <p class="svc__desc">${esc(s.desc)}</p>
+  const offerBy = new Map([...offers, ...careOffers].map(o => [o.service, o]));
+
+  // Les 3 parcours (bulles) : chaque prestation doit être dans l'un d'eux.
+  const paths = T.PATHS.map(p => {
+    if (!BUB_ART[p.id]) throw new Error(`tarifs : pas d’illustration pour le parcours ${p.id}`);
+    const top = p.top.map(t => {
+      const name = typeof t === 'string' ? t : t.name;
+      const o = offerBy.get(name) || null;
+      return { s: serviceByName(name), o, ico: (o && o.icon) || t.icon || 'plus' };
+    });
+    const groups = p.groups.map(g => ({ ...g, list: g.services.map(serviceByName) }));
+    const all = new Set([...top.map(x => x.s), ...groups.flatMap(g => g.list)]);
+    // « dès … € » : le plus petit prix forfaitaire du parcours (hors prix à l'heure, au jour, au mois).
+    const min = Math.min(...[...all].filter(s => !s.unit).map(euros));
+    return { ...p, top, groups, all, min };
+  });
+  const covered = new Set(paths.flatMap(p => [...p.all]));
+  const lost = T.SERVICES.filter(s => !covered.has(s));
+  if (lost.length) throw new Error(`tarifs-data : prestations dans aucun parcours, ${lost.map(s => s.name).join(', ')}`);
+
+  // Ancre d'une prestation (#landing-page…) : à sa première apparition.
+  const ids = new Set();
+  const anchor = (s) => {
+    const id = svcId(s);
+    if (ids.has(id)) return '';
+    ids.add(id);
+    return ` id="${id}"`;
+  };
+  // Une prestation = une tuile : icône, nom, prix. Le détail (description,
+  // ce qui est compris, devis) s'ouvre dans un panneau (js/tarifs.js) ;
+  // sans JavaScript, la tuile se déplie sur place.
+  const tile = (s, { ico, where, o = null, top = false }) => `
+              <li class="tile${top ? ' tile--top' : ''}"${top && o ? ` id="offre-${o.id}"` : ''} data-name="${esc(s.name)}" data-search="${esc([o && o.title, s.name, s.desc, o && o.pitch, s.kw, where, ...s.cats.map(catLabel)].filter(Boolean).join(' '))}">
+                <details class="tile__d"${anchor(s)}>
+                  <summary class="tile__s">
+                    <span class="tile__ico">${icon(ico)}</span>
+                    <span class="tile__n">${esc(o && top ? o.title : s.name)}</span>${top ? `
+                    <span class="tile__pitch">${esc(o ? o.pitch : s.desc)}</span>` : ''}
+                    <span class="tile__p price">${priceHtml(s)}</span>
+                    <span class="tile__more">${icon('plus')}<span class="sr-only">Voir le détail</span></span>
+                  </summary>
+                  <div class="tile__b" data-where="${esc(where)}" data-icon="${ico}">${o && top && o.title !== s.name ? `
+                    <p class="tile__svc">${esc(s.name)}</p>` : ''}
+                    <p class="tile__desc">${esc(s.desc)}</p>${o && top && o.includes ? `
+                    <ul class="tile__inc" aria-label="Compris">${o.includes.map(i => `<li>${icon('check')}${esc(i)}</li>`).join('')}</ul>` : ''}
+                    <a class="text-link tile__go" href="/devis">Demander un devis${icon('arrow')}</a>
+                  </div>
                 </details>
               </li>`;
-  const catBlock = (c) => `
-          <section class="cat" id="${c.id}" aria-labelledby="cat-${c.id}">
-            <h3 class="cat__t" id="cat-${c.id}">${esc(c.label)}<span>${esc(c.hint)}</span></h3>
-            <ul class="svc-list">${inCat(c.id).map(s => svcRow(s, c.id)).join('')}
+
+  const route = (p, i) => `
+        <section class="route route--${i + 1}" id="${p.id}" data-route aria-labelledby="${p.id}-t">
+          <header class="route__head">
+            <span class="route__n" aria-hidden="true">0${i + 1}</span>
+            <span class="route__bub" aria-hidden="true">${BUB_ART[p.id]}</span>
+            <div class="route__txt">
+              <h2 class="route__t" id="${p.id}-t">${esc(p.title)}</h2>
+              <p class="route__tag">${esc(p.tagline)}</p>
+            </div>
+            <a class="route__back" href="#situation">${icon('up')}<span>Changer de situation</span></a>
+          </header>
+          <section class="grp grp--top" aria-labelledby="${p.id}-top-t">
+            <h3 class="grp__t" id="${p.id}-top-t"><span class="grp__ico">${icon('bolt')}</span>Les plus demandées</h3>
+            <ul class="tiles tiles--top">${p.top.map(x => tile(x.s, { ico: x.ico, where: `${p.short} · Les plus demandées`, o: x.o, top: true })).join('')}
             </ul>
-          </section>`;
-  // Ordre de lecture : ce que la plupart des visiteurs cherchent d'abord
-  // (6 offres), puis « déjà un site » (4 cartes), puis la grille complète,
-  // repliée derrière une recherche pour ne pas noyer le visiteur.
-  const paths = `
-      <nav class="paths" aria-label="Votre situation">
-        <a class="path" href="#offres">${icon('site')}<span><strong>Je n’ai pas encore de site</strong><small>ou je veux être trouvé sur Google</small></span></a>
-        <a class="path" href="#deja-un-site">${icon('bolt')}<span><strong>J’ai déjà un site</strong><small>à refaire, adapter ou entretenir</small></span></a>
-        <a class="path" href="#toutes">${icon('search')}<span><strong>J’ai un autre besoin</strong><small>application, design, conseil…</small></span></a>
+          </section>${p.groups.map(g => `
+          <section class="grp" id="${p.id}-${g.id}" aria-labelledby="${p.id}-${g.id}-t">
+            <h3 class="grp__t" id="${p.id}-${g.id}-t"><span class="grp__ico">${icon(g.icon)}</span>${esc(g.label)}<span class="grp__n">${g.list.length}</span></h3>
+            <ul class="tiles">${g.list.map(s => tile(s, { ico: g.icon, where: `${p.short} · ${g.label}` })).join('')}
+            </ul>
+          </section>`).join('')}
+        </section>`;
+
+  // Haut de page : la recherche, puis les 3 bulles.
+  const TRY = ['réservation', 'logo', 'boutique', 'application', 'Google'];
+  const finder = `
+      <div class="finder js-only" id="recherche" role="search">
+        <div class="search">
+          ${icon('search', 'ico search__ico')}
+          <label class="sr-only" for="tarifSearch">Rechercher parmi les ${T.SERVICES.length} prestations</label>
+          <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" aria-controls="tarifResults" placeholder="Rechercher une prestation">
+          <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
+        </div>
+        <p class="finder__try"><span>Essayez</span>${TRY.map(w => `<button type="button" class="finder__chip" data-q="${esc(w)}">${esc(w)}</button>`).join('')}</p>
+        <p class="search__status" id="tarifStatus" role="status" aria-live="polite"></p>
+        <div class="results" id="tarifResults" hidden>
+          <ul class="tiles tiles--res" id="tarifList"></ul>
+          <div class="noresult" id="tarifNone" hidden>
+            <p>Votre besoin est peut-être spécifique : parlons-en.</p>
+            <p class="cta__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit${icon('arrow')}</a><a class="btn" href="/contact">Me contacter</a></p>
+          </div>
+        </div>
+      </div>`;
+  const bubbles = `
+      <nav class="bubs" id="situation" aria-labelledby="situation-t">
+        <p class="bubs__k" id="situation-t">Votre situation</p>
+        <svg class="bubs__link" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M120 70C300 0 380 120 500 60s220-60 380 10" pathLength="1"/></svg>
+        <ul class="bubs__list">${paths.map((p, i) => `
+          <li class="bub bub--${i + 1}" style="--i:${i}">
+            <a class="bub__a" href="#${p.id}">
+              <span class="bub__ring" aria-hidden="true"></span>
+              <span class="bub__disc">
+                <span class="bub__glow" aria-hidden="true"></span>
+                ${BUB_ART[p.id]}
+                <strong class="bub__t">${esc(p.title)}</strong>
+                <span class="bub__meta"><span class="bub__from">dès ${p.min} €</span><span class="bub__n">${p.all.size} prestations</span></span>
+              </span>
+              <span class="bub__tags" aria-hidden="true">${p.tags.map(esc).join(' · ')}</span>
+            </a>
+          </li>`).join('')}
+        </ul>
       </nav>`;
-  const careCard = (o) => `
-          <li class="care" id="offre-${o.id}">
-            <span class="care__ico">${icon(o.icon)}</span>
-            <h3 class="care__t">${esc(o.title)}</h3>
-            <p class="care__price price">${priceHtml(o.svc)}</p>
-            <p class="care__pitch">${esc(o.pitch)}</p>
-            <a class="text-link care__go" href="/devis">Demander un devis${icon('arrow')}</a>
-          </li>`;
-  const main = `${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', 'Les prix sont « à partir de » : le prix final dépend de votre projet et il est fixé dans le devis, avant de commencer. Le premier échange est gratuit.', paths)}
-    <section class="wrap block" id="offres" aria-labelledby="top-t">
-      <h2 class="block__t" id="top-t">Les offres les plus demandées</h2>
-      <p class="block__lead">Ce que les commerces, artisans et indépendants me demandent le plus souvent.</p>${offerGrid('h3')}
-    </section>
+  const switcher = `
+      <nav class="switch" aria-label="Changer de parcours">
+        <div class="switch__in">${paths.map((p, i) => `
+          <a class="switch__a" href="#${p.id}" data-for="${p.id}"><span class="switch__n" aria-hidden="true">0${i + 1}</span>${esc(p.short)}</a>`).join('')}
+          <a class="switch__a switch__find js-only" href="#recherche">${icon('search')}<span class="sr-only">Rechercher une prestation</span></a>
+        </div>
+      </nav>`;
 
-    <section class="wrap block" id="deja-un-site" aria-labelledby="care-t">
-      <h2 class="block__t" id="care-t">Vous avez déjà un site ?</h2>
-      <p class="block__lead">Pas besoin de tout refaire : je peux l’améliorer, l’adapter au téléphone ou m’en occuper pour vous.</p>
-      <ul class="cares">${careOffers.map(careCard).join('')}
-      </ul>
-    </section>
+  const main = `${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', 'Prix « à partir de », fixés dans le devis avant de commencer. Premier échange gratuit.', finder + bubbles)}
+    <div class="routes">${switcher}
+      <div class="wrap">${paths.map(route).join('')}
+        <p class="note routes__note">${esc(vatNote)}</p>
+      </div>
+    </div>
 
-    <section class="wrap" aria-label="Premier échange gratuit">
+    <section class="wrap free-wrap" aria-label="Premier échange gratuit">
       <div class="free">
         <span class="free__ico">${icon('chat')}</span>
         <div class="free__txt">
@@ -929,35 +1049,17 @@ function tarifsPage() {
       </div>
     </section>
 
-    <section class="wrap block catalog" id="toutes" aria-labelledby="all-t">
-      <h2 class="block__t" id="all-t">Un autre besoin ?</h2>
-      <p class="block__lead">Design, statistiques, application sur mesure, conseil… Tapez ce que vous cherchez, ou ouvrez la liste complète.</p>
-      <div class="search js-only" role="search">
-        ${icon('search', 'ico search__ico')}
-        <label class="sr-only" for="tarifSearch">Rechercher une prestation</label>
-        <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Rechercher : logo, application, statistiques…">
-        <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
+    <dialog class="sheet" id="tarifSheet" aria-labelledby="sheetT">
+      <div class="sheet__in">
+        <button type="button" class="sheet__x" data-close aria-label="Fermer">${icon('close')}</button>
+        <p class="sheet__k"><span class="sheet__ico"></span><span class="sheet__where"></span></p>
+        <h2 class="sheet__t" id="sheetT"></h2>
+        <p class="sheet__p price"></p>
+        <div class="sheet__body"></div>
+        <p class="sheet__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit${icon('arrow')}</a><a class="btn" href="${esc(WA_HREF)}" target="_blank" rel="noopener">${icon('whatsapp')}WhatsApp</a></p>
+        <p class="sheet__note">${esc(vatNote)}</p>
       </div>
-      <p class="search__status" id="tarifStatus" role="status" aria-live="polite"></p>
-      <div class="noresult" id="tarifNone" hidden>
-        <p>Votre besoin est peut-être spécifique : parlons-en.</p>
-        <p class="cta__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit${icon('arrow')}</a><a class="btn" href="/contact">Me contacter</a></p>
-      </div>
-      <details class="all" id="liste">
-        <summary class="all__sum"><span>Voir toutes les prestations</span><span class="all__n">${T.SERVICES.length}</span>${icon('chevron', 'ico all__chev')}</summary>
-        <div class="all__body">
-          <nav class="cat-nav" aria-label="Catégories">${T.CATEGORIES.map(c => `<a class="chip" href="#${c.id}">${esc(c.label)}</a>`).join('')}</nav>
-          <div class="cats">${main_.map(catBlock).join('')}
-          </div>
-          <h3 class="block__t block__t--sub" id="tech-t">Projets techniques</h3>
-          <p class="block__lead">Pour les entreprises qui ont déjà une équipe ou un logiciel : applications sur mesure, serveur, mise en production.</p>
-          <div class="cats">${tech.map(catBlock).join('')}
-          </div>
-        </div>
-      </details>
-      <p class="note">${esc(vatNote)}</p>
-    </section>
-${ctaBand('Vous hésitez entre deux offres ?', 'Décrivez votre activité en quelques clics : je vous conseille la solution la plus simple pour votre budget.')}`;
+    </dialog>`;
   const jsonld = graph(page, { name: page.title, description: page.description }, [{
     '@type': 'OfferCatalog', '@id': `${SITE_URL}tarifs#catalogue`, name: 'Offres principales',
     itemListElement: offers.map(o => ({
@@ -967,7 +1069,7 @@ ${ctaBand('Vous hésitez entre deux offres ?', 'Décrivez votre activité en que
       itemOffered: { '@type': 'Service', name: o.svc.name, areaServed: AREA, provider: { '@id': BUSINESS_ID } },
     })),
   }]);
-  return [page, shell(page, { main, jsonld, keepMode: true, scripts: ['/js/tarifs.js'] })];
+  return [page, shell(page, { main, jsonld, keepMode: true, css: ['/css/tarifs.css'], scripts: ['/js/tarifs.js'] })];
 }
 
 // ══════════════════════════════════════════════════════

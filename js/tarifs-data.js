@@ -10,7 +10,9 @@
                   desc, cats (la première = catégorie principale), kw
      MAIN_OFFERS  les 6 offres mises en avant (accueil + haut de /tarifs) :
                   service = nom exact dans SERVICES (prix lu là-bas)
-     CARE_OFFERS  « Vous avez déjà un site ? » sur /tarifs (même principe)
+     CARE_OFFERS  cartes du parcours « J’ai déjà un site » (même principe)
+     PATHS        les 3 parcours de /tarifs (bulles) : chaque prestation
+                  y figure au moins une fois
      SYNONYMS     mots de la recherche → synonymes
    ══════════════════════════════════════════════════════ */
 (function (global) {
@@ -468,7 +470,80 @@
       pitch: 'Un bug, une erreur, un site en panne : je trouve et je corrige.' }
   ];
 
-  var api = { CATEGORIES: CATEGORIES, SERVICES: SERVICES, MAIN_OFFERS: MAIN_OFFERS, CARE_OFFERS: CARE_OFFERS, SYNONYMS: SYNONYMS };
+  /* Les 3 parcours de /tarifs (bulles du haut). Chaque prestation de
+     SERVICES doit figurer dans au moins un parcours (vérifié au build).
+       top     les plus demandées du parcours, en cartes plus grandes :
+               nom exact dans SERVICES, ou { name, icon } ; titre, phrase
+               et icône lus dans MAIN_OFFERS / CARE_OFFERS s'il y en a
+       groups  le reste, par famille (icon = symbole du sprite) */
+  var PATHS = [
+    { id: 'deja-un-site', title: 'J’ai déjà un site', short: 'Déjà un site',
+      tagline: 'L’améliorer, le moderniser ou m’en occuper pour vous.',
+      tags: ['Refonte', 'Téléphone', 'Suivi'],
+      top: ['Refonte de site', 'Adaptation mobile / responsive', 'Maintenance', 'Intervention / dépannage'],
+      groups: [
+        { id: 'moderniser', label: 'Moderniser', icon: 'site',
+          services: ['Optimisation performance / PageSpeed', 'Mise en conformité accessibilité', 'Migration de CMS',
+            'Animations & micro-interactions', 'Rédaction des textes du site'] },
+        { id: 'fonctions', label: 'Ajouter une fonctionnalité', icon: 'grid',
+          services: ['Système de réservation / prise de RDV', "Formulaire de contact + envoi d'e-mails", "Création d'un chatbot",
+            'Espace client / back-office / intranet', 'Authentification & gestion des rôles', 'Composant sur mesure',
+            'Intégration de service tiers', 'Tableau de bord & reporting', 'Import / export de données'] },
+        { id: 'visibilite', label: 'Être mieux trouvé', icon: 'chart',
+          services: ['Audit SEO', 'SEO technique + données structurées', 'Fiche Google Business Profile',
+            'Installation Google Analytics / Matomo', 'Suivi des conversions', 'Tableau de bord des statistiques',
+            'Bandeau cookies + conformité RGPD'] },
+        { id: 'entretien', label: 'Entretenir et sécuriser', icon: 'shield',
+          services: ['Sécurisation + sauvegardes', 'Supervision + alertes', "Changement d'hébergement",
+            'Formation à la gestion de votre site', 'Développement à la journée'] }
+      ] },
+    { id: 'pas-de-site', title: 'Je n’ai pas encore de site', short: 'Pas encore de site',
+      tagline: 'Être trouvé, présenter votre activité, vendre en ligne.',
+      tags: ['Fiche Google', 'Site', 'Boutique'],
+      top: ['Fiche Google Business Profile', 'Landing page', 'Site vitrine', 'Système de réservation / prise de RDV',
+        'Boutique Shopify', 'Automatisation de processus'],
+      groups: [
+        { id: 'creer', label: 'Site ou boutique', icon: 'site',
+          services: ['Site WordPress', 'Thème WordPress sur mesure', 'E-commerce (WooCommerce ou sur mesure)',
+            "Intégration d'une maquette Figma", 'Portfolio créatif sur mesure', 'Site immersif / interactif',
+            'Intégration de service tiers'] },
+        { id: 'image', label: 'Votre image', icon: 'palette',
+          services: ['Logo + identité visuelle', 'Rédaction des textes du site', "Maquettes de site ou d'application",
+            'Nom de domaine + e-mails pro'] },
+        { id: 'demarrer', label: 'Bien démarrer', icon: 'compass',
+          services: ['Accompagnement à la digitalisation', 'Cadrage de projet', 'Formation à la gestion de votre site',
+            'Bandeau cookies + conformité RGPD'] }
+      ] },
+    { id: 'autre-besoin', title: 'J’ai un autre besoin', short: 'Autre besoin',
+      tagline: 'Application, SaaS, IA, automatisation, 3D, DevOps, conseil.',
+      tags: ['Application', 'IA', '3D'],
+      top: [{ name: 'Application web', icon: 'code' }, { name: 'SaaS', icon: 'grid' },
+        { name: 'Intégration IA / LLM', icon: 'spark' }, { name: 'Expérience 3D (Three.js / WebGL)', icon: 'cube' }],
+      groups: [
+        { id: 'apps', label: 'Applications et API', icon: 'code',
+          services: ['Application mobile', 'API / backend', "Passage d'une app web en PWA / mobile",
+            "Migration / mise à jour d'une application"] },
+        { id: 'ia', label: 'IA et automatisation', icon: 'spark',
+          services: ['Automatisation de processus', "Création d'un chatbot", 'Collecte de données / scraping cadré',
+            'Import / export de données'] },
+        { id: 'creatif', label: '3D et créatif', icon: 'cube',
+          services: ['Site immersif / interactif', 'Mini-jeu web promotionnel', 'Animations & micro-interactions',
+            'Portfolio créatif sur mesure'] },
+        { id: 'design', label: 'Design et UX', icon: 'palette',
+          services: ["Maquettes de site ou d'application", 'Wireframes + prototype cliquable', 'Design system / charte UI',
+            'Audit UX', 'Tests utilisateurs'] },
+        { id: 'devops', label: 'DevOps et qualité', icon: 'server',
+          services: ['Mise en place Docker + CI/CD', 'Déploiement & infrastructure', 'Migration de base de données',
+            'Mise en place de tests automatisés', 'Publication sur les stores', 'Recette fonctionnelle',
+            'Tests multi-navigateurs et appareils'] },
+        { id: 'conseil', label: 'Conseil et pilotage', icon: 'compass',
+          services: ['Audit technique', 'Conseil en choix technique', "Conception d'architecture", 'Revue de code',
+            'Cahier des charges', 'Spécifications + user stories', 'Pilotage de projet', 'Accompagnement / mentorat',
+            'Développement à la journée'] }
+      ] }
+  ];
+
+  var api = { CATEGORIES: CATEGORIES, SERVICES: SERVICES, MAIN_OFFERS: MAIN_OFFERS, CARE_OFFERS: CARE_OFFERS, PATHS: PATHS, SYNONYMS: SYNONYMS };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else global.TarifsData = api;
 })(this);
