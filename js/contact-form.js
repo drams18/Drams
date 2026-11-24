@@ -72,8 +72,25 @@
 
   // Un envoi déjà en cours pour ce formulaire (double clic, double appel)
   // est réutilisé : un seul e-mail, un seul « lead:sent ».
+  // Objet du mail ({{subject}} dans le modèle) : data-subject du
+  // formulaire, sinon selon le type. Champ caché créé au besoin.
+  var SUBJECT = { devis: 'Demande de devis', contact: 'Message depuis le site' };
+  function setSubject(form) {
+    if (!form || !form.elements) return;
+    var f = form.elements.subject;
+    if (!f) {
+      f = global.document.createElement('input');
+      f.type = 'hidden';
+      f.name = 'subject';
+      form.appendChild(f);
+    }
+    var who = form.elements.from_name ? form.elements.from_name.value.trim() : '';
+    f.value = (form.getAttribute('data-subject') || SUBJECT[kind(form)]) + (who && !form.getAttribute('data-subject') ? ' · ' + who : '');
+  }
+
   function sendForm(form) {
     if (form && form.__sending) return form.__sending;
+    setSubject(form);
     var sending = load().then(function (emailjs) {
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form);
     }).then(function (res) {

@@ -392,7 +392,8 @@
     if (!state.items.length) return fail('Votre panier est vide.');
     if (!global.ContactForm) return fail('L’envoi est indisponible. Écrivez-moi ou appelez-moi depuis la page Contact.');
 
-    form.from_name.value = c.nom + ' · panier de ' + plural(state.items.length, 'prestation', 'prestations');
+    form.from_name.value = c.nom;
+    form.setAttribute('data-subject', 'Panier tarifs · ' + plural(state.items.length, 'prestation', 'prestations') + ' · ' + c.nom);
     form.from_email.value = c.email;
     form.message.value = summary(state, catalog, { date: new Date(), page: location.origin + location.pathname });
 
@@ -400,6 +401,7 @@
     status.textContent = 'Envoi…';
     status.className = 'cart__status';
     global.ContactForm.sendForm(form).then(function () {
+      status.textContent = '';
       state.items = [];
       state.needs = {};
       state.message = '';
