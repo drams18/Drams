@@ -950,8 +950,11 @@ function tarifsPage() {
   // Une prestation = une tuile : icône, nom, prix. Le détail (description,
   // ce qui est compris, devis) s'ouvre dans un panneau (js/tarifs.js) ;
   // sans JavaScript, la tuile se déplie sur place.
+  // Données lues par le panier (js/panier.js) : catégorie principale, prix.
+  const catIds = T.CATEGORIES.map(c => c.id);
+  const cartData = (s) => ` data-cat="${esc(catLabel(s.cats[0]))}" data-cat-id="${s.cats[0]}" data-cat-i="${catIds.indexOf(s.cats[0])}" data-ico="${CAT_ICON[s.cats[0]] || 'plus'}" data-price="${esc(priceText(s))}" data-eur="${euros(s)}"${s.unit ? ` data-unit="${esc(s.unit)}"` : ''}`;
   const tile = (s, { ico, where, o = null, top = false }) => `
-              <li class="tile${top ? ' tile--top' : ''}"${top && o ? ` id="offre-${o.id}"` : ''} data-name="${esc(s.name)}" data-search="${esc([o && o.title, s.name, s.desc, o && o.pitch, s.kw, where, ...s.cats.map(catLabel)].filter(Boolean).join(' '))}">
+              <li class="tile${top ? ' tile--top' : ''}"${top && o ? ` id="offre-${o.id}"` : ''} data-name="${esc(s.name)}"${cartData(s)} data-search="${esc([o && o.title, s.name, s.desc, o && o.pitch, s.kw, where, ...s.cats.map(catLabel)].filter(Boolean).join(' '))}">
                 <details class="tile__d"${anchor(s)}>
                   <summary class="tile__s">
                     <span class="tile__ico">${icon(ico)}</span>
@@ -967,6 +970,7 @@ function tarifsPage() {
                     <a class="text-link tile__go" href="/devis">Demander un devis${icon('arrow')}</a>
                   </div>
                 </details>
+                <button type="button" class="tile__add js-only" data-add data-name="${esc(s.name)}" aria-pressed="false" aria-label="Ajouter « ${esc(s.name)} » au panier">${icon('plus')}${icon('check')}</button>
               </li>`;
 
   const route = (p, i) => `
@@ -1039,7 +1043,9 @@ function tarifsPage() {
         </div>
       </nav>`;
 
-  const main = `${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', 'Prix « à partir de », fixés dans le devis avant de commencer. Premier échange gratuit.', finder + bubbles)}
+  const howto = `
+      <p class="cart-how js-only">${icon('bag')}<span>Ajoutez des prestations avec <span class="cart-how__plus" aria-hidden="true">${icon('plus')}</span><span class="sr-only">le bouton plus</span>, puis envoyez-moi votre sélection en une fois.</span></p>`;
+  const main = `${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', 'Prix « à partir de », fixés dans le devis avant de commencer. Premier échange gratuit.', howto + finder + bubbles)}
     <div class="routes">${switcher}
       <div class="wrap">${paths.map(route).join('')}${searchOnly.length ? `
         <div class="search-only" hidden>
@@ -1069,10 +1075,11 @@ function tarifsPage() {
         <h2 class="sheet__t" id="sheetT"></h2>
         <p class="sheet__p price"></p>
         <div class="sheet__body"></div>
-        <p class="sheet__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit${icon('arrow')}</a><a class="btn" href="${esc(WA_HREF)}" target="_blank" rel="noopener">${icon('whatsapp')}WhatsApp</a></p>
+        <p class="sheet__btns"><button type="button" class="btn btn--cta sheet__add" data-add aria-pressed="false"><span class="sheet__add-off">${icon('plus')}Ajouter au panier</span><span class="sheet__add-on">${icon('check')}Dans le panier</span></button><a class="btn" href="${esc(WA_HREF)}" target="_blank" rel="noopener">${icon('whatsapp')}WhatsApp</a></p>
         <p class="sheet__note">${esc(vatNote)}</p>
       </div>
-    </dialog>`;
+    </dialog>
+${cartHtml()}`;
   const jsonld = graph(page, { name: page.title, description: page.description }, [{
     '@type': 'OfferCatalog', '@id': `${SITE_URL}tarifs#catalogue`, name: 'Offres principales',
     itemListElement: offers.map(o => ({
@@ -1082,7 +1089,61 @@ function tarifsPage() {
       itemOffered: { '@type': 'Service', name: o.svc.name, areaServed: AREA, provider: { '@id': BUSINESS_ID } },
     })),
   }]);
-  return [page, shell(page, { main, jsonld, keepMode: true, css: ['/css/tarifs.css'], scripts: ['/js/tarifs.js'] })];
+  return [page, shell(page, { main, jsonld, keepMode: true, css: ['/css/tarifs.css'], scripts: ['/js/contact-form.js', '/js/tarifs.js', '/js/panier.js'] })];
+}
+
+// Panier de /tarifs (js/panier.js) : bouton flottant + panneau en deux
+// étapes (sélection et besoins par catégorie, puis coordonnées), envoyé
+// par EmailJS comme le devis. Rien de tout cela sans JavaScript.
+function cartHtml() {
+  return `
+    <button type="button" class="cartfab" id="cartFab" hidden aria-haspopup="dialog" aria-controls="tarifCart">
+      <span class="cartfab__ico">${icon('bag')}<span class="cartfab__n" id="cartFabN">0</span></span>
+      <span class="cartfab__txt"><span class="cartfab__t">Mon panier</span><span class="cartfab__p" id="cartFabP"></span></span>
+      ${icon('arrow', 'ico cartfab__go')}
+    </button>
+    <p class="sr-only" id="cartLive" role="status" aria-live="polite"></p>
+
+    <dialog class="sheet cart" id="tarifCart" aria-labelledby="cartT">
+      <div class="sheet__in">
+        <button type="button" class="sheet__x" data-close aria-label="Fermer">${icon('close')}</button>
+
+        <div class="cart__view" data-view="list">
+          <p class="sheet__k"><span class="sheet__ico">${icon('bag')}</span><span>Étape 1 sur 2 · Votre sélection</span></p>
+          <h2 class="sheet__t" id="cartT">Mon panier</h2>
+          <div class="cart__empty" id="cartEmpty" hidden>
+            <p>Votre panier est vide.</p>
+            <p>Ajoutez des prestations avec le bouton <span class="cart-how__plus" aria-hidden="true">${icon('plus')}</span> de chaque tuile.</p>
+          </div>
+          <div class="cart__list" id="cartList"></div>
+          <div class="cart__sum" id="cartSum"></div>
+          <p class="sheet__btns"><button type="button" class="btn btn--cta" data-next>Continuer${icon('arrow')}</button><button type="button" class="btn" data-close>Ajouter d’autres prestations</button></p>
+          <p class="sheet__note">${esc(vatNote)}</p>
+        </div>
+
+        <form class="cart__view cart__form" data-view="form" hidden novalidate>
+          <p class="sheet__k"><span class="sheet__ico">${icon('mail')}</span><span>Étape 2 sur 2 · Vos coordonnées</span></p>
+          <h2 class="sheet__t">Où puis-je vous répondre ?</h2>
+          <p class="cart__recap" id="cartRecap"></p>
+          <label class="field">Nom et prénom *<input name="client_nom" type="text" autocomplete="name" required></label>
+          <label class="field">Téléphone *<input name="client_tel" type="tel" autocomplete="tel" inputmode="tel" required></label>
+          <label class="field">E-mail *<input name="client_email" type="email" autocomplete="email" inputmode="email" required></label>
+          <label class="field">Votre activité <small>(facultatif)</small><input name="client_activite" type="text" autocomplete="organization" placeholder="Ex. : fleuriste à Montreuil"></label>
+          <label class="field">Autre chose à me dire ? <small>(facultatif)</small><textarea name="client_message" rows="3" placeholder="Un délai, une contrainte, un site que vous aimez…"></textarea></label>
+          <input type="hidden" name="from_name"><input type="hidden" name="from_email"><input type="hidden" name="message">
+          <p class="cart__status" role="status"></p>
+          <p class="sheet__btns"><button type="submit" class="btn btn--cta">Envoyer ma demande${icon('arrow')}</button><button type="button" class="btn" data-back>${icon('back')}Retour</button></p>
+          <p class="sheet__note">Vos coordonnées servent uniquement à vous répondre. <a href="/confidentialite">Confidentialité</a></p>
+        </form>
+
+        <div class="cart__view cart__done" data-view="done" hidden>
+          <span class="cart__check">${icon('check')}</span>
+          <h2 class="sheet__t">Demande envoyée</h2>
+          <p>Merci, j’ai bien reçu votre sélection. Je vous réponds sous 48 h, par e-mail ou par téléphone.</p>
+          <p class="sheet__btns"><button type="button" class="btn btn--cta" data-close>Fermer</button></p>
+        </div>
+      </div>
+    </dialog>`;
 }
 
 // ══════════════════════════════════════════════════════

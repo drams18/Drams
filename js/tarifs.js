@@ -11,6 +11,8 @@
      • la barre collante des parcours : parcours en cours allumé
      • l'arrivée dans un parcours (bulle, lien) et sur une tuile ciblée
      • un léger relief des illustrations des bulles sous le pointeur
+   Le panier (bouton +, « Ajouter au panier ») est dans js/panier.js :
+   l'événement « panier:sync » lui signale les boutons créés ici.
    ══════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -101,6 +103,7 @@
     var sTitle = sheet.querySelector('.sheet__t');
     var sPrice = sheet.querySelector('.sheet__p');
     var sBody = sheet.querySelector('.sheet__body');
+    var sAdd = sheet.querySelector('.sheet__add');
     var closing = false;
 
     doc.querySelectorAll('.tile__s').forEach(function (s) { s.setAttribute('aria-haspopup', 'dialog'); });
@@ -117,6 +120,8 @@
       Array.prototype.forEach.call(b.children, function (c) {
         if (!c.classList.contains('tile__go')) sBody.appendChild(c.cloneNode(true));
       });
+      if (sAdd) sAdd.setAttribute('data-name', tile.getAttribute('data-name'));
+      doc.dispatchEvent(new CustomEvent('panier:sync'));
       sheet.scrollTop = 0;
       closing = false;
       sheet.classList.remove('is-closing');
@@ -323,6 +328,7 @@
     list.innerHTML = '';
     list.appendChild(frag);
     if (canSheet) list.querySelectorAll('.tile__s').forEach(function (s) { s.setAttribute('aria-haspopup', 'dialog'); });
+    doc.dispatchEvent(new CustomEvent('panier:sync'));
     none.hidden = found.length > 0;
     status.textContent = found.length
       ? found.length + (found.length > 1 ? ' prestations' : ' prestation') + ' pour « ' + q + ' »'
