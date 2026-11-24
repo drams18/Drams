@@ -1,15 +1,19 @@
 /* ══════════════════════════════════════════════════════
-   TARIFS.JS : page /tarifs.
+   TARIFS.JS : page /tarifs, une mini boutique.
    Tout le contenu est écrit en HTML par scripts/build-site.mjs (lisible
-   sans JavaScript et par Google). Ce script ajoute :
-     • les anciennes adresses (#professionnels/site-pro, #app, #offres…)
-       redirigées vers le parcours ou la famille qui les remplace
-     • la recherche du haut : résultats juste en dessous (copies des
-       tuiles), synonymes (js/tarifs-data.js) chargés au premier focus
+   sans JavaScript et par Google : les parcours sont sous les bulles).
+   Ce script ajoute :
+     • la fenêtre des prestations (#shopDlg) : une bulle l'ouvre sur son
+       parcours, des onglets passent d'un parcours à l'autre, le panier
+       reste à côté (js/panier.js). Les parcours y sont déplacés au
+       chargement. Le bouton « retour » du téléphone la ferme.
+     • les liens directs (/tarifs#site-vitrine, #offre-…, #pas-de-site)
+       et les anciennes adresses (#professionnels/site-pro, #app…) :
+       la fenêtre s'ouvre sur le bon parcours, la tuile s'illumine
+     • la recherche (dans la fenêtre) : résultats à la place du parcours,
+       synonymes (js/tarifs-data.js) chargés au premier focus
      • le panneau de détail (<dialog>) quand on ouvre une tuile ; sans
        JavaScript, la tuile se déplie sur place (<details>)
-     • la barre collante des parcours : parcours en cours allumé
-     • l'arrivée dans un parcours (bulle, lien) et sur une tuile ciblée
      • un léger relief des illustrations des bulles sous le pointeur
    Le panier (bouton +, « Ajouter au panier ») est dans js/panier.js :
    l'événement « panier:sync » lui signale les boutons créés ici.
@@ -21,6 +25,7 @@
   var root = doc.documentElement;
   var fx = root.classList.contains('fx');
   var byId = function (id) { return id ? doc.getElementById(id) : null; };
+  var sync = function () { doc.dispatchEvent(new CustomEvent('panier:sync')); };
 
   // ── Anciennes adresses ────────────────────────────────
   // #professionnels/<x> (ancienne page), puis anciennes catégories et
@@ -39,59 +44,161 @@
     'autre-besoin-apps': 'autre-besoin', 'autre-besoin-ia': 'autre-besoin', 'autre-besoin-creatif': 'autre-besoin',
     'autre-besoin-design': 'autre-besoin', 'autre-besoin-devops': 'autre-besoin', 'autre-besoin-conseil': 'autre-besoin-accompagner'
   };
-  function legacy() {
-    var h = decodeURIComponent(location.hash.replace(/^#/, ''));
-    if (!h) return;
+  // Ancre (sans #) → id présent dans la page, ou ''.
+  function resolve(h) {
+    if (!h) return '';
     var parts = h.split('/');
     var id = h;
     if (parts[0] === 'professionnels' || parts[0] === 'particuliers') id = LEGACY[parts[1]] || parts[1] || '';
-    if (!byId(id)) id = MOVED[id] || (MOVED[LEGACY[id]] || '');
-    if (id === h) return;
-    history.replaceState(null, '', location.pathname + location.search + (byId(id) ? '#' + id : ''));
-    var t = byId(id);
-    if (t) t.scrollIntoView();
+    if (!byId(id)) id = MOVED[id] || MOVED[LEGACY[id]] || '';
+    return byId(id) ? id : '';
   }
-  legacy();
-  addEventListener('hashchange', legacy);
+  function hashId() { return decodeURIComponent(location.hash.replace(/^#/, '')); }
 
-  // ── Arrivée : parcours qui s'allume, tuile ciblée ─────
   function restart(el, cls) {
+    if (!el) return;
     el.classList.remove(cls);
     void el.offsetWidth;
     el.classList.add(cls);
   }
-  function arrive(id) {
-    var t = byId(id);
-    if (!t) return;
-    if (t.matches('.route')) restart(t, 'is-arrived');
-    var tile = t.closest('.tile');
-    if (tile) {
-      var d = tile.querySelector('.tile__d');
-      if (d && root.classList.contains('js')) d.open = false;
-      restart(tile, 'is-hit');
-    }
+
+  // Fermeture animée commune aux fenêtres (classe .is-closing).
+  function animateClose(d, after) {
+    if (!d.open || d.__closing) return;
+    var done = function () {
+      if (!d.__closing) return;
+      d.__closing = false;
+      d.classList.remove('is-closing');
+      d.close();
+      if (after) after();
+    };
+    if (!fx) { d.__closing = true; done(); return; }
+    d.__closing = true;
+    d.classList.add('is-closing');
+    d.addEventListener('animationend', function end(e) {
+      if (e.target !== d) return;
+      d.removeEventListener('animationend', end);
+      done();
+    });
+    setTimeout(done, 340);
   }
-  arrive(decodeURIComponent(location.hash.slice(1)));
-  addEventListener('hashchange', function () { arrive(decodeURIComponent(location.hash.slice(1))); });
 
-  var head = doc.querySelector('.p-tarifs .phead');
-  var input = byId('tarifSearch');
+  // ── Fenêtre des prestations ───────────────────────────
+  var dlg = byId('shopDlg');
+  var shopMain = byId('shopMain');
+  var routesBox = doc.querySelector('.routes');
+  var canShop = !!(dlg && typeof dlg.showModal === 'function' && shopMain && routesBox);
+  var routes = Array.prototype.slice.call(doc.querySelectorAll('.route'));
+  var tabs = dlg ? Array.prototype.slice.call(dlg.querySelectorAll('[data-route]')) : [];
+  var current = null;
 
-  // Liens internes : un même lien cliqué deux fois rallume l'arrivée ;
-  // « Changer de situation » ferme d'abord une recherche en cours ;
-  // la loupe de la barre remonte à la recherche et y place le curseur.
+  if (canShop) shopMain.appendChild(routesBox);
+  else if (routesBox) routesBox.style.display = 'block';   // vieux navigateur : la liste reste dans la page
+
+  function setRoute(id) {
+    current = id;
+    routes.forEach(function (r) { r.classList.toggle('is-current', r.id === id); });
+    tabs.forEach(function (t) {
+      var on = t.getAttribute('data-route') === id;
+      t.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (on && t.parentNode.scrollWidth > t.parentNode.clientWidth) {
+        t.parentNode.scrollTo({ left: t.offsetLeft - (t.parentNode.clientWidth - t.offsetWidth) / 2, behavior: fx ? 'smooth' : 'auto' });
+      }
+    });
+    var title = byId(id + '-t');
+    if (title) dlg.setAttribute('aria-label', title.textContent);
+  }
+
+  function hit(t) {
+    var tile = t && t.closest('.tile');
+    if (!tile) return;
+    var d = tile.querySelector('.tile__d');
+    if (d) d.open = false;
+    tile.scrollIntoView({ block: 'center' });
+    restart(tile, 'is-hit');
+  }
+
+  // Ouvre la fenêtre sur l'élément #id (parcours, famille, tuile).
+  // push : nouvelle entrée d'historique (le bouton retour fermera).
+  function openAt(id, push) {
+    var t = byId(id);
+    if (!canShop || !t || !shopMain.contains(t)) return false;
+    var r = t.matches('.route') ? t : t.closest('.route');
+    if (!r) {
+      // Prestation hors parcours : elle sort par la recherche.
+      var only = t.closest('.tile');
+      if (!only) return false;
+      openAt(current || routes[0].id, push);
+      search(only.querySelector('.tile__n').textContent);
+      return true;
+    }
+    if (searching()) clearSearch(false);
+    var was = current;
+    setRoute(r.id);
+    if (!dlg.open) {
+      if (push !== false) history.pushState({ shop: 1 }, '', '#' + id);
+      dlg.__closing = false;
+      dlg.classList.remove('is-closing');
+      dlg.showModal();
+    } else {
+      history.replaceState(history.state, '', '#' + id);
+    }
+    if (was !== r.id || t === r) shopMain.scrollTop = 0;
+    if (was !== r.id) restart(r, 'is-arrived');
+    if (t !== r) {
+      if (t.closest('.tile')) hit(t);
+      else t.scrollIntoView({ block: 'start' });
+    }
+    return true;
+  }
+
+  // Fermer : par l'historique si la fenêtre y a une entrée (le bouton
+  // retour et la croix font la même chose), sinon directement.
+  function closeShop() {
+    if (!dlg.open) return;
+    if (history.state && history.state.shop) history.back();
+    else animateClose(dlg, clearUrl);
+  }
+  function clearUrl() {
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  }
+
+  if (canShop) {
+    addEventListener('popstate', function () {
+      var inShop = history.state && history.state.shop;
+      if (dlg.open && !inShop) animateClose(dlg);
+      else if (!dlg.open && inShop) openAt(resolve(hashId()), false);
+    });
+    addEventListener('hashchange', function () {
+      var id = resolve(hashId());
+      if (id) openAt(id, false);
+    });
+    dlg.addEventListener('click', function (e) {
+      if (e.target === dlg || (e.target.closest && e.target.closest('.shopdlg__x'))) closeShop();
+    });
+    dlg.addEventListener('cancel', function (e) { e.preventDefault(); closeShop(); });
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { openAt(t.getAttribute('data-route')); });
+    });
+  }
+
+  // Liens internes (#parcours, #tuile, #situation, #recherche).
   doc.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href^="#"]');
-    if (!a) return;
-    var id = a.getAttribute('href').slice(1);
-    if (id === 'situation' && head && head.classList.contains('is-searching')) clearSearch(false);
-    if (id === 'recherche' && input) {
-      e.preventDefault();
-      byId('recherche').scrollIntoView({ block: 'center' });
-      input.focus({ preventScroll: true });
+    if (!a || !canShop) return;
+    var h = decodeURIComponent(a.getAttribute('href').slice(1));
+    if (h === 'situation') {
+      if (dlg.open) { e.preventDefault(); closeShop(); }
       return;
     }
-    if (location.hash === '#' + id) arrive(id);
+    if (h === 'recherche') {
+      e.preventDefault();
+      openAt(current || routes[0].id);
+      if (input) input.focus();
+      return;
+    }
+    var id = resolve(h);
+    if (id && openAt(id)) e.preventDefault();
   });
 
   // ── Panneau de détail ─────────────────────────────────
@@ -104,7 +211,6 @@
     var sPrice = sheet.querySelector('.sheet__p');
     var sBody = sheet.querySelector('.sheet__body');
     var sAdd = sheet.querySelector('.sheet__add');
-    var closing = false;
 
     doc.querySelectorAll('.tile__s').forEach(function (s) { s.setAttribute('aria-haspopup', 'dialog'); });
 
@@ -121,29 +227,11 @@
         if (!c.classList.contains('tile__go')) sBody.appendChild(c.cloneNode(true));
       });
       if (sAdd) sAdd.setAttribute('data-name', tile.getAttribute('data-name'));
-      doc.dispatchEvent(new CustomEvent('panier:sync'));
+      sync();
       sheet.scrollTop = 0;
-      closing = false;
+      sheet.__closing = false;
       sheet.classList.remove('is-closing');
       sheet.showModal();
-    };
-    var closeSheet = function () {
-      if (!sheet.open || closing) return;
-      if (!fx) { sheet.close(); return; }
-      closing = true;
-      sheet.classList.add('is-closing');
-      var done = function () {
-        if (!closing) return;
-        closing = false;
-        sheet.classList.remove('is-closing');
-        sheet.close();
-      };
-      sheet.addEventListener('animationend', function end(e) {
-        if (e.target !== sheet) return;
-        sheet.removeEventListener('animationend', end);
-        done();
-      });
-      setTimeout(done, 320);
     };
 
     doc.addEventListener('click', function (e) {
@@ -153,47 +241,9 @@
       openSheet(s.closest('.tile'));
     });
     sheet.addEventListener('click', function (e) {
-      if (e.target === sheet || (e.target.closest && e.target.closest('[data-close]'))) closeSheet();
+      if (e.target === sheet || (e.target.closest && e.target.closest('[data-close]'))) animateClose(sheet);
     });
-    sheet.addEventListener('cancel', function (e) { e.preventDefault(); closeSheet(); });
-  }
-
-  // ── Barre des parcours ────────────────────────────────
-  var bar = doc.querySelector('.switch');
-  if (bar && 'IntersectionObserver' in window) {
-    var inner = bar.querySelector('.switch__in');
-    var links = Array.prototype.slice.call(bar.querySelectorAll('[data-for]'));
-    var top = parseFloat(getComputedStyle(root).getPropertyValue('--top')) || 64;
-    // Ombre quand la barre colle en haut
-    var probe = doc.createElement('div');
-    probe.setAttribute('aria-hidden', 'true');
-    bar.parentNode.insertBefore(probe, bar);
-    new IntersectionObserver(function (en) {
-      var e = en[0];
-      bar.classList.toggle('is-stuck', !e.isIntersecting && e.boundingClientRect.top < top + 1);
-    }, { rootMargin: '-' + (top + 1) + 'px 0px 0px 0px' }).observe(probe);
-    // Parcours en cours : celui qui occupe le milieu de l'écran
-    var current = null;
-    var setOn = function (id) {
-      if (id === current) return;
-      current = id;
-      links.forEach(function (a) {
-        var on = a.getAttribute('data-for') === id;
-        a.classList.toggle('is-on', on);
-        if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
-        if (on && inner.scrollWidth > inner.clientWidth) {
-          inner.scrollTo({ left: a.offsetLeft - (inner.clientWidth - a.offsetWidth) / 2, behavior: fx ? 'smooth' : 'auto' });
-        }
-      });
-    };
-    var seen = {};
-    var routeIo = new IntersectionObserver(function (en) {
-      en.forEach(function (e) { seen[e.target.id] = e.isIntersecting; });
-      var on = null;
-      links.forEach(function (a) { var id = a.getAttribute('data-for'); if (!on && seen[id]) on = id; });
-      setOn(on);
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    doc.querySelectorAll('.route').forEach(function (r) { routeIo.observe(r); });
+    sheet.addEventListener('cancel', function (e) { e.preventDefault(); animateClose(sheet); });
   }
 
   // ── Bulles : boucles en pause hors écran, relief au pointeur ──
@@ -216,23 +266,25 @@
         d.querySelector('.bub__glow').style.transform = e ? 'translate3d(' + (x * -18).toFixed(1) + 'px,' + (y * -14).toFixed(1) + 'px,0) scale(1.08)' : '';
       });
     };
-    var list = bubs.querySelector('.bubs__list');
-    list.addEventListener('pointermove', function (e) {
+    var bubList = bubs.querySelector('.bubs__list');
+    bubList.addEventListener('pointermove', function (e) {
       if (!ev) requestAnimationFrame(frame);
       ev = e;
     }, { passive: true });
-    list.addEventListener('pointerleave', function () { ev = null; requestAnimationFrame(frame); boxes = null; });
+    bubList.addEventListener('pointerleave', function () { ev = null; requestAnimationFrame(frame); boxes = null; });
     addEventListener('scroll', function () { boxes = null; }, { passive: true });
     addEventListener('resize', function () { boxes = null; });
   }
 
-  // ── Recherche ─────────────────────────────────────────
-  if (!input) return;
+  // ── Recherche (dans la fenêtre) ───────────────────────
+  var input = byId('tarifSearch');
   var clear = byId('tarifSearchClear');
   var status = byId('tarifStatus');
   var results = byId('tarifResults');
   var list = byId('tarifList');
   var none = byId('tarifNone');
+
+  function searching() { return !!(dlg && dlg.classList.contains('is-searching')); }
 
   var DIACRITICS = new RegExp('[\\u0300-\\u036f]', 'g');
   function norm(s) {
@@ -266,7 +318,6 @@
     s.onload = function () { SYN = (window.TarifsData && window.TarifsData.SYNONYMS) || {}; if (input.value) run(); };
     doc.head.appendChild(s);
   }
-  input.addEventListener('focus', loadSynonyms, { once: true });
 
   function wordMatch(tok, words) {
     for (var i = 0; i < words.length; i++) {
@@ -302,13 +353,14 @@
 
   var last = '';
   function run() {
+    if (!input) return;
     var q = input.value.trim();
     var toks = tokens(q);
-    var searching = toks.length > 0;
+    var on = toks.length > 0;
     clear.hidden = !input.value.length;
-    head.classList.toggle('is-searching', searching);
-    results.hidden = !searching;
-    if (!searching) { status.textContent = ''; list.innerHTML = ''; last = ''; return; }
+    if (dlg) dlg.classList.toggle('is-searching', on);
+    results.hidden = !on;
+    if (!on) { status.textContent = ''; list.innerHTML = ''; last = ''; return; }
     var key = toks.join(' ') + '|' + Object.keys(SYN).length;
     if (key === last) return;
     last = key;
@@ -328,31 +380,44 @@
     list.innerHTML = '';
     list.appendChild(frag);
     if (canSheet) list.querySelectorAll('.tile__s').forEach(function (s) { s.setAttribute('aria-haspopup', 'dialog'); });
-    doc.dispatchEvent(new CustomEvent('panier:sync'));
+    sync();
     none.hidden = found.length > 0;
     status.textContent = found.length
       ? found.length + (found.length > 1 ? ' prestations' : ' prestation') + ' pour « ' + q + ' »'
       : 'Aucune prestation pour « ' + q + ' ».';
+    if (shopMain) shopMain.scrollTop = 0;
   }
   function clearSearch(focus) {
+    if (!input) return;
     input.value = '';
     run();
     if (focus) input.focus();
   }
+  function search(q) {
+    if (!input) return;
+    loadSynonyms();
+    input.value = q;
+    run();
+  }
 
-  input.addEventListener('input', run);
-  input.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && input.value) { e.preventDefault(); clearSearch(true); }
-    // Téléphone : « Rechercher » ferme le clavier, les résultats sont dessous.
-    if (e.key === 'Enter') { e.preventDefault(); if (matchMedia('(pointer: coarse)').matches) input.blur(); }
-  });
-  clear.addEventListener('click', function () { clearSearch(true); });
-  doc.querySelectorAll('.finder__chip').forEach(function (b) {
-    b.addEventListener('click', function () {
-      loadSynonyms();
-      input.value = b.getAttribute('data-q');
-      run();
-      input.focus({ preventScroll: true });
+  if (input) {
+    input.addEventListener('focus', loadSynonyms, { once: true });
+    input.addEventListener('input', run);
+    input.addEventListener('keydown', function (e) {
+      // Échap efface d'abord la recherche, sans fermer la fenêtre.
+      if (e.key === 'Escape' && input.value) { e.preventDefault(); e.stopPropagation(); clearSearch(true); }
+      // Téléphone : « Rechercher » ferme le clavier, les résultats sont dessous.
+      if (e.key === 'Enter') { e.preventDefault(); if (matchMedia('(pointer: coarse)').matches) input.blur(); }
     });
-  });
+    clear.addEventListener('click', function () { clearSearch(true); });
+  }
+
+  // ── Arrivée avec une ancre (/tarifs#site-vitrine…) ─────
+  // L'adresse sans ancre reste en dessous dans l'historique : « retour »
+  // ferme la fenêtre et laisse sur les bulles.
+  var first = resolve(hashId());
+  if (first && canShop) {
+    history.replaceState(null, '', location.pathname + location.search);
+    openAt(first);
+  }
 })();

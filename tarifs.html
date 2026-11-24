@@ -345,33 +345,17 @@
   </header>
 
   <main id="main" tabindex="-1">
+    <div class="shop wrap">
+      <div class="shop__main">
     <header class="phead wrap">
       <p class="kicker">Tarifs</p>
       <h1 class="phead__t"><span class="bw" style="--i:0">Tarifs</span> <span class="bw" style="--i:1">:</span> <span class="bw" style="--i:2">des</span> <span class="bw" style="--i:3">prix</span> <span class="bw" style="--i:4">clairs,</span> <span class="bw" style="--i:5">affichés</span> <span class="bw" style="--i:6">d’avance</span></h1>
-      <p class="phead__lead">Prix « à partir de », fixés dans le devis avant de commencer. Premier échange gratuit.</p>
-      <p class="cart-how js-only"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bag"/></svg><span>Ajoutez des prestations avec <span class="cart-how__plus" aria-hidden="true"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-plus"/></svg></span><span class="sr-only">le bouton plus</span>, puis envoyez-moi votre sélection en une fois.</span></p>
-      <div class="finder js-only" id="recherche" role="search">
-        <div class="search">
-          <svg class="ico search__ico" aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
-          <label class="sr-only" for="tarifSearch">Rechercher parmi les 74 prestations</label>
-          <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" aria-controls="tarifResults" placeholder="Rechercher une prestation">
-          <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
-        </div>
-        <p class="finder__try"><span>Essayez</span><button type="button" class="finder__chip" data-q="réservation">réservation</button><button type="button" class="finder__chip" data-q="logo">logo</button><button type="button" class="finder__chip" data-q="boutique">boutique</button><button type="button" class="finder__chip" data-q="application">application</button><button type="button" class="finder__chip" data-q="Google">Google</button></p>
-        <p class="search__status" id="tarifStatus" role="status" aria-live="polite"></p>
-        <div class="results" id="tarifResults" hidden>
-          <ul class="tiles tiles--res" id="tarifList"></ul>
-          <div class="noresult" id="tarifNone" hidden>
-            <p>Votre besoin est peut-être spécifique : parlons-en.</p>
-            <p class="cta__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn" href="/contact">Me contacter</a></p>
-          </div>
-        </div>
-      </div>
+      
       <nav class="bubs" id="situation" aria-labelledby="situation-t">
         <p class="bubs__k" id="situation-t">Votre situation</p>
         <ul class="bubs__list">
           <li class="bub bub--1" style="--i:0">
-            <a class="bub__a" href="#deja-un-site">
+            <a class="bub__a" href="#deja-un-site" aria-haspopup="dialog">
               <span class="bub__ring" aria-hidden="true"></span>
               <span class="bub__disc">
                 <span class="bub__glow" aria-hidden="true"></span>
@@ -392,7 +376,7 @@
             </a>
           </li>
           <li class="bub bub--2" style="--i:1">
-            <a class="bub__a" href="#pas-de-site">
+            <a class="bub__a" href="#pas-de-site" aria-haspopup="dialog">
               <span class="bub__ring" aria-hidden="true"></span>
               <span class="bub__disc">
                 <span class="bub__glow" aria-hidden="true"></span>
@@ -411,7 +395,7 @@
             </a>
           </li>
           <li class="bub bub--3" style="--i:2">
-            <a class="bub__a" href="#autre-besoin">
+            <a class="bub__a" href="#autre-besoin" aria-haspopup="dialog">
               <span class="bub__ring" aria-hidden="true"></span>
               <span class="bub__disc">
                 <span class="bub__glow" aria-hidden="true"></span>
@@ -432,15 +416,13 @@
         </ul>
       </nav>
     </header>
+        <p class="note shop__note">Prix nets : TVA non applicable, article 293 B du CGI. Le prix final dépend de votre projet, il est fixé dans le devis avant de commencer.</p>
+      </div>
+      <aside class="minicart minicart--page js-only" data-minicart aria-label="Votre panier"></aside>
+    </div>
+    <div class="cartbar cartbar--page js-only" data-cartbar></div>
+
     <div class="routes">
-      <nav class="switch" aria-label="Changer de parcours">
-        <div class="switch__in">
-          <a class="switch__a" href="#deja-un-site" data-for="deja-un-site"><span class="switch__n" aria-hidden="true">01</span>Déjà un site</a>
-          <a class="switch__a" href="#pas-de-site" data-for="pas-de-site"><span class="switch__n" aria-hidden="true">02</span>Pas encore de site</a>
-          <a class="switch__a" href="#autre-besoin" data-for="autre-besoin"><span class="switch__n" aria-hidden="true">03</span>Autre besoin</a>
-          <a class="switch__a switch__find js-only" href="#recherche"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-search"/></svg><span class="sr-only">Rechercher une prestation</span></a>
-        </div>
-      </nav>
       <div class="wrap">
         <section class="route route--1" id="deja-un-site" data-route aria-labelledby="deja-un-site-t">
           <header class="route__head">
@@ -1745,17 +1727,40 @@
       </div>
     </div>
 
-    <section class="wrap free-wrap" aria-label="Premier échange gratuit">
-      <div class="free">
-        <span class="free__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg></span>
-        <div class="free__txt">
-          <h2 class="free__t">Premier échange gratuit</h2>
-          <p>Vous ne savez pas ce qu’il vous faut ? Expliquez-moi votre activité : je vous conseille gratuitement, sans engagement.</p>
-          <p class="free__note">Prestations réservées aux professionnels : commerces, artisans, indépendants, entreprises et associations.</p>
+    <dialog class="shopdlg" id="shopDlg" aria-label="Prestations" autofocus>
+      <div class="shopdlg__in">
+        <header class="shopdlg__top">
+          <nav class="shopdlg__tabs" aria-label="Votre situation">
+            <button type="button" class="stab stab--1" data-route="deja-un-site" aria-pressed="false"><span class="stab__n" aria-hidden="true">01</span>Déjà un site</button>
+            <button type="button" class="stab stab--2" data-route="pas-de-site" aria-pressed="false"><span class="stab__n" aria-hidden="true">02</span>Pas encore de site</button>
+            <button type="button" class="stab stab--3" data-route="autre-besoin" aria-pressed="false"><span class="stab__n" aria-hidden="true">03</span>Autre besoin</button>
+          </nav>
+          <button type="button" class="shopdlg__x" data-close aria-label="Fermer"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-close"/></svg></button>
+        </header>
+        <div class="shopdlg__grid">
+          <div class="shopdlg__main" id="shopMain">
+      <div class="finder js-only" id="recherche" role="search">
+        <div class="search">
+          <svg class="ico search__ico" aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
+          <label class="sr-only" for="tarifSearch">Rechercher parmi les 74 prestations</label>
+          <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" aria-controls="tarifResults" placeholder="Rechercher une prestation">
+          <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
         </div>
-        <p class="free__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn" href="https://wa.me/33767318426?text=Bonjour%20Arphan%2C%20je%20vous%20contacte%20depuis%20votre%20site%20au%20sujet%20d'un%20projet." target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>WhatsApp</a></p>
+        <p class="search__status" id="tarifStatus" role="status" aria-live="polite"></p>
+        <div class="results" id="tarifResults" hidden>
+          <ul class="tiles tiles--res" id="tarifList"></ul>
+          <div class="noresult" id="tarifNone" hidden>
+            <p>Votre besoin est peut-être spécifique : parlons-en.</p>
+            <p class="cta__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn" href="/contact">Me contacter</a></p>
+          </div>
+        </div>
       </div>
-    </section>
+          </div>
+          <aside class="minicart" data-minicart aria-label="Votre panier"></aside>
+        </div>
+        <div class="cartbar" data-cartbar></div>
+      </div>
+    </dialog>
 
     <dialog class="sheet" id="tarifSheet" aria-labelledby="sheetT">
       <div class="sheet__in">
@@ -1769,11 +1774,6 @@
       </div>
     </dialog>
 
-    <button type="button" class="cartfab" id="cartFab" hidden aria-haspopup="dialog" aria-controls="tarifCart">
-      <span class="cartfab__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bag"/></svg><span class="cartfab__n" id="cartFabN">0</span></span>
-      <span class="cartfab__txt"><span class="cartfab__t">Mon panier</span><span class="cartfab__p" id="cartFabP"></span></span>
-      <svg class="ico cartfab__go" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg>
-    </button>
     <p class="sr-only" id="cartLive" role="status" aria-live="polite"></p>
 
     <dialog class="sheet cart" id="tarifCart" aria-labelledby="cartT">

@@ -998,7 +998,6 @@ function tarifsPage() {
         </section>`;
 
   // Haut de page : la recherche, puis les 3 bulles.
-  const TRY = ['réservation', 'logo', 'boutique', 'application', 'Google'];
   const finder = `
       <div class="finder js-only" id="recherche" role="search">
         <div class="search">
@@ -1007,7 +1006,6 @@ function tarifsPage() {
           <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" aria-controls="tarifResults" placeholder="Rechercher une prestation">
           <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
         </div>
-        <p class="finder__try"><span>Essayez</span>${TRY.map(w => `<button type="button" class="finder__chip" data-q="${esc(w)}">${esc(w)}</button>`).join('')}</p>
         <p class="search__status" id="tarifStatus" role="status" aria-live="polite"></p>
         <div class="results" id="tarifResults" hidden>
           <ul class="tiles tiles--res" id="tarifList"></ul>
@@ -1022,7 +1020,7 @@ function tarifsPage() {
         <p class="bubs__k" id="situation-t">Votre situation</p>
         <ul class="bubs__list">${paths.map((p, i) => `
           <li class="bub bub--${i + 1}" style="--i:${i}">
-            <a class="bub__a" href="#${p.id}">
+            <a class="bub__a" href="#${p.id}" aria-haspopup="dialog">
               <span class="bub__ring" aria-hidden="true"></span>
               <span class="bub__disc">
                 <span class="bub__glow" aria-hidden="true"></span>
@@ -1035,18 +1033,20 @@ function tarifsPage() {
           </li>`).join('')}
         </ul>
       </nav>`;
-  const switcher = `
-      <nav class="switch" aria-label="Changer de parcours">
-        <div class="switch__in">${paths.map((p, i) => `
-          <a class="switch__a" href="#${p.id}" data-for="${p.id}"><span class="switch__n" aria-hidden="true">0${i + 1}</span>${esc(p.short)}</a>`).join('')}
-          <a class="switch__a switch__find js-only" href="#recherche">${icon('search')}<span class="sr-only">Rechercher une prestation</span></a>
-        </div>
-      </nav>`;
+  // Page : le titre et les 3 bulles, le panier à droite (ordinateur) ou en
+  // barre en bas (téléphone). Les parcours restent écrits dans la page
+  // (Google, sans JavaScript) ; js/tarifs.js les déplace dans la fenêtre
+  // #shopDlg, ouverte par une bulle, avec le panier à côté.
+  const main = `
+    <div class="shop wrap">
+      <div class="shop__main">${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', '', bubbles)}
+        <p class="note shop__note">${esc(vatNote)}</p>
+      </div>
+      <aside class="minicart minicart--page js-only" data-minicart aria-label="Votre panier"></aside>
+    </div>
+    <div class="cartbar cartbar--page js-only" data-cartbar></div>
 
-  const howto = `
-      <p class="cart-how js-only">${icon('bag')}<span>Ajoutez des prestations avec <span class="cart-how__plus" aria-hidden="true">${icon('plus')}</span><span class="sr-only">le bouton plus</span>, puis envoyez-moi votre sélection en une fois.</span></p>`;
-  const main = `${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', 'Prix « à partir de », fixés dans le devis avant de commencer. Premier échange gratuit.', howto + finder + bubbles)}
-    <div class="routes">${switcher}
+    <div class="routes">
       <div class="wrap">${paths.map(route).join('')}${searchOnly.length ? `
         <div class="search-only" hidden>
           <ul class="tiles">${searchOnly.map(s => tile(s, { ico: CAT_ICON[s.cats[0]] || 'plus', where: catLabel(s.cats[0]) })).join('')}
@@ -1056,17 +1056,22 @@ function tarifsPage() {
       </div>
     </div>
 
-    <section class="wrap free-wrap" aria-label="Premier échange gratuit">
-      <div class="free">
-        <span class="free__ico">${icon('chat')}</span>
-        <div class="free__txt">
-          <h2 class="free__t">Premier échange gratuit</h2>
-          <p>Vous ne savez pas ce qu’il vous faut ? Expliquez-moi votre activité : je vous conseille gratuitement, sans engagement.</p>
-          <p class="free__note">${PRO_ONLY} : ${PRO_WHO}.</p>
+    <dialog class="shopdlg" id="shopDlg" aria-label="Prestations" autofocus>
+      <div class="shopdlg__in">
+        <header class="shopdlg__top">
+          <nav class="shopdlg__tabs" aria-label="Votre situation">${paths.map((p, i) => `
+            <button type="button" class="stab stab--${i + 1}" data-route="${p.id}" aria-pressed="false"><span class="stab__n" aria-hidden="true">0${i + 1}</span>${esc(p.short)}</button>`).join('')}
+          </nav>
+          <button type="button" class="shopdlg__x" data-close aria-label="Fermer">${icon('close')}</button>
+        </header>
+        <div class="shopdlg__grid">
+          <div class="shopdlg__main" id="shopMain">${finder}
+          </div>
+          <aside class="minicart" data-minicart aria-label="Votre panier"></aside>
         </div>
-        <p class="free__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit${icon('arrow')}</a><a class="btn" href="${esc(WA_HREF)}" target="_blank" rel="noopener">${icon('whatsapp')}WhatsApp</a></p>
+        <div class="cartbar" data-cartbar></div>
       </div>
-    </section>
+    </dialog>
 
     <dialog class="sheet" id="tarifSheet" aria-labelledby="sheetT">
       <div class="sheet__in">
@@ -1092,16 +1097,11 @@ ${cartHtml()}`;
   return [page, shell(page, { main, jsonld, keepMode: true, css: ['/css/tarifs.css'], scripts: ['/js/contact-form.js', '/js/tarifs.js', '/js/panier.js'] })];
 }
 
-// Panier de /tarifs (js/panier.js) : bouton flottant + panneau en deux
+// Panier de /tarifs (js/panier.js) : panneau de validation en deux
 // étapes (sélection et besoins par catégorie, puis coordonnées), envoyé
 // par EmailJS comme le devis. Rien de tout cela sans JavaScript.
 function cartHtml() {
   return `
-    <button type="button" class="cartfab" id="cartFab" hidden aria-haspopup="dialog" aria-controls="tarifCart">
-      <span class="cartfab__ico">${icon('bag')}<span class="cartfab__n" id="cartFabN">0</span></span>
-      <span class="cartfab__txt"><span class="cartfab__t">Mon panier</span><span class="cartfab__p" id="cartFabP"></span></span>
-      ${icon('arrow', 'ico cartfab__go')}
-    </button>
     <p class="sr-only" id="cartLive" role="status" aria-live="polite"></p>
 
     <dialog class="sheet cart" id="tarifCart" aria-labelledby="cartT">

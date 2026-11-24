@@ -7,7 +7,10 @@
    part par EmailJS (js/contact-form.js, même modèle que le devis), avec
    un message en texte lisible, rangé par catégorie (summary()).
 
-   Le HTML (bouton flottant, panneau en 2 étapes) est écrit par
+   Le panier reste visible : panneau à droite sur ordinateur, barre en bas
+   sur téléphone ([data-minicart], [data-cartbar], sur la page et dans la
+   fenêtre des prestations). « Valider ma demande » ouvre le panneau en
+   2 étapes. Le HTML de ces blocs (vides) et du panneau est écrit par
    scripts/build-site.mjs (cartHtml) ; les prix et catégories sont lus
    sur les tuiles (data-cat, data-price, data-eur, data-unit).
 
@@ -174,9 +177,8 @@
     n.classList.add(cls);
   }
 
-  var fab = doc.getElementById('cartFab');
-  var fabN = doc.getElementById('cartFabN');
-  var fabP = doc.getElementById('cartFabP');
+  var minis = doc.querySelectorAll('[data-minicart]');
+  var bars = doc.querySelectorAll('[data-cartbar]');
   var live = doc.getElementById('cartLive');
   var list = doc.getElementById('cartList');
   var empty = doc.getElementById('cartEmpty');
@@ -209,12 +211,45 @@
     });
   }
 
-  function syncFab() {
+  // ── Panier visible : panneau à droite (ordinateur), barre en bas (téléphone) ──
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function svg(id, cls) { return '<svg class="' + (cls || 'ico') + '" aria-hidden="true"><use href="#i-' + id + '"/></svg>'; }
+  var PLUS = '<span class="cart-how__plus" aria-hidden="true">' + svg('plus') + '</span>';
+
+  function miniHtml() {
     var n = state.items.length;
-    fab.hidden = n === 0;
-    fabN.textContent = n;
+    var h = '<p class="mc__k">' + svg('bag') + '<span>Votre panier</span><span class="mc__n">' + n + '</span></p>';
+    if (!n) {
+      return h + '<div class="mc__empty"><p>Votre panier est vide.</p><p>Ajoutez des prestations avec le bouton ' + PLUS + '.</p></div>';
+    }
+    h += '<ul class="mc__list">';
+    state.items.forEach(function (name) {
+      var s = catalog[name];
+      h += '<li class="mc__item"><span class="mc__name">' + esc(s.name) + '</span><span class="mc__price">' + esc(s.price) + '</span>' +
+        '<button type="button" class="mc__x" data-remove="' + esc(s.name) + '" aria-label="Retirer « ' + esc(s.name) + ' »">' + svg('close') + '</button></li>';
+    });
+    h += '</ul>';
+    var lines = totalLines(totals(state.items.map(function (x) { return catalog[x]; })));
+    h += '<div class="mc__sum"><span class="mc__sum-k">Estimation</span><strong>' + esc(lines[0] || '') + '</strong>' +
+      lines.slice(1).map(function (l) { return '<span>' + esc(l) + '</span>'; }).join('') + '</div>';
+    h += '<button type="button" class="btn btn--cta mc__go" data-checkout>Valider ma demande' + svg('arrow') + '</button>';
+    h += '<p class="mc__note">Devis gratuit, sans engagement.</p>';
+    return h;
+  }
+  function barHtml() {
+    var n = state.items.length;
+    if (!n) return '<div class="cartbar__in is-empty">' + svg('bag') + '<span>Panier vide · ajoutez avec ' + PLUS + '</span></div>';
     var t = totals(state.items.map(function (x) { return catalog[x]; }));
-    fabP.textContent = t.once ? 'dès ' + fmt(t.once) + ' €' : t.monthly ? 'dès ' + fmt(t.monthly) + ' € / mois' : plural(n, 'prestation', 'prestations');
+    var p = t.once ? 'dès ' + fmt(t.once) + ' €' : t.monthly ? 'dès ' + fmt(t.monthly) + ' € / mois' : plural(n, 'prestation', 'prestations');
+    return '<button type="button" class="cartbar__in" data-checkout>' +
+      '<span class="cartbar__ico">' + svg('bag') + '<span class="cartbar__n">' + n + '</span></span>' +
+      '<span class="cartbar__txt"><strong>Mon panier · ' + plural(n, 'prestation', 'prestations') + '</strong><span>' + esc(p) + '</span></span>' +
+      '<span class="cartbar__go">Valider' + svg('arrow') + '</span></button>';
+  }
+  function renderCart(bump) {
+    var m = miniHtml(), b = barHtml();
+    minis.forEach(function (el) { el.innerHTML = m; if (bump) replay(el.querySelector('.mc__n'), 'is-bump'); });
+    bars.forEach(function (el) { el.innerHTML = b; if (bump) replay(el.querySelector('.cartbar__in'), 'is-bump'); });
   }
 
   function toggle(name, btn) {
@@ -224,12 +259,8 @@
     else state.items.splice(state.items.indexOf(name), 1);
     save();
     syncButtons();
-    var wasHidden = fab.hidden;
-    syncFab();
-    if (on) {
-      replay(btn, 'is-pop');
-      if (!wasHidden) replay(fab, 'is-bump');
-    }
+    renderCart(on);
+    if (on) replay(btn, 'is-pop');
     live.textContent = '« ' + name + ' » ' + (on ? 'ajouté au panier' : 'retiré du panier') + ' (' + plural(state.items.length, 'prestation', 'prestations') + ').';
     if (dlg.open) renderList();
   }
@@ -295,9 +326,12 @@
       lines.slice(1).forEach(function (l) { sum.appendChild(el('span', 'cart__sum-x', l)); });
     }
   }
-  list.addEventListener('click', function (e) {
-    var x = e.target.closest('[data-remove]');
-    if (x) toggle(x.getAttribute('data-remove'), null);
+  // Retirer (panier visible, panneau de validation) ; valider la demande.
+  doc.addEventListener('click', function (e) {
+    var x = e.target.closest && e.target.closest('[data-remove]');
+    if (x) { toggle(x.getAttribute('data-remove'), null); return; }
+    var go = e.target.closest && e.target.closest('[data-checkout]');
+    if (go) open();
   });
   list.addEventListener('input', function (e) {
     var id = e.target.getAttribute('data-need');
@@ -337,7 +371,6 @@
     });
     setTimeout(done, 320);
   }
-  fab.addEventListener('click', open);
   dlg.addEventListener('click', function (e) {
     if (e.target === dlg || (e.target.closest && e.target.closest('[data-close]'))) close();
   });
@@ -407,7 +440,7 @@
       state.message = '';
       save();
       syncButtons();
-      syncFab();
+      renderCart(false);
       show('done');
       if (global.FX && global.FX.confetti) global.FX.confetti();
     }).catch(function (err) {
@@ -419,5 +452,5 @@
   });
 
   syncButtons();
-  syncFab();
+  renderCart(false);
 })(typeof window !== 'undefined' ? window : globalThis);
