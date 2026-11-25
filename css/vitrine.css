@@ -878,6 +878,8 @@ html.nav-open .topbar { background: var(--bg) !important; backdrop-filter: none 
 .svc-prices li { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 14px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); text-align: left; }
 .svc-prices li > span:first-child { font-weight: 650; }
 .svc-prices .price { color: var(--accent); font-weight: 700; }
+.svc-packs { width: min(100%, 460px); margin: 12px auto 0; font-size: 14.5px; color: var(--muted); text-wrap: balance; }
+.svc-packs a { font-weight: 650; color: var(--accent); }
 .svc-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
 .svc-prose { max-width: 820px; }
 .svc-prose .sec__t { text-align: center; }

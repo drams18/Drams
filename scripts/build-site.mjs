@@ -116,6 +116,17 @@ const euros = (s) => parseInt(s.price.replace(/\D/g, ''), 10);
 const offers = T.MAIN_OFFERS.map(o => ({ ...o, svc: serviceByName(o.service) }));
 const offer = (id) => offers.find(o => o.id === id);
 const careOffers = T.CARE_OFFERS.map(o => ({ ...o, svc: serviceByName(o.service) }));
+// Les 3 packs : prix = somme des prestations comprises (SERVICES),
+// forfaits seulement, et chaque pack plus cher que le précédent.
+const packs = T.PACKS.map((p, i) => {
+  const list = p.services.map(serviceByName);
+  const bad = list.find(s => s.unit);
+  if (bad) throw new Error(`tarifs-data : pack ${p.id}, « ${bad.name} » n’est pas un forfait`);
+  const eur = list.reduce((a, s) => a + euros(s), 0);
+  const amount = `${String(eur).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} €`;
+  return { ...p, list, eur, amount, n: i + 1 };
+  });
+packs.forEach((p, i) => { if (i && p.eur <= packs[i - 1].eur) throw new Error(`tarifs-data : le pack ${p.id} doit coûter plus que ${packs[i - 1].id}`); });
 const maintenance = serviceByName('Maintenance');
 const depannage = serviceByName('Intervention / dépannage');
 const refonte = serviceByName('Refonte de site');
@@ -911,8 +922,8 @@ const BUB_ART = {
 function tarifsPage() {
   const page = {
     key: 'tarifs', path: 'tarifs', file: 'tarifs.html',
-    title: `Tarifs · Site vitrine, landing page, réservation · ${NAME}`,
-    description: `Tarifs d’un ${JOB.toLowerCase()} en ${AREA} : fiche Google ${offer('fiche-google').svc.price}, landing page ${offer('landing-page').svc.price}, site vitrine ${offer('site-vitrine').svc.price}, réservation en ligne ${offer('reservation').svc.price}. Prix affichés, devis gratuit.`,
+    title: `Tarifs création de site internet · Packs dès ${packs[0].amount} · ${NAME}`,
+    description: `Tarifs de création de site internet à ${biz.city} : ${packs.length} packs dès ${packs[0].amount} (fiche Google, site vitrine, réservation en ligne) ou prestations à la carte. Prix affichés, devis gratuit.`,
     crumbs: [{ name: 'Tarifs', path: 'tarifs' }],
   };
   const catLabel = (id) => (T.CATEGORIES.find(c => c.id === id) || {}).label || '';
@@ -997,17 +1008,6 @@ function tarifsPage() {
           <p class="route__more">${icon('search')}<span>${esc(p.more)}</span></p>` : ''}
         </section>`;
 
-  // Les 3 packs : prix = somme des prestations comprises (SERVICES),
-  // forfaits seulement, et chaque pack plus cher que le précédent.
-  const packs = T.PACKS.map((p, i) => {
-    const list = p.services.map(serviceByName);
-    const bad = list.find(s => s.unit);
-    if (bad) throw new Error(`tarifs-data : pack ${p.id}, « ${bad.name} » n’est pas un forfait`);
-    const eur = list.reduce((a, s) => a + euros(s), 0);
-    const amount = `${String(eur).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} €`;
-    return { ...p, list, eur, amount, n: i + 1 };
-  });
-  packs.forEach((p, i) => { if (i && p.eur <= packs[i - 1].eur) throw new Error(`tarifs-data : le pack ${p.id} doit coûter plus que ${packs[i - 1].id}`); });
   const packCards = `
       <section class="packs" id="packs" aria-labelledby="packs-t">
         <h2 class="packs__t" id="packs-t">Trois packs, du plus simple au plus complet</h2>
@@ -1021,7 +1021,7 @@ function tarifsPage() {
               <p class="pack__pitch">${esc(p.pitch)}</p>
               <p class="pack__price price"><span class="price__from">à partir de</span> <span class="price__amount">${esc(p.amount)}</span></p>
               <ul class="pack__inc" aria-label="Compris dans le ${esc(p.title)}">${p.list.map(s => `
-                <li${i && packs[i - 1].list.includes(s) ? '' : (i ? ' class="is-new"' : '')}>${icon('check')}<span>${esc(s.name)}</span><small>${esc(s.price)}</small></li>`).join('')}
+                <li${i && packs[i - 1].list.includes(s) ? '' : (i ? ' class="is-new"' : '')}>${icon('check')}<span>${svcPageOf(s) ? `<a href="/${svcPageOf(s).slug}">${esc(s.name)}</a>` : esc(s.name)}</span><small>${esc(s.price)}</small></li>`).join('')}
               </ul>
               <button type="button" class="btn${p.badge ? ' btn--cta' : ''} pack__add js-only" data-add data-name="${esc(p.title)}" aria-pressed="false"><span class="pack__off">${icon('plus')}Choisir ce pack</span><span class="pack__on">${icon('check')}Pack choisi</span></button>
               <a class="text-link pack__devis" href="/devis">Demander un devis${icon('arrow')}</a>
@@ -1316,6 +1316,10 @@ const SERVICE_PAGES = [
   },
 ];
 const servicePageOf = (offerId) => SERVICE_PAGES.find(s => s.offer === offerId || s.care === offerId);
+// Packs qui comprennent l'une de ces prestations (pages services).
+const packsOf = (svcs) => packs.filter(p => p.list.some(s => svcs.includes(s)));
+// Page service d'une prestation (liens depuis les packs de /tarifs).
+const svcPageOf = (svc) => SERVICE_PAGES.find(p => p.services.includes(svc.name));
 const val = (v) => typeof v === 'function' ? v() : v;
 
 function servicePage(s) {
@@ -1333,7 +1337,8 @@ function servicePage(s) {
   const main = `${pageHead('Services', s.h1, esc(s.lead), `
       <ul class="svc-prices" aria-label="Tarifs">${svcs.map(v => `
         <li><span>${esc(v.name)}</span><span class="price">${priceHtml(v)}</span></li>`).join('')}
-      </ul>
+      </ul>${packsOf(svcs).length ? `
+      <p class="svc-packs">Aussi compris dans nos packs : ${packsOf(svcs).map(p => `<a href="/tarifs#pack-${p.id}">${esc(p.title)}</a> (dès ${esc(p.amount)})`).join(', ').replace(/, ([^,]*)$/, ' et $1')}.</p>` : ''}
       <p class="svc-cta"><a class="btn btn--cta btn--lg" href="/devis" data-magnet>Demander un devis gratuit${icon('arrow')}</a><a class="btn btn--lg" href="${esc(WA_HREF)}" target="_blank" rel="noopener">${icon('whatsapp')}WhatsApp</a></p>`)}
 
     <section class="sec" aria-labelledby="svc-why">
