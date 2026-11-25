@@ -11,6 +11,7 @@
      MAIN_OFFERS  les 6 offres mises en avant (accueil + haut de /tarifs) :
                   service = nom exact dans SERVICES (prix lu là-bas)
      CARE_OFFERS  cartes du parcours « J’ai déjà un site » (même principe)
+     PACKS        les 3 packs en tête de /tarifs (prix = somme des prestations)
      PATHS        les 3 parcours de /tarifs (bulles) : les prestations
                   affichées ; les autres ne sortent que dans la recherche
      SYNONYMS     mots de la recherche → synonymes
@@ -514,7 +515,27 @@
       more: 'Projet plus technique (API, hébergement, revue de code, architecture…) ? Cherchez-le en haut de page ou demandez un devis.' }
   ];
 
-  var api = { CATEGORIES: CATEGORIES, SERVICES: SERVICES, MAIN_OFFERS: MAIN_OFFERS, CARE_OFFERS: CARE_OFFERS, PATHS: PATHS, SYNONYMS: SYNONYMS };
+  /* Les 3 packs en tête de /tarifs (25/11/2026) : du plus simple au plus
+     complet. Le prix d'un pack = la somme des prix de ses prestations
+     (lus dans SERVICES, « à partir de ») : aucun prix écrit ici.
+       services  noms exacts dans SERVICES (prestations forfaitaires)
+       badge     petite étiquette au-dessus du pack (facultatif)
+     Chaque pack contient le précédent, plus quelque chose : le
+     générateur vérifie que les prix montent. */
+  var PACKS = [
+    { id: 'essentiel', title: 'Pack Essentiel', icon: 'pin',
+      pitch: 'Être trouvé sur Google et contacté en un geste.',
+      services: ['Fiche Google Business Profile', 'Landing page', 'Nom de domaine + e-mails pro'] },
+    { id: 'vitrine', title: 'Pack Vitrine', icon: 'site', badge: 'Recommandé',
+      pitch: 'Un vrai site de plusieurs pages, à votre image.',
+      services: ['Fiche Google Business Profile', 'Site vitrine', 'Nom de domaine + e-mails pro', 'Logo + identité visuelle'] },
+    { id: 'premium', title: 'Pack Premium', icon: 'calendar',
+      pitch: 'Le site complet : vos clients réservent seuls, Google vous met en avant.',
+      services: ['Fiche Google Business Profile', 'Site vitrine', 'Nom de domaine + e-mails pro', 'Logo + identité visuelle',
+        'Rédaction des textes du site', 'Système de réservation / prise de RDV', 'SEO technique + données structurées'] }
+  ];
+
+  var api = { CATEGORIES: CATEGORIES, SERVICES: SERVICES, MAIN_OFFERS: MAIN_OFFERS, CARE_OFFERS: CARE_OFFERS, PATHS: PATHS, PACKS: PACKS, SYNONYMS: SYNONYMS };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else global.TarifsData = api;
 })(this);

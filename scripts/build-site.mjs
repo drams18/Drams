@@ -997,7 +997,40 @@ function tarifsPage() {
           <p class="route__more">${icon('search')}<span>${esc(p.more)}</span></p>` : ''}
         </section>`;
 
-  // Haut de page : la recherche, puis les 3 bulles.
+  // Les 3 packs : prix = somme des prestations comprises (SERVICES),
+  // forfaits seulement, et chaque pack plus cher que le précédent.
+  const packs = T.PACKS.map((p, i) => {
+    const list = p.services.map(serviceByName);
+    const bad = list.find(s => s.unit);
+    if (bad) throw new Error(`tarifs-data : pack ${p.id}, « ${bad.name} » n’est pas un forfait`);
+    const eur = list.reduce((a, s) => a + euros(s), 0);
+    const amount = `${String(eur).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} €`;
+    return { ...p, list, eur, amount, n: i + 1 };
+  });
+  packs.forEach((p, i) => { if (i && p.eur <= packs[i - 1].eur) throw new Error(`tarifs-data : le pack ${p.id} doit coûter plus que ${packs[i - 1].id}`); });
+  const packCards = `
+      <section class="packs" id="packs" aria-labelledby="packs-t">
+        <h2 class="packs__t" id="packs-t">Trois packs, du plus simple au plus complet</h2>
+        <ul class="packs__list">${packs.map((p, i) => `
+          <li class="pack pack--${p.n}${p.badge ? ' pack--star' : ''}" id="pack-${p.id}" style="--i:${i}" data-name="${esc(p.title)}" data-pack data-cat="Packs" data-cat-id="pack" data-cat-i="-1" data-ico="${p.icon}" data-price="à partir de ${esc(p.amount)}" data-eur="${p.eur}" data-includes="${esc(p.list.map(s => s.name).join('|'))}">
+            <article class="pack__in">${p.badge ? `
+              <p class="pack__badge">${icon('spark')}${esc(p.badge)}</p>` : ''}
+              <p class="pack__lvl" aria-label="Niveau ${p.n} sur ${packs.length}">${packs.map((_, j) => `<span${j <= i ? ' class="on"' : ''}></span>`).join('')}</p>
+              <span class="pack__ico">${icon(p.icon)}</span>
+              <h3 class="pack__name">${esc(p.title)}</h3>
+              <p class="pack__pitch">${esc(p.pitch)}</p>
+              <p class="pack__price price"><span class="price__from">à partir de</span> <span class="price__amount">${esc(p.amount)}</span></p>
+              <ul class="pack__inc" aria-label="Compris dans le ${esc(p.title)}">${p.list.map(s => `
+                <li${i && packs[i - 1].list.includes(s) ? '' : (i ? ' class="is-new"' : '')}>${icon('check')}<span>${esc(s.name)}</span><small>${esc(s.price)}</small></li>`).join('')}
+              </ul>
+              <button type="button" class="btn${p.badge ? ' btn--cta' : ''} pack__add js-only" data-add data-name="${esc(p.title)}" aria-pressed="false"><span class="pack__off">${icon('plus')}Choisir ce pack</span><span class="pack__on">${icon('check')}Pack choisi</span></button>
+              <a class="text-link pack__devis" href="/devis">Demander un devis${icon('arrow')}</a>
+            </article>
+          </li>`).join('')}
+        </ul>
+      </section>`;
+
+  // Haut de page : la recherche, les 3 packs, puis les 3 bulles.
   const finder = `
       <div class="finder js-only" id="recherche" role="search">
         <div class="search">
@@ -1017,6 +1050,7 @@ function tarifsPage() {
       </div>`;
   const bubbles = `
       <nav class="bubs" id="situation" aria-labelledby="situation-t">
+        <h2 class="bubs__h">Ou composez votre panier, prestation par prestation</h2>
         <p class="bubs__k" id="situation-t">Votre situation</p>
         <ul class="bubs__list">${paths.map((p, i) => `
           <li class="bub bub--${i + 1}" style="--i:${i}">
@@ -1033,14 +1067,17 @@ function tarifsPage() {
           </li>`).join('')}
         </ul>
       </nav>`;
-  // Page : le titre et les 3 bulles, le panier à droite (ordinateur) ou en
-  // barre en bas (téléphone). Les parcours restent écrits dans la page
-  // (Google, sans JavaScript) ; js/tarifs.js les déplace dans la fenêtre
-  // #shopDlg, ouverte par une bulle, avec le panier à côté.
+  // Page : titre, recherche, 3 packs, 3 bulles ; le panier dans une
+  // colonne blanche fixe à droite (ordinateur) ou en barre en bas
+  // (téléphone). Les parcours restent écrits dans la page (Google, sans
+  // JavaScript) ; js/tarifs.js les déplace dans la fenêtre #shopDlg,
+  // ouverte par une bulle, avec le panier à côté.
   const main = `
-    <div class="shop wrap">
-      <div class="shop__main">${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', '', bubbles)}
-        <p class="note shop__note">${esc(vatNote)}</p>
+    <div class="shop">
+      <div class="shop__main">${pageHead('Tarifs', 'Tarifs : des prix clairs, affichés d’avance', 'Choisissez un pack ou composez votre panier. Je vous réponds sous 48 h avec un devis gratuit.')}
+        <div class="shop__body wrap">${finder}${packCards}${bubbles}
+          <p class="note shop__note">${esc(vatNote)}</p>
+        </div>
       </div>
       <aside class="minicart minicart--page js-only" data-minicart aria-label="Votre panier"></aside>
     </div>
@@ -1065,8 +1102,7 @@ function tarifsPage() {
           <button type="button" class="shopdlg__x" data-close aria-label="Fermer">${icon('close')}</button>
         </header>
         <div class="shopdlg__grid">
-          <div class="shopdlg__main" id="shopMain">${finder}
-          </div>
+          <div class="shopdlg__main" id="shopMain"></div>
           <aside class="minicart" data-minicart aria-label="Votre panier"></aside>
         </div>
         <div class="cartbar" data-cartbar></div>
@@ -1087,19 +1123,24 @@ function tarifsPage() {
 ${cartHtml()}`;
   const jsonld = graph(page, { name: page.title, description: page.description }, [{
     '@type': 'OfferCatalog', '@id': `${SITE_URL}tarifs#catalogue`, name: 'Offres principales',
-    itemListElement: offers.map(o => ({
+    itemListElement: [...packs.map(p => ({
+      '@type': 'Offer', name: p.title, description: `${p.pitch} Comprend : ${p.list.map(s => s.name).join(', ')}.`, url: `${SITE_URL}tarifs#pack-${p.id}`,
+      priceCurrency: 'EUR', price: String(p.eur),
+      priceSpecification: { '@type': 'PriceSpecification', minPrice: p.eur, priceCurrency: 'EUR' },
+      itemOffered: { '@type': 'Service', name: p.title, areaServed: AREA, provider: { '@id': BUSINESS_ID } },
+    })), ...offers.map(o => ({
       '@type': 'Offer', name: o.title, description: o.pitch, url: `${SITE_URL}tarifs#offre-${o.id}`,
       priceCurrency: 'EUR', price: String(euros(o.svc)),
       priceSpecification: { '@type': 'PriceSpecification', minPrice: euros(o.svc), priceCurrency: 'EUR' },
       itemOffered: { '@type': 'Service', name: o.svc.name, areaServed: AREA, provider: { '@id': BUSINESS_ID } },
-    })),
+    }))],
   }]);
   return [page, shell(page, { main, jsonld, keepMode: true, css: ['/css/tarifs.css'], scripts: ['/js/contact-form.js', '/js/tarifs.js', '/js/panier.js'] })];
 }
 
-// Panier de /tarifs (js/panier.js) : panneau de validation en deux
-// étapes (sélection et besoins par catégorie, puis coordonnées), envoyé
-// par EmailJS comme le devis. Rien de tout cela sans JavaScript.
+// Panier de /tarifs (js/panier.js) : panneau de validation (rappel du
+// panier, prénom, nom, téléphone, e-mail), envoyé par EmailJS comme le
+// devis. Rien de tout cela sans JavaScript.
 function cartHtml() {
   return `
     <p class="sr-only" id="cartLive" role="status" aria-live="polite"></p>
@@ -1108,32 +1149,21 @@ function cartHtml() {
       <div class="sheet__in">
         <button type="button" class="sheet__x" data-close aria-label="Fermer">${icon('close')}</button>
 
-        <div class="cart__view" data-view="list">
-          <p class="sheet__k"><span class="sheet__ico">${icon('bag')}</span><span>Étape 1 sur 2 · Votre sélection</span></p>
-          <h2 class="sheet__t" id="cartT">Mon panier</h2>
-          <div class="cart__empty" id="cartEmpty" hidden>
-            <p>Votre panier est vide.</p>
-            <p>Ajoutez des prestations avec le bouton <span class="cart-how__plus" aria-hidden="true">${icon('plus')}</span> de chaque tuile.</p>
+        <form class="cart__view cart__form" data-view="form" novalidate>
+          <p class="sheet__k"><span class="sheet__ico">${icon('bag')}</span><span>Valider mon panier</span></p>
+          <h2 class="sheet__t" id="cartT">Où puis-je vous répondre ?</h2>
+          <div class="cart__recap" id="cartRecap"></div>
+          <div class="cart__row">
+            <label class="field"><span>Prénom <small>(facultatif)</small></span><input name="client_prenom" type="text" autocomplete="given-name"></label>
+            <label class="field"><span>Nom <small>(facultatif)</small></span><input name="client_nom" type="text" autocomplete="family-name"></label>
           </div>
-          <div class="cart__list" id="cartList"></div>
-          <div class="cart__sum" id="cartSum"></div>
-          <p class="sheet__btns"><button type="button" class="btn btn--cta" data-next>Continuer${icon('arrow')}</button><button type="button" class="btn" data-close>Ajouter d’autres prestations</button></p>
-          <p class="sheet__note">${esc(vatNote)}</p>
-        </div>
-
-        <form class="cart__view cart__form" data-view="form" hidden novalidate>
-          <p class="sheet__k"><span class="sheet__ico">${icon('mail')}</span><span>Étape 2 sur 2 · Vos coordonnées</span></p>
-          <h2 class="sheet__t">Où puis-je vous répondre ?</h2>
-          <p class="cart__recap" id="cartRecap"></p>
-          <label class="field">Nom et prénom *<input name="client_nom" type="text" autocomplete="name" required></label>
           <label class="field">Téléphone *<input name="client_tel" type="tel" autocomplete="tel" inputmode="tel" required></label>
           <label class="field">E-mail *<input name="client_email" type="email" autocomplete="email" inputmode="email" required></label>
-          <label class="field">Votre activité <small>(facultatif)</small><input name="client_activite" type="text" autocomplete="organization" placeholder="Ex. : fleuriste à Montreuil"></label>
-          <label class="field">Autre chose à me dire ? <small>(facultatif)</small><textarea name="client_message" rows="3" placeholder="Un délai, une contrainte, un site que vous aimez…"></textarea></label>
+          <label class="field"><span>Votre projet en quelques mots <small>(facultatif)</small></span><textarea name="client_message" rows="3" placeholder="Ex. : fleuriste à Montreuil, un site avant le printemps…"></textarea></label>
           <input type="hidden" name="from_name"><input type="hidden" name="from_email"><input type="hidden" name="message">
           <p class="cart__status" role="status"></p>
-          <p class="sheet__btns"><button type="submit" class="btn btn--cta">Envoyer ma demande${icon('arrow')}</button><button type="button" class="btn" data-back>${icon('back')}Retour</button></p>
-          <p class="sheet__note">Vos coordonnées servent uniquement à vous répondre. <a href="/confidentialite">Confidentialité</a></p>
+          <p class="sheet__btns"><button type="submit" class="btn btn--cta">Envoyer ma demande${icon('arrow')}</button><button type="button" class="btn" data-close>Continuer mes achats</button></p>
+          <p class="sheet__note">${esc(vatNote)} Vos coordonnées servent uniquement à vous répondre. <a href="/confidentialite">Confidentialité</a></p>
         </form>
 
         <div class="cart__view cart__done" data-view="done" hidden>

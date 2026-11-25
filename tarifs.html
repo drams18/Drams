@@ -150,6 +150,69 @@
       "itemListElement": [
         {
           "@type": "Offer",
+          "name": "Pack Essentiel",
+          "description": "Être trouvé sur Google et contacté en un geste. Comprend : Fiche Google Business Profile, Landing page, Nom de domaine + e-mails pro.",
+          "url": "https://arphandrame.fr/tarifs#pack-essentiel",
+          "priceCurrency": "EUR",
+          "price": "750",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": 750,
+            "priceCurrency": "EUR"
+          },
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Pack Essentiel",
+            "areaServed": "Île-de-France",
+            "provider": {
+              "@id": "https://arphandrame.fr/#business"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Pack Vitrine",
+          "description": "Un vrai site de plusieurs pages, à votre image. Comprend : Fiche Google Business Profile, Site vitrine, Nom de domaine + e-mails pro, Logo + identité visuelle.",
+          "url": "https://arphandrame.fr/tarifs#pack-vitrine",
+          "priceCurrency": "EUR",
+          "price": "1500",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": 1500,
+            "priceCurrency": "EUR"
+          },
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Pack Vitrine",
+            "areaServed": "Île-de-France",
+            "provider": {
+              "@id": "https://arphandrame.fr/#business"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Pack Premium",
+          "description": "Le site complet : vos clients réservent seuls, Google vous met en avant. Comprend : Fiche Google Business Profile, Site vitrine, Nom de domaine + e-mails pro, Logo + identité visuelle, Rédaction des textes du site, Système de réservation / prise de RDV, SEO technique + données structurées.",
+          "url": "https://arphandrame.fr/tarifs#pack-premium",
+          "priceCurrency": "EUR",
+          "price": "2950",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": 2950,
+            "priceCurrency": "EUR"
+          },
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Pack Premium",
+            "areaServed": "Île-de-France",
+            "provider": {
+              "@id": "https://arphandrame.fr/#business"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
           "name": "Fiche Google",
           "description": "Apparaître sur Google Maps quand on cherche votre métier près de chez vous.",
           "url": "https://arphandrame.fr/tarifs#offre-fiche-google",
@@ -345,13 +408,91 @@
   </header>
 
   <main id="main" tabindex="-1">
-    <div class="shop wrap">
+    <div class="shop">
       <div class="shop__main">
     <header class="phead wrap">
       <p class="kicker">Tarifs</p>
       <h1 class="phead__t"><span class="bw" style="--i:0">Tarifs</span> <span class="bw" style="--i:1">:</span> <span class="bw" style="--i:2">des</span> <span class="bw" style="--i:3">prix</span> <span class="bw" style="--i:4">clairs,</span> <span class="bw" style="--i:5">affichés</span> <span class="bw" style="--i:6">d’avance</span></h1>
-      
+      <p class="phead__lead">Choisissez un pack ou composez votre panier. Je vous réponds sous 48 h avec un devis gratuit.</p>
+    </header>
+        <div class="shop__body wrap">
+      <div class="finder js-only" id="recherche" role="search">
+        <div class="search">
+          <svg class="ico search__ico" aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
+          <label class="sr-only" for="tarifSearch">Rechercher parmi les 74 prestations</label>
+          <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" aria-controls="tarifResults" placeholder="Rechercher une prestation">
+          <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
+        </div>
+        <p class="search__status" id="tarifStatus" role="status" aria-live="polite"></p>
+        <div class="results" id="tarifResults" hidden>
+          <ul class="tiles tiles--res" id="tarifList"></ul>
+          <div class="noresult" id="tarifNone" hidden>
+            <p>Votre besoin est peut-être spécifique : parlons-en.</p>
+            <p class="cta__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn" href="/contact">Me contacter</a></p>
+          </div>
+        </div>
+      </div>
+      <section class="packs" id="packs" aria-labelledby="packs-t">
+        <h2 class="packs__t" id="packs-t">Trois packs, du plus simple au plus complet</h2>
+        <ul class="packs__list">
+          <li class="pack pack--1" id="pack-essentiel" style="--i:0" data-name="Pack Essentiel" data-pack data-cat="Packs" data-cat-id="pack" data-cat-i="-1" data-ico="pin" data-price="à partir de 750 €" data-eur="750" data-includes="Fiche Google Business Profile|Landing page|Nom de domaine + e-mails pro">
+            <article class="pack__in">
+              <p class="pack__lvl" aria-label="Niveau 1 sur 3"><span class="on"></span><span></span><span></span></p>
+              <span class="pack__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg></span>
+              <h3 class="pack__name">Pack Essentiel</h3>
+              <p class="pack__pitch">Être trouvé sur Google et contacté en un geste.</p>
+              <p class="pack__price price"><span class="price__from">à partir de</span> <span class="price__amount">750 €</span></p>
+              <ul class="pack__inc" aria-label="Compris dans le Pack Essentiel">
+                <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Fiche Google Business Profile</span><small>150 €</small></li>
+                <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Landing page</span><small>450 €</small></li>
+                <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Nom de domaine + e-mails pro</span><small>150 €</small></li>
+              </ul>
+              <button type="button" class="btn pack__add js-only" data-add data-name="Pack Essentiel" aria-pressed="false"><span class="pack__off"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-plus"/></svg>Choisir ce pack</span><span class="pack__on"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Pack choisi</span></button>
+              <a class="text-link pack__devis" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+            </article>
+          </li>
+          <li class="pack pack--2 pack--star" id="pack-vitrine" style="--i:1" data-name="Pack Vitrine" data-pack data-cat="Packs" data-cat-id="pack" data-cat-i="-1" data-ico="site" data-price="à partir de 1 500 €" data-eur="1500" data-includes="Fiche Google Business Profile|Site vitrine|Nom de domaine + e-mails pro|Logo + identité visuelle">
+            <article class="pack__in">
+              <p class="pack__badge"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-spark"/></svg>Recommandé</p>
+              <p class="pack__lvl" aria-label="Niveau 2 sur 3"><span class="on"></span><span class="on"></span><span></span></p>
+              <span class="pack__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-site"/></svg></span>
+              <h3 class="pack__name">Pack Vitrine</h3>
+              <p class="pack__pitch">Un vrai site de plusieurs pages, à votre image.</p>
+              <p class="pack__price price"><span class="price__from">à partir de</span> <span class="price__amount">1 500 €</span></p>
+              <ul class="pack__inc" aria-label="Compris dans le Pack Vitrine">
+                <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Fiche Google Business Profile</span><small>150 €</small></li>
+                <li class="is-new"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Site vitrine</span><small>900 €</small></li>
+                <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Nom de domaine + e-mails pro</span><small>150 €</small></li>
+                <li class="is-new"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Logo + identité visuelle</span><small>300 €</small></li>
+              </ul>
+              <button type="button" class="btn btn--cta pack__add js-only" data-add data-name="Pack Vitrine" aria-pressed="false"><span class="pack__off"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-plus"/></svg>Choisir ce pack</span><span class="pack__on"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Pack choisi</span></button>
+              <a class="text-link pack__devis" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+            </article>
+          </li>
+          <li class="pack pack--3" id="pack-premium" style="--i:2" data-name="Pack Premium" data-pack data-cat="Packs" data-cat-id="pack" data-cat-i="-1" data-ico="calendar" data-price="à partir de 2 950 €" data-eur="2950" data-includes="Fiche Google Business Profile|Site vitrine|Nom de domaine + e-mails pro|Logo + identité visuelle|Rédaction des textes du site|Système de réservation / prise de RDV|SEO technique + données structurées">
+            <article class="pack__in">
+              <p class="pack__lvl" aria-label="Niveau 3 sur 3"><span class="on"></span><span class="on"></span><span class="on"></span></p>
+              <span class="pack__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-calendar"/></svg></span>
+              <h3 class="pack__name">Pack Premium</h3>
+              <p class="pack__pitch">Le site complet : vos clients réservent seuls, Google vous met en avant.</p>
+              <p class="pack__price price"><span class="price__from">à partir de</span> <span class="price__amount">2 950 €</span></p>
+              <ul class="pack__inc" aria-label="Compris dans le Pack Premium">
+                <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Fiche Google Business Profile</span><small>150 €</small></li>
+                <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Site vitrine</span><small>900 €</small></li>
+                <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Nom de domaine + e-mails pro</span><small>150 €</small></li>
+                <li><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Logo + identité visuelle</span><small>300 €</small></li>
+                <li class="is-new"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Rédaction des textes du site</span><small>250 €</small></li>
+                <li class="is-new"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>Système de réservation / prise de RDV</span><small>900 €</small></li>
+                <li class="is-new"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg><span>SEO technique + données structurées</span><small>300 €</small></li>
+              </ul>
+              <button type="button" class="btn pack__add js-only" data-add data-name="Pack Premium" aria-pressed="false"><span class="pack__off"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-plus"/></svg>Choisir ce pack</span><span class="pack__on"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Pack choisi</span></button>
+              <a class="text-link pack__devis" href="/devis">Demander un devis<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+            </article>
+          </li>
+        </ul>
+      </section>
       <nav class="bubs" id="situation" aria-labelledby="situation-t">
+        <h2 class="bubs__h">Ou composez votre panier, prestation par prestation</h2>
         <p class="bubs__k" id="situation-t">Votre situation</p>
         <ul class="bubs__list">
           <li class="bub bub--1" style="--i:0">
@@ -415,8 +556,8 @@
           </li>
         </ul>
       </nav>
-    </header>
-        <p class="note shop__note">Prix nets : TVA non applicable, article 293 B du CGI. Le prix final dépend de votre projet, il est fixé dans le devis avant de commencer.</p>
+          <p class="note shop__note">Prix nets : TVA non applicable, article 293 B du CGI. Le prix final dépend de votre projet, il est fixé dans le devis avant de commencer.</p>
+        </div>
       </div>
       <aside class="minicart minicart--page js-only" data-minicart aria-label="Votre panier"></aside>
     </div>
@@ -1738,24 +1879,7 @@
           <button type="button" class="shopdlg__x" data-close aria-label="Fermer"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-close"/></svg></button>
         </header>
         <div class="shopdlg__grid">
-          <div class="shopdlg__main" id="shopMain">
-      <div class="finder js-only" id="recherche" role="search">
-        <div class="search">
-          <svg class="ico search__ico" aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
-          <label class="sr-only" for="tarifSearch">Rechercher parmi les 74 prestations</label>
-          <input id="tarifSearch" class="search__input" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false" aria-controls="tarifResults" placeholder="Rechercher une prestation">
-          <button type="button" class="search__clear" id="tarifSearchClear" hidden>Effacer</button>
-        </div>
-        <p class="search__status" id="tarifStatus" role="status" aria-live="polite"></p>
-        <div class="results" id="tarifResults" hidden>
-          <ul class="tiles tiles--res" id="tarifList"></ul>
-          <div class="noresult" id="tarifNone" hidden>
-            <p>Votre besoin est peut-être spécifique : parlons-en.</p>
-            <p class="cta__btns"><a class="btn btn--cta" href="/devis">Demander un devis gratuit<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="btn" href="/contact">Me contacter</a></p>
-          </div>
-        </div>
-      </div>
-          </div>
+          <div class="shopdlg__main" id="shopMain"></div>
           <aside class="minicart" data-minicart aria-label="Votre panier"></aside>
         </div>
         <div class="cartbar" data-cartbar></div>
@@ -1780,32 +1904,21 @@
       <div class="sheet__in">
         <button type="button" class="sheet__x" data-close aria-label="Fermer"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-close"/></svg></button>
 
-        <div class="cart__view" data-view="list">
-          <p class="sheet__k"><span class="sheet__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bag"/></svg></span><span>Étape 1 sur 2 · Votre sélection</span></p>
-          <h2 class="sheet__t" id="cartT">Mon panier</h2>
-          <div class="cart__empty" id="cartEmpty" hidden>
-            <p>Votre panier est vide.</p>
-            <p>Ajoutez des prestations avec le bouton <span class="cart-how__plus" aria-hidden="true"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-plus"/></svg></span> de chaque tuile.</p>
+        <form class="cart__view cart__form" data-view="form" novalidate>
+          <p class="sheet__k"><span class="sheet__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bag"/></svg></span><span>Valider mon panier</span></p>
+          <h2 class="sheet__t" id="cartT">Où puis-je vous répondre ?</h2>
+          <div class="cart__recap" id="cartRecap"></div>
+          <div class="cart__row">
+            <label class="field"><span>Prénom <small>(facultatif)</small></span><input name="client_prenom" type="text" autocomplete="given-name"></label>
+            <label class="field"><span>Nom <small>(facultatif)</small></span><input name="client_nom" type="text" autocomplete="family-name"></label>
           </div>
-          <div class="cart__list" id="cartList"></div>
-          <div class="cart__sum" id="cartSum"></div>
-          <p class="sheet__btns"><button type="button" class="btn btn--cta" data-next>Continuer<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button><button type="button" class="btn" data-close>Ajouter d’autres prestations</button></p>
-          <p class="sheet__note">Prix nets : TVA non applicable, article 293 B du CGI. Le prix final dépend de votre projet, il est fixé dans le devis avant de commencer.</p>
-        </div>
-
-        <form class="cart__view cart__form" data-view="form" hidden novalidate>
-          <p class="sheet__k"><span class="sheet__ico"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg></span><span>Étape 2 sur 2 · Vos coordonnées</span></p>
-          <h2 class="sheet__t">Où puis-je vous répondre ?</h2>
-          <p class="cart__recap" id="cartRecap"></p>
-          <label class="field">Nom et prénom *<input name="client_nom" type="text" autocomplete="name" required></label>
           <label class="field">Téléphone *<input name="client_tel" type="tel" autocomplete="tel" inputmode="tel" required></label>
           <label class="field">E-mail *<input name="client_email" type="email" autocomplete="email" inputmode="email" required></label>
-          <label class="field">Votre activité <small>(facultatif)</small><input name="client_activite" type="text" autocomplete="organization" placeholder="Ex. : fleuriste à Montreuil"></label>
-          <label class="field">Autre chose à me dire ? <small>(facultatif)</small><textarea name="client_message" rows="3" placeholder="Un délai, une contrainte, un site que vous aimez…"></textarea></label>
+          <label class="field"><span>Votre projet en quelques mots <small>(facultatif)</small></span><textarea name="client_message" rows="3" placeholder="Ex. : fleuriste à Montreuil, un site avant le printemps…"></textarea></label>
           <input type="hidden" name="from_name"><input type="hidden" name="from_email"><input type="hidden" name="message">
           <p class="cart__status" role="status"></p>
-          <p class="sheet__btns"><button type="submit" class="btn btn--cta">Envoyer ma demande<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button><button type="button" class="btn" data-back><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-back"/></svg>Retour</button></p>
-          <p class="sheet__note">Vos coordonnées servent uniquement à vous répondre. <a href="/confidentialite">Confidentialité</a></p>
+          <p class="sheet__btns"><button type="submit" class="btn btn--cta">Envoyer ma demande<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button><button type="button" class="btn" data-close>Continuer mes achats</button></p>
+          <p class="sheet__note">Prix nets : TVA non applicable, article 293 B du CGI. Le prix final dépend de votre projet, il est fixé dans le devis avant de commencer. Vos coordonnées servent uniquement à vous répondre. <a href="/confidentialite">Confidentialité</a></p>
         </form>
 
         <div class="cart__view cart__done" data-view="done" hidden>

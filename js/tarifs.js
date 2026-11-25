@@ -10,8 +10,8 @@
      • les liens directs (/tarifs#site-vitrine, #offre-…, #pas-de-site)
        et les anciennes adresses (#professionnels/site-pro, #app…) :
        la fenêtre s'ouvre sur le bon parcours, la tuile s'illumine
-     • la recherche (dans la fenêtre) : résultats à la place du parcours,
-       synonymes (js/tarifs-data.js) chargés au premier focus
+     • la recherche (sur la page, au-dessus des packs) : résultats sous
+       la barre, synonymes (js/tarifs-data.js) chargés au premier focus
      • le panneau de détail (<dialog>) quand on ouvre une tuile ; sans
        JavaScript, la tuile se déplie sur place (<details>)
      • un léger relief des illustrations des bulles sous le pointeur
@@ -125,14 +125,14 @@
     if (!canShop || !t || !shopMain.contains(t)) return false;
     var r = t.matches('.route') ? t : t.closest('.route');
     if (!r) {
-      // Prestation hors parcours : elle sort par la recherche.
+      // Prestation hors parcours : elle sort par la recherche, sur la page.
       var only = t.closest('.tile');
       if (!only) return false;
-      openAt(current || routes[0].id, push);
+      if (dlg.open) closeShop();
       search(only.querySelector('.tile__n').textContent);
+      finder.scrollIntoView({ block: 'start', behavior: fx ? 'smooth' : 'auto' });
       return true;
     }
-    if (searching()) clearSearch(false);
     var was = current;
     setRoute(r.id);
     if (!dlg.open) {
@@ -193,8 +193,9 @@
     }
     if (h === 'recherche') {
       e.preventDefault();
-      openAt(current || routes[0].id);
-      if (input) input.focus();
+      if (dlg.open) closeShop();
+      finder.scrollIntoView({ block: 'start', behavior: fx ? 'smooth' : 'auto' });
+      if (input) input.focus({ preventScroll: true });
       return;
     }
     var id = resolve(h);
@@ -276,15 +277,14 @@
     addEventListener('resize', function () { boxes = null; });
   }
 
-  // ── Recherche (dans la fenêtre) ───────────────────────
+  // ── Recherche (sur la page) ───────────────────────────
+  var finder = byId('recherche');
   var input = byId('tarifSearch');
   var clear = byId('tarifSearchClear');
   var status = byId('tarifStatus');
   var results = byId('tarifResults');
   var list = byId('tarifList');
   var none = byId('tarifNone');
-
-  function searching() { return !!(dlg && dlg.classList.contains('is-searching')); }
 
   var DIACRITICS = new RegExp('[\\u0300-\\u036f]', 'g');
   function norm(s) {
@@ -358,7 +358,7 @@
     var toks = tokens(q);
     var on = toks.length > 0;
     clear.hidden = !input.value.length;
-    if (dlg) dlg.classList.toggle('is-searching', on);
+    if (finder) finder.classList.toggle('is-on', on);
     results.hidden = !on;
     if (!on) { status.textContent = ''; list.innerHTML = ''; last = ''; return; }
     var key = toks.join(' ') + '|' + Object.keys(SYN).length;
@@ -385,7 +385,6 @@
     status.textContent = found.length
       ? found.length + (found.length > 1 ? ' prestations' : ' prestation') + ' pour « ' + q + ' »'
       : 'Aucune prestation pour « ' + q + ' ».';
-    if (shopMain) shopMain.scrollTop = 0;
   }
   function clearSearch(focus) {
     if (!input) return;
@@ -416,7 +415,7 @@
   // L'adresse sans ancre reste en dessous dans l'historique : « retour »
   // ferme la fenêtre et laisse sur les bulles.
   var first = resolve(hashId());
-  if (first && canShop) {
+  if (first && canShop && shopMain.contains(byId(first))) {
     history.replaceState(null, '', location.pathname + location.search);
     openAt(first);
   }
